@@ -1,4 +1,4 @@
-# ✨ FoxiooShaderPack ✨
+# ✨ Foxioo Shader Pack ✨
 
 **Here is a package of shaders created or modified by me for the Clickteam Fusion engine!**
 
