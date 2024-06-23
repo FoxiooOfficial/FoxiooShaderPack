@@ -1,0 +1,48 @@
+<effect>
+	<Name>Division With Hyperbolic Sinus</Name>
+		<description>Division With Hyperbolic Sinus - Shader divides background and object colors with each other then colors are calculated by hyperbolic sinus</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+			
+		<parameter>
+			<name>/* Foxioo Division With Hyperbolic Sinus (Background) Shader | 1.1 (23.06.2024) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>Shader divides background and object colors with each other then colors are calculated by hyperbolic sinus</description>
+		</parameter>
+
+			<parameter>
+				<name>Blending Mode</name>
+				<variable>_Blending_Mode</variable>
+
+				<description>This variable decides which color the divider should be. When the option is off, the divisor is the background colors and when the option is on, the divisor is the object colors</description>
+
+				<type>int</type>
+				<property>checkbox</property>
+
+				<value>1</value>
+			</parameter>
+
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+
+				<description>This variable sets the intensity of background visibility</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+		<parameter>
+			<name>/*  */</name>
+			<property>checkbox</property>
+
+			<variable>__</variable>
+		</parameter>
+</effect>
