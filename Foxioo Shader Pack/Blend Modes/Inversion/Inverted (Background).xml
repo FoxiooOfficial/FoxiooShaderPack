@@ -1,0 +1,49 @@
+<effect>
+	<Name>Inverted</Name>
+		<description>Inverted - Shader inverts the final colors of the background allowing you to also take into account the colors of the object</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>			
+
+		<parameter>
+			<name>/* Foxioo Inverted (Background) Shader | 1.1 (23.06.2024) */</name>
+			<property>checkbox</property>
+
+				<variable>_</variable>
+
+			<description>Shader inverts the final colors of the background allowing you to also take into account the colors of the object</description>
+		</parameter>
+
+			<parameter>
+				<name>Blending Mode</name>
+				<variable>_Blending_Mode</variable>
+
+				<description>This option allows you to specify whether the main texture should be included in the final blending.</description>
+
+				<type>int</type>
+				<property>checkbox</property>
+
+				<value>1</value>
+			</parameter>
+			
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable sets the intensity of background visibility</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+	
+		<parameter>
+			<name>/*  */</name>
+			<property>checkbox</property>
+
+				<variable>__</variable>
+
+		</parameter>
+
+</effect>
