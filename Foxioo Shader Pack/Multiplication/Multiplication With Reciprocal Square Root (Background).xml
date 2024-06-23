@@ -1,6 +1,6 @@
 <effect>
 	<Name>Multiplication With Reciprocal Square Root</Name>
-		<description>Multiplication With Reciprocal Square Root - Shader adds object and background colors then colors are calculated by reciprocal square root</description> 
+		<description>Multiplication With Reciprocal Square Root - Shader multiplies colors of objects and backgrounds with each other then colors are calculated by reciprocal square root</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
@@ -12,7 +12,7 @@
 
 			<variable>_</variable>
 
-			<description>Shader adds object and background colors then colors are calculated by reciprocal square root</description>
+			<description>Shader multiplies colors of objects and backgrounds with each other then colors are calculated by reciprocal square root</description>
 		</parameter>
 
 			<parameter>

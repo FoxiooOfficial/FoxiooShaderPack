@@ -1,6 +1,6 @@
 <effect>
 	<Name>Multiplication With Arctangent</Name>
-		<description>Multiplication With Arctangent - Shader adds object and background colors then colors are calculated by arctangent</description> 
+		<description>Multiplication With Arctangent - Shader multiplies colors of objects and backgrounds with each other then colors are calculated by arctangent</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
@@ -12,7 +12,7 @@
 
 			<variable>_</variable>
 
-			<description>Shader adds object and background colors then colors are calculated by arctangent</description>
+			<description>Shader multiplies colors of objects and backgrounds with each other then colors are calculated by arctangent</description>
 		</parameter>
 
 			<parameter>

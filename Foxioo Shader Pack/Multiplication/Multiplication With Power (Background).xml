@@ -1,6 +1,6 @@
 <effect>
 	<Name>Multiplication With Power</Name>
-		<description>Multiplication With Power - Shader adds object and background colors then colors are calculated by power</description> 
+		<description>Multiplication With Power - Shader multiplies colors of objects and backgrounds with each other then colors are calculated by power</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
@@ -12,7 +12,7 @@
 
 			<variable>_</variable>
 
-			<description>Shader adds object and background colors then colors are calculated by power</description>
+			<description>Shader multiplies colors of objects and backgrounds with each other then colors are calculated by power</description>
 		</parameter>
 
 			<parameter>
