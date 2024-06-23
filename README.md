@@ -30,3 +30,13 @@
 - ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Usage/4.png?raw=true)
 2. In the directory tree, select **"Foxioo Shader Pack."** There, select the shader you want to use and click "OK".
 - ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Usage/5.png?raw=true)
+
+## 🖼️ Shader preview
+
+Here are demonstration images of what the shader looks like
+
+### 🚫 Without any effect
+Preview objects along with the background without any effects
+- ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Preview/No%20Shader/No%20Shader.png?raw=true)
+Previewing the background itself
+- ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Preview/No%20Shader/Background.png?raw=true)
