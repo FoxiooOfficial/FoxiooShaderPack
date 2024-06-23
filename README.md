@@ -6,7 +6,7 @@
 
 ❗ **Shaders currently only work on Windows under Direct3D 9 and Direct3D 11 (No pre-multiplied)**
 
-❗ **Note that the colors as well as the final appearance in the shaders on Direct3D 9 as well as Direct3D 11 may differ!**
+❗ **Final colors in Direct3D 9 and Direct3D 11 may vary. This is most likely due to the different calculation methods however, I am not completely sure about this.**
 
 ## 💿 Installation
 
