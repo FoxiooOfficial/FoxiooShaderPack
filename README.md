@@ -2,7 +2,7 @@
 
 **Here is a package of shaders created or modified by me for the Clickteam Fusion engine!**
 
-🥳 The package currently has over **+80 Shaders** 🎉
+🥳 The package currently has over **+90 Shaders** 🎉
 
 ❗ **Shaders currently only work on Windows under Direct3D 9 and Direct3D 11 (No pre-multiplied)**
 
