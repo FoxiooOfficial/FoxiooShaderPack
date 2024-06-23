@@ -2,7 +2,11 @@
 
 **Here is a package of shaders created or modified by me for the Clickteam Fusion engine!**
 
-**Shaders currently only work on Windows under Direct3D 9 and Direct3D 11 (No pre-multiplied)**
+🥳 The package currently has over **+80 Shaders** 🎉
+
+❗ **Shaders currently only work on Windows under Direct3D 9 and Direct3D 11 (No pre-multiplied)**
+
+❗ **Note that the colors as well as the final appearance in the shaders on Direct3D 9 as well as Direct3D 11 may differ!**
 
 ## 💿 Installation
 
@@ -36,7 +40,26 @@
 Here are demonstration images of what the shader looks like
 
 ### 🚫 Without any effect
-Preview objects along with the background without any effects
+- Preview objects along with the background without any effects
 - ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Preview/No%20Shader/No%20Shader.png?raw=true)
-Previewing the background itself
+- Previewing the background itself
 - ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Preview/No%20Shader/Background.png?raw=true)
+
+### 🖼️ Addition (Background) ⭐
+- ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Preview/Addition%20(Background).png?raw=true)
+
+### 🖼️ Division (Background) ⭐
+- ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Preview/Division%20(Background).png?raw=true)
+
+### 🖼️ Addition With Arccosinus (Background) ⭐
+- ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Preview/Addition%20With%20Arccosinus%20(Background).png?raw=true)
+
+### 🖼️ Inverted (Background) ⭐
+- ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Preview/Inverted%20(Background).png?raw=true)
+
+### 🖼️ Multiplication (Background) ⭐
+- ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Preview/Multiplication%20(Background).png?raw=true)
+
+### 🖼️ Offset Color (Background) ⭐
+- ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Preview/Offset%20Color%20(Background).png?raw=true)
+
