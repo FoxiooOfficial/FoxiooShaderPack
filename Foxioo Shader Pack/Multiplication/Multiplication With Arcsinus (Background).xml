@@ -1,6 +1,6 @@
 <effect>
 	<Name>Multiplication With Arcsinus</Name>
-		<description>Multiplication With Arcsinus - Shader multiplies colors of objects and backgrounds with each other then colors are calculated by arcsinus</description> 
+		<description>Multiplication With Arcsinus - Shader multiplies colors of base and blend with each other then colors are calculated by arcsinus</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
@@ -12,7 +12,7 @@
 
 			<variable>_</variable>
 
-			<description>Shader multiplies colors of objects and backgrounds with each other then colors are calculated by arcsinus</description>
+			<description>Shader multiplies colors of base and blend with each other then colors are calculated by arcsinus</description>
 		</parameter>
 
 			<parameter>

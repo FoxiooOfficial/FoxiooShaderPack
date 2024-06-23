@@ -1,6 +1,6 @@
 <effect>
 	<Name>Addition With Power</Name>
-		<description>Addition With Power - Shader adds object and background colors then colors are calculated by power</description> 
+		<description>Addition With Power - Shader adds base and mixes colors with each other then colors are calculated by power</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
@@ -12,7 +12,7 @@
 
 			<variable>_</variable>
 
-			<description>Shader adds object and background colors then colors are calculated by power</description>
+			<description>Shader adds base and mixes colors with each other then colors are calculated by power</description>
 		</parameter>
 
 			<parameter>

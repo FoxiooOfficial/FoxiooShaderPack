@@ -1,6 +1,6 @@
 <effect>
 	<Name>Subtraction With Cosinus</Name>
-		<description>Subtraction With Cosinus - Shader subtracts background and object colors from each other then colors are calculated by cosinus</description> 
+		<description>Subtraction With Cosinus - Shader subtracts base and blend colors from each other then colors are calculated by cosinus</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
@@ -12,7 +12,7 @@
 
 			<variable>_</variable>
 
-			<description>Shader subtracts background and object colors from each other then colors are calculated by cosinus</description>
+			<description>Shader subtracts base and blend colors from each other then colors are calculated by cosinus</description>
 		</parameter>
 
 			<parameter>

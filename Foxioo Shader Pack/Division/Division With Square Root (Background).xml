@@ -1,6 +1,6 @@
 <effect>
 	<Name>Division With Square Root</Name>
-		<description>Division With Square Root - Shader divides background and object colors with each other then colors are calculated by square root</description> 
+		<description>Division With Square Root - Shader divides base and blend colors with each other then colors are calculated by square root</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
@@ -12,7 +12,7 @@
 
 			<variable>_</variable>
 
-			<description>Shader divides background and object colors with each other then colors are calculated by square root</description>
+			<description>Shader divides base and blend colors with each other then colors are calculated by square root</description>
 		</parameter>
 
 			<parameter>

@@ -1,6 +1,6 @@
 <effect>
 	<Name>Inverted</Name>
-		<description>Inverted - Shader inverts the final colors of the background allowing you to also take into account the colors of the object</description> 
+		<description>Inverted - Shader inverts the base allowing you to also take into account the colors of the blend</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
@@ -12,7 +12,7 @@
 
 				<variable>_</variable>
 
-			<description>Shader inverts the final colors of the background allowing you to also take into account the colors of the object</description>
+			<description>Shader inverts the base allowing you to also take into account the colors of the blend</description>
 		</parameter>
 
 			<parameter>

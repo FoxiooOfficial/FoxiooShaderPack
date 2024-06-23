@@ -1,6 +1,6 @@
 <effect>
 	<Name>Subtraction With Hyperbolic Tangent</Name>
-		<description>Subtraction With Hyperbolic Tangent - Shader subtracts background and object colors from each other then colors are calculated by hyperbolic tangent</description> 
+		<description>Subtraction With Hyperbolic Tangent - Shader subtracts base and blend colors from each other then colors are calculated by hyperbolic tangent</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
@@ -12,7 +12,7 @@
 
 			<variable>_</variable>
 
-			<description>Shader subtracts background and object colors from each other then colors are calculated by hyperbolic tangent</description>
+			<description>Shader subtracts base and blend colors from each other then colors are calculated by hyperbolic tangent</description>
 		</parameter>
 
 			<parameter>

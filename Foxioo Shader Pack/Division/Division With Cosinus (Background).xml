@@ -1,6 +1,6 @@
 <effect>
 	<Name>Division With Cosinus</Name>
-		<description>Division With Cosinus - Shader divides background and object colors with each other then colors are calculated by cosinus</description> 
+		<description>Division With Cosinus - Shader divides base and blend colors with each other then colors are calculated by cosinus</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
@@ -12,7 +12,7 @@
 
 			<variable>_</variable>
 
-			<description>Shader divides background and object colors with each other then colors are calculated by cosinus</description>
+			<description>Shader divides base and blend colors with each other then colors are calculated by cosinus</description>
 		</parameter>
 
 			<parameter>

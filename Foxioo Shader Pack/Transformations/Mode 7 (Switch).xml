@@ -1,0 +1,271 @@
+<effect>
+	<Name>Mode 7 (Switch)</Name>
+		<description>Shader giving Mode 7 style perspective effect.</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+
+		<parameter>
+			<name>/* Foxioo Mode 7 Shader | 1.3 (02.05.2024) */</name>
+			<property>checkbox</property>
+			<description>Shader giving Mode 7 style perspective effect.</description>
+			<variable>_</variable>
+		</parameter>
+
+		<parameter>
+			<name>( Position )</name>
+			<property>checkbox</property>
+			<description>Here are the variables for changing the position in the texture.</description>
+			<variable>__</variable>
+		</parameter>
+
+			<parameter>
+				<name>Position X</name>
+				<variable>_PosX</variable>
+				<description>A variable that determines the position of the texture in the X axis.</description> 
+
+				<type>float</type>
+
+				<value>0.5</value>
+			</parameter>
+
+
+			<parameter>
+				<name>Position Y</name>
+				<variable>_PosY</variable>
+				<description>A variable that determines the position of the texture in the Y axis.</description> 
+
+				<type>float</type>
+
+				<value>1.0</value>
+			</parameter>
+
+
+			<parameter>
+				<name>Position Z</name>
+				<variable>_PosZ</variable>
+				<description>*Variable that specifies the position of the texture in the Z-axis. (Otherwise known as scale).</description> 
+
+				<type>float</type>
+
+				<value>1.0</value>
+			</parameter>
+
+		<parameter>
+			<name>( Rotation )</name>
+			<property>checkbox</property>
+			<description>Here are the variables for changing the rotation in the texture.</description>
+			<variable>___</variable>
+		</parameter>
+
+			<parameter>
+				<name>Rotation X</name>
+				<variable>_RotX</variable>
+				<description>A variable that determines rotation in the X axis.</description>
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+
+			<parameter>
+				<name>Rotation Y</name>
+				<variable>_RotY</variable>
+				<description>A variable that determines rotation in the Y axis.</description>
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+
+			<parameter>
+				<name>Rotation Z</name>
+				<variable>_RotZ</variable>
+					<description>*The variable that determines rotation in the Z-axis. (This is otherwise known as the displacement of the point of the center of the perspective in the Y axis).</description>
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+	<parameter>
+			<name>( Points Position )</name>
+			<property>checkbox</property>
+			<description>Here are the variables for changing the position of point.</description> 
+			<variable>____</variable>
+		</parameter>
+
+			<parameter>
+				<name>Point X</name>
+				<variable>_PointX</variable>
+				<description>A variable that determines point position in the X axis.</description>
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Point Y</name>
+				<variable>_PointY</variable>
+				<description>A variable that determines point position in the Y axis.</description>
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+		<parameter>
+			<name>( Camera Extra Options )</name>
+			<property>checkbox</property>
+			<description>Here are additional options for the camera.</description>
+			<variable>_____</variable>
+		</parameter>
+
+			<parameter>
+				<name>Offset X</name>
+				<variable>_OffsetX</variable>
+				<description>A variable that determines the shift of the perspective center point in the X axis.</description>
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+
+			<parameter>
+				<name>Distortion Of Perspective</name>
+				<variable>_Distortion</variable>
+				<description>A variable specifying how much the texture should be curved to give perspective immediately. (0 is no curvature, 1 is the default value giving perspective effect).</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<!--
+			<parameter>
+				<name>Offset Y</name>
+				<variable>_OffsetY</variable>
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+			-->
+
+		<parameter>
+			<name>( Texture Scale )</name>
+			<property>checkbox</property>
+			<description>Here are the variables that determine the scale of the texture.</description>
+			<variable>______</variable>
+		</parameter>
+
+			<parameter>
+				<name>Scale</name>
+				<variable>_Scale</variable>
+				<description>This variable determines the overall scale of the texture (in X and Y axes).</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+
+			<parameter>
+				<name>Scale X</name>
+				<variable>_ScaleX</variable>
+				<description>This variable determines the scale of the texture in the X axis.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+
+			<parameter>
+				<name>Scale Y</name>
+				<variable>_ScaleY</variable>
+				<description>This variable determines the scale of the texture in the Y axis.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+		<parameter>
+			<name>( Rendering Options )</name>
+			<property>checkbox</property>
+			<description>Here are the options for how the texture should be rendered.</description>
+			<variable>_______</variable>
+		</parameter>
+
+
+			<parameter>
+				<name>Looping Mode!</name>
+				<variable>_Looping_Mode</variable>
+				<description>This variable determines how the texture is to be looped: 0 - REPEAT (Repeats the texture image); 1 - MIRRORED REPEAT (Repeats the texture image, but reflects the image at each repetition); 2 - CLAMP TO EDGE (Extends the texture after crossing coordinates 0 and 1); 3 - CLAMP TO BORDER (After crossing coordinates 0 and 1, the texture will be invisible). For more information, visit: https://learnopengl.com/Getting-started/Textures</description>
+				<!-- For more information, visit: https://learnopengl.com/Getting-started/Textures -->
+
+				<type>int</type>
+				<property>SLIDER</property>
+
+				<value>0</value>
+				<min>0</min>
+				<max>3</max>
+			</parameter>
+
+
+			<parameter>
+				<name>Render Sky</name>
+				<variable>_Render_Sky</variable>
+				<description>This variable determines whether the "sky" should be visible. (This is a reflection of the floor with the axes reversed.)</description>
+
+				<type>int</type>
+				<property>checkbox</property>
+
+				<value>0</value>
+			</parameter>
+
+
+			<parameter>
+				<name>Change Texture Final Result</name>
+				<variable>_Result</variable>
+				<property>checkbox</property>
+				<description>This variable determines whether the default texture is an object or background texture.</description>
+
+				<description>
+				</description>
+
+				<type>int</type>
+				<value>0</value>
+			</parameter>
+
+			<!--
+				<parameter>
+				<name>Filter Mode!</name>
+				<variable>_Filter_Mode</variable>
+
+				<type>int</type>
+				<property>SLIDER</property>
+
+				<value>0</value>
+				<min>0</min>
+				<max>1</max>
+			</parameter>
+			-->
+
+		<parameter>
+			<name>/*  */</name>
+			<property>checkbox</property>
+			<variable>________</variable>
+		</parameter>
+
+	<sampler>
+		<index>0</index>
+		<filter>point</filter>
+	</sampler>
+</effect>

@@ -1,6 +1,6 @@
 <effect>
 	<Name>Division With Sinus</Name>
-		<description>Division With Sinus - Shader divides background and object colors with each other then colors are calculated by sinus</description> 
+		<description>Division With Sinus - Shader divides base and blend colors with each other then colors are calculated by sinus</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
@@ -12,7 +12,7 @@
 
 			<variable>_</variable>
 
-			<description>Shader divides background and object colors with each other then colors are calculated by sinus</description>
+			<description>Shader divides base and blend colors with each other then colors are calculated by sinus</description>
 		</parameter>
 
 			<parameter>

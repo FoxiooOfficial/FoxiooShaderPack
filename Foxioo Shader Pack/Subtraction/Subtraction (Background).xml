@@ -1,6 +1,6 @@
 <effect>
 	<Name>Subtraction</Name>
-		<description>Subtraction - Shader subtracts background and object colors from each other</description> 
+		<description>Subtraction - Shader subtracts base and blend colors from each other</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
@@ -12,7 +12,7 @@
 
 			<variable>_</variable>
 
-			<description>Shader subtracts background and object colors from each other</description>
+			<description>Shader subtracts base and blend colors from each other</description>
 		</parameter>
 
 			<parameter>

@@ -1,6 +1,6 @@
 <effect>
 	<Name>Addition With Hyperbolic Sinus</Name>
-		<description>Addition With Hyperbolic Sinus - Shader adds object and background colors then colors are calculated by hyperbolic sinus</description> 
+		<description>Addition With Hyperbolic Sinus - Shader adds base and mixes colors with each other then colors are calculated by hyperbolic sinus</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
@@ -12,7 +12,7 @@
 
 			<variable>_</variable>
 
-			<description>Shader adds object and background colors then colors are calculated by hyperbolic sinus</description>
+			<description>Shader adds base and mixes colors with each other then colors are calculated by hyperbolic sinus</description>
 		</parameter>
 
 			<parameter>
