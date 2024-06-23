@@ -1,0 +1,47 @@
+<effect>
+	<Name>Subtraction With Reciprocal Square Root</Name>
+		<description>Subtraction With Reciprocal Square Root - Shader subtracts background and object colors from each other then colors are calculated by reciprocal square root</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+			
+		<parameter>
+			<name>/* Foxioo Subtraction With Reciprocal Square Root (Background) Shader | 1.1 (23.06.2024) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>Shader subtracts background and object colors from each other then colors are calculated by reciprocal square root</description>
+		</parameter>
+
+			<parameter>
+				<name>Blending Mode</name>
+				<variable>_Blending_Mode</variable>
+
+				<description>This variable determines the color of the subtractor. When the option is off, the subtractor is the background colors, and when the option is on, the subtractor is the object colors</description>
+
+				<type>int</type>
+				<property>checkbox</property>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+
+				<description>This variable sets the intensity of background visibility</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+		<parameter>
+			<name>/*  */</name>
+			<property>checkbox</property>
+
+			<variable>__</variable>
+		</parameter>
+</effect>

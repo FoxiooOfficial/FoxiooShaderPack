@@ -55,7 +55,7 @@ PS_OUTPUT ps_main( in PS_INPUT In )
 
         if(_Blending_Mode == 0)
         {
-            float4 _Result = round(_Render_Texture / (_Render_Background * _Mixing));
+            _Result = round(_Render_Texture / (_Render_Background * _Mixing));
         }
         else
         {

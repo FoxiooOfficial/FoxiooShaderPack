@@ -26,6 +26,7 @@ cbuffer PS_VARIABLES : register(b0)
     bool _;
     bool _Blending_Mode;
     float _Mixing;
+    float _Denom;
     bool __;
 };
 
@@ -55,11 +56,11 @@ PS_OUTPUT ps_main( in PS_INPUT In )
 
         if(_Blending_Mode == 0)
         {
-            _Result = _Render_Texture / (_Render_Background * _Mixing);
+            _Result = fmod(_Render_Texture - (_Render_Background * _Mixing), _Denom);
         }
         else
         {
-            _Result = (_Render_Background * _Mixing) / _Render_Texture;
+            _Result = fmod((_Render_Background * _Mixing) - _Render_Texture, _Denom);
         }
 
     _Result.a = _Render_Texture.a;

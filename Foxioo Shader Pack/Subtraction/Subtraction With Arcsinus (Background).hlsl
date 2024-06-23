@@ -55,11 +55,11 @@ PS_OUTPUT ps_main( in PS_INPUT In )
 
         if(_Blending_Mode == 0)
         {
-            _Result = _Render_Texture / (_Render_Background * _Mixing);
+            _Result = asin(_Render_Texture - (_Render_Background * _Mixing));
         }
         else
         {
-            _Result = (_Render_Background * _Mixing) / _Render_Texture;
+            _Result = asin((_Render_Background * _Mixing) - _Render_Texture);
         }
 
     _Result.a = _Render_Texture.a;

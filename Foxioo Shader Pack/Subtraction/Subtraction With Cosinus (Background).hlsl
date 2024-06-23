@@ -24,7 +24,6 @@ SamplerState S2D_BackgroundSampler : register(s1);
 cbuffer PS_VARIABLES : register(b0)
 {
     bool _;
-    bool _Blending_Mode;
     float _Mixing;
     bool __;
 };
@@ -51,16 +50,7 @@ PS_OUTPUT ps_main( in PS_INPUT In )
     float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
 
-        float4 _Result;
-
-        if(_Blending_Mode == 0)
-        {
-            _Result = _Render_Texture / (_Render_Background * _Mixing);
-        }
-        else
-        {
-            _Result = (_Render_Background * _Mixing) / _Render_Texture;
-        }
+        float4 _Result = cos(_Render_Texture - (_Render_Background * _Mixing));
 
     _Result.a = _Render_Texture.a;
     Out.Color = _Result;

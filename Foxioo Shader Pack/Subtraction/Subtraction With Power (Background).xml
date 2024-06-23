@@ -1,0 +1,46 @@
+<effect>
+	<Name>Subtraction With Power</Name>
+		<description>Subtraction With Power - Shader subtracts background and object colors from each other then colors are calculated by power</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+			
+		<parameter>
+			<name>/* Foxioo Subtraction With Power (Background) Shader | 1.1 (23.06.2024) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>Shader subtracts background and object colors from each other then colors are calculated by power</description>
+		</parameter>
+		
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+
+				<description>This variable sets the intensity of background visibility</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Power</name>
+				<variable>_Power</variable>
+
+				<description>This variable sets the color power</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+		<parameter>
+			<name>/*  */</name>
+			<property>checkbox</property>
+
+			<variable>__</variable>
+		</parameter>
+</effect>
