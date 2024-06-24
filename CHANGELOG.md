@@ -72,7 +72,7 @@
 |                                            |              |                  |             |      |
 | HSL                                        | (Switch)     | 1.4 (24.06.2024) | DX9 \| DX11 | 2.0  |
 | Invert Brightness                          | (Switch)     | 1.3 (24.06.2024) | DX9 \| DX11 | 2.0  |
-| Lighten                                    | (Background) | 1.5 (21.06.2024) | DX9 \| DX11 | 2.0  |
+| Light                                      | (Background) | 1.5 (21.06.2024) | DX9 \| DX11 | 2.0  |
 | Temperature                                | (Switch)     | 1.1 (24.06.2024) | DX9 \| DX11 | 2.0  |
 |                                            |              |                  |             |      |
 | 📂 Division                                |              |                  |             |      |
