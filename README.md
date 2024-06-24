@@ -1,8 +1,17 @@
-# ✨ Foxioo Shader Pack ✨
+<div align="center">
+   
+   <a href="https://github.com/FoxiooOfficial/FoxiooShaderPack">
+       <img src="Resources/Logo/Logo.png" alt="Logo">
+   </a>
+     
+   <br><br>
+   <b>Here is a package of shaders created or modified by me for the Clickteam Fusion!</b><br>
+   <a href="https://github.com/FoxiooOfficial/FoxiooShaderPack/issues">Report Bug</a>
+</div>
 
-**Here is a package of shaders created or modified by me for the Clickteam Fusion engine!**
+___
 
-🥳 The package currently has over **+90 Shaders** 🎉
+🥳 The package currently has **88 Shaders** 🎉
 
 ❗ **Shaders currently only work on Windows under Direct3D 9 and Direct3D 11 (No pre-multiplied)**
 
@@ -24,7 +33,7 @@
 - ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Usage/1.png?raw=true)
 2. Go to **"Runtime options"** and make sure **"Display Mode"** is set to **"Direct3D 11"** or **"Direct3D 9"**.
    
-![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Usage/2.png?raw=true)
+- ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Usage/2.png?raw=true)
    - ⚠️ **If you have "Direct3D 11" set, UNCHECK "Pre-multiplied alpha"**. *Shaders do not have their pre-multiplied version* ***yet!***
    - ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Usage/3.png?raw=true)
 
