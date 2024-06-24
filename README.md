@@ -1,6 +1,15 @@
-# ✨ Foxioo Shader Pack ✨
+<div align="center">
+   
+   <a href="https://github.com/FoxiooOfficial/FoxiooShaderPack">
+       <img src="Resources/Logo/Logo.png" alt="Logo">
+   </a>
+     
+   <br><br>
+   <b>Here is a package of shaders created or modified by me for the Clickteam Fusion!</b><br>
+   <a href="https://github.com/FoxiooOfficial/FoxiooShaderPack/issues">Report Bug</a>
+</div>
 
-**Here is a package of shaders created or modified by me for the Clickteam Fusion engine!**
+___
 
 🥳 The package currently has over **+90 Shaders** 🎉
 
