@@ -1,0 +1,35 @@
+<effect>
+	<Name>Color Dodge</Name>
+		<description>Color Dodge - (The effect comes from the Photoshop) Looks at the color information in each channel and brightens the base color to reflect the blend color by decreasing contrast between the two. Blending with black produces no change</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+		<parameter>
+			<name>/* Foxioo Color Dodge (Background) Shader | 1.1 (24.06.2024) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>(The effect comes from the Photoshop) Looks at the color information in each channel and brightens the base color to reflect the blend color by decreasing contrast between the two. Blending with black produces no change</description>
+		</parameter>
+			
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+
+				<description>This variable sets the intensity of base visibility</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+	
+		<parameter>
+			<name>/*  */</name>
+			<property>checkbox</property>
+
+			<variable>__</variable>
+		</parameter>
+
+</effect>

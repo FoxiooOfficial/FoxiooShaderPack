@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>			
 
 		<parameter>
-			<name>/* Foxioo Negation (Background) Shader | 1.1 (23.06.2024) */</name>
+			<name>/* Foxioo Negation (Background) Shader | 1.0 (23.06.2024) */</name>
 			<property>checkbox</property>
 
 				<variable>_</variable>
@@ -20,7 +20,7 @@
 				<name>Mixing</name>
 				<variable>_Mixing</variable>
 				
-				<description>This variable sets the intensity of background visibility</description>
+				<description>This variable sets the intensity of blend visibility</description>
 
 				<type>float</type>
 

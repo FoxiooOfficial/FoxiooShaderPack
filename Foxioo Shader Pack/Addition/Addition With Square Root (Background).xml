@@ -1,6 +1,6 @@
 <effect>
 	<Name>Addition With Square Root</Name>
-		<description>Addition With Square Root - Shader adds base and mixes colors with each other then colors are calculated by square root</description> 
+		<description>Addition With Square Root - Shader adds base and blend colors with each other then colors are calculated by square root</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
@@ -12,14 +12,14 @@
 
 			<variable>_</variable>
 
-			<description>Shader adds base and mixes colors with each other then colors are calculated by square root</description>
+			<description>Shader adds base and blend colors with each other then colors are calculated by square root</description>
 		</parameter>
 
 			<parameter>
 				<name>Mixing</name>
 				<variable>_Mixing</variable>
 
-				<description>This variable sets the intensity of background visibility</description>
+				<description>This variable sets the intensity of base visibility</description>
 
 				<type>float</type>
 

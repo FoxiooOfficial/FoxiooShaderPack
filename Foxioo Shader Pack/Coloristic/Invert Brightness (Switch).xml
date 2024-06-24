@@ -1,0 +1,45 @@
+<effect>
+	<Name>Invert Brightness</Name>
+		<description>Invert Brightness - Shader inverts color luminosities</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+
+		<parameter>
+			<name>/* Foxioo Invert Brightness (Switch) Shader | 1.3 (24.06.2024) */</name>
+			<property>checkbox</property>
+
+			<description>Shader inverts color luminosities</description>
+		</parameter>
+
+			<parameter>
+				<name>Blending Mode</name>
+				<variable>_Blending_Mode</variable>
+
+				<description>This variable determines what the base should be. Setting it to 0 sets the base as the texture of the object on which the effect is applied, and setting it to 1 sets this as the background.</description>
+
+				<type>int</type>
+				<property>checkbox</property>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable sets the intensity of base visibility.</description>
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+	<parameter>
+		<name>/*  */</name>
+		<property>checkbox</property>
+		
+		<variable>__</variable>
+	</parameter>
+</effect>

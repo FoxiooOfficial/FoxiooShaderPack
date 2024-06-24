@@ -1,6 +1,6 @@
 <effect>
 	<Name>Average</Name>
-		<description>Average - The final result is the average of the background and object colors</description> 
+		<description>Average - The final result is the average of the base and blend colors</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
@@ -12,14 +12,14 @@
 
 			<variable>_</variable>
 
-			<description>The final result is the average of the background and object colors</description>
+			<description>The final result is the average of the base and blend colors</description>
 		</parameter>
 
 			<parameter>
 				<name>Mixing</name>
 				<variable>_Mixing</variable>
 				
-				<description>This variable sets the intensity of background visibility</description>
+				<description>This variable sets the intensity of base visibility</description>
 
 				<type>float</type>
 

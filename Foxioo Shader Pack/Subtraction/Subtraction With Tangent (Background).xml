@@ -19,7 +19,7 @@
 				<name>Blending Mode</name>
 				<variable>_Blending_Mode</variable>
 
-				<description>This variable determines the color of the subtractor. When the option is off, the subtractor is the background colors, and when the option is on, the subtractor is the object colors</description>
+				<description>This variable determines the color of the subtractor. When the option is off, the subtractor is the base colors, and when the option is on, the subtractor is the blend colors</description>
 
 				<type>int</type>
 				<property>checkbox</property>
@@ -32,7 +32,7 @@
 				<name>Mixing</name>
 				<variable>_Mixing</variable>
 
-				<description>This variable sets the intensity of background visibility</description>
+				<description>This variable sets the intensity of base visibility</description>
 
 				<type>float</type>
 

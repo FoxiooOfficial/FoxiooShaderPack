@@ -1,0 +1,53 @@
+<effect>
+	<Name>Temperature</Name>
+		<description>Temperature - Shader changes color temperature</description> 
+			<author>Foxioo</author>
+			<BackgroundTexture>1</BackgroundTexture>
+
+		<parameter>
+			<name>/* Foxioo Temperature (Switch) Shader | 1.1 (24.06.2024) */</name>
+			<property>checkbox</property>
+
+			<description>Shader changes color temperature</description>
+		</parameter>
+
+			<parameter>
+				<name>Blending Mode</name>
+				<variable>_Blending_Mode</variable>
+
+				<description>This variable determines what the base should be. Setting it to 0 sets the base as the texture of the object on which the effect is applied, and setting it to 1 sets this as the background.</description>
+
+				<type>int</type>
+				<property>checkbox</property>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable sets the intensity of base visibility.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+			
+			<parameter>
+				<name>Temperature</name>
+				<variable>_Temperature</variable>
+
+				<description>This variable sets the color temperature</description>
+
+				<type>float</type>
+
+				<value>45</value>
+			</parameter>
+	
+		<parameter>
+			<name>/*  */</name>
+			<property>checkbox</property>
+		</parameter>
+
+</effect>

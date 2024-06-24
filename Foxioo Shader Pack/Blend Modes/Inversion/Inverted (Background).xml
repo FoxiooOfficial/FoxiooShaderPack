@@ -19,7 +19,7 @@
 				<name>Blending Mode</name>
 				<variable>_Blending_Mode</variable>
 
-				<description>This option allows you to specify whether the main texture should be included in the final blending.</description>
+				<description>This option allows you to specify whether the blend color should be included in the final blending.</description>
 
 				<type>int</type>
 				<property>checkbox</property>
@@ -31,7 +31,7 @@
 				<name>Mixing</name>
 				<variable>_Mixing</variable>
 				
-				<description>This variable sets the intensity of background visibility</description>
+				<description>This variable sets the intensity of base visibility</description>
 
 				<type>float</type>
 

@@ -67,7 +67,7 @@
 				<name>Mixing</name>
 				<variable>_Mixing</variable>
 
-				<description>This variable sets the intensity of background visibility</description>
+				<description>This variable sets the intensity of base visibility.</description>
 
 				<type>float</type>
 
@@ -78,7 +78,7 @@
 				<name>Alpha</name>
 				<variable>_Alpha</variable>
 
-				<description>Zmienna ta określa mnożenie koloru alpha.</description>
+				<description>This variable determines the multiplication of the color alpha.</description>
 
 				<type>float</type>
 				<property>spin</property>

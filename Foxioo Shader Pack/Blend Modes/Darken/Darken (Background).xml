@@ -1,0 +1,35 @@
+<effect>
+	<Name>Darken</Name>
+		<description>Darken - (The effect comes from the Photoshop) Looks at the color information in each channel and selects the base or blend color - whichever is darker - as the result color. Pixels lighter than the blend color are replaced, and pixels darker than the blend color do not change</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+		<parameter>
+			<name>/* Foxioo Color Burn (Background) Shader | 1.1 (24.06.2024) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>(The effect comes from the Photoshop) Looks at the color information in each channel and selects the base or blend color - whichever is darker - as the result color. Pixels lighter than the blend color are replaced, and pixels darker than the blend color do not change</description>
+		</parameter>
+			
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+
+				<description>This variable sets the intensity of base visibility</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+	
+		<parameter>
+			<name>/*  */</name>
+			<property>checkbox</property>
+
+			<variable>__</variable>
+		</parameter>
+
+</effect>
