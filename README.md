@@ -33,7 +33,7 @@ ___
 - ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Usage/1.png?raw=true)
 2. Go to **"Runtime options"** and make sure **"Display Mode"** is set to **"Direct3D 11"** or **"Direct3D 9"**.
    
-![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Usage/2.png?raw=true)
+- ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Usage/2.png?raw=true)
    - ⚠️ **If you have "Direct3D 11" set, UNCHECK "Pre-multiplied alpha"**. *Shaders do not have their pre-multiplied version* ***yet!***
    - ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Usage/3.png?raw=true)
 
