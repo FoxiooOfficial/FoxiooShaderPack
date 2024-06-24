@@ -6,7 +6,7 @@
 # ✨ 24 June 2024 | Release ID: 1
 
 ## 📝 Notes
-- Added 88 shaders in this release
+- Added 89 shaders in this release
 
 ## ➕ Added
 | Shader name                                | Type         | Shader Version   | Render      | PS   |
@@ -128,8 +128,9 @@
 | 📂 Transformations                         |              |                  |             |      |
 |                                            |              |                  |             |      |
 | Better Bloom                               | (Background) | 1.4 (21.06.2024) | DX9 \| DX11 | 2.49 |
-| Mode 7                                     | (Switch    ) | 1.3 (02.05.2024) | DX9 \| DX11 | 2.0  |
-| Scaler                                     | (Switch)     | 1.2 (24.01.2024) | DX9 \| DX11 | 2.0  |
+| Mode 7                                     | (Switch)     | 1.3 (02.05.2024) | DX9 \| DX11 | 2.0  |
+| Offset Color                               | (Background) | 1.2 (24.06.2024) | DX9 \| DX11 | 2.0  |
+| Scaler                                     | (Switch)     | 1.2 (24.06.2024) | DX9 \| DX11 | 2.0  |
 | Sinus Wave                                 | (Switch)     | 1.1 (24.06.2024) | DX9 \| DX11 | 2.0  |
 | Sinus Wave Offset                          | (Switch)     | 1.1 (24.06.2024) | DX9 \| DX11 | 2.0  |
     
