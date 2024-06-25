@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 
 		<parameter>
-			<name>/* Foxioo Sinus Wave (Switch) Shader | 1.0 (30.12.2023) */</name>
+			<name>/* Foxioo Sinus Wave (Switch) Shader | 1.1 (24.06.2024) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
