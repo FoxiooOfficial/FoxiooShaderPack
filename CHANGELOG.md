@@ -6,7 +6,7 @@
 # ✨ 24 June 2024 | Release ID: 1
 
 ## 📝 Notes
-- Added 88 shaders in this release
+- Added +80 shaders in this release
 
 ## ➕ Added
 | Shader name                                | Type         | Shader Version   | Render      | PS   |
