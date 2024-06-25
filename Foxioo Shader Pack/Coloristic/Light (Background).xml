@@ -1,6 +1,6 @@
 <effect>
-	<Name>HSL</Name>
-		<description>HSL - This shader calculates so blend and base to simulate light. I recommend using a white-black or white-transparent gradient</description> 
+	<Name>Light</Name>
+		<description>Light - This shader calculates so blend and base to simulate light. I recommend using a white-black or white-transparent gradient</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
