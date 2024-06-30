@@ -1,7 +1,7 @@
 /***********************************************************/
 
 /* Autor shader: Foxioo */
-/* Version shader: 1.4 (21.06.2024) */
+/* Version shader: 1.5 (26.06.2024) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 
 /***********************************************************/
@@ -19,7 +19,7 @@ Texture2D<float4> S2D_Background : register(t1);
 SamplerState S2D_BackgroundSampler : register(s1);
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
 cbuffer PS_VARIABLES : register(b0)
@@ -41,8 +41,6 @@ cbuffer PS_PIXELSIZE : register(b1)
     float fPixelWidth;
     float fPixelHeight;
 };
-
-/* too many float's 2!1!!! @w@ */
 
 #define _BlurSize 30
 
@@ -91,7 +89,6 @@ struct PS_OUTPUT
     float4 Color : SV_Target;
 };
 
-
 /************************************************************/
 /* Main */
 /************************************************************/
@@ -102,17 +99,21 @@ PS_OUTPUT ps_main(PS_INPUT In)
 
     float4 _Result_Blur = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
 
-    /* BLUR!!!!! */
-    /* Destroy my graphics card!!!!!!!!!! */
-    for (int j = 1; j < _Quality; j++)
+    for (int j = 0; j < _Quality; j++)
     {
+        float4 _Blur_Sum = float4(0.0, 0.0, 0.0, 0.0);
+
         for (int i = 0; i < _BlurSize; i++)
         {
-            float2 offset = max(0.0, min(1.0, In.texCoord + ((_Distance / j) * float2(fPixelWidth, fPixelHeight) * _Blur[i]) / 2.0));
-            _Result_Blur += S2D_Background.Sample(S2D_BackgroundSampler, offset);
+            float2 _Offset_Add = In.texCoord + ((float2(fPixelWidth, fPixelHeight) * _Distance) * _Blur[i] / _Quality);
+            float2 _Offset_Sub = In.texCoord - ((float2(fPixelWidth, fPixelHeight) * _Distance) * _Blur[i] / _Quality);
+
+            _Blur_Sum += S2D_Background.Sample(S2D_BackgroundSampler, _Offset_Add);
+            _Blur_Sum += S2D_Background.Sample(S2D_BackgroundSampler, _Offset_Sub);
         }
-        _Result_Blur /= _BlurSize + 1;
+        _Result_Blur += _Blur_Sum / (_BlurSize * 2);
     }
+    _Result_Blur /= _Quality + 1;
 
     if (_Alpha_Mode == 1)
     {
@@ -127,5 +128,57 @@ PS_OUTPUT ps_main(PS_INPUT In)
 
     Out.Color = _Result * _Alpha * S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
 
+    return Out;
+}
+
+
+/************************************************************/
+/* Premultiplied Alpha */
+/************************************************************/
+
+float4 Demultiply(float4 _color)
+{
+	float4 color = _color;
+	if ( color.a != 0 )
+		color.rgb /= color.a;
+	return color;
+}
+
+PS_OUTPUT ps_main_pm( in PS_INPUT In ) 
+{
+    PS_OUTPUT Out;
+
+    float4 _Result_Blur = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
+
+    for (int j = 0; j < _Quality; j++)
+    {
+        float4 _Blur_Sum = float4(0.0, 0.0, 0.0, 0.0);
+
+        for (int i = 0; i < _BlurSize; i++)
+        {
+            float2 _Offset_Add = In.texCoord + ((float2(fPixelWidth, fPixelHeight) * _Distance) * _Blur[i] / _Quality);
+            float2 _Offset_Sub = In.texCoord - ((float2(fPixelWidth, fPixelHeight) * _Distance) * _Blur[i] / _Quality);
+
+            _Blur_Sum += S2D_Background.Sample(S2D_BackgroundSampler, _Offset_Add);
+            _Blur_Sum += S2D_Background.Sample(S2D_BackgroundSampler, _Offset_Sub);
+        }
+        _Result_Blur += _Blur_Sum / (_BlurSize * 2);
+    }
+    _Result_Blur /= _Quality + 1;
+
+    if (_Alpha_Mode == 1)
+    {
+        _Result_Blur.a *= ((_Result_Blur.r + _Result_Blur.g + _Result_Blur.b) / 3.0);
+    }
+    else if (_Alpha_Mode == 2)
+    {
+        _Result_Blur.a *= 1 - ((_Result_Blur.r + _Result_Blur.g + _Result_Blur.b) / 3.0);
+    }
+
+    float4 _Result = pow(abs(_Result_Blur), _Power) * _Mixing;
+
+    Out.Color = _Result * _Alpha * Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
+
+    Out.Color.rgb *= Out.Color.a;
     return Out;
 }

@@ -1,25 +1,25 @@
 <effect>
-	<Name>Signed Difference</Name>
-		<description>Signed Difference - The blend color is subtracted from the base color, then this is divided by 2, and 0.5 is added at the very end</description> 
+	<Name>Signed Difference (Background)</Name>
+		<description>The blend color is subtracted from the base color, then this is divided by 2, and 0.5 is added at the very end</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Signed Difference (Background) Shader | 1.0 (23.06.2024) */</name>
+			<name>/* Foxioo Signed Difference (Background) Shader | 1.1 (30.06.2024) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
 
 			<description>The blend color is subtracted from the base color, then this is divided by 2, and 0.5 is added at the very end</description>
 		</parameter>
-
+		
 			<parameter>
 				<name>Mixing</name>
 				<variable>_Mixing</variable>
 				
-				<description>This variable sets the intensity of blend visibility</description>
+				<description>This variable is responsible for the visibility of the effect.</description>
 
 				<type>float</type>
 

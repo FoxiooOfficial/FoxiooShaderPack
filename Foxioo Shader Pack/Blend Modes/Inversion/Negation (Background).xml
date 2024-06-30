@@ -1,26 +1,25 @@
 <effect>
-	<Name>Negation</Name>
-		<description>Negation - (The effect comes from the Krita) The absolute of the 1.0f value subtracted by the base subtracted by the blend layer. abs(1.0f - Base - Blend)</description> 
+	<Name>Negation (Background)</Name>
+		<description>(The effect comes from the Krita) The absolute of the 1.0f value subtracted by the base subtracted by the blend layer. abs(1.0f - Base - Blend)</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>			
 
 		<parameter>
-			<name>/* Foxioo Negation (Background) Shader | 1.0 (23.06.2024) */</name>
+			<name>/* Foxioo Negation (Background) Shader | 1.1 (30.06.2024) */</name>
 			<property>checkbox</property>
 
 				<variable>_</variable>
 
 			<description>(The effect comes from the Krita) The absolute of the 1.0f value subtracted by the base subtracted by the blend layer. abs(1.0f - Base - Blend)</description>
-		</parameter>
-
+		</parameter>=
 			
 			<parameter>
 				<name>Mixing</name>
 				<variable>_Mixing</variable>
 				
-				<description>This variable sets the intensity of blend visibility</description>
+				<description>This variable is responsible for the visibility of the effect.</description>
 
 				<type>float</type>
 

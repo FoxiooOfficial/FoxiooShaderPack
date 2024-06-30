@@ -1,27 +1,27 @@
 <effect>
-	<Name>Subtraction</Name>
-		<description>Subtraction - Shader subtracts base and blend colors from each other</description> 
+	<Name>Subtraction (Background)</Name>
+		<description>Base and blend colors are subtracted.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Subtraction (Background) Shader | 1.1 (23.06.2024) */</name>
+			<name>/* Foxioo Subtraction (Background) Shader | 1.2 (26.06.2024) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
 
-			<description>Shader subtracts base and blend colors from each other</description>
+			<description>Base and blend colors are subtracted.</description>
 		</parameter>
 
 			<parameter>
 				<name>Blending Mode</name>
 				<variable>_Blending_Mode</variable>
+				
+				<description>This variable manages which color will be the subtraction. When this value is set to 0 then blend will subtract base and when set to 1 then base will subtract blend.</description>
 
-				<description>This variable determines the color of the subtractor. When the option is off, the subtractor is the base colors, and when the option is on, the subtractor is the blend colors</description>
-
-				<type>int</type>
+				<type>bool</type>
 				<property>checkbox</property>
 
 				<value>1</value>
@@ -31,7 +31,7 @@
 				<name>Mixing</name>
 				<variable>_Mixing</variable>
 				
-				<description>This variable sets the intensity of base visibility</description>
+				<description>This variable is responsible for the visibility of the effect.</description>
 
 				<type>float</type>
 

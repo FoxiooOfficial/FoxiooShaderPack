@@ -1,7 +1,7 @@
 /***********************************************************/
 
 /* Autor shader: Foxioo */
-/* Version shader: 1.1 (24.06.2024) */
+/* Version shader: 1.2 (30.06.2024) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 
 /***********************************************************/
@@ -78,15 +78,53 @@ PS_OUTPUT ps_main( in PS_INPUT In )
     if(_Blending_Mode == 1)
     {   
         _Render = S2D_Image.Sample(S2D_ImageSampler, UV) * In.Tint;
-
     }
     else
     {   
         _Render = S2D_Background.Sample(S2D_BackgroundSampler, UV) * In.Tint;
-
-    }
         _Render.a *= _Render_Texture.a;
+    }
 
     Out.Color = _Render * _Mixing;
     return Out;
+}
+
+/************************************************************/
+/* Premultiplied Alpha */
+/************************************************************/
+
+float4 Demultiply(float4 _color)
+{
+	float4 color = _color;
+	if ( color.a != 0 )
+		color.rgb /= color.a;
+	return color;
+}
+
+PS_OUTPUT ps_main_pm( in PS_INPUT In ) 
+{
+    PS_OUTPUT Out;
+
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
+
+    float2 UV = In.texCoord;
+    if(_X == true) { UV.x = In.texCoord.x + ( _AmplitudeX * sin(((In.texCoord.y *_PeriodsX) + _PosX) * _FraqX)); } else { In.texCoord.x; }
+    if(_Y == true) { UV.y = In.texCoord.y + ( _AmplitudeY * sin(((In.texCoord.x *_PeriodsY) + _PosY) * _FraqY)); } else { In.texCoord.y; }
+
+    float4 _Render = 0;
+
+    if(_Blending_Mode == 1)
+    {   
+        _Render = Demultiply(S2D_Image.Sample(S2D_ImageSampler, UV)) * In.Tint;
+    }
+    else
+    {   
+        _Render = S2D_Background.Sample(S2D_BackgroundSampler, UV) * In.Tint;
+        _Render.a *= _Render_Texture.a;
+    }
+
+    _Render.rgb *= _Mixing * _Render.a;
+
+    Out.Color = _Render;
+    return Out;  
 }

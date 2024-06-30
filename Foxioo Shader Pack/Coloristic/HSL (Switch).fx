@@ -1,8 +1,7 @@
-
 /***********************************************************/
 
 /* Autor shader: Foxioo */
-/* Version shader: 1.4 (24.06.2024) */
+/* Version shader: 1.5 (30.06.2024) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 
 /***********************************************************/
@@ -45,11 +44,8 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
 
     /* Hue */
 
-        _Hue /= 120.0;
-
-        _Hue = _Hue % 3;
-
-        if (_Hue < 0) _Hue = 3 - abs(_Hue);
+    _Hue = (_Hue / 120.0) % 3;
+    if (_Hue < 0) _Hue = 3 - abs(_Hue);
 
         if (_Hue >= 0 && _Hue < 1)
         {

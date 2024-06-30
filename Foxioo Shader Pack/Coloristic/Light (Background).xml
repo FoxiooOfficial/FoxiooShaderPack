@@ -1,13 +1,13 @@
 <effect>
-	<Name>Light</Name>
-		<description>Light - This shader calculates so blend and base to simulate light. I recommend using a white-black or white-transparent gradient</description> 
+	<Name>Light (Background)</Name>
+		<description>This shader calculates so blend and base to simulate light. I recommend using a white-black or white-transparent gradient</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 
 		<parameter>
-			<name>/* Foxioo Light (Background) Shader | 1.5 (21.06.2024) */</name>
+			<name>/* Foxioo Light (Background) Shader | 1.6 (30.06.2024) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

@@ -30,7 +30,7 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In);
 
-        float4 _Result = pow(_Render_Texture * (_Render_Background * _Mixing), _Power);
+        float4 _Result = pow(abs(_Render_Texture * (_Render_Background * _Mixing)), _Power);
 
         _Result.a = _Render_Texture.a;
 

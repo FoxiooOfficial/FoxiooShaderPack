@@ -1,7 +1,7 @@
 /***********************************************************/
 
 /* Autor shader: Foxioo */
-/* Version shader: 1.1 (24.06.2024) */
+/* Version shader: 1.2 (30.06.2024) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 
 /***********************************************************/
@@ -30,13 +30,13 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In);
 
-        float4 _Result = _Render_Texture;
+        float4 _Result = 0;
 
         _Result.r = (_Render_Texture.r + (_Render_Background.r * _Mixing)) > 1 ? 1 : 0;
         _Result.g = (_Render_Texture.g + (_Render_Background.g * _Mixing)) > 1 ? 1 : 0;
         _Result.b = (_Render_Texture.b + (_Render_Background.b * _Mixing)) > 1 ? 1 : 0;
 
-        _Result.a *= _Render_Texture.a;
+        _Result.a = _Render_Texture.a;
 
     return _Result;
 }

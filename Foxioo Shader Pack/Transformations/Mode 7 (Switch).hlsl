@@ -1,7 +1,7 @@
 /***********************************************************/
 
 /* Autor shader: Foxioo */
-/* Version shader: 1.3 (02.05.2024) */
+/* Version shader: 1.4 (30.06.2024) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 
 /***********************************************************/
@@ -149,6 +149,74 @@ PS_OUTPUT ps_main(PS_INPUT In)
 
     _Render *= In.Tint;
 
+    Out.Color = _Render;
+
+    return Out;
+}
+
+/************************************************************/
+/* Premultiplied Alpha */
+/************************************************************/
+
+float4 Demultiply(float4 _color)
+{
+	float4 color = _color;
+	if ( color.a != 0 )
+		color.rgb /= color.a;
+	return color;
+}
+
+PS_OUTPUT ps_main_pm( in PS_INPUT In ) 
+{
+    PS_OUTPUT Out;
+
+        float2 _In = In.texCoord;
+        _In = Fun_RotationY(_In);
+
+    float _RotZ_Temp = _RotZ * (3.14159265 / 180);
+
+        float2 _In_Old = _In;
+        _In.y += _RotZ_Temp;
+
+        float2 _UV = Fun_Mode7(_In);
+        float2 _Pos = float2(-_PosX, _PosY);
+        float2 _Scale_Temp = (float2(_ScaleX, _ScaleY)) * _Scale;
+
+    _UV = Fun_RotationX(_UV);
+    _UV -= _Pos;
+    _UV *= _Scale_Temp;
+
+    if(_Looping_Mode == 0)
+    {
+        _UV = frac(_UV);
+    }
+    else if(_Looping_Mode == 1)
+    {
+        _UV /= 2;
+        _UV = frac(_UV);
+        _UV = abs(_UV * 2.0 - 1.0);
+    }
+
+    float4 _Render = 1;
+    if(_Result == false) { Demultiply(_Render = S2D_Image.Sample(S2D_ImageSampler, _UV)); }
+    else { _Render = S2D_Background.Sample(S2D_BackgroundSampler, _UV); }
+
+        if (_Looping_Mode == 3 && (_UV.x < 0 || _UV.x > 1 || _UV.y < 0 || _UV.y > 1 || _UV.y < 0))
+        {
+            _Render = 0;
+        }
+
+        if(_Render_Sky == false)
+        {
+            if(_In_Old.y > (0.5 / _Distortion) - _RotZ_Temp)
+            {
+                _Render = 0;
+            }
+        }
+
+    _Render *= In.Tint;
+
+    _Render.rgb *= _Render.a;
     Out.Color = _Render;
 
     return Out;

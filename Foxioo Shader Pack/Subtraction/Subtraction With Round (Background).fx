@@ -1,7 +1,7 @@
 /***********************************************************/
 
 /* Autor shader: Foxioo */
-/* Version shader: 1.1 (23.06.2024) */
+/* Version shader: 1.2 (26.06.2024) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 
 /***********************************************************/
@@ -36,11 +36,11 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
 
         if(_Blending_Mode == 0)
         {
-            _Result = _Render_Texture - (_Render_Background * _Mixing);
+            _Result = round(_Render_Texture - (_Render_Background * _Mixing));
         }
         else
         {
-            _Result = (_Render_Background * _Mixing) - _Render_Texture;
+            _Result = round((_Render_Background * _Mixing) - _Render_Texture);
         }
 
         _Result.a = _Render_Texture.a;

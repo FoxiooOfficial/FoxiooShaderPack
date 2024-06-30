@@ -1,25 +1,25 @@
 <effect>
-	<Name>Glow</Name>
-		<description>Glow - (The effect comes from the Paint.NET) This is the reverse of the Reflect</description> 
+	<Name>Glow (Background)</Name>
+		<description>(The effect comes from the Paint.NET) This is the reverse of the Reflect</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>			
 
 		<parameter>
-			<name>/* Foxioo Glow (Background) Shader | 1.0 (23.06.2024) */</name>
+			<name>/* Foxioo Glow (Background) Shader | 1.1 (30.06.2024) */</name>
 			<property>checkbox</property>
 
 				<variable>_</variable>
 
-			<description>This is the reverse of the Reflect</description>
+			<description>(The effect comes from the Paint.NET) This is the reverse of the Reflect</description>
 		</parameter>
 			
 			<parameter>
 				<name>Mixing</name>
 				<variable>_Mixing</variable>
 				
-				<description>This variable sets the intensity of background visibility</description>
+				<description>This variable is responsible for the visibility of the effect.</description>
 
 				<type>float</type>
 

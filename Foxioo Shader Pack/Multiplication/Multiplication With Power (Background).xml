@@ -1,25 +1,25 @@
 <effect>
-	<Name>Multiplication With Power</Name>
-		<description>Multiplication With Power - Shader multiplies colors of base and blend with each other then colors are calculated by power</description> 
+	<Name>Multiplication With Power (Background)</Name>
+		<description>Base and blend colors are multiplied after which the colors are reduced by the power.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Multiplication With Power (Background) Shader | 1.1 (23.06.2024) */</name>
+			<name>/* Foxioo Multiplication With Power (Background) Shader | 1.2 (26.06.2024) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
 
-			<description>Shader multiplies colors of base and blend with each other then colors are calculated by power</description>
+			<description>Base and blend colors are multiplied after which the colors are reduced by the power.</description>
 		</parameter>
 
 			<parameter>
 				<name>Mixing</name>
 				<variable>_Mixing</variable>
-
-				<description>This variable sets the intensity of base visibility</description>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
 
 				<type>float</type>
 
@@ -29,8 +29,8 @@
 			<parameter>
 				<name>Power</name>
 				<variable>_Power</variable>
-
-				<description>This variable sets the color power</description>
+				
+				<description>This variable determines the exponent to which the sum of base and blend is raised as a function of power.</description>
 
 				<type>float</type>
 

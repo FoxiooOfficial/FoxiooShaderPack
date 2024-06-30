@@ -1,7 +1,7 @@
 /***********************************************************/
 
 /* Autor shader: Foxioo */
-/* Version shader: 1.0 (23.06.2024) */
+/* Version shader: 1.4 (30.06.2024) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 
 /***********************************************************/
@@ -11,6 +11,7 @@
 /***********************************************************/
 /* Samplers */
 /***********************************************************/
+
 Texture2D<float4> S2D_Image : register(t0);
 SamplerState S2D_ImageSampler : register(s0);
 
@@ -51,7 +52,7 @@ PS_OUTPUT ps_main( in PS_INPUT In )
     float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord) * In.Tint;
     
-        float4 _Result;
+    float4 _Result = 0;
         
         if(_Blending_Mode == 0)
         {
@@ -66,9 +67,50 @@ PS_OUTPUT ps_main( in PS_INPUT In )
             _Result.b = (1 - (_Render_Background.r + (_Render_Background.g - _Render_Background.b))) + (_Mixing * _Render_Background.b);
         }
 
-        _Result.a = _Render_Texture.a;
+    _Result.a = _Render_Texture.a;
 
     Out.Color = _Result;
 
+    return Out;
+}
+
+/************************************************************/
+/* Premultiplied Alpha */
+/************************************************************/
+
+float4 Demultiply(float4 _color)
+{
+	float4 color = _color;
+	if ( color.a != 0 )
+		color.rgb /= color.a;
+	return color;
+}
+
+PS_OUTPUT ps_main_pm( in PS_INPUT In ) 
+{
+    PS_OUTPUT Out;
+
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
+    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord) * In.Tint;
+    
+    float4 _Result = 0;
+        
+        if(_Blending_Mode == 0)
+        {
+            _Result.r = (1 - (_Render_Texture.g + (_Render_Texture.b - _Render_Texture.r))) + (_Mixing * _Render_Texture.r);
+            _Result.g = (1 - (_Render_Texture.b + (_Render_Texture.r - _Render_Texture.g))) + (_Mixing * _Render_Texture.g);
+            _Result.b = (1 - (_Render_Texture.r + (_Render_Texture.g - _Render_Texture.b))) + (_Mixing * _Render_Texture.b);
+        }
+        else
+        {
+            _Result.r = (1 - (_Render_Background.g + (_Render_Background.b - _Render_Background.r))) + (_Mixing * _Render_Background.r);
+            _Result.g = (1 - (_Render_Background.b + (_Render_Background.r - _Render_Background.g))) + (_Mixing * _Render_Background.g);
+            _Result.b = (1 - (_Render_Background.r + (_Render_Background.g - _Render_Background.b))) + (_Mixing * _Render_Background.b);
+        }
+
+    _Result.a = _Render_Texture.a;
+    _Result.rgb *= _Result.a;
+
+    Out.Color = _Result;
     return Out;
 }

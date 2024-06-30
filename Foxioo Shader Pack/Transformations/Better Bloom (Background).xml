@@ -1,18 +1,18 @@
 <effect>
 	<Name>Better Bloom (Background)</Name>
-		<description>WARNING! THIS SHADER IS A HUGE OVERLOAD FOR GRAPHICS CARDS! That this shader is based on the modified 'Bloom 30' shader by: Looki, NaitorStudios and fnkycoldmadeanr.</description> 
+		<description>WARNING! THIS SHADER IS A HUGE OVERLOAD FOR GRAPHICS CARDS! This shader is a modification of the "Bloom 30" shader created by: Looki, NaitorStudios and fnkycoldmadeanr.</description> 
 			<author>Foxioo, Looki, NaitorStudios, fnkycoldmadeanr</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 
 		<parameter>
-			<name>/* Foxioo Better Bloom (Background) Shader | 1.4 (21.06.2024) */</name>
+			<name>/* Foxioo Better Bloom (Background) Shader | 1.5 (26.06.2024) */</name>
 			<property>checkbox</property>
 				
 				<variable>_</variable>
 
-			<description>WARNING! THIS SHADER IS A HUGE OVERLOAD FOR GRAPHICS CARDS! That this shader is based on the modified 'Bloom 30' shader by: Looki, NaitorStudios and fnkycoldmadeanr.</description>
+			<description>WARNING! THIS SHADER IS A HUGE OVERLOAD FOR GRAPHICS CARDS! This shader is a modification of the "Bloom 30" shader created by: Looki, NaitorStudios and fnkycoldmadeanr.</description>
 		</parameter>
 
 		<parameter>

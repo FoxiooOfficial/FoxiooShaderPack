@@ -1,7 +1,7 @@
 /***********************************************************/
 
 /* Autor shader: Foxioo */
-/* Version shader: 1.2 (24.06.2024) */
+/* Version shader: 1.2 (30.06.2024) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 
 /***********************************************************/
@@ -52,12 +52,9 @@ float4 Main(float2 In: TEXCOORD) : COLOR
     }
     
     _Result *= _Mixing;
-
     _Result.a *= _Render_Texture.a;
 
     return _Result;
-
-    
 }
 
 /************************************************************/

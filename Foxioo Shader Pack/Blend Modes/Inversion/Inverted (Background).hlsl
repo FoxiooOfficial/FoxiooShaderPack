@@ -1,7 +1,7 @@
 /***********************************************************/
 
 /* Autor shader: Foxioo */
-/* Version shader: 1.1 (23.06.2024) */
+/* Version shader: 1.2 (30.06.2024) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 
 /***********************************************************/
@@ -31,13 +31,13 @@ cbuffer PS_VARIABLES : register(b0)
 
 struct PS_INPUT
 {
-    float4 Tint : COLOR0;
-    float2 texCoord : TEXCOORD0;
+  float4 Tint : COLOR0;
+  float2 texCoord : TEXCOORD0;
 };
 
 struct PS_OUTPUT
 {
-    float4 Color : SV_Target;
+    float4 Color   : SV_TARGET;
 };
 
 /************************************************************/
@@ -50,20 +50,56 @@ PS_OUTPUT ps_main( in PS_INPUT In )
 
     float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
-    float4 _Result = _Render_Texture;
 
-    if (_Blending_Mode == 0)
-    {
-        _Result.rgb = _Mixing - (_Render_Background.rgb * _Mixing);
-    }
-    else
-    {
-        _Result.rgb = _Mixing - ((_Render_Background.rgb * _Mixing) + _Render_Texture.rgb)/ 2.0;
-    }
+    float4 _Result = 0;
+
+        if(_Blending_Mode == 0)
+        {
+            _Result.rgb = _Mixing - (_Render_Background.rgb * _Mixing); 
+        }
+        else
+        {
+            _Result.rgb = _Mixing - ((_Render_Background.rgb * _Mixing) + _Render_Texture.rgb) / 2.0;
+        }
+
+    _Result.a = _Render_Texture.a;
+    Out.Color = _Result;
     
-    _Result.a *= _Render_Texture.a;
+    return Out;
+}
+/************************************************************/
+/* Premultiplied Alpha */
+/************************************************************/
+
+float4 Demultiply(float4 _color)
+{
+	float4 color = _color;
+	if ( color.a != 0 )
+		color.rgb /= color.a;
+	return color;
+}
+
+PS_OUTPUT ps_main_pm( in PS_INPUT In ) 
+{
+    PS_OUTPUT Out;
+
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
+    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
+
+    float4 _Result = 0;
+
+        if(_Blending_Mode == 0)
+        {
+            _Result.rgb = _Mixing - (_Render_Background.rgb * _Mixing); 
+        }
+        else
+        {
+            _Result.rgb = _Mixing - ((_Render_Background.rgb * _Mixing) + _Render_Texture.rgb) / 2.0;
+        }
+
+    _Result.a = _Render_Texture.a;
+    _Result.rgb *= _Result.a;
 
     Out.Color = _Result;
-
-    return Out;
+    return Out;  
 }

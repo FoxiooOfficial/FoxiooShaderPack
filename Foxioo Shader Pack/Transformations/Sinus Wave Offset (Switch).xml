@@ -1,13 +1,13 @@
 <effect>
 	<Name>Sinus Wave Offset (Switch)</Name>
-		<description>Sinus Wave Offset - Shader moves colors through sinus wave</description> 
+		<description>Shader moves colors through sinus wave</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 
 		<parameter>
-			<name>/* Foxioo Sinus Wave Offset (Switch) Shader | 1.1 (24.06.2024) */</name>
+			<name>/* Foxioo Sinus Wave Offset (Switch) Shader | 1.2 (30.06.2024) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

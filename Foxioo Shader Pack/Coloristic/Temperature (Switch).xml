@@ -1,14 +1,18 @@
 <effect>
-	<Name>Temperature</Name>
-		<description>Temperature - Shader changes color temperature</description> 
+	<Name>Temperature (Switch)</Name>
+		<description>Shader changes color temperature</description> 
 			<author>Foxioo</author>
-			<BackgroundTexture>1</BackgroundTexture>
+			<copyright>Copyright (C) 2024 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
 
 		<parameter>
-			<name>/* Foxioo Temperature (Switch) Shader | 1.1 (24.06.2024) */</name>
+			<name>/* Foxioo Temperature (Switch) Shader | 1.2 (30.06.2024) */</name>
 			<property>checkbox</property>
 
 			<description>Shader changes color temperature</description>
+
+			<variable>_</variable>
 		</parameter>
 
 			<parameter>
@@ -48,6 +52,8 @@
 		<parameter>
 			<name>/*  */</name>
 			<property>checkbox</property>
+
+			<variable>__</variable>
 		</parameter>
 
 </effect>

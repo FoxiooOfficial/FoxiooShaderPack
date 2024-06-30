@@ -1,13 +1,13 @@
 <effect>
-	<Name>Inverted</Name>
-		<description>Inverted - Shader inverts the base allowing you to also take into account the colors of the blend</description> 
+	<Name>Inverted (Background)</Name>
+		<description>Shader inverts the base allowing you to also take into account the colors of the blend</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>			
 
 		<parameter>
-			<name>/* Foxioo Inverted (Background) Shader | 1.1 (23.06.2024) */</name>
+			<name>/* Foxioo Inverted (Background) Shader | 1.2 (30.06.2024) */</name>
 			<property>checkbox</property>
 
 				<variable>_</variable>
@@ -31,7 +31,7 @@
 				<name>Mixing</name>
 				<variable>_Mixing</variable>
 				
-				<description>This variable sets the intensity of base visibility</description>
+				<description>This variable is responsible for the visibility of the effect.</description>
 
 				<type>float</type>
 

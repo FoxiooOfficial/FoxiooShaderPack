@@ -1,13 +1,13 @@
 <effect>
-	<Name>Offset Color</Name>
-		<description>Offset Color - Shader shifts blend colors depending on base color</description> 
+	<Name>Offset Color (Background)</Name>
+		<description>Shader shifts blend colors depending on base color</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 
 		<parameter>
-			<name>/* Foxioo Offset Color (Background) Shader | 1.1 (24.06.2024) */</name>
+			<name>/* Foxioo Offset Color (Background) Shader | 1.2 (30.06.2024) */</name>
 			<property>checkbox</property>
 			<variable>_</variable>
 			<description>Shader shifts blend colors depending on base color</description>

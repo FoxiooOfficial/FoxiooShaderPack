@@ -1,7 +1,7 @@
 /***********************************************************/
 
 /* Autor shader: Foxioo */
-/* Version shader: 1.1 (23.06.2024) */
+/* Version shader: 1.2 (27.06.2024) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 
 /***********************************************************/
@@ -67,4 +67,40 @@ PS_OUTPUT ps_main( in PS_INPUT In )
     Out.Color = _Result;
     
     return Out;
+}
+/************************************************************/
+/* Premultiplied Alpha */
+/************************************************************/
+
+float4 Demultiply(float4 _color)
+{
+	float4 color = _color;
+	if ( color.a != 0 )
+		color.rgb /= color.a;
+	return color;
+}
+
+PS_OUTPUT ps_main_pm( in PS_INPUT In ) 
+{
+    PS_OUTPUT Out;
+
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
+    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
+
+        float4 _Result;
+
+        if(_Blending_Mode == 0)
+        {
+            _Result = pow(abs(_Render_Texture / (_Render_Background * _Mixing)), _Power);
+        }
+        else
+        {
+            _Result = pow(abs((_Render_Background * _Mixing) / _Render_Texture), _Power);
+        }
+
+    _Result.a = _Render_Texture.a;
+    _Result.rgb *= _Result.a;
+
+    Out.Color = _Result;
+    return Out;  
 }

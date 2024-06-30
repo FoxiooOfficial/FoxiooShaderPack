@@ -1,13 +1,13 @@
 <effect>
-	<Name>HSL</Name>
-		<description>HSL - Shader allows changing hue, saturation and lightness </description> 
+	<Name>HSL (Switch)</Name>
+		<description>Shader allows changing hue, saturation and lightness</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo HSL (Switch) Shader | 1.4 (24.06.2024) */</name>
+			<name>/* Foxioo HSL (Switch) Shader | 1.5 (30.06.2024) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

@@ -1,25 +1,25 @@
 <effect>
-	<Name>Addition With Floating Modulus</Name>
-		<description>Addition With Floating Modulus - Shader adds base and blend colors with each other then colors are calculated by floating modulus</description> 
+	<Name>Addition With Floating Modulus (Background)</Name>
+		<description>Base and blend colors are added after which the colors are reduced by the floating modulus function.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Addition With Floating Modulus (Background) Shader | 1.1 (23.06.2024) */</name>
+			<name>/* Foxioo Addition With Floating Modulus (Background) Shader | 1.2 (25.06.2024) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
 
-			<description>Shader adds base and blend colors with each other then colors are calculated by floating modulus</description>
+			<description>Base and blend colors are added after which the colors are reduced by the floating modulus function.</description>
 		</parameter>
 
 			<parameter>
 				<name>Mixing</name>
 				<variable>_Mixing</variable>
-
-				<description>This variable sets the intensity of base visibility</description>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
 
 				<type>float</type>
 
@@ -29,13 +29,13 @@
 			<parameter>
 				<name>Denom</name>
 				<variable>_Denom</variable>
-
-				<description>This variable is the color divisor</description>
+				
+				<description>This variable represents the denominator used in the floating-point modulus operation, determining the divisor in the function.</description>
 
 				<type>float</type>
 
 				<value>1</value>
-			</parameter>
+			</parameter>			
 
 		<parameter>
 			<name>/*  */</name>

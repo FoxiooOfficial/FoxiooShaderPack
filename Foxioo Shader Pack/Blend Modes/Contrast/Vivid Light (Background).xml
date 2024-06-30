@@ -1,12 +1,12 @@
 <effect>
-	<Name>Vivid Light</Name>
-		<description>Vivid Light - (The effect comes from the Photoshop) Burns or dodges the colors by increasing or decreasing the contrast, depending on the blend color. If the blend color (light source) is lighter than 50% gray, the image is lightened by decreasing the contrast. If the blend color is darker than 50% gray, the image is darkened by increasing the contrast</description> 
+	<Name>Vivid Light (Background)</Name>
+		<description>(The effect comes from the Photoshop) Burns or dodges the colors by increasing or decreasing the contrast, depending on the blend color. If the blend color (light source) is lighter than 50% gray, the image is lightened by decreasing the contrast. If the blend color is darker than 50% gray, the image is darkened by increasing the contrast</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 		<parameter>
-			<name>/* Foxioo Vivid Light (Background) Shader | 1.1 (24.06.2024) */</name>
+			<name>/* Foxioo Vivid Light (Background) Shader | 1.2 (30.06.2024) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
@@ -17,8 +17,8 @@
 			<parameter>
 				<name>Mixing</name>
 				<variable>_Mixing</variable>
-
-				<description>This variable sets the intensity of base visibility</description>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
 
 				<type>float</type>
 

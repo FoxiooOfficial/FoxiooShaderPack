@@ -1,13 +1,13 @@
 <effect>
-	<Name>Exclusion</Name>
-		<description>Exclusion - (The effect comes from the Photoshop) Creates an effect similar to but lower in contrast than the Difference mode. Blending with white inverts the base color values. Blending with black produces no change</description> 
+	<Name>Exclusion (Background)</Name>
+		<description>(The effect comes from the Photoshop) Creates an effect similar to but lower in contrast than the Difference mode. Blending with white inverts the base color values. Blending with black produces no change</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 				
 		<parameter>
-			<name>/* Foxioo Exclusion (Background) Shader | 1.1 (23.06.2024) */</name>
+			<name>/* Foxioo Exclusion (Background) Shader | 1.2 (30.06.2024) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
@@ -19,7 +19,7 @@
 				<name>Mixing</name>
 				<variable>_Mixing</variable>
 				
-				<description>This variable sets the intensity of base visibility</description>
+				<description>This variable is responsible for the visibility of the effect.</description>
 
 				<type>float</type>
 

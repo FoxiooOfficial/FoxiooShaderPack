@@ -1,12 +1,12 @@
 <effect>
-	<Name>Linear Burn</Name>
-		<description>Linear Burn - (The effect comes from the Photoshop) Looks at the color information in each channel and darkens the base color to reflect the blend color by decreasing the brightness. Blending with white produces no change</description> 
+	<Name>Linear Burn (Background)</Name>
+		<description>(The effect comes from the Photoshop) Looks at the color information in each channel and darkens the base color to reflect the blend color by decreasing the brightness. Blending with white produces no change</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 		<parameter>
-			<name>/* Foxioo Linear Burn (Background) Shader | 1.1 (24.06.2024) */</name>
+			<name>/* Foxioo Linear Burn (Background) Shader | 1.2 (30.06.2024) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
@@ -17,8 +17,8 @@
 			<parameter>
 				<name>Mixing</name>
 				<variable>_Mixing</variable>
-
-				<description>This variable sets the intensity of base visibility</description>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
 
 				<type>float</type>
 
