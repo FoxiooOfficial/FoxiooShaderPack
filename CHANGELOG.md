@@ -3,9 +3,84 @@
 
 ---
 
+# ✨ 30 June 2024 | Release ID: 2
+
+## 📝 Notes (Abbreviated) 
+- Added 13 shaders in this release
+- Ported all shaders of DX11 version (Non-Premultiplied Alpha) to DX11 version (Premultiplied Alpha)
+- Some shader calculations improved
+- Changed text in .xml files to corrected
+
+## ➕ Added
+| Shader name                                | Type         | Shader Version   | Render      | PS   |
+|--------------------------------------------|--------------|------------------|-------------|------|
+|                                            |              |                  |             |      |
+| 📂 Coloristic / Correction                 |              |                  |             |      |
+|                                            |              |                  |             |      |
+| Corrcection With Arccosinus                | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
+| Corrcection With Arcsinus                  | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
+| Corrcection With Arctangent                | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
+| Corrcection With Cosinus                   | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
+| Corrcection With Floating Modulus          | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
+| Corrcection With Hyperbolic Sinus          | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
+| Corrcection With Hyperbolic Tangent        | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
+| Corrcection With Power                     | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
+| Corrcection With Reciprocal Square Root    | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
+| Corrcection With Round                     | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
+| Corrcection With Sinus                     | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
+| Corrcection With Square Root               | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
+| Corrcection With Tangent                   | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
+
+## ✏️ Changed
+- Ported DX11 shaders from (Non-Premultiplied Alpha) to (Premultiplied Alpha) for:
+
+| Shader name                                | Type         | Shader Version   | Render      | PS   |
+|--------------------------------------------|--------------|------------------|-------------|------|
+|                                            |              |                  |             |      |
+| * EVERY                                     | (-)          | -                | DX9 \| DX11 | -    |
+
+- Changed calculations for shader **Darker Color (Background):**
+```
+- **OLD:**
+    float _Average = (_Render_Texture.r + _Render_Texture.g + _Render_Texture.b) / 3.0;
+        if (_Render_Background.r < _Average) { _Render_Texture.r = _Render_Background.r; }
+        if (_Render_Background.g < _Average) { _Render_Texture.g = _Render_Background.g; }
+        if (_Render_Background.b < _Average) { _Render_Texture.b = _Render_Background.b; }
+
+- **NEW:**
+        float _Average_Texture = (_Render_Texture.r + _Render_Texture.g + _Render_Texture.b) / 3.0;
+        float _Average_Background = (_Render_Background.r + _Render_Background.g + _Render_Background.b) / 3.0;
+
+            if (_Average_Background < _Average_Texture) { _Render_Texture.rgb = _Render_Background.rgb; }
+```
+
+- Changed calculations for shader **Lighter Color (Background):**
+```
+- **OLD:**
+    float _Average = (_Render_Texture.r + _Render_Texture.g + _Render_Texture.b) / 3.0;
+        if (_Render_Background.r > _Average) { _Render_Texture.r = _Render_Background.r; }
+        if (_Render_Background.g > _Average) { _Render_Texture.g = _Render_Background.g; }
+        if (_Render_Background.b > _Average) { _Render_Texture.b = _Render_Background.b; }
+
+- **NEW:**
+        float _Average_Texture = (_Render_Texture.r + _Render_Texture.g + _Render_Texture.b) / 3.0;
+        float _Average_Background = (_Render_Background.r + _Render_Background.g + _Render_Background.b) / 3.0;
+
+            if (_Average_Background > _Average_Texture) { _Render_Texture.rgb = _Render_Background.rgb; }
+```
+
+- Typos in the files have been corrected.
+
+## ❌ Removed
+- Removed file: **Bloom Better (Background).fx.old**
+- Removed file: **Bloom Better (Background).hlsl.old**
+- Removed file: **Bloom Better (Background).fxc.old**
+  
+---
+
 # ✨ 24 June 2024 | Release ID: 1
 
-## 📝 Notes
+## 📝 Notes (Abbreviated)
 - Added +80 shaders in this release
 
 ## ➕ Added
