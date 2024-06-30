@@ -17,19 +17,19 @@
 |                                            |              |                  |             |      |
 | 📂 Coloristic / Correction                 |              |                  |             |      |
 |                                            |              |                  |             |      |
-| Corrcection With Arccosinus                | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
-| Corrcection With Arcsinus                  | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
-| Corrcection With Arctangent                | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
-| Corrcection With Cosinus                   | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
-| Corrcection With Floating Modulus          | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
-| Corrcection With Hyperbolic Sinus          | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
-| Corrcection With Hyperbolic Tangent        | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
-| Corrcection With Power                     | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
-| Corrcection With Reciprocal Square Root    | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
-| Corrcection With Round                     | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
-| Corrcection With Sinus                     | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
-| Corrcection With Square Root               | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
-| Corrcection With Tangent                   | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
+| Corrcection With Arccosinus                | (Switch)     | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
+| Corrcection With Arcsinus                  | (Switch)     | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
+| Corrcection With Arctangent                | (Switch)     | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
+| Corrcection With Cosinus                   | (Switch)     | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
+| Corrcection With Floating Modulus          | (Switch)     | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
+| Corrcection With Hyperbolic Sinus          | (Switch)     | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
+| Corrcection With Hyperbolic Tangent        | (Switch)     | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
+| Corrcection With Power                     | (Switch)     | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
+| Corrcection With Reciprocal Square Root    | (Switch)     | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
+| Corrcection With Round                     | (Switch)     | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
+| Corrcection With Sinus                     | (Switch)     | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
+| Corrcection With Square Root               | (Switch)     | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
+| Corrcection With Tangent                   | (Switch)     | 1.0 (30.06.2024) | DX9 \| DX11 | 2.0  |
 
 ## ✏️ Changed
 - ✏️ Ported DX11 shaders from **(Non-Premultiplied Alpha)** to **(Premultiplied Alpha)**  for:
