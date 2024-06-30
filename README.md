@@ -17,6 +17,8 @@ ___
 
 ❗ **Final colors in Direct3D 9 and Direct3D 11 may vary. This is most likely due to the different calculation methods however, I am not completely sure about this.**
 
+⭐ **Special thanks to** <a href="https://github.com/NaitorStudios">NaitorStudios</a> **for helping port DX11 shaders to versions (Premultiplied Alpha)**
+
 ## 💿 Installation
 
 1. Click on the **"Code"** button then **"Download ZIP"**.
