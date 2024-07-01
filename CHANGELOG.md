@@ -3,6 +3,36 @@
 
 ---
 
+# ✨ 01 July 2024 | Release ID: 3
+
+## 📝 Notes (Abbreviated) 
+- Added **10** shaders in this release
+
+## ➕ Added
+| Shader name                                | Type         | Shader Version   | Render      | PS   |
+|--------------------------------------------|--------------|------------------|-------------|------|
+|                                            |              |                  |             |      |
+| 📂 Logical                                 |              |                  |             |      |
+|                                            |              |                  |             |      |
+| Logical AND                                | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.49 |
+| Logical IMPLY                              | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.49 |
+| Logical NAND                               | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.49 |
+| Logical NIMPLY                             | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.49 |
+| Logical NOR                                | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.49 |
+| Logical OR                                 | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.49 |
+| Logical XIMPLY                             | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.49 |
+| Logical XNIMPLY                            | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.49 |
+| Logical XNOR                               | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.49 |
+| Logical XOR                                | (Background) | 1.0 (30.06.2024) | DX9 \| DX11 | 2.49 |
+
+## ✏️ Changed
+- ✖️ Nothing has changed
+  
+## ❌ Removed
+- ✖️ Nothing has been removed
+
+---
+
 # ✨ 30 June 2024 | Release ID: 2
 
 ## 📝 Notes (Abbreviated) 
@@ -215,4 +245,3 @@
   
 ## ❌ Removed
 - ✖️ Nothing has been removed
-  
