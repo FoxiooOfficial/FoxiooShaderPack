@@ -11,11 +11,13 @@
 
 ___
 
-🥳 The package currently has **+80 Shaders** 🎉
+🥳 The package currently has **101 Shaders** 🎉
 
-❗ **Shaders currently only work on Windows under Direct3D 9 and Direct3D 11 (No pre-multiplied)**
+❗ **Shaders currently only work on Windows under Direct3D 9 and Direct3D 11**
 
 ❗ **Final colors in Direct3D 9 and Direct3D 11 may vary. This is most likely due to the different calculation methods however, I am not completely sure about this.**
+
+⭐ **Special thanks to** <a href="https://github.com/NaitorStudios">NaitorStudios</a> **for helping port DX11 shaders to versions (Premultiplied Alpha)**
 
 ## 💿 Installation
 
@@ -34,8 +36,6 @@ ___
 2. Go to **"Runtime options"** and make sure **"Display Mode"** is set to **"Direct3D 11"** or **"Direct3D 9"**.
    
 - ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Usage/2.png?raw=true)
-   - ⚠️ **If you have "Direct3D 11" set, UNCHECK "Pre-multiplied alpha"**. *Shaders do not have their pre-multiplied version* ***yet!***
-   - ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Usage/3.png?raw=true)
 
 ## 📚 Usage
 
