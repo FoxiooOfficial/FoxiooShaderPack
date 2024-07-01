@@ -1,0 +1,35 @@
+<effect>
+	<Name>Logical NOR (Background)</Name>
+		<description>This shader is a modification of the "AND" shader created by Cazra. The colors are bit by a logic gate NOR for base and blend colors.</description> 
+			<author>Foxioo, Cazra</author>
+			<copyright>Copyright (C) 2024 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+			
+		<parameter>
+			<name>/* Foxioo Logical NOR (Background) Shader | 1.0 (30.06.2024) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>This shader is a modification of the "AND" shader created by Cazra. The colors are bit by a logic gate NOR for base and blend colors.</description>
+		</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+		<parameter>
+			<name>/*  */</name>
+			<property>checkbox</property>
+
+			<variable>__</variable>
+		</parameter>
+</effect>
