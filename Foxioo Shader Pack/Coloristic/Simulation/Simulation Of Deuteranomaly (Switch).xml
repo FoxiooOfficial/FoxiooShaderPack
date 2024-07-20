@@ -1,0 +1,47 @@
+<effect>
+	<Name>Simulation Of Deuteranomaly (Switch)</Name>
+		<description>Shader simulates deuteranomal color blindness.</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+			
+		<parameter>
+			<name>/* Foxioo Simulation Of Deuteranomaly (Switch) Shader | 1.0 (20.07.2024) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>Shader simulates deuteranomal color blindness.</description>
+		</parameter>
+
+			<parameter>
+				<name>Blending Mode</name>
+				<variable>_Blending_Mode</variable>
+			
+				<description>This variable determines what the base should be. Setting it to 0 sets the base as the texture of the object on which the effect is applied, and setting it to 1 sets this as the background.</description>
+			
+				<type>int</type>
+				<property>checkbox</property>
+			
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+		<parameter>
+			<name>/*  */</name>
+			<property>checkbox</property>
+
+			<variable>__</variable>
+		</parameter>
+</effect>

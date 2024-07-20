@@ -1,0 +1,169 @@
+<effect>
+	<Name>Animeish (Switch)</Name>
+		<description>Shader changes to an anime styled look.</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+			
+		<parameter>
+			<name>/* Foxioo Animeish (Switch) Shader | 1.0 (20.07.2024) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>Shader changes to an anime styled look.</description>
+		</parameter>
+
+		<parameter>
+			<name>( Rendering Options )</name>
+			<property>checkbox</property>
+			<description>Here are the options for how the texture should be rendered.</description>
+			<variable>__</variable>
+		</parameter>
+
+
+			<parameter>
+				<name>Blending Mode</name>
+				<variable>_Blending_Mode</variable>
+
+				<description>This variable determines what the base should be. Setting it to 0 sets the base as the texture of the object on which the effect is applied, and setting it to 1 sets this as the background.</description>
+
+				<type>int</type>
+				<property>checkbox</property>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>1.25</value>
+			</parameter>
+
+			<parameter>
+				<name>Color Steps</name>
+				<variable>_ColorSteps</variable>
+				
+				<description>This change sets how many levels of brightness there should be for a given color. A setting value of 255 gives no effect. (Range from 0 to 255)</description>
+
+				<type>float</type>
+
+				<value>4.5</value>
+			</parameter>
+
+			<parameter>
+				<name>Saturation</name>
+				<variable>_Saturation</variable>
+				
+				<description>This variable changes the color saturation. (Range from 0 to 100)</description>
+
+				<type>float</type>
+
+				<value>85.0</value>
+			</parameter>	
+
+			<parameter>
+				<name>( Shadow Options )</name>
+				<property>checkbox</property>
+				<description>Here are the variables for shadow which changes the base color.</description>
+				<variable>___</variable>
+			</parameter>	
+
+			<parameter>
+				<name>Shadow Threshold</name>
+				<variable>_ShadowThreshold</variable>
+				
+				<description>This variable determines at which brightness level the shadow color should be displayed. (Range from 0 to 1)</description>
+
+				<type>float</type>
+
+				<value>0.4</value>
+			</parameter>
+			
+			<parameter>
+				<name>Shadow Alpha</name>
+				<variable>_ShadowAlpha</variable>
+				
+				<description>This variable determines how visible the shadow should be. (Range from 0 to 1) </description>
+
+				<type>float</type>
+
+				<value>0.4</value>
+			</parameter>
+
+			<parameter>
+				<name>( Outline Options )</name>
+				<property>checkbox</property>
+				<description>Here are the variables for outline.</description>
+				<variable>____</variable>
+			</parameter>	
+
+			<parameter>
+				<name>Outline Color</name>
+				<variable>_OutlineColor</variable>
+				
+				<description>This variable sets what color the outline should be.</description>
+
+				<type>int_float4</type>
+				<property>color</property>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Outline Threshold</name>
+				<variable>_OutlineThreshold</variable>
+				
+				<description>This variable sets the sensitivity for edge detection. Lower values will make the outline appear more easily, while higher values require stronger edges to be detected. (Range from 0 to 1)</description>
+
+				<type>float</type>
+
+				<value>0.35</value>
+			</parameter>
+
+			<parameter>
+				<name>Outline Anti-aliasing</name>
+				<variable>_OutlineAntialiasing</variable>
+				
+				<description>This variable determines how smooth the outline should be. (Range from 0 to 1)</description>
+
+				<type>float</type>
+
+				<value>0.25</value>
+			</parameter>
+
+			<parameter>
+				<name>Outline Scale</name>
+				<variable>_OutlineScale</variable>
+				
+				<description>This variable sets the thickness of the outline.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Outline Alpha</name>
+				<variable>_OutlineAlpha</variable>
+				
+				<description>This variable sets the alpha color of the outline. (Range from 0 to 1)</description>
+
+				<type>float</type>
+
+				<value>1.0</value>
+			</parameter>
+
+		<parameter>
+			<name>/*  */</name>
+			<property>checkbox</property>
+
+			<variable>_____</variable>
+		</parameter>
+</effect>
