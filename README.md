@@ -11,7 +11,7 @@
 
 ___
 
-🥳 The package currently has **111 Shaders** 🎉
+🥳 The package currently has **120 Shaders** 🎉
 
 ❗ **Shaders currently only work on Windows under Direct3D 9 and Direct3D 11**
 
