@@ -17,7 +17,7 @@ ___
 
 🗓️ Last updated description dated **27.07.24**
 
-🗓️ Last update of shaders from 20.07.24
+🗓️ Last update of shaders from **20.07.24**
 
 ⭐ **Special thanks to** <a href="https://github.com/NaitorStudios">NaitorStudios</a> **for helping port DX11 shaders to versions (Premultiplied Alpha)**
 
