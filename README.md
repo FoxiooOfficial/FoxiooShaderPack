@@ -15,9 +15,9 @@ ___
 
 ❗ **Final colors in Direct3D 9 and Direct3D 11 may vary. This is most likely due to the different calculation methods however, I am not completely sure about this.**
 
-🗓️ Last updated description dated **27.07.24**
+🗓️ Last updated description dated **July 27, 2024 (UTC+2)**
 
-🗓️ Last update of shaders from **20.07.24**
+🗓️ Last update of shaders from **July 20, 2024 (UTC+2)**
 
 ⭐ **Special thanks to** <a href="https://github.com/NaitorStudios">NaitorStudios</a> **for helping port DX11 shaders to versions (Premultiplied Alpha)**
 
