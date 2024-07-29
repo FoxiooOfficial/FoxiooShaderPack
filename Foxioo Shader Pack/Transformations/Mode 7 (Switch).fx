@@ -33,7 +33,7 @@ sampler2D S2D_Background : register(s1) = sampler_state
             _ScaleX, _ScaleY, _Scale,
             _RotX, _RotY, _RotZ,
             _Distortion,
-            _RotY_PointX, _RotY_PointY,
+            _PointX, _PointY,
             _PosOffsetX, _PosOffsetY;
 
     int     _Looping_Mode, _Filter_Mode;
@@ -56,7 +56,7 @@ float2 Fun_Mode7(float2 In: TEXCOORD)
 
 float2 Fun_RotationX(float2 In: TEXCOORD)
 {
-    float2  _UV = float2((In.x + _RotY_PointY) / 2.0, (In.y + _RotY_PointY) / 2.0);
+    float2  _UV = float2((In.x + _PointX) / 2.0, (In.y + _PointY) / 2.0);
     _RotX = _RotX * (3.14159265 / 180);
 
         _UV = mul(float2x2(cos(_RotX), sin(_RotX), -sin(_RotX), cos(_RotX)), _UV);
