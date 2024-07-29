@@ -11,13 +11,24 @@
 
 ___
 
-🥳 The package currently has **111 Shaders** 🎉
-
-❗ **Shaders currently only work on Windows under Direct3D 9 and Direct3D 11**
+🥳 The package currently has **120 Shaders** 🎉
 
 ❗ **Final colors in Direct3D 9 and Direct3D 11 may vary. This is most likely due to the different calculation methods however, I am not completely sure about this.**
 
+🗓️ Last updated description dated **July 27, 2024 (UTC+2)**
+
+🗓️ Last update of shaders from **July 20, 2024 (UTC+2)**
+
 ⭐ **Special thanks to** <a href="https://github.com/NaitorStudios">NaitorStudios</a> **for helping port DX11 shaders to versions (Premultiplied Alpha)**
+
+---
+
+## ❗ Important information
+
+- **Shaders currently only work on Windows under Direct3D 9 and Direct3D 11**
+- **Shaders having in their name: (... With Arcosinus, ... With Arcsinus and ... With Arctangent) for unknown reasons differ in color in Direct3D 9 and Direct3D 11 modes. It is not known why, but I suspect that these  are calculated differently in these modes. The rest of the shaders work correctly.**
+
+---
 
 ## 💿 Installation
 

@@ -3,6 +3,41 @@
 
 ---
 
+# ✨ 20 July 2024 | Release ID: 4
+
+## 📝 Notes (Abbreviated) 
+- Added **9** shaders in this release
+
+## ➕ Added
+| Shader name                                | Type         | Shader Version   | Render      | PS   |
+|--------------------------------------------|--------------|------------------|-------------|------|
+|                                            |              |                  |             |      |
+| 📂 Coloristic                              |              |                  |             |      |
+|                                            |              |                  |             |      |
+| Animeish                                   | (Switch)     | 1.0 (20.07.2024) | DX9 \| DX11 | 2.0  |
+|                                            |              |                  |             |      |
+| 📂 Coloristic / Conversion                 |              |                  |             |      |
+|                                            |              |                  |             |      |
+| Conversion To Y'CbCr                       | (Switch)     | 1.0 (20.07.2024) | DX9 \| DX11 | 2.0  |
+|                                            |              |                  |             |      |
+| 📂 Coloristic / Simulation                 |              |                  |             |      |
+|                                            |              |                  |             |      |
+| Simulation Of Achromatomaly                | (Switch)     | 1.0 (20.07.2024) | DX9 \| DX11 | 2.0  |
+| Simulation Of Deuteranomaly                | (Switch)     | 1.0 (20.07.2024) | DX9 \| DX11 | 2.0  |
+| Simulation Of Deuteranopia                 | (Switch)     | 1.0 (20.07.2024) | DX9 \| DX11 | 2.0  |
+| Simulation Of Protanomaly                  | (Switch)     | 1.0 (20.07.2024) | DX9 \| DX11 | 2.0  |
+| Simulation Of Protanopia                   | (Switch)     | 1.0 (20.07.2024) | DX9 \| DX11 | 2.0  |
+| Simulation Of Tritanomaly                  | (Switch)     | 1.0 (20.07.2024) | DX9 \| DX11 | 2.0  |
+| Simulation Of Tritanopia                   | (Switch)     | 1.0 (20.07.2024) | DX9 \| DX11 | 2.0  |
+
+## ✏️ Changed
+- ✖️ Nothing has changed
+  
+## ❌ Removed
+- ✖️ Nothing has been removed
+
+---
+
 # ✨ 01 July 2024 | Release ID: 3
 
 ## 📝 Notes (Abbreviated) 
