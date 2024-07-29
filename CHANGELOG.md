@@ -21,8 +21,8 @@
 
 - The version of the Pixel Shader has been changed. **(From 2.0 to 2.49 due to instruction limitations in 2.0)**.
 - A bug with an inverted texture in the X-axis has been fixed.
-- Fixed the Alpha color mask for _Result when set to 1.
-- Added 2 new variables to change Texture Offset. **(For the variables _Scale, _ScaleX and _ScaleY)**.
+- Fixed the alpha color mask for _Result when set to 1.
+- Added 2 new variables to change texture offset. **(For the variables _Scale, _ScaleX and _ScaleY)**.
 
 ## ❌ Removed
 - ✖️ Nothing has been removed
