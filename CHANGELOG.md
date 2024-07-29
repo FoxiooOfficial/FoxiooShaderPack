@@ -3,6 +3,32 @@
 
 ---
 
+# ✨ 29 July 2024 | Release ID: 5
+
+## 📝 Notes (Abbreviated) 
+- Fixed and added new features to Mode 7 (Switch) shader
+
+## ➕ Added
+- ✖️ Nothing has added
+
+## ✏️ Changed
+| Shader name                                | Type         | Shader Version   | Render      | PS   |
+|--------------------------------------------|--------------|------------------|-------------|------|
+|                                            |              |                  |             |      |
+| 📂 Transformations                         |              |                  |             |      |
+|                                            |              |                  |             |      |
+| Mode 7                                     | (Switch)     | 1.5 (29.07.2024) | DX9 \| DX11 | 2.49  |
+
+- The version of the Pixel Shader has been changed. **(From 2.0 to 2.49 due to instruction limitations in 2.0)**.
+- A bug with an inverted texture in the X-axis has been fixed.
+- Fixed the alpha color mask for _Result when set to 1.
+- Added 2 new variables to change texture offset. **(For the variables _Scale, _ScaleX and _ScaleY)**.
+
+## ❌ Removed
+- ✖️ Nothing has been removed
+
+---
+
 # ✨ 20 July 2024 | Release ID: 4
 
 ## 📝 Notes (Abbreviated) 
