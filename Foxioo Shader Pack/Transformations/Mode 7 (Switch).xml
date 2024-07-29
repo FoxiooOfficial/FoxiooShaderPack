@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 
 		<parameter>
-			<name>/* Foxioo Mode 7 (Switch) Shader | 1.4 (30.06.2024) */</name>
+			<name>/* Foxioo Mode 7 (Switch) Shader | 1.5 (29.07.2024) */</name>
 			<property>checkbox</property>
 			<description>Shader giving Mode 7 style perspective effect.</description>
 			<variable>_</variable>
@@ -27,7 +27,7 @@
 
 				<type>float</type>
 
-				<value>0.5</value>
+				<value>0</value>
 			</parameter>
 
 
@@ -38,7 +38,7 @@
 
 				<type>float</type>
 
-				<value>1.0</value>
+				<value>0</value>
 			</parameter>
 
 
@@ -158,9 +158,9 @@
 			-->
 
 		<parameter>
-			<name>( Texture Scale )</name>
+			<name>( Texture )</name>
 			<property>checkbox</property>
-			<description>Here are the variables that determine the scale of the texture.</description>
+			<description>Here are the variables that determine the scale and offset of the texture.</description>
 			<variable>______</variable>
 		</parameter>
 
@@ -194,6 +194,26 @@
 				<type>float</type>
 
 				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Offset X</name>
+				<variable>_PosOffsetX</variable>
+				<description>This variable sets the offset of the texture position in the X axis. (For the _ScaleX and _Scale variable).</description>
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Offset Y</name>
+				<variable>_PosOffsetY</variable>
+				<description>This variable sets the offset of the texture position in the Y axis. (For the _ScaleY and _Scale variable).</description>
+
+				<type>float</type>
+
+				<value>0</value>
 			</parameter>
 
 		<parameter>

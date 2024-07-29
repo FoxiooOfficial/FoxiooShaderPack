@@ -1,7 +1,7 @@
 /***********************************************************/
 
 /* Autor shader: Foxioo */
-/* Version shader: 1.4 (30.06.2024) */
+/* Version shader: 1.5 (29.07.2024) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 
 /***********************************************************/
@@ -43,6 +43,8 @@ cbuffer PS_VARIABLES : register(b0)
     float _Scale;
     float _ScaleX;
     float _ScaleY;
+    float _PosOffsetX;
+    float _PosOffsetY;
     bool _______;
     int _Looping_Mode;
     bool _Render_Sky;
@@ -91,7 +93,6 @@ float2 Fun_RotationY(float2 In)
 
         In = 0.5 + mul(float2x2(cos(_RotY_Temp), sin(_RotY_Temp), -sin(_RotY_Temp), cos(_RotY_Temp)), In - 0.5);
 
-        In.x = 1 - In.x;
     return In;
 }
 
@@ -113,11 +114,13 @@ PS_OUTPUT ps_main(PS_INPUT In)
 
         float2 _UV = Fun_Mode7(_In);
         float2 _Pos = float2(-_PosX, _PosY);
+        float2 _PosOffset = float2(-_PosOffsetX, _PosOffsetY - 0.5);
         float2 _Scale_Temp = (float2(_ScaleX, _ScaleY)) * _Scale;
 
     _UV = Fun_RotationX(_UV);
-    _UV -= _Pos;
+    _UV -= _PosOffset;
     _UV *= _Scale_Temp;
+    _UV -= _Pos - 0.5;
 
     if(_Looping_Mode == 0)
     {
@@ -131,8 +134,9 @@ PS_OUTPUT ps_main(PS_INPUT In)
     }
 
     float4 _Render = 1;
+    float4 _Alpha = 0;
     if(_Result == false) { _Render = S2D_Image.Sample(S2D_ImageSampler, _UV); }
-    else { _Render = S2D_Background.Sample(S2D_BackgroundSampler, _UV); }
+    else { _Render = S2D_Background.Sample(S2D_BackgroundSampler, _UV); _Alpha = S2D_Image.Sample(S2D_ImageSampler, In.texCoord); _Render.a *= _Alpha.a;}
 
         if (_Looping_Mode == 3 && (_UV.x < 0 || _UV.x > 1 || _UV.y < 0 || _UV.y > 1 || _UV.y < 0))
         {
@@ -180,11 +184,13 @@ PS_OUTPUT ps_main_pm( in PS_INPUT In )
 
         float2 _UV = Fun_Mode7(_In);
         float2 _Pos = float2(-_PosX, _PosY);
+        float2 _PosOffset = float2(-_PosOffsetX, _PosOffsetY - 0.5);
         float2 _Scale_Temp = (float2(_ScaleX, _ScaleY)) * _Scale;
 
     _UV = Fun_RotationX(_UV);
-    _UV -= _Pos;
+    _UV -= _PosOffset;
     _UV *= _Scale_Temp;
+    _UV -= _Pos - 0.5;
 
     if(_Looping_Mode == 0)
     {
@@ -198,8 +204,9 @@ PS_OUTPUT ps_main_pm( in PS_INPUT In )
     }
 
     float4 _Render = 1;
+    float4 _Alpha = 0;
     if(_Result == false) { Demultiply(_Render = S2D_Image.Sample(S2D_ImageSampler, _UV)); }
-    else { _Render = S2D_Background.Sample(S2D_BackgroundSampler, _UV); }
+        else { _Render = S2D_Background.Sample(S2D_BackgroundSampler, _UV); Demultiply(_Alpha = S2D_Image.Sample(S2D_ImageSampler, In.texCoord)); _Render.a *= _Alpha.a;}
 
         if (_Looping_Mode == 3 && (_UV.x < 0 || _UV.x > 1 || _UV.y < 0 || _UV.y > 1 || _UV.y < 0))
         {

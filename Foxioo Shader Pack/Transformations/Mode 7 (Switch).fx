@@ -1,7 +1,7 @@
 /***********************************************************/
 
 /* Autor shader: Foxioo */
-/* Version shader: 1.4 (30.06.2024) */
+/* Version shader: 1.5 (29.07.2024) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 
 /***********************************************************/
@@ -33,7 +33,8 @@ sampler2D S2D_Background : register(s1) = sampler_state
             _ScaleX, _ScaleY, _Scale,
             _RotX, _RotY, _RotZ,
             _Distortion,
-            _PointX, _PointY;
+            _RotY_PointX, _RotY_PointY,
+            _PosOffsetX, _PosOffsetY;
 
     int     _Looping_Mode, _Filter_Mode;
 
@@ -55,7 +56,7 @@ float2 Fun_Mode7(float2 In: TEXCOORD)
 
 float2 Fun_RotationX(float2 In: TEXCOORD)
 {
-    float2  _UV = float2((In.x + _PointX) / 2.0, (In.y + _PointY) / 2.0);
+    float2  _UV = float2((In.x + _RotY_PointY) / 2.0, (In.y + _RotY_PointY) / 2.0);
     _RotX = _RotX * (3.14159265 / 180);
 
         _UV = mul(float2x2(cos(_RotX), sin(_RotX), -sin(_RotX), cos(_RotX)), _UV);
@@ -69,8 +70,6 @@ float2 Fun_RotationY(float2 In: TEXCOORD)
     _RotY = (_RotY - 180) * (3.14159265 / 180);
 
         In = 0.5 + mul(float2x2(cos(_RotY), sin(_RotY), -sin(_RotY), cos(_RotY)), In - 0.5);
-
-        In.x = 1 - In.x;
 
     return In;
 
@@ -91,11 +90,14 @@ float4 Main(float2 In: TEXCOORD) : COLOR
 
     float2  _UV = Fun_Mode7(In),
             _Pos = float2(-_PosX, _PosY),
+            _PosOffset = float2(-_PosOffsetX, _PosOffsetY - 0.5),
             _Scale = (float2(_ScaleX, _ScaleY)) * _Scale;
 
+
     _UV = Fun_RotationX(_UV);
-    _UV -= _Pos;
+    _UV -= _PosOffset;
     _UV *= _Scale;
+    _UV -= _Pos - 0.5;
 
     if(_Looping_Mode == 0)
     {
@@ -112,7 +114,7 @@ float4 Main(float2 In: TEXCOORD) : COLOR
 
     float4 _Render = 1;
     if(_Result == 0) { _Render = tex2D(S2D_Image, _UV); }
-    else { _Render = tex2D(S2D_Background, _UV); }
+    else { _Render = tex2D(S2D_Background, _UV); float4 _Alpha = tex2D(S2D_Image, In); _Render.a *= _Alpha.a; }
 
         if (_Looping_Mode == 3 && (_UV.x < 0 || _UV.x > 1 || _UV.y < 0 || _UV.y > 1 || _UV.y < 0))
         {
@@ -135,4 +137,4 @@ float4 Main(float2 In: TEXCOORD) : COLOR
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_2_0 Main(); } }
+technique tech_main { pass P0 { PixelShader = compile ps_2_a Main(); } }
