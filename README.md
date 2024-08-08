@@ -32,7 +32,7 @@ ___
 
 **(Background)** - These shaders use the object texture and the background texture for calculations.
 
-**(Switch)** - These shaders use either the object texture or the background texture depending on the setting of the `_Blending_Mode` variable.
+**(Switch)** - These shaders use either the object texture **OR** the background texture depending on the setting of the `_Blending_Mode` variable.
 
 **(Texutre)** - These shaders use **ONLY** the object texture.
 
