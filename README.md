@@ -11,11 +11,11 @@
 
 ___
 
-🥳 The package currently has **120 Shaders** 🎉
+🥳 The package currently has **146 Shaders** 🎉
 
 🗓️ Last updated description dated **August 08, 2024 (UTC+02:00)**
 
-🗓️ Last update of shaders from **July 29, 2024 (UTC+02:00)**
+🗓️ Last update of shaders from **August 17, 2024 (UTC+02:00)**
 
 ⭐ **Special thanks to** <a href="https://github.com/NaitorStudios">NaitorStudios</a> **for helping port DX11 shaders to versions (Premultiplied Alpha)**
 
