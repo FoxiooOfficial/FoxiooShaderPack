@@ -1,0 +1,35 @@
+<effect>
+	<Name>Photoshop Saturation (Background)</Name>
+		<description>(The effect comes from the Photoshop) Creates a result color with the luminance and hue of the base color and the saturation of the blend color. Painting with this mode in an area with no (0) saturation (gray) causes no change.</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+			
+		<parameter>
+			<name>/* Foxioo Photoshop Saturation (Background) Shader | 1.0 (05.08.2024) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>(The effect comes from the Photoshop) Creates a result color with the luminance and hue of the base color and the saturation of the blend color. Painting with this mode in an area with no (0) saturation (gray) causes no change.</description>
+		</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+		<parameter>
+			<name>/*  */</name>
+			<property>checkbox</property>
+
+			<variable>__</variable>
+		</parameter>
+</effect>

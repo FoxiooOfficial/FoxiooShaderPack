@@ -3,6 +3,99 @@
 
 ---
 
+# ✨ 17 August 2024 | Release ID: 6
+
+## 📝 Notes (Abbreviated) 
+- Added **26** shaders in this release
+- Renamed **24** shaders
+
+## ➕ Added
+| Shader name                                | Type         | Shader Version   | Render      | PS   |
+|--------------------------------------------|--------------|------------------|-------------|------|
+|                                            |              |                  |             |      |
+| 📂 Blend Modes / Component                |              |                  |             |      |
+|                                            |              |                  |             |      |
+| Blend Value                                | (Background) | 1.0 (16.08.2024) | DX9 \| DX11 | 2.0  |
+| Photoshop Color                            | (Background) | 1.0 (05.08.2024) | DX9 \| DX11 | 2.0  |
+| Photoshop Hue                              | (Background) | 1.0 (05.08.2024) | DX9 \| DX11 | 2.0  |
+| Photoshop Luminosity                       | (Background) | 1.0 (05.08.2024) | DX9 \| DX11 | 2.0  |
+| Photoshop Saturation                       | (Background) | 1.0 (05.08.2024) | DX9 \| DX11 | 2.0  |
+|                                            |              |                  |             |      |
+| 📂 Blend Modes / Contrast                 |              |                  |             |      |
+|                                            |              |                  |             |      |
+| GIMP Grain Extract                         | (Background) | 1.0 (15.08.2024) | DX9 \| DX11 | 2.0  |
+| GIMP Grain Merge                           | (Background) | 1.0 (15.08.2024) | DX9 \| DX11 | 2.0  |
+|                                            |              |                  |             |      |
+| 📂 Blend Modes / Inversion                |              |                  |             |      |
+|                                            |              |                  |             |      |
+| Phoenix                                    | (Background) | 1.0 (15.08.2024) | DX9 \| DX11 | 2.0  |
+|                                            |              |                  |             |      |
+| 📂 Blend Modes / Normal                   |              |                  |             |      |
+|                                            |              |                  |             |      |
+| Blend Color Blue                           | (Background) | 1.0 (15.08.2024) | DX9 \| DX11 | 2.0  |
+| Blend Color Cyan                           | (Background) | 1.0 (15.08.2024) | DX9 \| DX11 | 2.0  |
+| Blend Color Green                          | (Background) | 1.0 (15.08.2024) | DX9 \| DX11 | 2.0  |
+| Blend Color Magenta                        | (Background) | 1.0 (15.08.2024) | DX9 \| DX11 | 2.0  |
+| Blend Color Red                            | (Background) | 1.0 (15.08.2024) | DX9 \| DX11 | 2.0  |
+| Blend Color Yellow                         | (Background) | 1.0 (15.08.2024) | DX9 \| DX11 | 2.0  |
+|                                            |              |                  |             |      |
+| 📂 Blend Modes / Quadratic                |              |                  |             |      |
+|                                            |              |                  |             |      |
+| Krita Frect                                | (Background) | 1.0 (06.08.2024) | DX9 \| DX11 | 2.0  |
+| Krita Freeze                               | (Background) | 1.0 (05.08.2024) | DX9 \| DX11 | 2.0  |
+| Krita Freeze-Reflect                       | (Background) | 1.0 (06.08.2024) | DX9 \| DX11 | 2.0  |
+| Krita Gleat                                | (Background) | 1.0 (06.08.2024) | DX9 \| DX11 | 2.0  |
+| Krita Heat                                 | (Background) | 1.0 (05.08.2024) | DX9 \| DX11 | 2.0  |
+| Krita Helow                                | (Background) | 1.0 (06.08.2024) | DX9 \| DX11 | 2.0  |
+| Krita Reeze                                | (Background) | 1.0 (06.08.2024) | DX9 \| DX11 | 2.0  |
+|                                            |              |                  |             |      |
+| 📂 Coloristic / Conversion                |              |                  |             |      |
+|                                            |              |                  |             |      |
+| Conversion To CMYK                         | (Switch)     | 1.0 (06.08.2024) | DX9 \| DX11 | 2.0  |
+| Conversion To YUV                          | (Switch)     | 1.0 (06.08.2024) | DX9 \| DX11 | 2.0  |
+|                                            |              |                  |             |      |
+| 📂 Coloristic                             |              |                  |             |      |
+|                                            |              |                  |             |      |
+| Chroma Key Color                           | (Texture)    | 1.0 (08.08.2024) | DX9 \| DX11 | 2.0  |
+| Sharpness                                  | (Switch)     | 1.0 (08.08.2024) | DX9 \| DX11 | 2.0  |
+|                                            |              |                  |             |      |
+| 📂 Special                                |              |                  |             |      |
+|                                            |              |                  |             |      |
+| CPU Foilage                                | (Switch)     | 1.0 (16.08.2024) | DX9 \| DX11 | 2.49 |
+
+## ✏️ Changed
+Changed shader names from to:
+- Hard Light (Background) >>> Photoshop Hard Light (Background)
+- Hard Mix (Background) >>> Photoshop Hard Mix (Background)
+- Linear Light (Background) >>> Photoshop Linear Light (Background)
+- Overlay (Background) >>> Photoshop Overlay (Background)
+- Pin Light (Background) >>> Photoshop Pin Light (Background)
+- Soft Light (Background) >>> Photoshop Soft Light (Background)
+- Vivid Light (Background) >>> Photoshop Vivid Light (Background)
+- Color Burn (Background) >>> Photoshop Color Burn (Background)
+- Darken (Background) >>> Photoshop Darken (Background)
+- Darker Color (Background) >>> Photoshop Darker Color (Background)
+- Linear Burn (Background) >>> Photoshop Linear Burn (Background)
+- Stamp (Background) >>> Blend Stamp (Background)
+- Arcus Tangens (Background) >>> Krita Arcus Tangens (Background)
+- Difference (Background) >>> Photoshop Difference (Background)
+- Exclusion (Background) >>> Photoshop Exclusion (Background)
+- Inverted (Background) >>> Blend Inverted (Background)
+- Negation (Background) >>> Krita Negation (Background)
+- Signed Difference (Background) >>> Blend Signed Difference (Background)
+- Color Dodge (Background) >>> Photoshop Color Dodge (Background)
+- Glow (Background) >>> PaintDotNET Glow (Background)
+- Lighten (Background) >>> Photoshop Lighten (Background)
+- Lighter Color (Background) >>> Photoshop Lighter Color (Background)
+- Reflect (Background) >>> PaintDotNET Reflect (Background)
+- Screen (Background) >>> Photoshop Screen (Background)
+- Average (Background) >>> Blend Average (Background)
+
+## ❌ Removed
+- ✖️ Nothing has been removed
+
+---
+
 # ✨ 29 July 2024 | Release ID: 5
 
 ## 📝 Notes (Abbreviated) 

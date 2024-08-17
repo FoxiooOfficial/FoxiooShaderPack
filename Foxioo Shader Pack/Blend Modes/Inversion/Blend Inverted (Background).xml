@@ -1,0 +1,49 @@
+<effect>
+	<Name>Blend Inverted (Background)</Name>
+		<description>Shader inverts the base allowing you to also take into account the colors of the blend</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>			
+
+		<parameter>
+			<name>/* Foxioo Blend Inverted (Background) Shader | 1.2 (30.06.2024) */</name>
+			<property>checkbox</property>
+
+				<variable>_</variable>
+
+			<description>Shader inverts the base allowing you to also take into account the colors of the blend</description>
+		</parameter>
+
+			<parameter>
+				<name>Blending Mode</name>
+				<variable>_Blending_Mode</variable>
+
+				<description>This option allows you to specify whether the blend color should be included in the final blending.</description>
+
+				<type>int</type>
+				<property>checkbox</property>
+
+				<value>1</value>
+			</parameter>
+			
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+	
+		<parameter>
+			<name>/*  */</name>
+			<property>checkbox</property>
+
+				<variable>__</variable>
+
+		</parameter>
+
+</effect>

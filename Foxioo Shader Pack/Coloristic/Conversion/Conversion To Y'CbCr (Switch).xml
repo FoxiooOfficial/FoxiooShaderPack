@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Conversion To Y'CbCr (Switch) Shader | 1.0 (20.07.2024) */</name>
+			<name>/* Foxioo Conversion To Y'CbCr (Switch) Shader | 1.1 (06.08.2024) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

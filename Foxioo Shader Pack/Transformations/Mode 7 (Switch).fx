@@ -116,7 +116,7 @@ float4 Main(float2 In: TEXCOORD) : COLOR
     if(_Result == 0) { _Render = tex2D(S2D_Image, _UV); }
     else { _Render = tex2D(S2D_Background, _UV); float4 _Alpha = tex2D(S2D_Image, In); _Render.a *= _Alpha.a; }
 
-        if (_Looping_Mode == 3 && (_UV.x < 0 || _UV.x > 1 || _UV.y < 0 || _UV.y > 1 || _UV.y < 0))
+        if (_Looping_Mode == 3 && (_UV.x < 0 || _UV.x > 1 || _UV.y < 0 || _UV.y > 1))
         {
             _Render = 0;
         }

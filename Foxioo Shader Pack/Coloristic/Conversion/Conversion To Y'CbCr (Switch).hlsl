@@ -1,7 +1,7 @@
 /***********************************************************/
 
 /* Autor shader: Foxioo */
-/* Version shader: 1.0 (20.07.2024) */
+/* Version shader: 1.1 (06.08.2024) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 
 /***********************************************************/
@@ -70,7 +70,7 @@ PS_OUTPUT ps_main( in PS_INPUT In )
             float _Cb = -0.168736 * _Result.r - 0.331264 * _Result.g + 0.5 * _Result.b + 0.5;
             float _Cr = 0.5 * _Result.r - 0.418688 * _Result.g - 0.081312 * _Result.b + 0.5;
 
-        _Result.rgb = lerp(_Result.rgb, float3(_Y, _Cb, _Cr) * _Mixing, _Mixing);
+        _Result.rgb = lerp(_Result.rgb, float3(_Y, _Cb, _Cr) * _Mixing, min(_Mixing, 1));
 
     _Result.a = _Render_Texture.a;
     Out.Color = _Result;
@@ -116,7 +116,7 @@ PS_OUTPUT ps_main_pm( in PS_INPUT In )
             float _Cb = -0.168736 * _Result.r - 0.331264 * _Result.g + 0.5 * _Result.b + 0.5;
             float _Cr = 0.5 * _Result.r - 0.418688 * _Result.g - 0.081312 * _Result.b + 0.5;
 
-        _Result.rgb = lerp(_Result.rgb, float3(_Y, _Cb, _Cr) * _Mixing, _Mixing);
+        _Result.rgb = lerp(_Result.rgb, float3(_Y, _Cb, _Cr) * _Mixing, min(_Mixing, 1));
 
     _Result.a = _Render_Texture.a;
     _Result.rgb *= _Result.a;

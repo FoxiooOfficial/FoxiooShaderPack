@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Logical NOR (Background) Shader | 1.0 (30.06.2024) */</name>
+			<name>/* Foxioo Logical OR (Background) Shader | 1.0 (30.06.2024) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
