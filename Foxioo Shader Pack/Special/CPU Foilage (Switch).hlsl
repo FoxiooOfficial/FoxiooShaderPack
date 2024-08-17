@@ -77,8 +77,8 @@ float3 Fun_Rainbow(float2 In)
     
     float _Red, _Green, _Blue;
     if(_ChannelRed == 0) _Red = In.x; else if (_ChannelRed == 1) _Red = In.y; else  _Red = In.x + In.y;
-    if(_ChannelGreen == 0) _Green = In.x; else if (_ChannelRed == 1) _Green = In.y; else  _Green = In.x + In.y;
-    if(_ChannelBlue == 0) _Blue = In.x; else if (_ChannelRed == 1) _Blue = In.y; else  _Blue = In.x + In.y;
+    if(_ChannelGreen == 0) _Green = In.x; else if (_ChannelGreen == 1) _Green = In.y; else  _Green = In.x + In.y;
+    if(_ChannelBlue == 0) _Blue = In.x; else if (_ChannelBlue == 1) _Blue = In.y; else  _Blue = In.x + In.y;
     
     _Render.r = sin(_Frag * _Red + 0.0) * 0.5 + 0.5;
     _Render.g = sin(_Frag * _Green + 2.0) * 0.5 + 0.5;
