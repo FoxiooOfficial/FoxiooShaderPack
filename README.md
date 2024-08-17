@@ -13,7 +13,7 @@ ___
 
 🥳 The package currently has **120 Shaders** 🎉
 
-🗓️ Last updated description dated **August 01, 2024 (UTC+02:00)**
+🗓️ Last updated description dated **August 08, 2024 (UTC+02:00)**
 
 🗓️ Last update of shaders from **July 29, 2024 (UTC+02:00)**
 
@@ -25,6 +25,16 @@ ___
 
 - **Shaders currently only work on Windows under Direct3D 9 and Direct3D 11**
 - **Shaders having in their name: (... With Arcosinus, ... With Arcsinus and ... With Arctangent) for unknown reasons differ in color in Direct3D 9 and Direct3D 11 modes. It is not known why, but I suspect that these  are calculated differently in these modes. The rest of the shaders work correctly.**
+
+---
+
+## 🌸 Shader types
+
+**(Background)** - These shaders use the object texture **AND** the background texture for calculations.
+
+**(Switch)** - These shaders use either the object texture **OR** the background texture depending on the setting of the `_Blending_Mode` variable.
+
+**(Texutre)** - These shaders use **ONLY** the object texture.
 
 ---
 
