@@ -11,7 +11,7 @@
 
 ___
 
-🥳 The package currently has **146 Shaders** 🎉
+🥳 The package currently has **147 Shaders** 🎉
 
 🗓️ Last updated description dated **August 08, 2024 (UTC+02:00)**
 
