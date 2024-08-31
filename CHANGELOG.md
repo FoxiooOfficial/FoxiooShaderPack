@@ -3,6 +3,29 @@
 
 ---
 
+# ✨ 31 August 2024 | Release ID: 7
+
+## 📝 Notes (Abbreviated) 
+- Added **1** shader in this release
+
+---
+
+## ➕ Added
+| Shader name                                | Type         | Shader Version   | Render      | PS   |
+|--------------------------------------------|--------------|------------------|-------------|------|
+|                                            |              |                  |             |      |
+| 📂 Special                                 |              |                  |             |      |
+|                                            |              |                  |             |      |
+| Enchantment Glint                          | (Switch)     | 1.0 (31.08.2024) | DX9 \| DX11 | 2.49 |
+
+## ✏️ Changed
+- ✖️ Nothing has changed
+  
+## ❌ Removed
+- ✖️ Nothing has been removed
+
+---
+
 # ✨ 17 August 2024 | Release ID: 6
 
 ## 📝 Notes (Abbreviated) 
