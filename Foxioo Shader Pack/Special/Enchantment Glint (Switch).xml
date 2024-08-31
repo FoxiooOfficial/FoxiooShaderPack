@@ -1,18 +1,18 @@
 <effect>
-	<Name>CPU Foilage (Switch)</Name>
-		<description>This shader gives a foil effect similar to those on the CPU. This shader was created at the request of GlitchyDust.</description> 
+	<Name>Enchantment Glint (Switch)</Name>
+		<description>The shader gives a glint effect similar to the Minecraft game. Special thanks to Daniel Ilett</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo CPU Foilage (Switch) Shader | 1.0 (16.08.2024) */</name>
+			<name>/* Foxioo Enchantment Glint (Switch) Shader | 1.0 (31.08.2024) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
 
-			<description>This shader gives a foil effect similar to those on the CPU. This shader was created at the request of GlitchyDust.</description>
+			<description>The shader gives a glint effect similar to the Minecraft game. Special thanks to Daniel Ilett</description>
 		</parameter>
 
 			<parameter>
@@ -103,7 +103,7 @@
 
 				<type>float</type>
 
-				<value>8.5</value>
+				<value>15.5</value>
 			</parameter>
 
 
@@ -159,45 +159,26 @@
 					</parameter>
 
 					<parameter>
-						<name>Red Channel Source</name>
-						<variable>_ChannelRed</variable>
-						<description>This variable determines how the red channel is generated based on the UV coordinates:
-									 0 - Uses the X coordinate;
-									 1 - Uses the Y coordinate;
-									 2 - Uses the sum of X and Y coordinates.</description>
-						<type>int</type>
-						<property>SLIDER</property>
-						<value>1</value>
-						<min>0</min>
-						<max>2</max>
+						<name>Intensity</name>
+						<variable>_Intensity</variable>
+
+						<description>This variable determines what is the potency of the glint, the bigger it is the pattern is more intense.</description>
+					
+						<type>float</type>
+					
+						<value>15</value>
 					</parameter>
-				
+
 					<parameter>
-						<name>Green Channel Source</name>
-						<variable>_ChannelGreen</variable>
-						<description>This variable determines how the green channel is generated based on the UV coordinates:
-									 0 - Uses the X coordinate;
-									 1 - Uses the Y coordinate;
-									 2 - Uses the sum of X and Y coordinates.</description>
-						<type>int</type>
-						<property>SLIDER</property>
-						<value>0</value>
-						<min>0</min>
-						<max>2</max>
-					</parameter>
-	
-					<parameter>
-						<name>Blue Channel Source</name>
-						<variable>_ChannelBlue</variable>
-						<description>This variable determines how the blue channel is generated based on the UV coordinates:
-									 0 - Uses the X coordinate;
-									 1 - Uses the Y coordinate;
-									 2 - Uses the sum of X and Y coordinates.</description>
-						<type>int</type>
-						<property>SLIDER</property>
-						<value>2</value>
-						<min>0</min>
-						<max>2</max>
+						<name>Glint Color</name>
+						<variable>_Color</variable>
+						
+						<description>This variable determines the glint color.</description>
+		
+						<type>int_float4</type>
+						<property>color</property>
+		
+						<value>16734207</value>
 					</parameter>
 
 		<parameter>
