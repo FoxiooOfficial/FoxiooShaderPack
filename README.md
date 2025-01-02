@@ -7,13 +7,15 @@
    <br><br>
    <b>Here is a package of shaders created or modified by me for the Clickteam Fusion!</b><br>
    <a href="https://github.com/FoxiooOfficial/FoxiooShaderPack/issues">Report Bug</a>
+   |
+   <a href="https://github.com/FoxiooOfficial/FoxiooShaderPack/labels/important%20information">Important information</a>
 </div>
 
 ___
 
 🥳 The package currently has **147 Shaders** 🎉
 
-🗓️ Last updated description dated **August 31, 2024 (UTC+02:00)**
+🗓️ Last updated description dated **January 02, 2025 (UTC+02:00)**
 
 🗓️ Last update of shaders from **August 31, 2024 (UTC+02:00)**
 
