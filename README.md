@@ -28,7 +28,7 @@ ___
 - GLES (Android)
 - **Support for other platforms coming soon!**
   
-### ⚠️‼️‼️ **If you have been using an older version and are updating to the new one, be warned that there may be compatibility issues!** ‼️‼️⚠️
+### ⚠️‼️‼️ **If you have been using an older version and are updating to the new one, be warned that there may be compatibility issues! (Make backup Effects folder and MFA project before)** ‼️‼️⚠️
 
 ---
 
