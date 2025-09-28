@@ -1,0 +1,148 @@
+/***********************************************************/
+
+/* Autor shader: Foxioo */
+/* Version shader: 1.0 (27.09.2025) */
+/* My GitHub: https://github.com/FoxiooOfficial */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_vertex
+
+#ifdef GL_ES
+ precision mediump float;
+#endif
+uniform mat4 transformMatrix;
+uniform mat4 projectionMatrix;
+
+attribute vec4 position;
+attribute vec2 texCoord;
+varying vec2 In;
+
+void main(void)
+{
+    In = texCoord;
+    gl_Position = projectionMatrix * transformMatrix * position;
+}
+
+//@End
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+#ifdef GL_ES
+ precision mediump float;
+#endif
+
+#define RAD 0.0174532925
+
+varying vec2 In;
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+uniform sampler2D imgTexture;
+uniform sampler2D bckgTexture;
+
+uniform vec4 blendColor;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+uniform float _PosX;
+uniform float _PosY;
+
+uniform float _ScaleX;
+uniform float _ScaleY;
+uniform float _Scale;
+
+uniform float _Mixing;
+uniform bool _Blending_Mode;
+uniform int _Looping_Mode;
+
+uniform bool _Is_Pre_296_Build;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+float Fun_Fade(float _Times)    { return _Times * _Times * _Times * (_Times * (_Times * 6.0 - 15.0) + 10.0); }
+float Fun_Hash(vec2 _Pos)     {  return fract(sin(dot(_Pos, vec2(127.1, 311.7))) * 43758.5453); }
+float Fun_PerlinNoise(vec2 _Pos)
+{
+    vec2 _I = floor(_Pos);
+    vec2 _F = fract(_Pos);
+
+    float _A = Fun_Hash(_I);
+    float _B = Fun_Hash(_I + vec2(1.0, 0.0));
+    float _C = Fun_Hash(_I + vec2(0.0, 1.0));
+    float _D = Fun_Hash(_I + vec2(1.0, 1.0));
+
+    vec2 _UV = vec2(Fun_Fade(_F.x), Fun_Fade(_F.y));
+
+    return mix(mix(_A, _B, _UV.x), mix(_C, _D, _UV.x), _UV.y);
+}
+
+vec2 Fun_Offset(vec2 _Pos)
+{
+    vec2 _UV = _Pos * 0.5;
+
+    float _OffsetX = Fun_PerlinNoise(_UV + sin(_PosX + _UV));
+    float _OffsetY = Fun_PerlinNoise(_UV + cos(_PosX + _UV));
+
+        _OffsetX = (_OffsetX * 2.0 - 1.0) * 0.1;
+        _OffsetY = (_OffsetY * 2.0 - 1.0) * 0.1;
+
+    return vec2(_OffsetX, _OffsetY);
+}
+
+void main(void)
+{
+    vec2 In_Background = vec2(In.x, 1.0 - In.y);
+
+    vec4 _Render_Texture = texture2D(imgTexture, In) * blendColor;
+
+    vec2 UV;
+    if(_Is_Pre_296_Build == true && _Blending_Mode == true)
+    {
+        UV = mix(In_Background, In_Background + (Fun_PerlinNoise(In_Background * vec2(_ScaleX, _ScaleY) * _Scale + vec2(_PosX, _PosY))), _Mixing);
+    }
+    else
+    {
+        UV = mix(In, In + Fun_PerlinNoise(In * vec2(_ScaleX, _ScaleY) * _Scale + vec2(_PosX, _PosY)), _Mixing);
+    }
+
+    vec4 _Render = vec4(0.0);
+
+    if (_Looping_Mode == 0)
+    {
+        UV = fract(UV);
+    }
+    else if (_Looping_Mode == 1)
+    {
+        UV /= 2.0;
+        UV = fract(UV);
+        UV = abs(UV * 2.0 - 1.0);
+    }
+    else if(_Looping_Mode == 2)
+    {
+        UV = clamp(UV, 0.0, 1.0);
+    }
+
+
+    if(_Blending_Mode == false) {   _Render = texture2D(imgTexture, UV) * blendColor;  }
+    else {                      _Render = vec4(texture2D(bckgTexture, UV).rgb, _Render_Texture.a);  }
+
+        if (_Looping_Mode == 3 && (UV.x < 0.0 || UV.x > 1.0 || UV.y < 0.0 || UV.y > 1.0))
+        {
+            _Render = vec4(0.0);
+        }
+
+    gl_FragColor = _Render;
+}
+
+//@End

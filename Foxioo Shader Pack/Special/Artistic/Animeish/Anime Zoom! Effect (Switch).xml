@@ -1,0 +1,183 @@
+<effect>
+	<Name>Anime Zoom! Effect (Switch)</Name>
+		<description>This shader is a port of the "Actionlines Comic – Anime" shader created by EriNixie to works on Fusion. It gives a characteristic zoom effect from Anime.</description> 
+			<author>Foxioo, (Orginal shader created by EriNixie. https://godotshaders.com/shader/actionlines-comic-anime/)</author>
+			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+			
+		<parameter>
+			<name>/* Foxioo Anime Zoom! Effect (Switch) Shader | 1.0 (20.09.2025) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>This shader is a port of the "Actionlines Comic – Anime" shader created by EriNixie to works on Fusion. It gives a characteristic zoom effect from Anime.</description>
+		</parameter>
+
+			<parameter>
+				<name>Blending Mode</name>
+				<variable>_Blending_Mode</variable>
+
+				<description>This variable determines what the base should be. Setting it to 0 sets the base as the texture of the object on which the effect is applied, and setting it to 1 sets this as the background.</description>
+
+				<type>int</type>
+				<property>checkbox</property>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>1.0</value>
+			</parameter>
+
+			<parameter>
+				<name>Seed</name>
+				<variable>_Seed</variable>
+				
+				<description>This variable is responsible for the randomness of the pattern, depending on the seed.</description>
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Point X</name>
+				<variable>_PointX</variable>
+				<description>A variable that determines point position in the X axis.</description>
+
+				<type>float</type>
+
+				<value>0.5</value>
+			</parameter>
+
+			<parameter>
+				<name>Point Y</name>
+				<variable>_PointY</variable>
+				<description>A variable that determines point position in the Y axis.</description>
+
+				<type>float</type>
+
+				<value>0.5</value>
+			</parameter>
+
+			<parameter>
+				<name>Speed</name>
+				<variable>_Speed</variable>
+				
+				<description>This variable determines the Speed/Time at which the effect is currently located.</description>
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Line Color</name>
+				<variable>_Color</variable>
+				
+				<description>This variable changes the color of the line.</description>
+
+				<type>int_float4</type>
+				<property>color</property>
+
+				<value>16777215</value>
+			</parameter>
+
+
+			<parameter>
+				<name>Line Length</name>
+				<variable>_LineLength</variable>
+				
+				<description>This variable changes the length of the line.</description>
+
+				<type>float</type>
+
+				<value>2.0</value>
+			</parameter>
+
+			<parameter>
+				<name>Line Softness</name>
+				<variable>_Softness</variable>
+				
+				<description>This variable determines the degree of line smoothing.</description>
+
+				<type>float</type>
+
+				<value>0.1</value>
+			</parameter>
+
+			<parameter>
+				<name>Line Weirdness</name>
+				<variable>_Weirdness</variable>
+				
+				<description>This variable determines the distortion of the line pattern.</description>
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Radius</name>
+				<variable>_Radius</variable>
+				
+				<description>This variable determines when the line should end in relation to the center.</description>
+
+				<type>float</type>
+
+				<value>1.1</value>
+			</parameter>
+
+			<parameter>
+				<name>Freq</name>
+				<variable>_Freq</variable>
+				
+				<description>This variable determines the number of lines.</description>
+
+				<type>float</type>
+
+				<value>3.0</value>
+			</parameter>
+
+		<parameter>
+			<name>( Compatibility )</name>
+			<property>checkbox</property>
+			<description>Here you will find options that have changed, but you can still achieve the previous effect.</description>
+
+			<variable>_____</variable>
+		</parameter>
+            <parameter>
+                <name>Is Fusion Version Older Than 296?</name>
+                <variable>_Is_Pre_296_Build</variable>
+                <property>checkbox</property>
+                
+                <description>(Only applies to Android and iOS!) This variable determines whether to use the newer background formatting. In Clickteam Fusion 2.5 for build 295.10 and earlier, the background texture was flipped along the Y axis, but this was changed in build 296.1. Check this option if you are using an older build!</description>
+
+                <type>int</type>
+
+                <value>0</value>
+            </parameter>
+
+        <parameter>
+            <name>/* */</name>
+            <property>checkbox</property>
+            <variable>______</variable>
+        </parameter>
+
+		<sampler>
+			<index>0</index>
+			<filter>point</filter>
+			<addressU>border</addressU>
+			<addressV>border</addressV>
+			<bordercolor>0</bordercolor>
+		</sampler>
+</effect>

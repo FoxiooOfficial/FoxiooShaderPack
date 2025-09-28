@@ -1,6 +1,13 @@
 # ℹ️ Change Log
 **All notable changes to this project will be documented in this file.**
 
+# ✨ 28 September 2025 | Release ID: 7
+## 📝 Notes (Abbreviated) 
+- Android support for ALL shaders.
+- The number of shaders is now 300!
+- Many bugs have been fixed (too many to remember ;w;)
+- Compatibility issues may occur.
+
 ---
 
 # ✨ 17 August 2024 | Release ID: 6

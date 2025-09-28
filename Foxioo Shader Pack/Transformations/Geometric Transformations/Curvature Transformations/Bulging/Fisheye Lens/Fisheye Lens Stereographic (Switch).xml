@@ -1,0 +1,209 @@
+<effect>
+	<Name>Fisheye Lens Stereographic (Switch)</Name>
+		<description>This shader makes a fisheye lens (Stereographic) distortion effect.</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+			
+		<parameter>
+			<name>/* Foxioo Fisheye Lens (Switch) Shader | 1.1 (10.08.2025) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>This shader makes a fisheye lens (Stereographic) distortion effect.</description>
+		</parameter>
+
+		<parameter>
+			<name>( Position )</name>
+			<property>checkbox</property>
+			<description>Here are the variables for changing the position in the texture.</description>
+			<variable>__</variable>
+		</parameter>
+
+			<parameter>
+				<name>Position X</name>
+				<variable>_PosX</variable>
+				<description>A variable that determines the position of the texture in the X axis.</description> 
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+
+			<parameter>
+				<name>Position Y</name>
+				<variable>_PosY</variable>
+				<description>A variable that determines the position of the texture in the Y axis.</description> 
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+		<parameter>
+			<name>( Rotation )</name>
+			<property>checkbox</property>
+			<description>Here are the variables for changing the rotation in the texture.</description>
+			<variable>___</variable>
+		</parameter>
+
+			<parameter>
+				<name>Rotation X</name>
+				<variable>_RotX</variable>
+				<description>A variable that determines rotation in the X axis.</description>
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+
+	<parameter>
+			<name>( Points Position )</name>
+			<property>checkbox</property>
+			<description>Here are the variables for changing the position of point.</description> 
+			<variable>____</variable>
+		</parameter>
+
+			<parameter>
+				<name>Point X</name>
+				<variable>_PointX</variable>
+				<description>A variable that determines point position in the X axis.</description>
+
+				<type>float</type>
+
+				<value>0.5</value>
+			</parameter>
+
+			<parameter>
+				<name>Point Y</name>
+				<variable>_PointY</variable>
+				<description>A variable that determines point position in the Y axis.</description>
+
+				<type>float</type>
+
+				<value>0.5</value>
+			</parameter>
+
+		<parameter>
+			<name>( Scale )</name>
+			<property>checkbox</property>
+			<description>Here are the variables that determine the scale and offset of the texture.</description>
+			<variable>______</variable>
+		</parameter>
+
+			<parameter>
+				<name>Scale</name>
+				<variable>_Scale</variable>
+				<description>This variable determines the overall scale of the texture (in X and Y axes).</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+
+			<parameter>
+				<name>Scale X</name>
+				<variable>_ScaleX</variable>
+				<description>This variable determines the scale of the texture in the X axis.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+
+			<parameter>
+				<name>Scale Y</name>
+				<variable>_ScaleY</variable>
+				<description>This variable determines the scale of the texture in the Y axis.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+
+		<parameter>
+			<name>( Rendering Options )</name>
+			<property>checkbox</property>
+			<description>Here are the options for how the texture should be rendered.</description>
+			<variable>_______</variable>
+		</parameter>
+
+			<parameter>
+				<name>Blending Mode</name>
+				<variable>_Blending_Mode</variable>
+
+				<description>This variable determines which color will be the basis for modification. Set to 0 means it will be the texture of the object and set to 1 it will be the background.</description>
+			
+				<type>bool</type>
+				<property>checkbox</property>
+			
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>10</value>
+			</parameter>
+
+			<parameter>
+				<name>Distortion Of Fisheye Lens</name>
+				<variable>_Distortion</variable>
+				<description>A variable specifying how much the texture should be curved to give distortion immediately. (0 is no curvature, 1 is the default value giving fisheye lens effect).</description>
+
+				<type>float</type>
+
+				<value>-0.03</value>
+			</parameter>
+
+			<parameter>
+				<name>Looping Mode!</name>
+				<variable>_Looping_Mode</variable>
+				<description>This variable determines how the texture is to be looped: 0 - REPEAT (Repeats the texture image); 1 - MIRRORED REPEAT (Repeats the texture image, but reflects the image at each repetition); 2 - CLAMP TO EDGE (Extends the texture after crossing coordinates 0 and 1); 3 - CLAMP TO BORDER (After crossing coordinates 0 and 1, the texture will be invisible). For more information, visit: https://learnopengl.com/Getting-started/Textures</description>
+				<!-- For more information, visit: https://learnopengl.com/Getting-started/Textures -->
+
+				<type>int</type>
+				<property>SLIDER</property>
+
+				<value>3</value>
+				<min>0</min>
+				<max>3</max>
+			</parameter>
+
+		<parameter>
+			<name>( Compatibility )</name>
+			<property>checkbox</property>
+			<description>Here you will find options that have changed, but you can still achieve the previous effect.</description>
+			<variable>________</variable>
+		</parameter>
+            <parameter>
+                <name>Is Fusion Version Older Than 296?</name>
+                <variable>_Is_Pre_296_Build</variable>
+                <property>checkbox</property>
+                
+                <description>(Only applies to Android and iOS!) This variable determines whether to use the newer background formatting. In Clickteam Fusion 2.5 for build 295.10 and earlier, the background texture was flipped along the Y axis, but this was changed in build 296.1. Check this option if you are using an older build!</description>
+
+                <type>int</type>
+
+                <value>0</value>
+            </parameter>
+
+        <parameter>
+            <name>/* */</name>
+            <property>checkbox</property>
+            <variable>_________</variable>
+        </parameter>
+
+</effect>

@@ -1,0 +1,55 @@
+<effect>
+	<Name>Active (Texture)</Name>
+		<description>Make your active object... an active object.</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>0</BackgroundTexture>
+			
+		<parameter>
+			<name>/* Foxioo Active (Texture) Shader | 1.0 (28.08.2025) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>Make your active object... an active object.</description>
+		</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>1.</value>
+			</parameter>
+
+			<parameter>
+				<name>Sharpness Size</name>
+				<variable>_Sharpness_Size</variable>
+				
+				<description>This variable determines the distance of the sharpness size.</description>
+
+				<type>float</type>
+
+				<value>2.0</value>
+                                                        <preview_value>1.0</preview_value>
+			</parameter>
+
+        <parameter>
+            <name>/* */</name>
+            <property>checkbox</property>
+            <variable>__</variable>
+        </parameter>
+
+		<sampler>
+			<index>0</index>
+			<filter>point</filter>
+			<addressU>border</addressU>
+			<addressV>border</addressV>
+			<bordercolor>0</bordercolor>
+		</sampler>
+
+</effect>

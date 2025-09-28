@@ -1,0 +1,80 @@
+<effect>
+	<Name>Deltarune Freeze (Texture)</Name>
+		<description>This shader recreates freeze enemy effect in the game DELTARUNE (Chapter 2) created by Toby Fox.</description> 
+			<author>Foxioo, Toby Fox</author>
+			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>0</BackgroundTexture>
+			
+		<parameter>
+			<name>/* Foxioo Deltarune Freeze (Texture) Shader | 1.0 (13.08.2025) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>This shader recreates freeze enemy effect in the game DELTARUNE (Chapter 2) created by Toby Fox.</description>
+		</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Color</name>
+				<variable>_Color</variable>
+				
+				<description>This variable sets the freeze color (colors are added to the base, so the darker the color, the less visible it is).</description>
+
+				<type>int_float4</type>
+				<property>color</property>
+
+				<value>6050386</value>
+			</parameter>
+
+			<parameter>
+				<name>Fade</name>
+				<variable>_Fade</variable>
+				
+				<description>This variable sets the visibility level of the effect depending on Y.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Freeze Position X</name>
+				<variable>_PosXFreeze</variable>
+				
+				<description>This variable sets the offset of the freeze layers in the X axis.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Freeze Position Y</name>
+				<variable>_PosYFreeze</variable>
+				
+				<description>This variable sets the offset of the freeze layers in the Y axis.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+        <parameter>
+            <name>/* */</name>
+            <property>checkbox</property>
+            <variable>__</variable>
+        </parameter>
+
+</effect>

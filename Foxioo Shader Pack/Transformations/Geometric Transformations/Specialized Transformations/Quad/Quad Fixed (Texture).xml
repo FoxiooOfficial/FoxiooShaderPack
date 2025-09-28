@@ -1,0 +1,105 @@
+<effect>
+	<Name>Quad Fixed (Texture)</Name>
+		<description>This shader is a modification of the Quad shader created by Adam Hawker (aka Sketchy / MuddyMole).</description> 
+			<author>Foxioo and Adam Hawker (aka Sketchy / MuddyMole)</author>
+			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>0</BackgroundTexture>
+			
+		<parameter>
+			<name>/* Foxioo Quad Fixed (Texture) | 1.1 (20.07.2025) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>This shader is a modification of the Quad shader created by Adam Hawker (aka Sketchy / MuddyMole).</description>
+		</parameter>
+
+			<parameter>
+				<name>xA (-X -Y)</name>
+				<code>xA</code>
+				<variable>xA</variable>
+				<description>X of point A (Top left point)</description>
+				<type>float</type>
+				<property>edit</property>
+				<value>0</value>
+				<preview_value>0</preview_value>
+		</parameter>
+		<parameter>
+				<name>yA (-X -Y)</name>
+				<code>yA</code>
+				<variable>yA</variable>
+				<description>Y of point A (Top left point)</description>
+				<type>float</type>
+				<property>edit</property>
+				<value>0</value>
+				<preview_value>0</preview_value>
+		</parameter>
+		<parameter>
+				<name>xB (+X -Y)</name>
+				<code>xB</code>
+				<variable>xB</variable>
+				<description>X of point B (Top right point)</description>
+				<type>float</type>
+				<property>edit</property>
+				<value>1</value>
+				<preview_value>0.75</preview_value>
+		</parameter>
+		<parameter>
+				<name>yB (+X -Y)</name>
+				<code>yB</code>
+				<variable>yB</variable>
+				<description>Y of point B (Top right point)</description>
+				<type>float</type>
+				<property>edit</property>
+				<value>0</value>
+				<preview_value>0.25</preview_value>
+		</parameter>
+		<parameter>
+				<name>xC (+X +Y)</name>
+				<code>xC</code>
+				<variable>xC</variable>
+				<description>X of point C (Bottom right point)</description>
+				<type>float</type>
+				<property>edit</property>
+				<value>1</value>
+				<preview_value>1</preview_value>
+		</parameter>
+		<parameter>
+				<name>yC (+X +Y)</name>
+				<code>yC</code>
+				<variable>yC</variable>
+				<description>Y of point C (Bottom right point)</description>
+				<type>float</type>
+				<property>edit</property>
+				<value>1</value>
+				<preview_value>1</preview_value>
+		</parameter>
+		<parameter>
+				<name>xD (-X +Y)</name>
+				<code>xD</code>
+				<variable>xD</variable>
+				<description>X of point D (Bottom left point)</description>
+				<type>float</type>
+				<property>edit</property>
+				<value>0</value>
+				<preview_value>0.25</preview_value>
+		</parameter>
+		<parameter>
+				<name>yD (-X +Y)</name>
+				<code>yD</code>
+				<variable>yD</variable>
+				<description>Y of point D (Bottom left point)</description>
+				<type>float</type>
+				<property>edit</property>
+				<value>1</value>
+				<preview_value>0.75</preview_value>
+		</parameter>
+
+		<parameter>
+			<name>/*  */</name>
+			<property>checkbox</property>
+
+			<variable>__</variable>
+		</parameter>
+</effect>

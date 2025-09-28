@@ -1,0 +1,101 @@
+<effect>
+	<Name>CIELab (Switch)</Name>
+		<description>Shader allows changing luminance, a* and b*.</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+			
+		<parameter>
+			<name>/* Foxioo CIELab (Switch) Shader | 1.0 (29.08.2025) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>Shader allows changing luminance, a* and b*.</description>
+		</parameter>
+
+			<parameter>
+				<name>Blending Mode</name>
+				<variable>_Blending_Mode</variable>
+
+				<description>This variable determines what the base should be. Setting it to 0 sets the base as the texture of the object on which the effect is applied, and setting it to 1 sets this as the background.</description>
+
+				<type>int</type>
+				<property>checkbox</property>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Luminance</name>
+				<variable>_Luminance</variable>
+				
+				<description>This variable changes the color Luminance. (Range from 0 to 100)</description>
+
+				<type>float</type>
+
+				<value>50</value>
+			</parameter>
+
+			<parameter>
+				<name>A*</name>
+				<variable>_A</variable>
+				
+				<description>This variable changes (A* from LAB). (Range from -128 to 127)</description>
+
+				<type>float</type>
+
+				<value>50</value>
+				<preview_value>0</preview_value>
+			</parameter>
+
+			<parameter>
+				<name>B*</name>
+				<variable>_B</variable>
+				
+				<description>This variable changes (B* from LAB). (Range from -128 to 127)</description>
+
+				<type>float</type>
+
+				<value>50</value>
+				<preview_value>0</preview_value>
+			</parameter>
+
+		<parameter>
+			<name>( Compatibility )</name>
+			<property>checkbox</property>
+			<description>Here you will find options that have changed, but you can still achieve the previous effect.</description>
+
+			<variable>__</variable>
+		</parameter>
+            <parameter>
+                <name>Is Fusion Version Older Than 296?</name>
+                <variable>_Is_Pre_296_Build</variable>
+                <property>checkbox</property>
+                
+                <description>(Only applies to Android and iOS!) This variable determines whether to use the newer background formatting. In Clickteam Fusion 2.5 for build 295.10 and earlier, the background texture was flipped along the Y axis, but this was changed in build 296.1. Check this option if you are using an older build!</description>
+
+                <type>int</type>
+
+                <value>0</value>
+            </parameter>
+
+        <parameter>
+            <name>/* */</name>
+            <property>checkbox</property>
+            <variable>___</variable>
+        </parameter>
+
+</effect>

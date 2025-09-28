@@ -1,0 +1,349 @@
+<effect>
+	<Name>Texture Mask (Texture)</Name>
+		<description>This shader excludes the selected color causing the color to be invisible.</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+			
+		<parameter>
+			<name>/* Foxioo Texture Mask (Texture) Shader | 1.0 (07.09.2025) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>This shader excludes the selected color causing the color to be invisible.</description> 
+		</parameter>
+
+<parameter>
+			<name>( Position )</name>
+			<property>checkbox</property>
+			<description>Here are the variables for changing the position in the texture.</description>
+			<variable>__</variable>
+		</parameter>
+
+			<parameter>
+				<name>Position X</name>
+				<variable>_PosX</variable>
+				<description>A variable that determines the position of the texture in the X axis.</description> 
+
+				<type>float</type>
+
+				<preview_value>-0.003</preview_value>
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Position Y</name>
+				<variable>_PosY</variable>
+				<description>A variable that determines the position of the texture in the Y axis.</description> 
+
+				<type>float</type>
+
+				<preview_value>-0.005</preview_value>
+				<value>0</value>
+			</parameter>
+
+					<parameter>
+				<name>( Rotation )</name>
+				<property>checkbox</property>
+				<description>Here are the variables for changing the rotation in the rainbow.</description>
+				<variable>___</variable>
+			</parameter>
+	
+				<parameter>
+					<name>Rotation X</name>
+					<variable>_RotX</variable>
+					<description>A variable that determines rotation in the X axis.</description>
+	
+					<type>float</type>
+	
+					<value>0</value>
+				</parameter>
+
+				<parameter>
+					<name>( Points Position )</name>
+					<property>checkbox</property>
+					<description>Here are the variables for changing the position of point.</description> 
+					<variable>____</variable>
+				</parameter>
+		
+					<parameter>
+						<name>Point X</name>
+						<variable>_PointX</variable>
+						<description>A variable that determines point position in the X axis.</description>
+		
+						<type>float</type>
+		
+						<value>0.5</value>
+					</parameter>
+		
+					<parameter>
+						<name>Point Y</name>
+						<variable>_PointY</variable>
+						<description>A variable that determines point position in the Y axis.</description>
+		
+						<type>float</type>
+		
+						<value>0.5</value>
+					</parameter>
+
+		<parameter>
+			<name>( Scale )</name>
+			<property>checkbox</property>
+			<description>Here are the variables that determine the scale and offset of the texture.</description>
+			<variable>___</variable>
+		</parameter>
+
+			<parameter>
+				<name>Scale</name>
+				<variable>_Scale</variable>
+				<description>This variable determines the overall scale of the texture (in X and Y axes).</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+
+			<parameter>
+				<name>Scale X</name>
+				<variable>_ScaleX</variable>
+				<description>This variable determines the scale of the texture in the X axis.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+
+			<parameter>
+				<name>Scale Y</name>
+				<variable>_ScaleY</variable>
+				<description>This variable determines the scale of the texture in the Y axis.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+		<parameter>
+			<name>( Rendering Options )</name>
+			<property>checkbox</property>
+			<description>Here are the options for how the texture should be rendered.</description>
+			<variable>____</variable>
+		</parameter>
+
+			<parameter>
+				<name>Looping Mode!</name>
+				<variable>_Looping_Mode</variable>
+				<description>This variable determines how the texture is to be looped: 0 - REPEAT (Repeats the texture image); 1 - MIRRORED REPEAT (Repeats the texture image, but reflects the image at each repetition); 2 - CLAMP TO EDGE (Extends the texture after crossing coordinates 0 and 1); 3 - CLAMP TO BORDER (After crossing coordinates 0 and 1, the texture will be invisible). For more information, visit: https://learnopengl.com/Getting-started/Textures</description>
+				<!-- For more information, visit: https://learnopengl.com/Getting-started/Textures -->
+
+				<type>int</type>
+				<property>SLIDER</property>
+
+				<value>3</value>
+				<min>0</min>
+				<max>3</max>
+			</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+				
+			<!-- #################################### -->
+
+			<parameter>
+				<name>(Red) Texutre</name>
+				<varible>_Texture_Red</varible>
+				<code>_Texture_Red</code>			
+				<description>Here you declare the texture that is to be the mask.</description>			
+				<type>image</type>
+				<property>image</property>			
+				<value>TEXTUREMASK_9.png</value>
+			</parameter>
+
+					<parameter>
+						<name>(Red) Threshold</name>
+						<variable>_Threshold_Red</variable>
+						
+						<description>This variable determines when the color should be visible or not.</description>
+
+						<type>float</type>
+
+						<value>0</value>
+					</parameter>
+
+			<parameter>
+				<name>(Red) Smooth lower transition</name>
+				<variable>_Lower_Red</variable>
+				
+				<description>This value determines the degree of smoothing for values lower the threshold.</description>
+
+				<type>float</type>
+
+				<value>0.01</value>
+			</parameter>
+
+			<parameter>
+				<name>(Red) Smooth upper transition</name>
+				<variable>_Upper_Red</variable>
+				
+				<description>This value determines the degree of smoothing for values upper the threshold.</description>
+
+				<type>float</type>
+
+ 
+
+				<value>0.03</value>
+			</parameter>
+
+			<!-- #################################### -->
+
+			<parameter>
+				<name>(Green) Texutre</name>
+				<varible>_Texture_Green</varible>
+				<code>_Texture_Green</code>			
+				<description>Here you declare the texture that is to be the mask.</description>			
+				<type>image</type>
+				<property>image</property>			
+				<value>TEXTUREMASK_9.png</value>
+			</parameter>
+
+					<parameter>
+						<name>(Green) Threshold</name>
+						<variable>_Threshold_Green</variable>
+						
+						<description>This variable determines when the color should be visible or not.</description>
+
+						<type>float</type>
+
+						<value>0</value>
+					</parameter>
+
+			<parameter>
+				<name>(Green) Smooth lower transition</name>
+				<variable>_LowerGreen</variable>
+				
+				<description>This value determines the degree of smoothing for values lower the threshold.</description>
+
+				<type>float</type>
+
+				<value>0.01</value>
+			</parameter>
+
+			<parameter>
+				<name>(Green) Smooth upper transition</name>
+				<variable>_Upper_Green</variable>
+				
+				<description>This value determines the degree of smoothing for values upper the threshold.</description>
+
+				<type>float</type>
+
+				<value>0.01</value>
+			</parameter>
+
+			<!-- #################################### -->
+
+			<parameter>
+				<name>(Blue) Texutre</name>
+				<varible>_Texture_Blue</varible>
+				<code>_Texture_Blue</code>			
+				<description>Here you declare the texture that is to be the mask.</description>			
+				<type>image</type>
+				<property>image</property>			
+				<value>TEXTUREMASK_9.png</value>
+			</parameter>
+
+					<parameter>
+						<name>(Blue) Threshold</name>
+						<variable>_Threshold_Blue</variable>
+						
+						<description>This variable determines when the color should be visible or not.</description>
+
+						<type>float</type>
+
+						<value>0</value>
+					</parameter>
+
+			<parameter>
+				<name>(Blue) Smooth lower transition</name>
+				<variable>_Lower_Blue</variable>
+				
+				<description>This value determines the degree of smoothing for values lower the threshold.</description>
+
+				<type>float</type>
+
+				<value>0.01</value>
+			</parameter>
+
+			<parameter>
+				<name>(Blue) Smooth upper transition</name>
+				<variable>_Upper_Blue</variable>
+				
+				<description>This value determines the degree of smoothing for values upper the threshold.</description>
+
+				<type>float</type>
+
+				<value>0.01</value>
+			</parameter>
+
+			<!-- #################################### -->
+
+			<parameter>
+				<name>(Alpha) Texutre</name>
+				<varible>_Texture_Alpha</varible>
+				<code>_Texture_Alpha</code>			
+				<description>Here you declare the texture that is to be the mask.</description>			
+				<type>image</type>
+				<property>image</property>			
+				<value>TEXTUREMASK_0.png</value>
+			</parameter>
+
+					<parameter>
+						<name>(Alpha) Threshold</name>
+						<variable>_Threshold_Alpha</variable>
+						
+						<description>This variable determines when the color should be visible or not.</description>
+
+						<type>float</type>
+
+						<value>0.5</value>
+					</parameter>
+
+			<parameter>
+				<name>(Alpha) Smooth lower transition</name>
+				<variable>_Lower_Alpha</variable>
+				
+				<description>This value determines the degree of smoothing for values lower the threshold.</description>
+
+				<type>float</type>
+
+				<value>0.5</value>
+			</parameter>
+
+			<parameter>
+				<name>(Alpha) Smooth upper transition</name>
+				<variable>_Upper_Alpha</variable>
+				
+				<description>This value determines the degree of smoothing for values upper the threshold.</description>
+
+				<type>float</type>
+
+				<value>0.5</value>
+			</parameter>
+
+		<parameter>
+			<name>/*  */</name>
+			<property>checkbox</property>
+
+			<variable>__</variable>
+		</parameter>
+</effect>

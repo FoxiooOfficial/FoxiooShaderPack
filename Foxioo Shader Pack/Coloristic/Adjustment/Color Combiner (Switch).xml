@@ -1,0 +1,163 @@
+<effect>
+	<Name>Color Combiner (Switch)</Name>
+		<description>The shader modifies colors using the equation (_A - _B) * _C + _D, where _A is the texture color.</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+			
+		<parameter>
+			<name>/* Foxioo Color Combiner (Switch) Shader | 1.0 (14.09.2025) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>The shader modifies colors using the equation (_A - _B) * _C + _D, where _A is the texture color.</description>
+		</parameter>
+
+			<parameter>
+				<name>(A) Blending Mode</name>
+				<variable>_Blending_Mode</variable>
+				
+				<description>This variable manages which color will be reduced. Set to 0 is the blend color will be reduced and set to 1 is the base color will be reduced.</description>
+
+				<type>bool</type>
+				<property>checkbox</property>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+
+			<parameter>
+				<name>(B) Mode</name>
+				<variable>_B_Mode</variable>
+
+				<description>This variable manages whether parameter B is in variable mode or texture mode. Set to 0 is variable mode and set to 1 is texture mode.</description>
+
+				<type>bool</type>
+				<property>checkbox</property>
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>(B) Value</name>
+				<variable>_B</variable>
+				
+				<description>The text that will be used for parameter B when it is in variable mode. But in texture mode, it serves as a color multiplier for _Texture_B.</description>
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>(B) Texutre</name>
+				<varible>_Texture_B</varible>
+				<code>_Texture_B</code>			
+				<description>The texture that will be used for parameter B when in texture mode.</description>			
+				<type>image</type>
+				<property>image</property>			
+				<value>TEXTUREMASK_9.png</value>
+			</parameter>
+
+			<parameter>
+				<name>(C) Mode</name>
+				<variable>_C_Mode</variable>
+
+				<description>This variable manages whether parameter C is in variable mode or texture mode. Set to 0 is variable mode and set to 1 is texture mode.</description>
+
+				<type>bool</type>
+				<property>checkbox</property>
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>(C) Value</name>
+				<variable>_C</variable>
+				
+				<description>The text that will be used for parameter C when it is in variable mode. But in texture mode, it serves as a color multiplier for _Texture_C.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>(C) Texutre</name>
+				<varible>_Texture_C</varible>
+				<code>_Texture_C</code>			
+				<description>The texture that will be used for parameter C when in texture mode.</description>			
+				<type>image</type>
+				<property>image</property>			
+				<value>TEXTUREMASK_9.png</value>
+			</parameter>
+
+			<parameter>
+				<name>(D) Mode</name>
+				<variable>_D_Mode</variable>
+
+				<description>This variable manages whether parameter D is in variable mode or texture mode. Set to 0 is variable mode and set to 1 is texture mode.</description>
+
+				<type>bool</type>
+				<property>checkbox</property>
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>(D) Value</name>
+				<variable>_D</variable>
+				
+				<description>The text that will be used for parameter D when it is in variable mode. But in texture mode, it serves as a color multiplier for _Texture_D.</description>
+
+				<type>float</type>
+
+				<value>0.5</value>
+			</parameter>
+
+			<parameter>
+				<name>(D) Texutre</name>
+				<varible>_Texture_D</varible>
+				<code>_Texture_D</code>			
+				<description>The texture that will be used for parameter D when in texture mode.</description>			
+				<type>image</type>
+				<property>image</property>			
+				<value>TEXTUREMASK_9.png</value>
+			</parameter>
+
+		<parameter>
+			<name>( Compatibility )</name>
+			<property>checkbox</property>
+			<description>Here you will find options that have changed, but you can still achieve the previous effect.</description>
+
+			<variable>__</variable>
+		</parameter>
+            <parameter>
+                <name>Is Fusion Version Older Than 296?</name>
+                <variable>_Is_Pre_296_Build</variable>
+                <property>checkbox</property>
+                
+                <description>(Only applies to Android and iOS!) This variable determines whether to use the newer background formatting. In Clickteam Fusion 2.5 for build 295.10 and earlier, the background texture was flipped along the Y axis, but this was changed in build 296.1. Check this option if you are using an older build!</description>
+
+                <type>int</type>
+
+                <value>0</value>
+            </parameter>
+
+        <parameter>
+            <name>/* */</name>
+            <property>checkbox</property>
+            <variable>___</variable>
+        </parameter>
+
+</effect>

@@ -1,0 +1,133 @@
+<effect>
+	<Name>Better Bloom (Background)</Name>
+		<description>WARNING! THIS SHADER IS A HUGE OVERLOAD FOR GRAPHICS CARDS! This shader is a modification of the "Bloom 30" shader created by: Looki, NaitorStudios and fnkycoldmadeanr.</description> 
+			<author>Foxioo, Looki, NaitorStudios, fnkycoldmadeanr</author>
+			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+
+		<parameter>
+			<name>/* Foxioo Better Bloom (Background) Shader | 1.6 (19.09.2025) */</name>
+			<property>checkbox</property>
+				
+				<variable>_</variable>
+
+			<description>WARNING! THIS SHADER IS A HUGE OVERLOAD FOR GRAPHICS CARDS! This shader is a modification of the "Bloom 30" shader created by: Looki, NaitorStudios and fnkycoldmadeanr.</description>
+		</parameter>
+
+		<parameter>
+			<name>( Blur )</name>
+			<property>checkbox</property>
+			<description>Here are the settings for blur.</description>
+			<variable>__</variable>
+		</parameter>
+
+			<parameter>
+				<name>Blur Distance</name>
+				<variable>_Distance</variable>
+
+				<description>This variable determines how large the blur distance should be.</description>
+
+				<type>float</type>
+				<value>16</value>
+			</parameter>
+
+			<parameter>
+				<name>Blur Quality (Direct3D 11 only!)</name>
+				<variable>_Quality</variable>
+
+				<description>This variable allows you to change the quality of the blur. It works only on Direct3D 11. The higher the quality, the blur at higher values of _Distance is smoothed out, but the graphics card will be very overloaded. For Direct3D 9 this value is permanently set to 3. I DO NOT RECOMMEND SETTING THIS VALUE HIGHER THAN 8!</description>
+
+				<type>int</type>
+
+				<min>1</min>
+				<max>32</max>
+				<value>6</value>
+				<property>SLIDER</property>
+			</parameter>
+
+		<parameter>
+			<name>( Bloom )</name>
+			<property>checkbox</property>
+			<description>Here are the settings for bloom.</description>
+			<variable>___</variable>
+		</parameter>
+
+			<parameter>
+				<name>Power</name>
+				<variable>_Power</variable>
+
+				<description>This variable determines what power the colors should have.</description>
+
+				<type>float</type>
+				<value>2</value>
+			</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+
+				<description>This variable sets the intensity of base visibility.</description>
+
+				<type>float</type>
+
+				<value>2</value>
+			</parameter>
+	
+			<parameter>
+				<name>Alpha</name>
+				<variable>_Alpha</variable>
+
+				<description>This variable determines the multiplication of the color alpha.</description>
+
+				<type>float</type>
+				<property>spin</property>
+
+				<value>1</value>
+				<min>0</min>
+				<max>1</max>	
+			</parameter>
+
+			<parameter>
+				<name>Alpha Mode</name>
+				<variable>_Alpha_Mode</variable>
+
+				<description>This variable corresponds to how the Alpha color is to be displayed: 
+				0 - BALANCED (Every RGB color is displayed); 
+				1 - BRIGHTNESS (Brighter colors from the RGB average are displayed); 
+				2 - DARKNESS (Darker colors from the RGB average are displayed).</description>
+
+				<type>int</type>
+
+				<min>0</min>
+				<max>2</max>
+				<value>0</value>
+				<property>SLIDER</property>
+			</parameter>
+	
+		<parameter>
+			<name>( Compatibility )</name>
+			<property>checkbox</property>
+			<description>Here you will find options that have changed, but you can still achieve the previous effect.</description>
+				<variable>____</variable>
+		</parameter>
+            <parameter>
+                <name>Is Fusion Version Older Than 296?</name>
+                <variable>_Is_Pre_296_Build</variable>
+                <property>checkbox</property>
+                
+                <description>(Only applies to Android and iOS!) This variable determines whether to use the newer background formatting. In Clickteam Fusion 2.5 for build 295.10 and earlier, the background texture was flipped along the Y axis, but this was changed in build 296.1. Check this option if you are using an older build!</description>
+
+                <type>int</type>
+
+                <value>0</value>
+            </parameter>
+
+        <parameter>
+            <name>/* */</name>
+            <property>checkbox</property>
+            <variable>_____</variable>
+        </parameter>
+
+
+</effect>

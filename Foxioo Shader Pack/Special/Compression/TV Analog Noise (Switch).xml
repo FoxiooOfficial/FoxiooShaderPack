@@ -1,0 +1,158 @@
+<effect>
+	<Name>TV Analog Noise (Switch)</Name>
+		<description>The shader simulates analog white noise from a TV.</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+			
+		<parameter>
+			<name>/* Foxioo TV Analog Noise (Switch) Shader | 1.0 (16.09.2025) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>The shader simulates analog white noise from a TV.</description>
+		</parameter>
+
+		<parameter>
+			<name>( Position )</name>
+			<property>checkbox</property>
+			<description>Here are the variables for changing the position in the noise.</description>
+			<variable>__</variable>
+		</parameter>
+
+			<parameter>
+				<name>Position X</name>
+				<variable>_PosX</variable>
+				<description>A variable that determines the position of the noise in the X axis.</description> 
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+
+			<parameter>
+				<name>Position Y</name>
+				<variable>_PosY</variable>
+				<description>A variable that determines the position of the noise in the Y axis.</description> 
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+		<parameter>
+			<name>( Scale )</name>
+			<property>checkbox</property>
+			<description>Here are the variables that determine the scale and offset of the noise.</description>
+			<variable>___</variable>
+		</parameter>
+
+			<parameter>
+				<name>Scale</name>
+				<variable>_Scale</variable>
+				<description>This variable determines the overall scale of the noise (in X and Y axes).</description>
+
+				<type>float</type>
+
+				<value>1.6</value>
+			</parameter>
+
+
+			<parameter>
+				<name>Scale X</name>
+				<variable>_ScaleX</variable>
+				<description>This variable determines the scale of the noise in the X axis.</description>
+
+				<type>float</type>
+
+				<value>0.8</value>
+			</parameter>
+
+			<parameter>
+				<name>Scale Y</name>
+				<variable>_ScaleY</variable>
+				<description>This variable determines the scale of the noise in the X axis.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+		<parameter>
+			<name>( Rendering Options )</name>
+			<property>checkbox</property>
+			<description>Here are the options for how the texture should be rendered.</description>
+			<variable>____</variable>
+		</parameter>
+
+		<parameter>
+			<name>Blending Mode</name>
+			<variable>_Blending_Mode</variable>
+
+			<description>This variable determines which color will be the basis for modification. Set to 0 means it will be the texture of the object and set to 1 it will be the background.</description>
+		
+			<type>bool</type>
+			<property>checkbox</property>
+		
+			<value>0</value>
+		</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>0.5</value>
+			</parameter>
+
+			<parameter>
+				<name>Seed</name>
+				<variable>_Seed</variable>
+				
+				<description>This variable is responsible for the randomness of the pattern, depending on the seed.</description>
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+
+		<parameter>
+			<name>( Compatibility )</name>
+			<property>checkbox</property>
+			<description>Here you will find options that have changed, but you can still achieve the previous effect.</description>
+
+			<variable>_____</variable>
+		</parameter>
+            <parameter>
+                <name>Is Fusion Version Older Than 296?</name>
+                <variable>_Is_Pre_296_Build</variable>
+                <property>checkbox</property>
+                
+                <description>(Only applies to Android and iOS!) This variable determines whether to use the newer background formatting. In Clickteam Fusion 2.5 for build 295.10 and earlier, the background texture was flipped along the Y axis, but this was changed in build 296.1. Check this option if you are using an older build!</description>
+
+                <type>int</type>
+
+                <value>0</value>
+            </parameter>
+
+        <parameter>
+            <name>/* */</name>
+            <property>checkbox</property>
+            <variable>______</variable>
+        </parameter>
+
+		<sampler>
+			<index>0</index>
+			<filter>point</filter>
+			<addressU>border</addressU>
+			<addressV>border</addressV>
+			<bordercolor>0</bordercolor>
+		</sampler>
+</effect>

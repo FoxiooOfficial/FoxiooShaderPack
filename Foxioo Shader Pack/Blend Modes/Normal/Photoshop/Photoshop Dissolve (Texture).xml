@@ -1,0 +1,35 @@
+<effect>
+	<Name>Photoshop Dissolve (Texture)</Name>
+		<description>(The effect comes from Photoshop) Applies a random alpha color change to texture pixels. A random value is generated for each pixel, and if this value is below _Mixing, the pixel becomes fully transparent.</description>
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+			
+		<parameter>
+			<name>/* Foxioo Photoshop Dissolve (Texture) Shader | 1.0 (12.01.2025) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>(The effect comes from Photoshop) Applies a random alpha color change to texture pixels. A random value is generated for each pixel, and if this value is below _Mixing, the pixel becomes fully transparent.</description>
+		</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>0.5</value>
+			</parameter>
+
+		<parameter>
+			<name>/*  */</name>
+			<property>checkbox</property>
+
+			<variable>__</variable>
+		</parameter>
+</effect>

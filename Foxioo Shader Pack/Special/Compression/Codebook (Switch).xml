@@ -1,0 +1,84 @@
+<effect>
+	<Name>Codebook (Switch)</Name>
+		<description>This effect is an attempt to recreate the "Codebook" effect from the Paint.NET PolyGlitch plugin created by gsuberland.</description> 
+			<author>Foxioo, gsuberland</author>
+			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+			
+		<parameter>
+			<name>/* Foxioo Codebook (Switch) Shader | 1.0 (19.09.2025) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>This effect is an attempt to recreate the "Codebook" effect from the Paint.NET PolyGlitch plugin created by gsuberland.</description>
+		</parameter>
+
+		<parameter>
+			<name>Blending Mode</name>
+			<variable>_Blending_Mode</variable>
+
+			<description>This variable determines which color will be the basis for modification. Set to 0 means it will be the texture of the object and set to 1 it will be the background.</description>
+		
+			<type>bool</type>
+			<property>checkbox</property>
+		
+			<value>0</value>
+		</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Seed</name>
+				<variable>_Seed</variable>
+				
+				<description>This variable is responsible for the randomness of the pattern, depending on the seed.</description>
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+		<parameter>
+			<name>( Compatibility )</name>
+			<property>checkbox</property>
+			<description>Here you will find options that have changed, but you can still achieve the previous effect.</description>
+
+			<variable>__</variable>
+		</parameter>
+            <parameter>
+                <name>Is Fusion Version Older Than 296?</name>
+                <variable>_Is_Pre_296_Build</variable>
+                <property>checkbox</property>
+                
+                <description>(Only applies to Android and iOS!) This variable determines whether to use the newer background formatting. In Clickteam Fusion 2.5 for build 295.10 and earlier, the background texture was flipped along the Y axis, but this was changed in build 296.1. Check this option if you are using an older build!</description>
+
+                <type>int</type>
+
+                <value>0</value>
+            </parameter>
+
+        <parameter>
+            <name>/* */</name>
+            <property>checkbox</property>
+            <variable>___</variable>
+        </parameter>
+
+		<sampler>
+			<index>0</index>
+			<filter>point</filter>
+			<addressU>border</addressU>
+			<addressV>border</addressV>
+			<bordercolor>0</bordercolor>
+		</sampler>
+</effect>

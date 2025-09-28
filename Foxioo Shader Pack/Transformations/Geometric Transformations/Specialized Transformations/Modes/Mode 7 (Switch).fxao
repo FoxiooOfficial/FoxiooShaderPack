@@ -1,0 +1,197 @@
+/***********************************************************/
+
+/* Autor shader: Foxioo */
+/* Version shader: 1.7 (22.06.2025) */
+/* My GitHub: https://github.com/FoxiooOfficial */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_vertex
+
+#ifdef GL_ES
+ precision mediump float;
+#endif
+uniform mat4 transformMatrix;
+uniform mat4 projectionMatrix;
+
+attribute vec4 position;
+attribute vec2 texCoord;
+varying vec2 In;
+
+void main(void)
+{
+    In = texCoord;
+    gl_Position = projectionMatrix * transformMatrix * position;
+}
+
+//@End
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+#ifdef GL_ES
+ precision mediump float;
+#endif
+
+#define RAD 0.0174532925
+
+varying vec2 In;
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+uniform sampler2D imgTexture;
+uniform sampler2D bckgTexture;
+
+uniform vec4 blendColor;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+uniform float _PosX;
+uniform float _PosY;
+uniform float _PosZ;
+
+uniform float _OffsetX;
+
+uniform float _ScaleX;
+uniform float _ScaleY;
+uniform float _Scale;
+
+uniform float _RotX;
+uniform float _RotY;
+uniform float _RotZ;
+
+uniform float _Distortion;
+
+uniform float _RotXPointX;
+uniform float _RotXPointY;
+uniform float _RotYPointX;
+uniform float _RotYPointY;
+
+uniform float _PosOffsetX;
+uniform float _PosOffsetY;
+
+uniform int _Looping_Mode;
+
+uniform bool _Render_Sky;
+uniform bool _Blending_Mode;
+
+uniform bool _Is_Pre_296_Build;
+
+/***********************************************************/
+/* Mode 7 */
+/***********************************************************/
+
+vec2 Fun_Mode7(vec2 In)
+{
+    vec2 _UV = In;
+
+    _UV.x -= (-_OffsetX + 0.5);
+    _UV /= (In.y * _Distortion) - 0.5;
+
+    return _UV * _PosZ;
+}
+
+vec2 Fun_RotationX(vec2 In)
+{
+    vec2 _UV = vec2((In.x + _RotXPointX) / 2.0, (In.y + _RotXPointY) / 2.0);
+    float _RotX_Temp = _RotX * RAD;
+
+    float _CosR = cos(_RotX_Temp);
+    float _SinR = sin(_RotX_Temp);
+
+    return vec2(
+        _UV.x * _CosR + _UV.y * _SinR,
+        -_UV.x * _SinR + _UV.y * _CosR
+    );
+}
+
+vec2 Fun_RotationY(vec2 In)
+{
+    vec2 _UV = vec2(In.x + _RotYPointX, In.y + _RotYPointY);
+    float _RotY_Temp = (_RotY - 180.0) * RAD;
+
+    float _CosR = cos(_RotY_Temp);
+    float _SinR = sin(_RotY_Temp);
+
+    vec2 offsetUV = _UV - 0.5;
+
+    return 0.5 + vec2(
+        offsetUV.x * _CosR + offsetUV.y * _SinR,
+        -offsetUV.x * _SinR + offsetUV.y * _CosR
+    );
+}
+
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+void main(void)
+{   
+    vec2 In_Background = vec2(In.x, 1.0 - In.y);
+	
+    vec2 In_RotY;
+    if(_Is_Pre_296_Build && _Blending_Mode)
+        In_RotY = Fun_RotationY(In_Background);
+    else
+        In_RotY = Fun_RotationY(In);
+
+    float _RotZ_Temp = _RotZ * RAD;
+    
+    vec2 In_modified = In_RotY;
+    In_modified.y += _RotZ_Temp;
+    
+        vec2 _UV = Fun_Mode7(In_modified);
+        vec2 _Pos = vec2(-_PosX, _PosY);
+        vec2 _PosOffset = vec2(-_PosOffsetX, _PosOffsetY - 0.5);
+        vec2 _Scale_Temp = (vec2(_ScaleX, _ScaleY)) * _Scale;
+            
+            _UV = Fun_RotationX(_UV);
+            _UV -= _PosOffset;
+            _UV *= _Scale_Temp;
+            _UV -= _Pos - 0.5;
+            
+    if(_Looping_Mode == 0)
+    {
+        _UV = fract(_UV);
+    }
+
+    else if(_Looping_Mode == 1)
+    {
+        _UV = fract(_UV / 2.0);
+        _UV = abs(_UV * 2.0 - 1.0);
+    }
+        
+    vec4 _Render;
+    if(!_Blending_Mode)
+    {
+        _Render = texture2D(imgTexture, _UV) * blendColor;
+    }
+    else
+    {
+        _Render = texture2D(bckgTexture, _UV);
+        _Render.a *= texture2D(imgTexture, In_RotY).a;
+    }
+    
+    if(_Looping_Mode == 3 && (_UV.x < 0.0 || _UV.x > 1.0 || _UV.y < 0.0 || _UV.y > 1.0))
+    {
+        _Render = vec4(0.0);
+    }
+    
+    if(((In_modified.y * _Distortion) > 0.5) && !_Render_Sky)
+    {
+        _Render = vec4(0.0);
+    }
+    
+    gl_FragColor = _Render;
+}
+
+
+//@End

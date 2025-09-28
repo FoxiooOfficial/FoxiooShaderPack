@@ -1,0 +1,172 @@
+<effect>
+	<Name>End Portal (Switch)</Name>
+		<description>This shader recreates the end portal effect from Minecraft.</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>0</BackgroundTexture>
+
+		<parameter>
+			<name>/* Foxioo End Portal (Switch) Shader | 1.0 (16.09.2025) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>This shader recreates the end portal effect from Minecraft.</description>
+		</parameter>
+
+		<parameter>
+			<name>( Position )</name>
+			<property>checkbox</property>
+
+			<variable>__</variable>
+		</parameter>
+
+			<parameter>
+				<name>Position X</name>
+				<variable>_PosX</variable>
+				<description>A variable that determines the position of the texture in the X axis.</description> 
+
+				<type>float</type>
+
+				<value>0.4</value>
+			</parameter>
+
+			<parameter>
+				<name>Position Y</name>
+				<variable>_PosY</variable>
+				<description>A variable that determines the position of the texture in the Y axis.</description> 
+
+				<type>float</type>
+
+				<value>0.6</value>
+			</parameter>
+
+		<parameter>
+			<name>( Rotation )</name>
+			<property>checkbox</property>
+			<description>Here are the variables for changing the rotation in the texture.</description>
+			<variable>___</variable>
+		</parameter>
+
+			<parameter>
+				<name>Rotation X</name>
+				<variable>_RotX</variable>
+				<description>A variable that determines rotation.</description>
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+
+		<parameter>
+			<name>( Points )</name>
+			<property>checkbox</property>
+			<description>Here are the variables for changing the position of point.</description> 
+			<variable>____</variable>
+		</parameter>
+
+			<parameter>
+				<name>Point X</name>
+				<variable>_PointX</variable>
+				<description>A variable that determines point position in the X axis.</description>
+
+				<type>float</type>
+
+				<value>0.5</value>
+			</parameter>
+
+			<parameter>
+				<name>Point Y</name>
+				<variable>_PointY</variable>
+				<description>A variable that determines point position in the Y axis.</description>
+
+				<type>float</type>
+
+				<value>0.5</value>
+			</parameter>
+
+		<parameter>
+			<name>( Scale )</name>
+			<property>checkbox</property>
+
+			<variable>___</variable>
+		</parameter>
+
+			<parameter>
+				<name>Scale</name>
+				<variable>_Scale</variable>
+				<description>This variable determines the overall scale of the texture (in X and Y axes).</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Scale X</name>
+				<variable>_ScaleX</variable>
+				<description>This variable determines the scale of the texture in the X axis.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Scale Y</name>
+				<variable>_ScaleY</variable>
+				<description>This variable determines the scale of the texture in the Y axis.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+		<parameter>
+			<name>( Result )</name>
+			<property>checkbox</property>
+
+			<variable>____</variable>
+		</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable sets the intensity of base visibility.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+
+		<parameter>
+			<name>( Compatibility )</name>
+			<property>checkbox</property>
+			<description>Here you will find options that have changed, but you can still achieve the previous effect.</description>
+
+			<variable>_____</variable>
+		</parameter>
+            <parameter>
+                <name>Is Fusion Version Older Than 296?</name>
+                <variable>_Is_Pre_296_Build</variable>
+                <property>checkbox</property>
+                
+                <description>(Only applies to Android and iOS!) This variable determines whether to use the newer background formatting. In Clickteam Fusion 2.5 for build 295.10 and earlier, the background texture was flipped along the Y axis, but this was changed in build 296.1. Check this option if you are using an older build!</description>
+
+                <type>int</type>
+
+                <value>0</value>
+            </parameter>
+
+        <parameter>
+            <name>/* */</name>
+            <property>checkbox</property>
+            <variable>______</variable>
+        </parameter>
+
+
+</effect>

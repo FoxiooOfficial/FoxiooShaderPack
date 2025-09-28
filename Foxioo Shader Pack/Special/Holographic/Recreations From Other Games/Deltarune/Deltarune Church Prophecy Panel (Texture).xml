@@ -1,0 +1,183 @@
+<effect>
+	<Name>Deltarune Church Prophecy Panel (Texture)</Name>
+		<description>This shader recreates the effect of the prophecy panels that appear in The Dark Sanctuary in the game DELTARUNE (Chapter 4) created by Toby Fox.</description> 
+			<author>Foxioo, Toby Fox</author>
+			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+			<BackgroundTexture>0</BackgroundTexture>
+			
+		<parameter>
+			<name>/* Foxioo Deltarune Church Prophecy Panel (Texture) Shader | 1.0 (08.08.2025) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>This shader recreates the effect of the prophecy panels that appear in The Dark Sanctuary in the game DELTARUNE (Chapter 4) created by Toby Fox.</description>
+		</parameter>
+
+		<parameter>
+			<name>( Position )</name>
+			<property>checkbox</property>
+			<description>Here are the variables for changing the position in the texture.</description>
+			<variable>__</variable>
+		</parameter>
+
+			<parameter>
+				<name>Position X</name>
+				<variable>_PosX</variable>
+				<description>A variable that determines the position of the texture in the X axis.</description> 
+
+				<type>float</type>
+
+				<preview_value>-0.003</preview_value>
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Position Y</name>
+				<variable>_PosY</variable>
+				<description>A variable that determines the position of the texture in the Y axis.</description> 
+
+				<type>float</type>
+
+				<preview_value>-0.005</preview_value>
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Echo Position X</name>
+				<variable>_PosXEcho</variable>
+				<description>This variable defines the offset of the texture "echo" along the X axis.</description> 
+
+				<type>float</type>
+
+				<value>50</value>
+			</parameter>
+
+			<parameter>
+				<name>Echo Position Y</name>
+				<variable>_PosYEcho</variable>
+				<description>This variable defines the offset of the texture "echo" along the Y axis.</description> 
+
+				<type>float</type>
+
+				<value>50</value>
+			</parameter>
+
+		<parameter>
+			<name>( Scale )</name>
+			<property>checkbox</property>
+			<description>Here are the variables that determine the scale and offset of the texture.</description>
+			<variable>___</variable>
+		</parameter>
+
+			<parameter>
+				<name>Scale</name>
+				<variable>_Scale</variable>
+				<description>This variable determines the overall scale of the texture (in X and Y axes).</description>
+
+				<type>float</type>
+
+				<preview_value>1</preview_value>
+				<value>0.5</value>
+			</parameter>
+
+
+			<parameter>
+				<name>Scale X</name>
+				<variable>_ScaleX</variable>
+				<description>This variable determines the scale of the texture in the X axis.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+
+			<parameter>
+				<name>Scale Y</name>
+				<variable>_ScaleY</variable>
+				<description>This variable determines the scale of the texture in the Y axis.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+		<parameter>
+			<name>( Rendering Options )</name>
+			<property>checkbox</property>
+			<description>Here are the options for how the texture should be rendered.</description>
+			<variable>____</variable>
+		</parameter>
+
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Texutre</name>
+				<varible>_Texture</varible>
+				<code>S2D_Texture</code>
+
+				<description>This varible specify what texture is to be used to cover the entire surface.</description>
+
+				<type>image</type>
+				<property>image</property>
+
+				<value>DELTARUNE_DEPTH.png</value>
+			</parameter>
+
+			<parameter>
+				<name>Color</name>
+				<variable>_Color</variable>
+				<property>checkbox</property>
+				
+				<description>When this variable has a value of 1, it uses the colors _ColorLight and _ColorShadow for the texture covering the whole, and the colors range from these two variables depending on the brightness of the texture. When set to 0, the colors of the covering texture are original.</description>
+
+				<type>bool</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Color Light</name>
+				<variable>_ColorLight</variable>
+				
+				<description>This color is used when _Color is 1 and determines what color should be used when brightness is at its highest.</description>
+
+				<type>int_float4</type>
+				<property>color</property>
+
+				<value>16777050</value>
+			</parameter>
+			
+			<parameter>
+				<name>Color Shadow</name>
+				<variable>_ColorShadow</variable>
+				
+				<description>This color is used when _Color is 1 and determines what color should be used when lightness is at its lowest.</description>
+
+				<type>int_float4</type>
+				<property>color</property>
+
+				<value>14883855</value>
+			</parameter>
+
+
+
+		<parameter>
+			<name>/*  */</name>
+			<property>checkbox</property>
+
+			<variable>_____</variable>
+		</parameter>
+</effect>

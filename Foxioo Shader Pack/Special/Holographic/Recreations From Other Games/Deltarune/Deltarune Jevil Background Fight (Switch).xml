@@ -1,0 +1,242 @@
+<effect>
+	<Name>Deltarune Jevil Background Fight (Switch)</Name>
+		<description>This shader recreate the background distortion during the battle with Jevil in DELTARUNE (Chapter 1) created by Toby Fox.</description> 
+			<author>Foxioo, Toby Fox</author>
+			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+
+		<parameter>
+			<name>/* Foxioo Deltarune Jevil Background Fight (Switch) Shader | 1.0 (16.09.2025) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>This shader recreate the background distortion during the battle with Jevil in DELTARUNE (Chapter 1) created by Toby Fox.</description>
+		</parameter>
+
+		<parameter>
+			<name>( Position )</name>
+			<property>checkbox</property>
+
+			<variable>__</variable>
+		</parameter>
+
+			<parameter>
+				<name>Position X</name>
+				<variable>_PosX</variable>
+				<description>A variable that determines the position of the texture in the X axis.</description> 
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Position Y</name>
+				<variable>_PosY</variable>
+				<description>A variable that determines the position of the texture in the Y axis.</description> 
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+		<parameter>
+			<name>( Points )</name>
+			<property>checkbox</property>
+			<description>Here are the variables for changing the position of point.</description> 
+			<variable>____</variable>
+		</parameter>
+
+			<parameter>
+				<name>Point X</name>
+				<variable>_PointX</variable>
+				<description>A variable that determines point position in the X axis.</description>
+
+				<type>float</type>
+
+				<value>0.5</value>
+			</parameter>
+
+			<parameter>
+				<name>Point Y</name>
+				<variable>_PointY</variable>
+				<description>A variable that determines point position in the Y axis.</description>
+
+				<type>float</type>
+
+				<value>0.5</value>
+			</parameter>
+
+		<parameter>
+			<name>( Scale )</name>
+			<property>checkbox</property>
+
+			<variable>___</variable>
+		</parameter>
+
+			<parameter>
+				<name>Scale</name>
+				<variable>_Scale</variable>
+				<description>This variable determines the overall scale of the texture (in X and Y axes).</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Scale X</name>
+				<variable>_ScaleX</variable>
+				<description>This variable determines the scale of the texture in the X axis.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Scale Y</name>
+				<variable>_ScaleY</variable>
+				<description>This variable determines the scale of the texture in the Y axis.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+		<parameter>
+			<name>( Result )</name>
+			<property>checkbox</property>
+
+			<variable>____</variable>
+		</parameter>
+		
+			<parameter>
+				<name>Blending Mode</name>
+				<variable>_Blending_Mode</variable>
+
+				<description>This variable determines what the base should be. Setting it to 1 sets the base as the texture of the object on which the effect is applied, and setting it to 0 sets this as the background.</description>
+
+				<type>int</type>
+				<property>checkbox</property>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable sets the intensity of base visibility.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Distortion X Scale On Center</name>
+				<variable>_DistortionXCenter</variable>
+				
+				<description>This variable determines what the maximum scale should be (the one that will appear in the center of the texture).</description>
+
+				<type>float</type>
+
+				<value>10</value>
+			</parameter>
+
+			<parameter>
+				<name>Distortion X Scale On Edge</name>
+				<variable>_DistortionXEdge</variable>
+				
+				<description>This variable determines what the minimum scale should be (the one that will appear in the edge of the texture).</description>
+
+				<type>float</type>
+
+				<value>2</value>
+			</parameter>
+
+			<parameter>
+				<name>Distortion X Radius</name>
+				<variable>_DistortionXRadius</variable>
+				
+				<description>This variable determines the radius of the distortion effect from the center point. Higher values create a wider distortion area.</description>
+
+				<type>float</type>
+
+				<value>0.5</value>
+			</parameter>
+
+			<parameter>
+				<name>Distortion X Exponent</name>
+				<variable>_DistortionXExponent</variable>
+				
+				<description>This variable controls how smoothly the distortion transitions between the center and edge scales. Higher values create a more sudden transition.</description>
+
+				<type>float</type>
+
+				<value>3</value>
+			</parameter>
+
+			<parameter>
+				<name>Distortion Y Offset</name>
+				<variable>_DistortionYOffset</variable>
+				
+				<description>This variable determines the vertical displacement strength of the distortion effect. Negative values move the distortion dwonward, positive values move it upward.</description>
+
+				<type>float</type>
+
+				<value>-4</value>
+			</parameter>	
+			
+			<parameter>
+				<name>Distortion Y Offset Factor</name>
+				<variable>_DistortionYOffsetFactor</variable>
+				
+				<description>This variable adjusts how the vertical distortion is calculated relative to the center position. It influences the overall shape of the vertical wave effect.</description>
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>	
+
+			<parameter>
+				<name>Distortion Y Power</name>
+				<variable>_DistortionYPow</variable>
+				
+				<description>This variable controls the intensity of the vertical distortion effect. Higher values create more pronounced vertical wave distortions.</description>
+
+				<type>float</type>
+
+				<value>5</value>
+			</parameter>
+
+		<parameter>
+			<name>( Compatibility )</name>
+			<property>checkbox</property>
+			<description>Here you will find options that have changed, but you can still achieve the previous effect.</description>
+
+			<variable>_____</variable>
+		</parameter>
+            <parameter>
+                <name>Is Fusion Version Older Than 296?</name>
+                <variable>_Is_Pre_296_Build</variable>
+                <property>checkbox</property>
+                
+                <description>(Only applies to Android and iOS!) This variable determines whether to use the newer background formatting. In Clickteam Fusion 2.5 for build 295.10 and earlier, the background texture was flipped along the Y axis, but this was changed in build 296.1. Check this option if you are using an older build!</description>
+
+                <type>int</type>
+
+                <value>0</value>
+            </parameter>
+
+        <parameter>
+            <name>/* */</name>
+            <property>checkbox</property>
+            <variable>______</variable>
+        </parameter>
+
+
+</effect>
