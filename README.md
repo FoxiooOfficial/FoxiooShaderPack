@@ -7,17 +7,19 @@
    <br><br>
    <b>Here is a package of shaders created or modified by me for the Clickteam Fusion!</b><br>
    <a href="https://github.com/FoxiooOfficial/FoxiooShaderPack/issues">Report Bug</a>
+   |
+   <a href="https://github.com/FoxiooOfficial/FoxiooShaderPack/labels/important%20information">Important information</a>
 </div>
 
 ___
 
-🥳 The package currently has **146 Shaders** 🎉
+🥳 The package currently has **147 Shaders** 🎉
 
-🗓️ Last updated description dated **August 08, 2024 (UTC+02:00)**
+🗓️ Last updated description dated **January 02, 2025 (UTC+02:00)**
 
-🗓️ Last update of shaders from **August 17, 2024 (UTC+02:00)**
+🗓️ Last update of shaders from **August 31, 2024 (UTC+02:00)**
 
-⭐ **Special thanks to** <a href="https://github.com/NaitorStudios">NaitorStudios</a> **for helping port DX11 shaders to versions (Premultiplied Alpha)**
+⭐ **Special thanks to** <a href="https://github.com/NaitorStudios">NaitorStudios</a> **for helping advise on how to rewrite DX11 shaders for the Premultiplied Alpha version**
 
 ---
 
@@ -34,7 +36,7 @@ ___
 
 **(Switch)** - These shaders use either the object texture **OR** the background texture depending on the setting of the `_Blending_Mode` variable.
 
-**(Texutre)** - These shaders use **ONLY** the object texture.
+**(Texture)** - These shaders use **ONLY** the object texture.
 
 ---
 
