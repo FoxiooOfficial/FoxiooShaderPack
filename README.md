@@ -19,8 +19,14 @@ ___
 
 🗓️ Last update of shaders from **September 28, 2024 (UTC+02:00)**
 
-ℹ️ Shaders currently work under D3D9, D3D11, D3D11 PRE, and GLES (Android). **Support for other platforms coming soon!**
-### ⚠️ **If you have been using an older version and are updating to the new one, be warned that there may be compatibility issues!** ⚠️
+ℹ️ Shaders currently work under:
+- D3D9
+- D3D11
+- D3D11 PRE
+- GLES (Android)
+- **Support for other platforms coming soon!**
+- 
+### ⚠️‼️‼️ **If you have been using an older version and are updating to the new one, be warned that there may be compatibility issues!** ‼️‼️⚠️
 
 ---
 
