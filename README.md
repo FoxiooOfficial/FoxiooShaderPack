@@ -9,6 +9,8 @@
    <a href="https://github.com/FoxiooOfficial/FoxiooShaderPack/issues">Report Bug</a>
    |
    <a href="https://github.com/FoxiooOfficial/FoxiooShaderPack/labels/important%20information">Important information</a>
+   |
+   <a href="https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Table%20of%20shaders.md">List of effects</a>
 </div>
 
 ___
