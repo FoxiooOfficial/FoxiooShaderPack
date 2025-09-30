@@ -74,25 +74,24 @@ ___
 
 ## 💿 Installation
 
-1. Click on the **"Code"** button then **"Download ZIP"**.
+1. Click on the **"Code"** button then **"Download ZIP"**.<br>
 ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Installaton/1.png?raw=true)
-2. Open Clickteam Fusion, go to the **"Tools"** tab and click **"Windows Explorer"**. **This will show you a window where Clickteam Fusion is installed.**
+2. Open Clickteam Fusion, go to the **"Tools"** tab and click **"Windows Explorer"**. **This will show you a window where Clickteam Fusion is installed.**<br>
 ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Installaton/2.png?raw=true)
-3. When the window where Clickteam Fusion is installed shows up, **open the ZIP file you downloaded before and in this ZIP file go to the "FoxiooShaderPack-main" folder.** In this folder, **copy the "Foxioo Shader Pack" folder and paste it in the "Effects" folder where Clickteam Fusion is installed.**
+3. When the window where Clickteam Fusion is installed shows up, **open the ZIP file you downloaded before and in this ZIP file go to the "FoxiooShaderPack-main" folder.** In this folder, **copy the "Foxioo Shader Pack" folder and paste it in the "Effects" folder where Clickteam Fusion is installed.**<br>
 ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Installaton/3.png?raw=true)
 
 
 ## ⚙️ Configuration
 
-1. After the installation process, go to the **"Workspace Toolbar"** window, **select your application** and click **"Properties"**.
+1. After the installation process, go to the **"Workspace Toolbar"** window, **select your application** and click **"Properties"**.<br>
 ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Usage/1.png?raw=true)
-2. Go to **"Runtime options"** and make sure **"Display Mode"** is set to **"Direct3D 11"** or **"Direct3D 9"**.
-   
+2. Go to **"Runtime options"** and make sure **"Display Mode"** is set to **"Direct3D 11"** or **"Direct3D 9"**.<br>
 ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Usage/2.png?raw=true)
 
 ## 📚 Usage
 
-1. Select any object on which the shader can be located and in the **"Display Options"** tab where **"Effect"** is, click on the **"Edit"** button.
+1. Select any object on which the shader can be located and in the **"Display Options"** tab where **"Effect"** is, click on the **"Edit"** button.<br>
 ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Usage/4.png?raw=true)
-2. In the directory tree, select **"Foxioo Shader Pack."** There, select the shader you want to use and click "OK".
+2. In the directory tree, select **"Foxioo Shader Pack."** There, select the shader you want to use and click "OK".<br>
 ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Usage/5.png?raw=true)
