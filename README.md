@@ -30,7 +30,7 @@ ___
   
 ### ⚠️‼️‼️ **If you have been using an older version and are updating to the new one, be warned that there may be compatibility issues! (Make backup Effects folder and MFA project before)** ‼️‼️⚠️
 
-[![FSP TRAILER](https://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg)](https://www.youtube.com/watch?v=IXmz7K9XjOY)
+[![FSP TRAILER](https://img.youtube.com/vi/IXmz7K9XjOY/0.jpg)](https://www.youtube.com/watch?v=IXmz7K9XjOY)
 
 ---
 
