@@ -17,7 +17,7 @@ ___
 
 🥳 The package currently has **300 Shaders** 🎉
 
-🗓️ Last updated description dated **September 28, 2025 (UTC+02:00)**
+🗓️ Last updated description dated **September 29, 2025 (UTC+02:00)**
 
 🗓️ Last update of shaders from **September 28, 2024 (UTC+02:00)**
 
@@ -29,6 +29,8 @@ ___
 - **Support for other platforms coming soon!**
   
 ### ⚠️‼️‼️ **If you have been using an older version and are updating to the new one, be warned that there may be compatibility issues! (Make backup Effects folder and MFA project before)** ‼️‼️⚠️
+
+[![FSP TRAILER](https://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg)](https://www.youtube.com/watch?v=IXmz7K9XjOY)
 
 ---
 
