@@ -37,7 +37,13 @@ ___
 
 ---
 
-## ⭐ Special acknowledgments board
+## 🌠 Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=foxiooshaderpack/foxiooshaderpack,FoxiooOfficial/FoxiooShaderPack&type=Date)](https://www.star-history.com/#foxiooshaderpack/foxiooshaderpack&FoxiooOfficial/FoxiooShaderPack&Date)
+
+---
+
+## 😺 Special acknowledgments board
 
 | Person(s)                                                  | Description of how they helped me                                                      |
 |------------------------------------------------------------|----------------------------------------------------------------------------------------|
