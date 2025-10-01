@@ -33,12 +33,15 @@ ___
 ---
 
 ## 🎞️ Shader pack trailer
+
+**Official trailer for the “Double or More? / 300!” shader pack update**
 [![FSP TRAILER](https://img.youtube.com/vi/IXmz7K9XjOY/0.jpg)](https://www.youtube.com/watch?v=IXmz7K9XjOY)
 
 ---
 
 ## 🌠 Star History
 
+**History of stars earned on this repository**
 [![Star History Chart](https://api.star-history.com/svg?repos=FoxiooOfficial/FoxiooShaderPack&type=Date)](https://www.star-history.com/#FoxiooOfficial/FoxiooShaderPack&Date)
 
 ---
