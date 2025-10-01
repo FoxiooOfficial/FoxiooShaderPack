@@ -39,7 +39,7 @@ ___
 
 ## 🌠 Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=foxiooshaderpack/foxiooshaderpack,FoxiooOfficial/FoxiooShaderPack&type=Date)](https://www.star-history.com/#foxiooshaderpack/foxiooshaderpack&FoxiooOfficial/FoxiooShaderPack&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=FoxiooOfficial/FoxiooShaderPack&type=Date)](https://www.star-history.com/#FoxiooOfficial/FoxiooShaderPack&Date)
 
 ---
 
