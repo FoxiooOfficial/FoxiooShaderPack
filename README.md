@@ -19,7 +19,7 @@ ___
 
 🗓️ Last updated description dated **October 01, 2025 (UTC+02:00)**
 
-🗓️ Last update of shaders from **September 28, 2024 (UTC+02:00)**
+🗓️ Last update of shaders from **September 28, 2025 (UTC+02:00)**
 
 ℹ️ Shaders currently work under:
 - D3D9
