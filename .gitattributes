@@ -1,0 +1,4 @@
+*.fxao linguist-language=GLSL
+*.fxmo linguist-language=GLSL
+*.fxh5 linguist-language=GLSL
+*.fx linguist-language=HLSL
