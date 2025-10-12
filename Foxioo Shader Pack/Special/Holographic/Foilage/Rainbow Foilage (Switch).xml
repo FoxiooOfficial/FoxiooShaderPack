@@ -1,18 +1,18 @@
 <effect>
-	<Name>Colorful Grayout Foilage (Switch)</Name>
-		<description>Similar effect to CPU Foilage (Switch), but different material.</description> 
+	<Name>Rainbow Foilage (Switch)</Name>
+		<description>Similar effect to CPU Foilage (Switch), but different colorful.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Colorful Grayout Foilage Shader | 1.0 (28.09.2025) */</name>
+			<name>/* Foxioo Rainbow Foilage Shader | 1.0.1 (12.10.2025) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
 
-			<description>Similar effect to CPU Foilage (Switch), but different material.</description>
+			<description>Similar effect to CPU Foilage (Switch), but different colorful.</description>
 		</parameter>
 
 			<parameter>

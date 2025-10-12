@@ -1,7 +1,7 @@
 /***********************************************************/
 
 /* Autor shader: Foxioo */
-/* Version shader: 1.0 (27.09.2025) */
+/* Version shader: 1.0.1 (12.10.2025) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 
 /***********************************************************/
@@ -132,11 +132,10 @@ void main(void)
 
     vec2 _UV = mix(_UVB, _UVM, _Mask * _Mask * _Distortion);
 
-
         vec4 _Render_Background = vec4(0.0);
         for(int i = 0; i < 36; i++) {
             float _Mul = mod(float(i), 2.0) == 0.0 ? 1.0 : -1.0;
-            _Render_Background += texture2D(bckgTexture, In_Background + Fun_Noise(In) * (5.0 + float(i)) * _Mul * vec2(fPixelWidth, fPixelHeight));
+            _Render_Background += texture2D(bckgTexture, _UV + Fun_Noise(In_Background) * (5.0 + float(i)) * _Mul * vec2(fPixelWidth, fPixelHeight));
         }
         _Render_Background /= 36.0;
 

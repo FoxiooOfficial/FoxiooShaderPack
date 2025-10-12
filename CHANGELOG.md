@@ -1,6 +1,13 @@
 # ℹ️ Change Log
 **All notable changes to this project will be documented in this file.**
 
+# ✨ October 12 2025 | Release ID: 8 / Hotfix
+## 📝 Notes (Abbreviated) 
+- Fixed distortion in the "Liquid Glass (Background)" shader for **(.fxao)** Android *(cause: incorrect texCoord reference)*
+- Corrected description in "Rainbow Foliage (Switch)" **(.xml)**
+
+---
+
 # ✨ 28 September 2025 | Release ID: 7
 ## 📝 Notes (Abbreviated) 
 - Android support for ALL shaders.
