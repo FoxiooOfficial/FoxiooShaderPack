@@ -1,0 +1,185 @@
+/***********************************************************/
+
+/* Autor shader: Foxioo */
+/* Version shader: 1.1 (18.10.2025) */
+/* My GitHub: https://github.com/FoxiooOfficial */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_vertex
+//version_####
+
+uniform mat3 transformMatrix;
+uniform mat3 projectionMatrix;
+uniform mat3 objectMatrix;
+uniform mat3 textureMatrix;
+
+in vec2 position;
+out vec2 In;
+void main()
+{
+    vec3 pos = vec3(position, 1.0);
+    In = (textureMatrix * pos).xy;
+    gl_Position = vec4(projectionMatrix * transformMatrix * objectMatrix * pos, 1.0);
+}
+//@End
+
+/* ####################################################### */
+
+//@Begin_fragment
+//version_####
+
+#ifdef GL_ES
+    #if defined(GL_FRAGMENT_PRECISION_HIGH) || defined(GL_OES_standard_derivatives)
+        #define HIGH_PRECISION_SUPPORTED
+    #endif
+#else
+    #define HIGH_PRECISION_SUPPORTED    
+#endif
+
+#ifdef HIGH_PRECISION_SUPPORTED
+    precision highp float;
+#else
+    precision mediump float;
+#endif
+
+in vec2 In;
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+uniform sampler2D imgTexture;
+uniform sampler2D bckgTexture;
+
+uniform lowp vec4 blendColor;
+uniform float fPixelWidth;
+uniform float fPixelHeight;
+
+/***********************************************************/
+/* Varibles */
+/***********************************************************/
+
+uniform float _Mixing;
+uniform bool _Blending_Mode;
+uniform float _DitheringSize;
+uniform bool _Is_Pre_296_Build;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+#define _Palette_Size 28
+
+vec3 Fun_Color(int _Index)
+{  
+    /* i hate this code. */
+             if(_Index == 0) return vec3(0.0, 0.0, 0.0);
+        else if(_Index == 1) return vec3(1.0, 1.0, 1.0);
+ 
+        else if(_Index == 2) return vec3(0.5019608, 0.5019608, 0.5019608);
+        else if(_Index == 3) return vec3(0.7529412, 0.7529412, 0.7529412);
+
+        else if(_Index == 4) return vec3(0.4901961, 0.0, 0.0);
+        else if(_Index == 5) return vec3(0.9803922, 0.0, 0.0);
+
+        else if(_Index == 6) return vec3(0.5058824, 0.4980392, 0.0);
+        else if(_Index == 7) return vec3(1.0, 0.9921569, 0.2352941);
+
+        else if(_Index == 8) return vec3(0.1176471, 0.5019608, 0.09803922);
+        else if(_Index == 9) return vec3(0.2745098, 1.0, 0.2352941);
+
+        else if(_Index == 10) return vec3(0.09803922, 0.5058824, 0.5019608);
+        else if(_Index == 11) return vec3(0.2352941, 1.0, 1.0);
+ 
+        else if(_Index == 12) return vec3(0.0, 0.04313726, 0.4901961);
+        else if(_Index == 13) return vec3(0.0, 0.1294118, 0.9803922);
+
+        else if(_Index == 14) return vec3(0.4862745, 0.0, 0.4901961);
+        else if(_Index == 15) return vec3(0.972549, 0.0, 0.9803922);
+
+        else if(_Index == 16) return vec3(0.5058824, 0.4980392, 0.2705882);
+        else if(_Index == 17) return vec3(1.0, 0.9960784, 0.5372549);
+
+        else if(_Index == 18) return vec3(0.03137, 0.25098, 0.25098);
+        else if(_Index == 19) return vec3(0.26666, 1.0, 0.53725);
+
+        else if(_Index == 20) return vec3(0.0, 0.5176471, 0.9843137);
+        else if(_Index == 21) return vec3(0.5372549, 1.0, 1.0);
+
+        else if(_Index == 22) return vec3(0.0, 0.25882, 0.49411);
+        else if(_Index == 23) return vec3(0.49019, 0.51372, 0.98431);
+
+        else if(_Index == 24) return vec3(0.2, 0.12549, 0.98039);
+        else if(_Index == 25) return vec3(0.98039, 0.51372, 0.49019);
+
+        else if(_Index == 26) return vec3(0.4941176, 0.2431373, 0.03137255);
+        return vec3(0.9843137, 0.4862745, 0.2705882);
+}
+
+float Fun_Dithering(int _Index)
+{
+    /* i hate this code too. */
+         if (_Index == 0)  return  0.0 / 16.0; else if (_Index == 1)  return  8.0 / 16.0;  else if (_Index == 2)  return   2.0 / 16.0;  else if (_Index == 3) return 10.0 / 16.0;
+    else if (_Index == 4)  return 12.0 / 16.0; else if (_Index == 5)  return  4.0 / 16.0;  else if (_Index == 6)  return  14.0 / 16.0;  else if (_Index == 7) return  6.0 / 16.0;
+    else if (_Index == 8)  return  3.0 / 16.0; else if (_Index == 9)  return 11.0 / 16.0;  else if (_Index == 10) return   1.0 / 16.0;  else if (_Index == 11) return  9.0 / 16.0;
+    else if (_Index == 12) return 15.0 / 16.0; else if (_Index == 13) return  7.0 / 16.0;  else if (_Index == 14) return  13.0 / 16.0;  return  5.0 / 16.0;
+
+    /* why there no arrays in es 2.0 and switch/case :( ). */
+}
+
+vec3 Fun_Convert(vec3 _Color)
+{
+    vec3 _Low = _Color / 12.92;
+    vec3 _High = pow(abs((_Color + 0.055) / 1.055), vec3(2.4));
+    return mix(_High, _Low, step(_Color, vec3(0.04045)));
+}
+
+float Fun_FMod(float _Value, float _Denom)
+{
+    return _Value - _Denom * floor(_Value / _Denom);
+}
+
+out vec4 fragColor;
+void main(void)
+{
+    vec2 In_Background = vec2(In.x, 1.0 - In.y);
+
+    vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
+    vec4 _Render_Background = _Is_Pre_296_Build ? texture(bckgTexture, In_Background) : texture(bckgTexture, In);
+
+    vec4 _Result = vec4(0.0);
+    vec4 _Render = vec4(0.0);
+
+    if(_Blending_Mode == false) {   _Result = _Render_Texture;      _Render = _Render_Texture;  }
+    else                        {   _Result = _Render_Background;   _Render = _Render_Background; }
+
+            vec2 _Dith = vec2(Fun_FMod(In.x / fPixelWidth, 4.0), Fun_FMod(In.y / fPixelHeight, 4.0));
+            int _Index = int(_Dith.x) + int(_Dith.y) * 4;
+            float _DithValue = Fun_Dithering(_Index);
+
+                vec3 _Color = _Result.rgb + (_DithValue - 0.5) * _DitheringSize;
+
+            float _MinDist = 1.0e9;
+            int _IndexC = 0;
+
+            for(int i = 0; i < _Palette_Size; i++)
+            {
+                vec3 _PO = Fun_Convert(_Color);
+                vec3 _PL = Fun_Convert(Fun_Color(i));
+
+                float _Dist = distance(_PO, _PL);
+
+                if(_Dist < _MinDist)    {   _MinDist = _Dist;   _IndexC = i;    }
+            }
+
+        _Result.rgb = Fun_Color(_IndexC);
+        _Result.rgb = mix(_Render.rgb, _Result.rgb, _Mixing);
+
+    _Result.a = _Render_Texture.a;
+
+    fragColor = _Result;
+}
+//@End

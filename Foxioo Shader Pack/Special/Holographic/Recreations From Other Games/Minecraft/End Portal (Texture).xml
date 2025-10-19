@@ -7,7 +7,7 @@
 				<BackgroundTexture>0</BackgroundTexture>
 
 		<parameter>
-			<name>/* Foxioo End Portal (Switch) Shader | 1.0 (16.09.2025) */</name>
+			<name>/* Foxioo End Portal (Switch) Shader | 1.1 (18.10.2025) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

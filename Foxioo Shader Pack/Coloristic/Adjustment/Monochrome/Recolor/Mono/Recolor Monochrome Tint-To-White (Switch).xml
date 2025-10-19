@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Recolor Monochrome Tint-To-White (Switch) Shader | 1.0 (11.09.2025) */</name>
+			<name>/* Foxioo Recolor Monochrome Tint-To-White (Switch) Shader | 1.1 (18.10.2025) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

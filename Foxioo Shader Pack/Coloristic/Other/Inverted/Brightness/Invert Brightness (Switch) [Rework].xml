@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 
 		<parameter>
-			<name>/* Foxioo Invert Brightness (Switch) [Rework] Shader | 1.7 (17.08.2025) */</name>
+			<name>/* Foxioo Invert Brightness (Switch) [Rework] Shader | 1.8 (18.10.2025) */</name>
 			<property>checkbox</property>
 
 			<description>Shader inverts color luminosities.</description>

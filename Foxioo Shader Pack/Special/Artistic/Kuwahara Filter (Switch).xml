@@ -1,13 +1,13 @@
 <effect>
 	<Name>Kuwahara Filter (Switch)</Name>
-		<description>This shader makes a kuwahara filter distortion effect. Due to the limitations of Pixel Shader 2.0 in Direct3D9, the shader is very different from OpenGL or Direct3D11!</description> 
+		<description>This shader makes a kuwahara filter distortion effect. Due to the limitations of Pixel Shader 2.1 in Direct3D9, the shader is very different from OpenGL or Direct3D11!</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Kuwahara Filter (Switch) Shader | 1.1 (08.08.2025) */</name>
+			<name>/* Foxioo Kuwahara Filter (Switch) Shader | 1.1 (18.10.2025) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

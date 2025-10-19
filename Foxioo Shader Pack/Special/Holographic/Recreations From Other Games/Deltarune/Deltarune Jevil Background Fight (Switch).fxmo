@@ -1,0 +1,145 @@
+/***********************************************************/
+
+/* Autor shader: Foxioo */
+/* Version shader: 1.1 (18.10.2025) */
+/* My GitHub: https://github.com/FoxiooOfficial */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_vertex
+//version_####
+
+uniform mat3 transformMatrix;
+uniform mat3 projectionMatrix;
+uniform mat3 objectMatrix;
+uniform mat3 textureMatrix;
+
+in vec2 position;
+out vec2 In;
+void main()
+{
+    vec3 pos = vec3(position, 1.0);
+    In = (textureMatrix * pos).xy;
+    gl_Position = vec4(projectionMatrix * transformMatrix * objectMatrix * pos, 1.0);
+}
+//@End
+
+/* ####################################################### */
+
+//@Begin_fragment
+//version_####
+
+#ifdef GL_ES
+    #if defined(GL_FRAGMENT_PRECISION_HIGH) || defined(GL_OES_standard_derivatives)
+        #define HIGH_PRECISION_SUPPORTED
+    #endif
+#else
+    #define HIGH_PRECISION_SUPPORTED    
+#endif
+
+#ifdef HIGH_PRECISION_SUPPORTED
+    precision highp float;
+#else
+    precision mediump float;
+#endif
+
+in vec2 In;
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+uniform sampler2D imgTexture;
+uniform sampler2D bckgTexture;
+
+uniform vec4 blendColor;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+uniform float _PosX;
+uniform float _PosY;
+
+uniform float _PointX;
+uniform float _PointY;
+
+uniform float _ScaleX;
+uniform float _ScaleY;
+uniform float _Scale;
+
+uniform float _Mixing;
+uniform bool _Blending_Mode;
+
+uniform float _DistortionXCenter;
+uniform float _DistortionXEdge;
+uniform float _DistortionXRadius;
+uniform float _DistortionXExponent;
+uniform float _DistortionYOffset;
+uniform float _DistortionYOffsetFactor;
+uniform float _DistortionYPow;
+
+uniform bool _Is_Pre_296_Build;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+float Fun_Jevil(float In)
+{
+    float _UV = In - _PosX * _ScaleX * _Scale;
+
+    float _Distance = abs(_UV - 0.5);
+        float _Size = clamp(_Distance / _DistortionXRadius, 0.0, 1.0);
+        float _Smooth = pow(_Size, _DistortionXExponent);
+
+    float _Scaler = mix(_DistortionXCenter, _DistortionXEdge, _Smooth);
+    float _In = (_UV - 0.5) / _Scaler + 0.5;
+
+    float _Out = _In + _PosX  * _ScaleX * _Scale;
+
+    return _Out;
+}
+
+out vec4 fragColor;
+void main(void)
+{
+    vec2 In_Background = vec2(In.x, 1.0 - In.y);
+
+    vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
+    //vec4 _Render_Background = texture(bckgTexture, In);
+    vec4 _Render;
+
+    vec2 _Pos = vec2(_PosX, _PosY);
+    vec2 UV;
+
+        if(_Is_Pre_296_Build && _Blending_Mode)
+            UV = (In_Background + _Pos);
+        else
+            UV = (In + _Pos);
+
+        UV = ((UV - vec2(_PointX, _PointY)) * vec2(_ScaleX, _ScaleY) * _Scale) + vec2(_PointX, _PointY);
+
+        vec2 UV_Extra = UV;
+
+        float _In_Offset = distance(In.x + _DistortionYOffsetFactor, 0.5);
+        float _In_Dist = abs(In.x - 0.5) - _PosX;
+
+        float _UV_Distortion = pow(_In_Offset, _DistortionYPow);
+            UV_Extra.y += _UV_Distortion * _DistortionYOffset;
+
+        float _In_Scale = mix(2.0, 1.0, (_In_Dist * 2.0));
+            UV_Extra.x = Fun_Jevil(UV.x);
+
+            UV = mix(UV, UV_Extra, _Mixing);
+
+        UV = fract(UV);
+
+    if(_Blending_Mode == false) {   _Render = texture(imgTexture, UV) * blendColor;  }
+    else {                      _Render = texture(bckgTexture, UV) * _Render_Texture.a;  }
+
+    fragColor = _Render;
+}
+//@End

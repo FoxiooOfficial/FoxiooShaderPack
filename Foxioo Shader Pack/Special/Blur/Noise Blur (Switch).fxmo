@@ -1,0 +1,144 @@
+/***********************************************************/
+
+/* Autor shader: Foxioo */
+/* Version shader: 1.1 (18.10.2025) */
+/* My GitHub: https://github.com/FoxiooOfficial */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_vertex
+//version_####
+
+uniform mat3 transformMatrix;
+uniform mat3 projectionMatrix;
+uniform mat3 objectMatrix;
+uniform mat3 textureMatrix;
+
+in vec2 position;
+out vec2 In;
+void main()
+{
+    vec3 pos = vec3(position, 1.0);
+    In = (textureMatrix * pos).xy;
+    gl_Position = vec4(projectionMatrix * transformMatrix * objectMatrix * pos, 1.0);
+}
+//@End
+
+/* ####################################################### */
+
+//@Begin_fragment
+//version_####
+
+#ifdef GL_ES
+    #if defined(GL_FRAGMENT_PRECISION_HIGH) || defined(GL_OES_standard_derivatives)
+        #define HIGH_PRECISION_SUPPORTED
+    #endif
+#else
+    #define HIGH_PRECISION_SUPPORTED    
+#endif
+
+#ifdef HIGH_PRECISION_SUPPORTED
+    precision highp float;
+#else
+    precision mediump float;
+#endif
+
+in vec2 In;
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+uniform sampler2D imgTexture;
+uniform sampler2D bckgTexture;
+
+uniform lowp vec4 blendColor;
+uniform float fPixelWidth;
+uniform float fPixelHeight;
+
+/***********************************************************/
+/* Varibles */
+/***********************************************************/
+
+uniform float _Mixing;
+uniform float _Seed;
+uniform float _Dimension;
+uniform float _Angle;
+uniform int _Looping_Mode;
+uniform bool _Blending_Mode;
+uniform bool _Is_Pre_296_Build;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+vec2 Fun_Hash21(vec2 _Pos) 
+{ 
+    vec2 _Noise;
+    _Noise.x = fract(_Seed + sin(dot(_Pos - _Seed, vec2(12.9898, 78.233))) * 43758.5453) - 0.5;
+    _Noise.y = fract(_Seed + sin(dot(_Pos - _Seed, vec2(63.7264, 10.873))) * 73156.8473) - 0.5;
+    return _Noise;
+}
+
+vec2 Fun_Noise(vec2 _Pos) 
+{
+    vec2 _Noise = Fun_Hash21(_Pos);
+    vec2 _Dir = vec2(cos(_Angle * (3.14159265 / 180.0)), sin(_Angle * (3.14159265 / 180.0)));
+
+    _Noise = mix(vec2(_Noise.x, _Noise.x) * _Dir, _Noise, _Dimension);
+
+    return _Noise;
+}
+
+out vec4 fragColor;
+void main(void)
+{
+    //vec2 In_Background = vec2(In.x, 1.0 - In.y);
+
+    vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
+    //vec4 _Render_Background = _Is_Pre_296_Build ? texture(bckgTexture, In_Background) : texture(bckgTexture, In);
+
+        vec2 _UV;
+        if(_Is_Pre_296_Build && _Blending_Mode)
+        { 
+            _UV = vec2(In.x, 1.0 - In.y);
+            _UV += Fun_Noise(vec2(In.x, 1.0 - In.y)) * _Mixing;
+        }
+        else
+        { 
+            _UV = In;
+            _UV += Fun_Noise(In) * _Mixing;
+        }
+
+        if (_Looping_Mode == 0) {
+            _UV = fract(_UV);
+        }
+            else if(_Looping_Mode == 1)
+            {
+                _UV /= 2.0;
+                _UV = fract(_UV);
+                _UV = abs(_UV * 2.0 - 1.0);
+            }
+            else if(_Looping_Mode == 2)
+            {
+                _UV = clamp(_UV, 0.0, 1.0);
+            }
+
+        vec4 _Result = vec4(0.0);
+
+            vec4 _Render_Texture_Noise = texture(imgTexture, _UV) * blendColor;
+            vec4 _Render_Background_Noise = texture(bckgTexture, _UV);
+
+        vec4 _Render = _Blending_Mode ? _Render_Background_Noise : _Render_Texture_Noise;
+        if(_Blending_Mode)  _Render.a = _Render_Texture.a;
+
+        if (_Looping_Mode == 3 && (_UV.x < 0.0 || _UV.x > 1.0 || _UV.y < 0.0 || _UV.y > 1.0))
+        {
+            _Render = vec4(0.0);
+        }
+
+    fragColor = _Render;
+}
+//@End

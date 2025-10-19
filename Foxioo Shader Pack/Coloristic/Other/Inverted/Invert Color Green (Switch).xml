@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Invert Color Green (Switch) Shader | 1.0 (05.05.2025) */</name>
+			<name>/* Foxioo Invert Color Green (Switch) Shader | 1.1 (18.10.2025) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

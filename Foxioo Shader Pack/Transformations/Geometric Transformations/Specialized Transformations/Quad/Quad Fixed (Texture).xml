@@ -7,7 +7,7 @@
 				<BackgroundTexture>0</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Quad Fixed (Texture) | 1.1 (20.07.2025) */</name>
+			<name>/* Foxioo Quad Fixed (Texture) | 1.2 (18.10.2025) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

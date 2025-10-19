@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 
 		<parameter>
-			<name>/* Foxioo Reversed Offset Color (Background) Shader | 1.0 (20.08.2025) */</name>
+			<name>/* Foxioo Reversed Offset Color (Background) Shader | 1.1 (18.10.2025) */</name>
 			<property>checkbox</property>
 			<variable>_</variable>
 			<description>Shader shifts blend colors depending on base color (Reversed Blend! - The effect is visible when _Mixing is outside the range of 0-1!).</description>

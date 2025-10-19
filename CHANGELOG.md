@@ -1,6 +1,14 @@
 # ℹ️ Change Log
 **All notable changes to this project will be documented in this file.**
 
+# ✨ October 19 2025 | Release ID: 9
+## 📝 Notes (Abbreviated) 
+- Added **iOS** and **Mac** support for every effect
+- Added a new shader, "Simulation Color Blindness AIO (Switch)" which combines all color blindness simulation effects into one
+- Fixed "Deltarune Church Prophecy Panel (Texture)" variable with texture **(.xml)**
+
+---
+
 # ✨ October 12 2025 | Release ID: 8 / Hotfix
 ## 📝 Notes (Abbreviated) 
 - Fixed distortion in the "Liquid Glass (Background)" shader for **(.fxao)** Android *(cause: incorrect texCoord reference)*

@@ -1,0 +1,162 @@
+/***********************************************************/
+
+/* Autor shader: Foxioo */
+/* Version shader: 1.1 (18.10.2025) */
+/* My GitHub: https://github.com/FoxiooOfficial */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_vertex
+//version_####
+
+uniform mat3 transformMatrix;
+uniform mat3 projectionMatrix;
+uniform mat3 objectMatrix;
+uniform mat3 textureMatrix;
+
+in vec2 position;
+out vec2 In;
+void main()
+{
+    vec3 pos = vec3(position, 1.0);
+    In = (textureMatrix * pos).xy;
+    gl_Position = vec4(projectionMatrix * transformMatrix * objectMatrix * pos, 1.0);
+}
+//@End
+
+/* ####################################################### */
+
+//@Begin_fragment
+//version_####
+
+#ifdef GL_ES
+    #if defined(GL_FRAGMENT_PRECISION_HIGH) || defined(GL_OES_standard_derivatives)
+        #define HIGH_PRECISION_SUPPORTED
+    #endif
+#else
+    #define HIGH_PRECISION_SUPPORTED    
+#endif
+
+#ifdef HIGH_PRECISION_SUPPORTED
+    precision highp float;
+#else
+    precision mediump float;
+#endif
+
+in vec2 In;
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+uniform sampler2D imgTexture;
+uniform sampler2D bckgTexture;
+
+uniform lowp vec4 blendColor;
+uniform float fPixelWidth;
+uniform float fPixelHeight;
+
+/***********************************************************/
+/* Varibles */
+/***********************************************************/
+
+uniform float _Mixing;
+uniform float _PosX;
+uniform float _PosY;
+uniform float _PointX;
+uniform float _PointY;
+uniform float _RotX;
+uniform float _ScaleX;
+uniform float _ScaleY;
+uniform float _Scale;
+uniform float _Intensity;
+uniform bool _Blending_Mode;
+
+uniform bool _Is_Pre_296_Build;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+float Fun_Aero_Light(vec2 In)
+{   
+    float _D = In.x - In.y;
+
+        float _P1 = sin(_D * 0.75);
+        float _P2 = sin(_D * 0.4 + 0.1);
+        float _P3 = sin(_D * 0.65 + 0.2);
+        float _P4 = sin(_D * 1.1 + 0.3);
+
+    float _Light = 0.5 + 0.5 * ((_P1 + _P2 * 0.5 + _P3 * 0.25 - _P4 * 0.6) / 1.75);
+    return _Light;
+}
+
+vec3 Fun_Outline(vec2 In, vec3 _Color)
+{
+    vec2 _PX = vec2(fPixelWidth, fPixelHeight);
+    float _Alpha = texture(imgTexture, In).a * blendColor.a;
+
+    /* Outline DARK! */
+    float aL1 = texture(imgTexture, In + vec2(-_PX.x, 0.0)) .a * blendColor.a;
+    float aR1 = texture(imgTexture, In + vec2(_PX.x, 0.0))  .a * blendColor.a;
+    float aU1 = texture(imgTexture, In + vec2(0.0, -_PX.y)) .a * blendColor.a;
+    float aD1 = texture(imgTexture, In + vec2(0.0, _PX.y))  .a * blendColor.a;
+
+    /* Outline LIGHT! */
+    float aL2 = texture(imgTexture, In + vec2(-_PX.x * 2.0, 0.0)) .a * blendColor.a;
+    float aR2 = texture(imgTexture, In + vec2(_PX.x * 2.0, 0.0))  .a * blendColor.a;
+    float aU2 = texture(imgTexture, In + vec2(0.0, -_PX.y * 2.0)) .a * blendColor.a;
+    float aD2 = texture(imgTexture, In + vec2(0.0, _PX.y * 2.0))  .a * blendColor.a;
+
+    /* no outline. */
+    float aL3 = texture(imgTexture, In + vec2(-_PX.x * 1.0, 0.0)) .a * blendColor.a;
+    float aR3 = texture(imgTexture, In + vec2(_PX.x * 1.0, 0.0))  .a * blendColor.a;
+    float aU3 = texture(imgTexture, In + vec2(0.0, -_PX.y * 1.0)) .a * blendColor.a;
+    float aD3 = texture(imgTexture, In + vec2(0.0, _PX.y * 1.0))  .a * blendColor.a;
+
+        float _EdgeDark  = step(0.01, abs(aL1 - _Alpha) + abs(aR1 - _Alpha) + abs(aU1 - _Alpha) + abs(aD1 - _Alpha));
+        float _EdgeLight = step(0.01, abs(aL2 - _Alpha) + abs(aR2 - _Alpha) + abs(aU2 - _Alpha) + abs(aD2 - _Alpha));
+
+    if (_EdgeDark > 0.5)        return _Color *= 3.0;
+    else if (_EdgeLight > 0.5)  return _Color *= 1.2;
+    else return _Color;
+}
+
+vec2 Fun_RotationX(vec2 In)
+{
+    vec2 _Points = vec2(_PointX, _PointY);
+    vec2 _UV = In;
+    float _RotX_Fix = _RotX * (3.14159265 / 180.0);
+
+    mat2 _Mat = mat2(
+        cos(_RotX_Fix), sin(_RotX_Fix),
+        -sin(_RotX_Fix), cos(_RotX_Fix)
+    );
+
+    _UV = _Points + _Mat * (_UV - _Points);
+
+    return _UV;
+}
+
+out vec4 fragColor;
+void main(void)
+{
+    vec2 In_Background = vec2(In.x, 1.0 - In.y);
+
+    vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
+    vec4 _Render_Background = _Is_Pre_296_Build ? texture(bckgTexture, In_Background) : texture(bckgTexture, In);
+
+        vec2 _UV = Fun_RotationX(vec2((In.x + _PosX) * _ScaleX, (In.y + _PosY) * _ScaleY) * _Scale);
+
+        float _In_Aero = Fun_Aero_Light((_UV * 0.05 / vec2(fPixelWidth, fPixelHeight)));
+        vec3 _Result = _Render_Texture.rgb * ((abs(In.x - 0.5) * (1.0 - (In.y - 0.2))) + _In_Aero) * _Intensity;
+
+        vec3 _Outline = Fun_Outline(In, _Result);
+
+    vec4 _Render = vec4(mix(_Render_Texture.rgb, _Render_Background.rgb * 0.75 + _Render_Texture.rgb * 0.25 + (_Outline.rgb + _Render_Texture.rgb * 0.1) * 0.25, _Mixing), _Render_Texture.a);
+
+    fragColor = _Render;
+}
+//@End

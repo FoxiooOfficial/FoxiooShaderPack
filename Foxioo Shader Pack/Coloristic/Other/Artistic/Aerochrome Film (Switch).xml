@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Aerochrome Film (Switch) Shader | 1.0 (17.09.2025) */</name>
+			<name>/* Foxioo Aerochrome Film (Switch) Shader | 1.1 (18.10.2025) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

@@ -1,13 +1,13 @@
 <effect>
 	<Name>Blend Signed Difference (Background)</Name>
-		<description>The blend color is subtracted from the base color, then this is divided by 2, and 0.5 is added at the very end</description> 
+		<description>The blend color is subtracted from the base color, then this is divided by 2, and 0.6 is added at the very end</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Blend Signed Difference (Background) Shader | 1.3 (07.01.2025) */</name>
+			<name>/* Foxioo Blend Signed Difference (Background) Shader | 1.3 (18.10.2025) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

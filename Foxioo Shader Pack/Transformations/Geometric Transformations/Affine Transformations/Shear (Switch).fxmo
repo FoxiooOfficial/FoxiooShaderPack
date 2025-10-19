@@ -1,0 +1,154 @@
+/***********************************************************/
+
+/* Autor shader: Foxioo */
+/* Version shader: 1.1 (18.10.2025) */
+/* My GitHub: https://github.com/FoxiooOfficial */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_vertex
+//version_####
+
+uniform mat3 transformMatrix;
+uniform mat3 projectionMatrix;
+uniform mat3 objectMatrix;
+uniform mat3 textureMatrix;
+
+in vec2 position;
+out vec2 In;
+void main()
+{
+    vec3 pos = vec3(position, 1.0);
+    In = (textureMatrix * pos).xy;
+    gl_Position = vec4(projectionMatrix * transformMatrix * objectMatrix * pos, 1.0);
+}
+//@End
+
+/* ####################################################### */
+
+//@Begin_fragment
+//version_####
+
+#ifdef GL_ES
+    #if defined(GL_FRAGMENT_PRECISION_HIGH) || defined(GL_OES_standard_derivatives)
+        #define HIGH_PRECISION_SUPPORTED
+    #endif
+#else
+    #define HIGH_PRECISION_SUPPORTED    
+#endif
+
+#ifdef HIGH_PRECISION_SUPPORTED
+    precision highp float;
+#else
+    precision mediump float;
+#endif
+
+#define RAD 0.0174532925
+
+in vec2 In;
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+uniform sampler2D imgTexture;
+uniform sampler2D bckgTexture;
+
+uniform vec4 blendColor;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+uniform float _PosX;
+uniform float _PosY;
+
+uniform float _RotX;
+
+uniform float _PointX;
+uniform float _PointY;
+
+uniform float _ScaleX;
+uniform float _ScaleY;
+uniform float _Scale;
+
+uniform float _Mixing;
+uniform bool _Blending_Mode;
+uniform int _Looping_Mode;
+
+uniform float _ShearX;
+uniform float _ShearY;
+
+uniform bool _Is_Pre_296_Build;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+vec2 Fun_RotationX(vec2 In)
+{
+    vec2 _Points = vec2(_PointX, _PointY);
+    vec2 _UV = In;
+    float _RotX_Fix = _RotX * (3.14159265 / 180.0);
+
+    mat2 _Mat = mat2(
+        cos(_RotX_Fix), sin(_RotX_Fix),
+        -sin(_RotX_Fix), cos(_RotX_Fix)
+    );
+
+    _UV = _Points + _Mat * (_UV - _Points);
+
+    return _UV;
+}
+
+out vec4 fragColor;
+void main(void)
+{
+    vec2 In_Background = vec2(In.x, 1.0 - In.y);
+
+    vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
+    vec4 _Render_Background = texture(bckgTexture, In);
+    vec4 _Render;
+
+    vec2 _Pos = vec2(_PosX, _PosY);
+    vec2 UV;
+
+        if(_Is_Pre_296_Build && _Blending_Mode)
+            UV = Fun_RotationX(In_Background + _Pos);
+        else
+            UV = Fun_RotationX(In + _Pos);
+
+        UV = (UV - 0.5) * vec2(_ScaleX, _ScaleY) * _Scale + 0.5;
+
+        vec2 _Piv = In - vec2(_PosX, _PosY);
+        vec2 _Shear = vec2((_PointY - _Piv.y) * _ShearX, (_PointX - _Piv.x) * _ShearY);
+        UV = mix(UV, UV + _Shear, _Mixing);
+
+    if (_Looping_Mode == 0)
+    {
+        UV = fract(UV);
+    }
+    else if (_Looping_Mode == 1)
+    {
+        UV /= 2.0;
+        UV = fract(UV);
+        UV = abs(UV * 2.0 - 1.0);
+    }
+    else if(_Looping_Mode == 2)
+    {
+        UV = clamp(UV, 0.0, 1.0);
+    }
+
+    if(_Blending_Mode == false) {   _Render = texture(imgTexture, UV) * blendColor;  }
+    else {                      _Render = vec4(texture(bckgTexture, UV).rgb, _Render_Texture.a);  }
+
+        if (_Looping_Mode == 3 && (UV.x < 0.0 || UV.x > 1.0 || UV.y < 0.0 || UV.y > 1.0))
+        {
+            _Render = vec4(0.0);
+        }
+
+    fragColor = _Render;
+}
+//@End

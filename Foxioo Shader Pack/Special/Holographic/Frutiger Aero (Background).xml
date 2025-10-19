@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Frutiger Aero (Background) Shader | 1.0 (17.08.2025) */</name>
+			<name>/* Foxioo Frutiger Aero (Background) Shader | 1.1 (18.10.2025) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

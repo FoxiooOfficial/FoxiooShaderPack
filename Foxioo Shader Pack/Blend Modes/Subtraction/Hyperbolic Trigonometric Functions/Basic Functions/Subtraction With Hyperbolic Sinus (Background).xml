@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Subtraction With Hyperbolic Sinus (Background) Shader | 1.4 (23.09.2025) */</name>
+			<name>/* Foxioo Subtraction With Hyperbolic Sinus (Background) Shader | 1.5 (18.10.2025) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

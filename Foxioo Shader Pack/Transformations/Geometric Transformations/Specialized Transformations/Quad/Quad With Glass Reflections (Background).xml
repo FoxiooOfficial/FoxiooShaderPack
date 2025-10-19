@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Quad With Glass Reflections (Background) | 1.1 (16.09.2025) */</name>
+			<name>/* Foxioo Quad With Glass Reflections (Background) | 1.2 (18.10.2025) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

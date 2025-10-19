@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Simulation Of Achromatopsia (Switch) Shader | 1.0 (12.08.2025) */</name>
+			<name>/* Foxioo Simulation Of Achromatopsia (Switch) Shader | 1.1 (18.10.2025) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

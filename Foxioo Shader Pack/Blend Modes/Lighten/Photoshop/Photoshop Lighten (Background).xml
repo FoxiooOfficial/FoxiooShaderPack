@@ -6,7 +6,7 @@
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 		<parameter>
-			<name>/* Foxioo Photoshop Lighten (Background) Shader | 1.3 (07.08.2025) */</name>
+			<name>/* Foxioo Photoshop Lighten (Background) Shader | 1.4 (18.10.2025) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

@@ -1,0 +1,189 @@
+/***********************************************************/
+
+/* Autor shader: Foxioo */
+/* Version shader: 1.1 (18.10.2025) */
+/* My GitHub: https://github.com/FoxiooOfficial */
+
+/***********************************************************/
+
+/* Special thanks to The Cherno.
+    The video from which I took help on how to do this effect: https://www.youtube.com/watch?v=tI70-HIc5ro */
+
+/* ####################################################### */
+
+//@Begin_vertex
+//version_####
+
+uniform mat3 transformMatrix;
+uniform mat3 projectionMatrix;
+uniform mat3 objectMatrix;
+uniform mat3 textureMatrix;
+
+in vec2 position;
+out vec2 In;
+void main()
+{
+    vec3 pos = vec3(position, 1.0);
+    In = (textureMatrix * pos).xy;
+    gl_Position = vec4(projectionMatrix * transformMatrix * objectMatrix * pos, 1.0);
+}
+//@End
+
+/* ####################################################### */
+
+//@Begin_fragment
+//version_####
+
+#ifdef GL_ES
+    #if defined(GL_FRAGMENT_PRECISION_HIGH) || defined(GL_OES_standard_derivatives)
+        #define HIGH_PRECISION_SUPPORTED
+    #endif
+#else
+    #define HIGH_PRECISION_SUPPORTED    
+#endif
+
+#ifdef HIGH_PRECISION_SUPPORTED
+    precision highp float;
+#else
+    precision mediump float;
+#endif
+
+in vec2 In;
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+uniform sampler2D imgTexture;
+uniform sampler2D bckgTexture;
+
+uniform lowp vec4 blendColor;
+uniform float fPixelWidth;
+uniform float fPixelHeight;
+
+/***********************************************************/
+/* Varibles */
+/***********************************************************/
+
+uniform float _Mixing;
+uniform float _BloomAddition;
+uniform float _BlurStrength;
+uniform float _BloomIntensity;
+uniform float _ResA;
+uniform float _ResB;
+uniform float _ResC;
+uniform float _ResD;
+uniform float _ResE;
+uniform float _ResF;
+uniform float _ResG;
+uniform bool _Is_Pre_296_Build;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+float _Kernel(int j) {
+    if (j == 0) return 0.079589;
+    else if (j == 1) return 0.120651;
+    else if (j == 2) return 0.146768;
+    else if (j == 3) return 0.159155;
+    else if (j == 4) return 0.146768;
+    else if (j == 5) return 0.120651;
+    else if (j == 6) return 0.079589;
+    else return 0.0;
+}
+
+vec4 Fun_Blur(vec2 UV)
+{
+    vec4 _Result = texture(imgTexture, UV);
+
+    for (int i = 1; i < 7; i++)
+    {
+        vec2 _Offset = vec2(fPixelWidth * float(i) * _BlurStrength, 0.0);
+        _Result += texture(imgTexture, UV + _Offset) * _Kernel(i);
+        _Result += texture(imgTexture, UV - _Offset) * _Kernel(i);
+    }
+
+    for (int j = 1; j < 7; j++)
+    {
+        vec2 _Offset = vec2(0.0, fPixelHeight * float(j) * _BlurStrength);
+        _Result += texture(imgTexture, UV + _Offset) * _Kernel(j);
+        _Result += texture(imgTexture, UV - _Offset) * _Kernel(j);
+    }
+
+    return _Result / 15.0;
+}
+
+vec4 Fun_ReScale(vec2 In, float _ScaleFactor)
+{
+    _ScaleFactor = 1.0 / _ScaleFactor;
+    
+    vec2 _Res = vec2(fPixelWidth, fPixelHeight);
+    vec2 _BlockSize = _ScaleFactor * _Res;
+    
+        vec2 _UV = floor(In / _BlockSize) * _BlockSize;
+        vec2 _InFrac = fract(In / _BlockSize);
+    
+            //vec4 _Render_A = S2D_Image.Sample(S2D_ImageSampler, _UV);
+            //vec4 _Render_B = S2D_Image.Sample(S2D_ImageSampler, _UV + vec2(_BlockSize.x, 0));
+            //vec4 _Render_C = S2D_Image.Sample(S2D_ImageSampler, _UV + vec2(0, _BlockSize.y));
+            //vec4 _Render_D = S2D_Image.Sample(S2D_ImageSampler, _UV + _BlockSize);
+
+            vec4 _Render_A = Fun_Blur(_UV);
+            vec4 _Render_B = Fun_Blur(_UV + vec2(_BlockSize.x, 0.0));
+            vec4 _Render_C = Fun_Blur(_UV + vec2(0.0, _BlockSize.y));
+            vec4 _Render_D = Fun_Blur(_UV + _BlockSize);
+    
+                vec4 _RenderTop = mix(_Render_A, _Render_B, _InFrac.x);
+                vec4 _RenderBottom = mix(_Render_C, _Render_D, _InFrac.x);
+    
+        vec4 _Result = mix(_RenderTop, _RenderBottom, _InFrac.y);
+    
+    return _Result;
+}
+
+out vec4 fragColor;
+void main(void)
+{
+    vec2 In_Background = vec2(In.x, 1.0 - In.y);
+
+    vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
+    vec4 _Render_Background = _Is_Pre_296_Build ? texture(bckgTexture, In_Background) : texture(bckgTexture, In);
+
+            vec4 _Result = _Render_Texture;
+            _Result *= _Result;
+
+                    //Resulution 75%
+                    _Result += Fun_ReScale(In, 0.75) * _ResA;
+
+                // **** Resolution 50%
+                        _Result += Fun_ReScale(In, 0.5) * _ResB;
+
+                    //Resulution 37.5%
+                    _Result += Fun_ReScale(In, 0.375) * _ResC;
+
+                    // Resolution 25%
+                        _Result += Fun_ReScale(In, 0.25) * _ResD;
+
+                    // Resolution 12.5%
+                        _Result += Fun_ReScale(In, 0.125) * _ResE;
+
+                    // Resolution 6.25%
+                        _Result += Fun_ReScale(In, 0.0625) * _ResF;
+
+                    // Resolution 3.125%
+                    _Result += Fun_ReScale(In, 0.03125) * _ResG;
+
+                _Result /= 7.0;
+
+        vec4 _Bloom = Fun_Blur(In);
+            _Result += _Bloom * _BloomIntensity;
+
+        _Result = _Render_Texture + _Result * _BloomAddition;
+        _Result.rgb += mix(_Result.rgb, _Result.rgb + _Render_Background.rgb, 1.0 - normalize(_Result.a)) * _Mixing;
+
+        _Result.a = _Render_Texture.a;
+
+    fragColor = _Result;
+}
+//@End

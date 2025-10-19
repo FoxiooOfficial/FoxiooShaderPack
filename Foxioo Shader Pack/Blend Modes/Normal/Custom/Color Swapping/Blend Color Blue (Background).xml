@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Blend Color Blue (Background) Shader | 1.1 (12.01.2025) */</name>
+			<name>/* Foxioo Blend Color Blue (Background) Shader | 1.2 (18.10.2025) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

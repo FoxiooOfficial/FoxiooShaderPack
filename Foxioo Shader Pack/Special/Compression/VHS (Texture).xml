@@ -7,7 +7,7 @@
 				<BackgroundTexture>0</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo VHS (Texture) Shader | 1.0 (06.09.2025) */</name>
+			<name>/* Foxioo VHS (Texture) Shader | 1.1 (18.10.2025) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

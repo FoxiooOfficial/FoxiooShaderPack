@@ -1,0 +1,157 @@
+/***********************************************************/
+
+/* Autor shader: Foxioo */
+/* Version shader: 1.1 (18.10.2025) */
+/* My GitHub: https://github.com/FoxiooOfficial */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_vertex
+//version_####
+
+uniform mat3 transformMatrix;
+uniform mat3 projectionMatrix;
+uniform mat3 objectMatrix;
+uniform mat3 textureMatrix;
+
+in vec2 position;
+out vec2 In;
+void main()
+{
+    vec3 pos = vec3(position, 1.0);
+    In = (textureMatrix * pos).xy;
+    gl_Position = vec4(projectionMatrix * transformMatrix * objectMatrix * pos, 1.0);
+}
+//@End
+
+/* ####################################################### */
+
+//@Begin_fragment
+//version_####
+
+#ifdef GL_ES
+    #if defined(GL_FRAGMENT_PRECISION_HIGH) || defined(GL_OES_standard_derivatives)
+        #define HIGH_PRECISION_SUPPORTED
+    #endif
+#else
+    #define HIGH_PRECISION_SUPPORTED    
+#endif
+
+#ifdef HIGH_PRECISION_SUPPORTED
+    precision highp float;
+#else
+    precision mediump float;
+#endif
+
+in vec2 In;
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+uniform sampler2D imgTexture;
+uniform sampler2D bckgTexture;
+
+uniform lowp vec4 blendColor;
+uniform float fPixelWidth;
+uniform float fPixelHeight;
+
+/***********************************************************/
+/* Varibles */
+/***********************************************************/
+
+uniform float _Mixing;
+uniform float _Distortion;
+uniform float _Intensity;
+
+uniform bool _Is_Pre_296_Build;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+float Fun_Liquid(vec2 In, float _Size)
+{
+    vec2 _Dist = min(In, 1.0 - In);
+    float _DistMin = min(_Dist.x, _Dist.y);
+
+        return 1.0 - smoothstep(0.0, _Size, _DistMin);
+}
+
+vec3 Fun_Outline(vec2 In, vec3 _Color)
+{
+    vec2 _PX = vec2(fPixelWidth, fPixelHeight);
+    float _Alpha = texture(imgTexture, In).a * blendColor.a;
+
+    /* Outline DARK! */
+    float aL1 = texture(imgTexture, In + vec2(-_PX.x, 0.0)) .a * blendColor.a;
+    float aR1 = texture(imgTexture, In + vec2(_PX.x, 0.0))  .a * blendColor.a;
+    float aU1 = texture(imgTexture, In + vec2(0.0, -_PX.y)) .a * blendColor.a;
+    float aD1 = texture(imgTexture, In + vec2(0.0, _PX.y))  .a * blendColor.a;
+
+    /* Outline LIGHT! */
+    float aL2 = texture(imgTexture, In + vec2(-_PX.x * 2.0, 0.0)) .a * blendColor.a;
+    float aR2 = texture(imgTexture, In + vec2(_PX.x * 2.0, 0.0))  .a * blendColor.a;
+    float aU2 = texture(imgTexture, In + vec2(0.0, -_PX.y * 2.0)) .a * blendColor.a;
+    float aD2 = texture(imgTexture, In + vec2(0.0, _PX.y * 2.0))  .a * blendColor.a;
+
+    /* no outline. */
+    float aL3 = texture(imgTexture, In + vec2(-_PX.x * 1.0, 0.0)) .a * blendColor.a;
+    float aR3 = texture(imgTexture, In + vec2(_PX.x * 1.0, 0.0))  .a * blendColor.a;
+    float aU3 = texture(imgTexture, In + vec2(0.0, -_PX.y * 1.0)) .a * blendColor.a;
+    float aD3 = texture(imgTexture, In + vec2(0.0, _PX.y * 1.0))  .a * blendColor.a;
+
+        float _EdgeDark  = step(0.01, abs(aL1 - _Alpha) + abs(aR1 - _Alpha) + abs(aU1 - _Alpha) + abs(aD1 - _Alpha));
+        float _EdgeLight = step(0.01, abs(aL2 - _Alpha) + abs(aR2 - _Alpha) + abs(aU2 - _Alpha) + abs(aD2 - _Alpha));
+
+    if      (_EdgeDark > 0.5)   return _Color * 0.48;
+    else if (_EdgeLight > 0.5)  return _Color * 5.56;
+    else return mix(_Color, vec3(1.0, 1.0, 1.0), 0.269);
+}
+
+vec2 Fun_Hash21(vec2 _Pos) 
+{ 
+    vec2 _Noise;
+    _Noise.x = fract(sin(dot(_Pos, vec2(12.9898, 78.233))) * 43758.5453) - 0.5;
+    _Noise.y = fract(sin(dot(_Pos, vec2(63.7264, 10.873))) * 73156.8473) - 0.5;
+    return _Noise;
+}
+
+vec2 Fun_Noise(vec2 _Pos) 
+{
+    vec2 _Noise = Fun_Hash21(_Pos);
+
+    return _Noise;
+}
+
+out vec4 fragColor;
+void main(void)
+{
+    vec2 In_Background = _Is_Pre_296_Build ? vec2(In.x, 1.0 - In.y) : In;
+
+    vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
+
+    vec2 _Mask = vec2(  Fun_Liquid(vec2(In_Background.x) * _Render_Texture.a, _Intensity * fPixelWidth),
+                        Fun_Liquid(vec2(In_Background.y) * _Render_Texture.a, _Intensity * fPixelHeight));
+
+    vec2 _UVB = vec2(In_Background * 0.5) * 2.0;
+    vec2 _UVM = abs(_UVB - 1.0);
+
+    vec2 _UV = mix(_UVB, _UVM, _Mask * _Mask * _Distortion);
+
+        vec4 _Render_Background = vec4(0.0);
+        for(int i = 0; i < 36; i++) {
+            float _Mul = mod(float(i), 2.0) == 0.0 ? 1.0 : -1.0;
+            _Render_Background += texture(bckgTexture, _UV + Fun_Noise(In_Background) * (5.0 + float(i)) * _Mul * vec2(fPixelWidth, fPixelHeight));
+        }
+        _Render_Background /= 36.0;
+
+        vec3 _Outline = Fun_Outline(In, _Render_Background.rgb);
+        vec4 _Render_Tint = mix(_Render_Background, _Render_Texture, 0.5);
+
+    vec4 _Render = vec4(mix(_Render_Texture.rgb, (_Render_Tint.rgb * 0.75 + _Outline.rgb * 0.25) * 0.9, _Mixing), _Render_Texture.a);
+    fragColor = _Render;
+}
+//@End

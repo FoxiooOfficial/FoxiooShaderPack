@@ -1,0 +1,176 @@
+/***********************************************************/
+
+/* Autor shader: Foxioo */
+/* Version shader: 1.1 (18.10.2025) */
+/* My GitHub: https://github.com/FoxiooOfficial */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_vertex
+//version_####
+
+uniform mat3 transformMatrix;
+uniform mat3 projectionMatrix;
+uniform mat3 objectMatrix;
+uniform mat3 textureMatrix;
+
+in vec2 position;
+out vec2 In;
+void main()
+{
+    vec3 pos = vec3(position, 1.0);
+    In = (textureMatrix * pos).xy;
+    gl_Position = vec4(projectionMatrix * transformMatrix * objectMatrix * pos, 1.0);
+}
+//@End
+
+/* ####################################################### */
+
+//@Begin_fragment
+//version_####
+
+#ifdef GL_ES
+    #if defined(GL_FRAGMENT_PRECISION_HIGH) || defined(GL_OES_standard_derivatives)
+        #define HIGH_PRECISION_SUPPORTED
+    #endif
+#else
+    #define HIGH_PRECISION_SUPPORTED    
+#endif
+
+#ifdef HIGH_PRECISION_SUPPORTED
+    precision highp float;
+#else
+    precision mediump float;
+#endif
+
+in vec2 In;
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+uniform sampler2D imgTexture;
+uniform sampler2D bckgTexture;
+
+uniform vec4 blendColor;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+uniform float _PosXRed;
+uniform float _PosYRed;
+uniform float _PosXGreen;
+uniform float _PosYGreen;
+uniform float _PosXBlue;
+uniform float _PosYBlue;
+
+uniform float _RotXRed;
+uniform float _RotXGreen;
+uniform float _RotXBlue;
+
+uniform float _PointXRed;
+uniform float _PointYRed;
+uniform float _PointXGreen;
+uniform float _PointYGreen;
+uniform float _PointXBlue;
+uniform float _PointYBlue;
+
+uniform float _ScaleXRed;
+uniform float _ScaleYRed;
+uniform float _ScaleRed;
+uniform float _ScaleXGreen;
+uniform float _ScaleYGreen;
+uniform float _ScaleGreen;
+uniform float _ScaleXBlue;
+uniform float _ScaleYBlue;
+uniform float _ScaleBlue;
+
+uniform float _Mixing;
+uniform bool _Blending_Mode;
+uniform int _Looping_Mode;
+
+uniform bool _Is_Pre_296_Build;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+vec2 Fun_RotationX(vec2 In, float _RotX, float _PointX, float _PointY)
+{
+    vec2 _Points = vec2(_PointX, _PointY);
+    vec2 _UV = In;
+    float _RotX_Fix = _RotX * (3.14159265 / 180.0);
+
+    mat2 _Mat = mat2(
+        cos(_RotX_Fix), sin(_RotX_Fix),
+        -sin(_RotX_Fix), cos(_RotX_Fix)
+    );
+
+    _UV = _Points + _Mat * (_UV - _Points);
+
+    return _UV;
+}
+
+vec2 Fun_ChannelUV(vec2 In, float _PosX, float _PosY, float _PointX, float _PointY, float _ScaleX, float _ScaleY, float _Scale, float _RotX)
+{
+    vec2  _Pos = vec2(_PosX, _PosY),
+        UV = (Fun_RotationX(In + _Pos, _RotX, _PointX, _PointY) - vec2(_PointX, _PointY) * vec2(_ScaleX, _ScaleY) * _Scale) + vec2(_PointX, _PointY);
+
+    return UV;
+}
+
+out vec4 fragColor;
+void main(void)
+{
+    vec2 UV = In;
+    if(_Is_Pre_296_Build && _Blending_Mode) UV = vec2(In.x, 1.0 - In.y);
+
+    vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
+    //vec4 _Render_Background = texture(bckgTexture, In);
+    vec4 _Render;
+
+    vec2 _UVRed =     mix(UV, Fun_ChannelUV(UV, _PosXRed, _PosYRed, _PointXRed, _PointYRed, _ScaleXRed, _ScaleYRed, _ScaleRed, _RotXRed), _Mixing);
+    vec2 _UVGreen =   mix(UV, Fun_ChannelUV(UV, _PosXGreen, _PosYGreen, _PointXGreen, _PointYGreen, _ScaleXGreen, _ScaleYGreen, _ScaleGreen, _RotXGreen), _Mixing);
+    vec2 _UVBlue =    mix(UV, Fun_ChannelUV(UV, _PosXBlue, _PosYBlue, _PointXBlue, _PointYBlue, _ScaleXBlue, _ScaleYBlue, _ScaleBlue, _RotXBlue), _Mixing);
+
+        if (_Looping_Mode == 0) {
+            _UVRed = fract(_UVRed);
+            _UVGreen = fract(_UVGreen);
+            _UVBlue = fract(_UVBlue);
+        }
+        else if(_Looping_Mode == 1)
+        {
+            _UVRed = abs(fract(_UVRed / 2.0) * 2.0 - 1.0);
+            _UVGreen = abs(fract(_UVGreen / 2.0) * 2.0 - 1.0);
+            _UVBlue = abs(fract(_UVBlue / 2.0) * 2.0 - 1.0);
+        }
+        else if(_Looping_Mode == 2)
+        {
+            _UVRed = clamp(_UVRed, 0.0, 1.0);
+            _UVGreen = clamp(_UVGreen, 0.0, 1.0);
+            _UVBlue = clamp(_UVBlue, 0.0, 1.0);
+        }
+
+    if(_Blending_Mode == false) {   _Render = vec4(     texture(imgTexture, _UVRed).r, 
+                                                        texture(imgTexture, _UVGreen).g, 
+                                                        texture(imgTexture, _UVBlue).b, 
+                                                        texture(imgTexture, _UVRed).a * texture(imgTexture, _UVGreen).a * texture(imgTexture, _UVBlue).a ) * blendColor.a;  }
+
+    else {                          _Render = vec4(     texture(bckgTexture, _UVRed).r, 
+                                                        texture(bckgTexture, _UVGreen).g, 
+                                                        texture(bckgTexture, _UVBlue).b, 
+                                                        _Render_Texture.a * texture(bckgTexture, _UVRed).a * texture(bckgTexture, _UVGreen).a * texture(bckgTexture, _UVBlue).a) * blendColor.a;             }
+
+    if (_Looping_Mode == 3)
+    {
+        if (any(lessThanEqual(_UVRed, vec2(0.0))) || any(greaterThanEqual(_UVRed, vec2(1.0))))      {   _Render.a = 0.0;    }
+        if (any(lessThanEqual(_UVGreen, vec2(0.0))) || any(greaterThanEqual(_UVGreen, vec2(1.0))))  {   _Render.a = 0.0;    }
+        if (any(lessThanEqual(_UVBlue, vec2(0.0))) || any(greaterThanEqual(_UVBlue, vec2(1.0))))    {   _Render.a = 0.0;    }
+    }
+
+    fragColor = _Render;
+}
+//@End

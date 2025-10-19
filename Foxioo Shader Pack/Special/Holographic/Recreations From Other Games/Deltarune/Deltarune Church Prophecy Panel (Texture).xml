@@ -7,7 +7,7 @@
 			<BackgroundTexture>0</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Deltarune Church Prophecy Panel (Texture) Shader | 1.0 (08.08.2025) */</name>
+			<name>/* Foxioo Deltarune Church Prophecy Panel (Texture) Shader | 1.1 (18.10.2025) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
@@ -126,7 +126,7 @@
 			<parameter>
 				<name>Texutre</name>
 				<varible>_Texture</varible>
-				<code>S2D_Texture</code>
+				<code>_Texture</code>
 
 				<description>This varible specify what texture is to be used to cover the entire surface.</description>
 

@@ -1,0 +1,160 @@
+/***********************************************************/
+
+/* Autor shader: Foxioo */
+/* Version shader: 1.8 (18.10.2025) */
+/* My GitHub: https://github.com/FoxiooOfficial */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_vertex
+//version_####
+
+uniform mat3 transformMatrix;
+uniform mat3 projectionMatrix;
+uniform mat3 objectMatrix;
+uniform mat3 textureMatrix;
+
+in vec2 position;
+out vec2 In;
+void main()
+{
+    vec3 pos = vec3(position, 1.0);
+    In = (textureMatrix * pos).xy;
+    gl_Position = vec4(projectionMatrix * transformMatrix * objectMatrix * pos, 1.0);
+}
+//@End
+
+/* ####################################################### */
+
+//@Begin_fragment
+//version_####
+
+#ifdef GL_ES
+    #if defined(GL_FRAGMENT_PRECISION_HIGH) || defined(GL_OES_standard_derivatives)
+        #define HIGH_PRECISION_SUPPORTED
+    #endif
+#else
+    #define HIGH_PRECISION_SUPPORTED    
+#endif
+
+#ifdef HIGH_PRECISION_SUPPORTED
+    precision highp float;
+#else
+    precision mediump float;
+#endif
+
+in vec2 In;
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+uniform sampler2D imgTexture;
+uniform sampler2D bckgTexture;
+
+uniform lowp vec4 blendColor;
+uniform float fPixelWidth;
+uniform float fPixelHeight;
+
+/***********************************************************/
+/* Varibles */
+/***********************************************************/
+
+uniform int _Blending_Mode;
+uniform float _Mixing;
+uniform float _Hue;
+uniform float _Saturation;
+uniform float _Value;
+uniform bool _Is_Pre_296_Build;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+float Fun_FMod(float a, float b) {
+    return a - b * floor(a / b);
+}
+    
+vec3 RGBtoHSV(vec3 _Render)
+{
+    float _CMax = max(_Render.r, max(_Render.g, _Render.b));
+    float _CMin = min(_Render.r, min(_Render.g, _Render.b));
+    float _Delta = _CMax - _CMin;
+
+    float _H = 0.0;
+    float _S = 0.0;
+    float _V = _CMax;
+
+    if (_Delta > 0.0)
+    {
+        _S = (_V > 0.0) ? (_Delta / _V) : 0.0;
+
+        if (_CMax == _Render.r)
+        {
+            _H = 60.0 * Fun_FMod(((_Render.g - _Render.b) / _Delta), 6.0);
+        }
+        else if (_CMax == _Render.g)
+        {
+            _H = 60.0 * (((_Render.b - _Render.r) / _Delta) + 2.0);
+        }
+        else
+        {
+            _H = 60.0 * (((_Render.r - _Render.g) / _Delta) + 4.0);
+        }
+    }
+
+    if (_H < 0.0) { _H += 360.0; }
+    return vec3(_H, _S, _V);
+}
+
+vec3 HSVtoRGB(float _H, float _S, float _V)
+{
+    float _C = _V * _S;
+    float _X = _C * (1.0 - abs(Fun_FMod(_H / 60.0, 2.0) - 1.0));
+    float _M = _V - _C;
+
+    vec3 _Render =      (_H < 60.0)   ? vec3(_C, _X, 0.0) :
+                        (_H < 120.0)  ? vec3(_X, _C, 0.0) :
+                        (_H < 180.0)  ? vec3(0.0, _C, _X) :
+                        (_H < 240.0)  ? vec3(0.0, _X, _C) :
+                        (_H < 300.0)  ? vec3(_X, 0.0, _C) :
+                                        vec3(_C, 0.0, _X);
+
+    return (_Render + _M);
+}
+
+out vec4 fragColor;
+void main(void)
+{
+    vec2 In_Background = vec2(In.x, 1.0 - In.y);
+
+    vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
+    vec4 _Render_Background = _Is_Pre_296_Build ? texture(bckgTexture, In_Background) : texture(bckgTexture, In) * blendColor;
+
+    vec4 _Render =    _Blending_Mode == 1 ? _Render_Background : _Render_Texture;
+    vec4 _Result =    _Render;
+
+    /* Hue Adjustment */
+        vec3 _HSV = RGBtoHSV(_Render.rgb);
+            _HSV.x = Fun_FMod(_HSV.x + _Hue, 360.0);
+            if (_HSV.x < 0.0) { _HSV.x += 360.0; }
+
+    /* Saturation Adjustment */
+        _HSV.y = (_HSV.y * (_Saturation / 50.0));
+
+    /* Value Adjustment */
+        _HSV.z = (_HSV.z + (_Value - 50.0) / 50.0);
+
+    /* Back to RGB */
+        _Render.rgb = HSVtoRGB(_HSV.x, _HSV.y, _HSV.z);
+
+    /* Mixing */
+        _Render.rgb = mix(_Result.rgb, _Render.rgb, _Mixing);
+    
+    _Render.a = _Render_Texture.a;
+
+    fragColor = _Render;
+}
+//@End
