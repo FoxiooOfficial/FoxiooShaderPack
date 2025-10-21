@@ -22,10 +22,15 @@ ___
 🗓️ Last update of shaders from **October 19, 2025 (UTC+02:00)**
 
 ℹ️ Shaders currently work under:
-- Windows **(Direct3D 9, Direct3D 11, Direct3D 11 Pre)**
+- Windows **(Direct3D 9, Direct3D 11, Direct3D 11 PRE)**
 - Android
 - iOS
 - MacOS **(Some effects may have a problem)**
+
+**The whole thing is based on MIT License**
+
+- ✅ You can modify the code and distribute it as you like.
+- ⚠️ However, you must specify me (**Foxioo**) in the credits.
   
 ### ⚠️‼️‼️ **If you have been using an older version and are updating to the new one, be warned that there may be compatibility issues! (Make backup Effects folder and MFA project before)** ‼️‼️⚠️
 
