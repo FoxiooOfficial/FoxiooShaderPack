@@ -22,7 +22,7 @@ ___
 🗓️ Last update of shaders from **October 19, 2025 (UTC+02:00)**
 
 ℹ️ Shaders currently work under:
-- Windows **(Direct3D 9, Direct3D 11, Direct3D 11 PRE)**
+- Windows **(Direct3D 9, Direct3D 11 Non-premultiplied Alpha, Direct3D 11 Premultiplied Alpha)**
 - Android
 - iOS
 - MacOS **(Some effects may have a problem)**
