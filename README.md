@@ -60,7 +60,7 @@ ___
 
 | Person(s)                                                  | Description of how they helped me                                                      |
 |------------------------------------------------------------|----------------------------------------------------------------------------------------|
-| <a href="https://github.com/NaitorStudios">NaitorStudios</a>                                              | Help in explaining how to rewrite shaders for DX3D11 to DX3D11 Premultiplied.          |
+| <a href="https://github.com/NaitorStudios">NaitorStudios</a>                                              | Help in explaining how to rewrite shaders for D3D11 Non-premultiplied Alpha to D3D11 Premultiplied Alpha.          |
 | <a href="https://linktr.ee/just_andrimal">Andrimal</a>                                                   | He composed the music for the trailer.                                                 |
 | [Acerola](https://www.youtube.com/@Acerola_t)                                                    | Explanation in videos of how shaders work.                                             |
 | [KYwoo](https://linktr.ee/KYwoo.socialss)                                                      | She helps create the Mangaish shader.                                                             |
