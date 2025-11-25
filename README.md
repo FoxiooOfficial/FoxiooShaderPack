@@ -17,9 +17,9 @@ ___
 
 🥳 The package currently has **301 Shaders** 🎉
 
-🗓️ Last updated description dated **October 19, 2025 (UTC+02:00)**
+🗓️ Last updated description dated **November 25, 2025 (UTC+01:00)**
 
-🗓️ Last update of shaders from **October 19, 2025 (UTC+02:00)**
+🗓️ Last update of shaders from **October 19, 2025 (UTC+01:00)**
 
 ℹ️ Shaders currently work under:
 - Windows **(Direct3D 9, Direct3D 11 Non-premultiplied Alpha, Direct3D 11 Premultiplied Alpha)**
@@ -29,8 +29,8 @@ ___
 
 **The whole thing is based on MIT License**
 
-- ✅ You can modify the code and distribute it as you like.
-- ⚠️ However, you must specify me (**Foxioo**) in the credits.
+- You can modify the code and distribute it as you like.
+- You must credit the authors of the shader in your games/projects.
   
 ### ⚠️‼️‼️ **If you have been using an older version and are updating to the new one, be warned that there may be compatibility issues! (Make backup Effects folder and MFA project before)** ‼️‼️⚠️
 
