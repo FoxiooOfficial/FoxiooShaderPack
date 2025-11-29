@@ -1,5 +1,5 @@
 <effect>
-	<Name>Invert Brightness (Switch) [Legacy]</Name>
+	<name>Invert Brightness (Switch) [Legacy]</name>
 		<description>Shader inverts color luminosities. (This is the Legacy version of the shader! It is replaced by Invert Brightness (Switch) [Rework]!)</description>
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

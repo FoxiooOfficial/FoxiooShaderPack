@@ -1,5 +1,5 @@
 <effect>
-	<Name>Conversion To Y'PbPr (Switch)</Name>
+	<name>Conversion To Y'PbPr (Switch)</name>
 		<description>This shader converts colors from the RGB standard to the Y'PbPr standard.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

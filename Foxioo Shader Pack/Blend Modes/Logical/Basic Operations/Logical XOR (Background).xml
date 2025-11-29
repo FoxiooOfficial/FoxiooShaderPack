@@ -1,5 +1,5 @@
 <effect>
-	<Name>Logical XOR (Background)</Name>
+	<name>Logical XOR (Background)</name>
 		<description>This shader is a modification of the "AND" shader created by Cazra. The colors are bit by a logic gate XOR for base and blend colors.</description> 
 			<author>Foxioo, Cazra</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

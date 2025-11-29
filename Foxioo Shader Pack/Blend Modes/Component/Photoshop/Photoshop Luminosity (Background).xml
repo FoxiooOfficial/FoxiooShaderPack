@@ -1,5 +1,5 @@
 <effect>
-	<Name>Photoshop Luminosity (Background)</Name>
+	<name>Photoshop Luminosity (Background)</name>
 		<description>(The effect comes from the Photoshop) Creates a result color with the hue and saturation of the base color and the luminance of the blend color. This mode creates the inverse effect of Color mode.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

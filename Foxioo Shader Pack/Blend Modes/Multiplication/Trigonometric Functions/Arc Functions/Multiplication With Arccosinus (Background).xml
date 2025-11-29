@@ -1,5 +1,5 @@
 <effect>
-	<Name>Multiplication With Arccosinus (Background)</Name>
+	<name>Multiplication With Arccosinus (Background)</name>
 		<description>Base and blend colors are multiplied after which the colors are reduced by the arccosinus function.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

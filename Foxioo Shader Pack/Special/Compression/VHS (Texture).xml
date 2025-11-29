@@ -1,5 +1,5 @@
 <effect>
-	<Name>VHS (Texture)</Name>
+	<name>VHS (Texture)</name>
 		<description>This shader simulates the analog image from VHS tapes. Special thanks to JargeZ, rgm89git, SergeyMC9730, zhuker, and constanton for the "ntscqt" project (https://github.com/JargeZ/ntscqt).</description> 
 			<author>Foxioo, JargeZ, rgm89git, SergeyMC9730, zhuker, constanton</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

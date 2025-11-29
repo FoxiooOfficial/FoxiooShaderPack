@@ -1,5 +1,5 @@
 <effect>
-	<Name>Krita Reeze (Background)</Name>
+	<name>Krita Reeze (Background)</name>
 		<description>(The effect comes from the Krita) The Reeze Blending Mode Shader is similar to the Frect blending mode but with swapped conditions for the blending modes. When the sum of the layer values is less than or equal to 1, it uses the Freeze blending mode; otherwise, it uses the Reflect blending mode.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

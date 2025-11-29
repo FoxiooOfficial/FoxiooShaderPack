@@ -1,5 +1,5 @@
 <effect>
-	<Name>Unity Bloom (Texture+Background)</Name>
+	<name>Unity Bloom (Texture+Background)</name>
 		<description>Shader burns your computer with powerful bloom.</description> 
 			<author>Foxioo, Special thanks to The Cherno.</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

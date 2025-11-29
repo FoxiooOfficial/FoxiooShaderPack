@@ -1,5 +1,5 @@
 <effect>
-	<Name>HSL (Switch)</Name>
+	<name>HSL (Switch) [Legacy]</name>
 		<description>Shader allows changing hue, saturation and lightness. (This is the Legacy version of the shader! It is replaced by HSL (Switch) [Rework]!)</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

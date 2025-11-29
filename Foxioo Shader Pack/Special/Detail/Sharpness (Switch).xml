@@ -1,5 +1,5 @@
 <effect>
-	<Name>Sharpness (Switch)</Name>
+	<name>Sharpness (Switch)</name>
 		<description>This shader gives the effect of "Sharpness" by detecting edges and giving sharpening to them.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

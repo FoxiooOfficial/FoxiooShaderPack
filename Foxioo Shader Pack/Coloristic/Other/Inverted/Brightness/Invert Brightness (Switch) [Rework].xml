@@ -1,5 +1,5 @@
 <effect>
-	<Name>Invert Brightness (Switch) [Rework]</Name>
+	<name>Invert Brightness (Switch) [Rework]</name>
 		<description>Shader inverts color luminosities.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

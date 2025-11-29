@@ -1,5 +1,5 @@
 <effect>
-	<Name>Krita Glow (Background)</Name>
+	<name>Krita Glow (Background)</name>
 		<description>(The effect comes from the Krita) The Reflect blending mode with source and destination layers swapped.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

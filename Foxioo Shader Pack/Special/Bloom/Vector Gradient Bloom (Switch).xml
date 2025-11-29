@@ -1,5 +1,5 @@
 <effect>
-	<Name>Vector Gradient Bloom (Switch)</Name>
+	<name>Vector Gradient Bloom (Switch)</name>
 		<description>"Vector Gradient Blur" shader divides an object's texture into smaller fragments and takes colors from points, then these points serve as colors for gradients and additionally a bloom effect is applied.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

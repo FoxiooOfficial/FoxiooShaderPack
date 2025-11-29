@@ -1,5 +1,5 @@
 <effect>
-	<Name>Blend Color Blue (Background)</Name>
+	<name>Blend Color Blue (Background)</name>
 		<description>Shader applies blue colors from base to blend.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

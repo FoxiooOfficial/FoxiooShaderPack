@@ -1,5 +1,5 @@
 <effect>
-	<Name>Krita Heat-Glow and Freeze-Reflect Hybrid (Background)</Name>
+	<name>Krita Heat-Glow and Freeze-Reflect Hybrid (Background)</name>
 		<description>(The effect comes from the Krita) Mix of the continuous quadratic blending modes. Very similar to Overlay, and sometimes provides better result than Overlay.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

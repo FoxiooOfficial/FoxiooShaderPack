@@ -1,5 +1,5 @@
 <effect>
-	<Name>Simulation Of Tritanopia (Switch)</Name>
+	<name>Simulation Of Tritanopia (Switch)</name>
 		<description>Shader simulates tritanopic color blindness.</description> 
 			<author>Foxioo (Special thanks to: MaPePeR)</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

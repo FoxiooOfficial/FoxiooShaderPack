@@ -1,6 +1,16 @@
 # ℹ️ Change Log
 **All notable changes to this project will be documented in this file.**
 
+# ✨ November 29 2025 | Release ID: 10
+## 📝 Notes (Abbreviated) 
+- The number of shaders has been increased from 301 to 327:
+- *(Mainly polygon shaders for Tails7 R1.0.2)* but also: **"PVZA Flower Cooldown (Texture)"**, **"Geometry Dash Glass Blocks (Background)"**, **"Cut-Off Alpha Test (Texture)"**, **"Chroma Key Inverted (Texture)"** and **"Ambient (Switch)"**.
+- For **"Mode 7 (Switch)"** and **"Mode 7 (Switch) [Antialiasing]"** *(which was added in this release)*, increased the number of **"_Looping_Mode"** for D3D11 and GLES (Android, iOS, Mac) from 4 different looping texture modes to 16! (D3D9 is still limited to 4, due to Pixel Shader 2.x limitations)
+- Fixed a bug in every **.xml** file *(typo in the header <Name>(shader name)</Name> (should be "name"))* and the effects was displayed incorrectly in the list, adding ".fx" to name.
+
+---
+
+
 # ✨ October 19 2025 | Release ID: 9
 ## 📝 Notes (Abbreviated) 
 - Added **iOS** and **Mac** support for every effect

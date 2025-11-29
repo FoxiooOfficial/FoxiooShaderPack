@@ -1,5 +1,5 @@
 <effect>
-	<Name>Void (Background)</Name>
+	<name>Void (Background)</name>
 		<description>This effect draws stars in the texture and blurs the background using noise.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

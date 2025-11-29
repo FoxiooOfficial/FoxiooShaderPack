@@ -1,5 +1,5 @@
 <effect>
-	<Name>Recolor Monochrome Tint-To-White (Switch)</Name>
+	<name>Recolor Monochrome Tint-To-White (Switch)</name>
 		<description>The effect converts colors to monochrome, but the darker the luminance, the closer the output color will be to the selected color, and the higher the luminance, the closer the output color will be to white.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

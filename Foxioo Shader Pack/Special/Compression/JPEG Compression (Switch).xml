@@ -1,5 +1,5 @@
 <effect>
-	<Name>JPEG Compression (Switch)</Name>
+	<name>JPEG Compression (Switch)</name>
 		<description>Effect gives a compression effect similar to JPEG, but not exactly the same!</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

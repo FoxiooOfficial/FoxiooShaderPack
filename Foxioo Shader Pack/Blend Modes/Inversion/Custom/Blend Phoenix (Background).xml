@@ -1,5 +1,5 @@
 <effect>
-	<Name>Blend Phoenix (Background)</Name>
+	<name>Blend Phoenix (Background)</name>
 		<description>The shader compares the minimum value with base and blend and subtracts the maximum value from it by also comparing base and blend and adds 1.1 at the end.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

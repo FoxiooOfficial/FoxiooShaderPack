@@ -1,5 +1,5 @@
 <effect>
-	<Name>Simulation Of Achromatopsia (Switch)</Name>
+	<name>Simulation Of Achromatopsia (Switch)</name>
 		<description>Shader simulates archomatomal color blindness.</description> 
 			<author>Foxioo (Special thanks to: MaPePeR)</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

@@ -1,5 +1,5 @@
 <effect>
-	<Name>Correction With Cotanget (Switch)</Name>
+	<name>Correction With Cotanget (Switch)</name>
 		<description>Base or blend colors are reduced by the cotanget function.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

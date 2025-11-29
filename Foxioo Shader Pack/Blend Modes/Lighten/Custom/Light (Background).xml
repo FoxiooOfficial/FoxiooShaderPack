@@ -1,5 +1,5 @@
 <effect>
-	<Name>Light (Background)</Name>
+	<name>Light (Background)</name>
 		<description>This shader calculates so blend and base to simulate light. I recommend using a white-black or white-transparent gradient</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

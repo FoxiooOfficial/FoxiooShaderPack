@@ -1,5 +1,5 @@
 <effect>
-	<Name>Normal Map (Switch)</Name>
+	<name>Normal Map (Switch)</name>
 		<description>This effect transforms colors to return the color vector as in Normal Map.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

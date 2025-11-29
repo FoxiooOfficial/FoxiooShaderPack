@@ -1,5 +1,5 @@
 <effect>
-	<Name>Krita Arcus Tangens (Background)</Name>
+	<name>Krita Arcus Tangens (Background)</name>
 		<description>(The effect comes from the Krita) It divides the bottom layer by the top layer. It then divides it by Pi. It then uses this in the arcus tangent function and multiplies it by two</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

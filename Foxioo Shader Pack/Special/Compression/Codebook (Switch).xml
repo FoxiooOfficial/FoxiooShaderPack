@@ -1,5 +1,5 @@
 <effect>
-	<Name>Codebook (Switch)</Name>
+	<name>Codebook (Switch)</name>
 		<description>This effect is an attempt to recreate the "Codebook" effect from the Paint.NET PolyGlitch plugin created by gsuberland.</description> 
 			<author>Foxioo, gsuberland</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

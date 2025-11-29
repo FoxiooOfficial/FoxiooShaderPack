@@ -1,5 +1,5 @@
 <effect>
-	<Name>Photoshop Overlay (Background)</Name>
+	<name>Photoshop Overlay (Background)</name>
 		<description>(The effect comes from the Photoshop) Multiplies or screens the colors, depending on the base color. Patterns or colors overlay the existing pixels while preserving the highlights and shadows of the base color. The base color is not replaced, but mixed with the blend color to reflect the lightness or darkness of the original color</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

@@ -1,5 +1,5 @@
 <effect>
-	<Name>Krita Freeze-Reflect (Background)</Name>
+	<name>Krita Freeze-Reflect (Background)</name>
 		<description>(The effect comes from the Krita) Mix of Freeze and Reflect blending modes.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

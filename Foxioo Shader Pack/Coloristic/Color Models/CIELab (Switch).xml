@@ -1,5 +1,5 @@
 <effect>
-	<Name>CIELab (Switch)</Name>
+	<name>CIELab (Switch)</name>
 		<description>Shader allows changing luminance, a* and b*.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

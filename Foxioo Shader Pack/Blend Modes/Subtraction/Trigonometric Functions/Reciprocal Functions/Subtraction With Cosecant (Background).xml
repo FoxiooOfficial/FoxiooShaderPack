@@ -1,5 +1,5 @@
 <effect>
-	<Name>Subtraction With Cosecant (Background)</Name>
+	<name>Subtraction With Cosecant (Background)</name>
 		<description>Base and blend colors are subtracted after which the colors are reduced by the cosecant function.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

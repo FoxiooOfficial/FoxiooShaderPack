@@ -1,5 +1,5 @@
 <effect>
-	<Name>Simulation Of Deuteranopia (Switch)</Name>
+	<name>Simulation Of Deuteranopia (Switch)</name>
 		<description>Shader simulates deuteranopic color blindness.</description> 
 			<author>Foxioo (Special thanks to: MaPePeR)</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

@@ -1,5 +1,5 @@
 <effect>
-	<Name>Photoshop Lighter Color (Background)</Name>
+	<name>Photoshop Lighter Color (Background)</name>
 		<description>(The effect comes from the Photoshop) Compares the total of all channel values for the blend and base color and displays the higher value color. Lighter Color does not produce a third color, which can result from the Lighten blend, because it chooses the highest channel values from both the base and blend color to create the result color</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

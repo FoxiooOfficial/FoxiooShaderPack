@@ -1,5 +1,5 @@
 <effect>
-	<Name>Recolor Monochrome (Switch)</Name>
+	<name>Recolor Monochrome (Switch)</name>
 		<description>The effect converts colors to monochrome and multiplies them with the specified color.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

@@ -1,5 +1,5 @@
 <effect>
-	<Name>Fisheye Lens Equisolid Angle (Switch)</Name>
+	<name>Fisheye Lens Equisolid Angle (Switch)</name>
 		<description>This shader makes a fisheye lens (Equisolid Angle) distortion effect.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

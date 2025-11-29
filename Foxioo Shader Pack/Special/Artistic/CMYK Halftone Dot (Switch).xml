@@ -1,5 +1,5 @@
 <effect>
-	<Name>CMYK Halftone Dot (Switch)</Name>
+	<name>CMYK Halftone Dot (Switch)</name>
 		<description>(The shader is based on the Mangaish (Switch) shader, which KYwoo helped me with). This shader gives the effect of printed comics or newspapers, creating a characteristic CMYK dot pattern.</description> 
 			<author>Foxioo, KYwoo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

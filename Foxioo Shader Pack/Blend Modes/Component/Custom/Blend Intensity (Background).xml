@@ -1,5 +1,5 @@
 <effect>
-	<Name>Blend Intensity (Background)</Name>
+	<name>Blend Intensity (Background)</name>
 		<description>Creates a result color with the hue and saturation of the base color and the intensity of the blend color. This mode creates an effect similar to the inverse of the Color mode, but operates based on value rather than luminance.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

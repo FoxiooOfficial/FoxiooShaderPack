@@ -1,5 +1,5 @@
 <effect>
-	<Name>Krita Negation (Background)</Name>
+	<name>Krita Negation (Background)</name>
 		<description>(The effect comes from the Krita) The absolute of the 1.0f value subtracted by the base subtracted by the blend layer. abs(1.0f - Base - Blend)</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

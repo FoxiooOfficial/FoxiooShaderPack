@@ -1,5 +1,5 @@
 <effect>
-	<Name>Photoshop Color (Background)</Name>
+	<name>Photoshop Color (Background)</name>
 		<description>(The effect comes from the Photoshop) Creates a result color with the luminance of the base color and the hue and saturation of the blend color. This preserves the gray levels in the image and is useful for coloring monochrome images and for tinting color images.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

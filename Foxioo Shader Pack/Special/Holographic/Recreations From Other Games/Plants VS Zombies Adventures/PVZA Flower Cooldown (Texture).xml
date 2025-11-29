@@ -1,0 +1,90 @@
+<effect>
+	<name>Plants VS Zombies Adventures Flower Cooldown (Texture)</name>
+		<description>The shader emits the cooldown effect of flowers from the game Plants VS Zombies Adventure, dividing the texture into two parts so that the gray level and brightness of each part can be changed separately.</description> 
+			<author>Foxioo (Made for speedinggames44)</author>
+			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>0</BackgroundTexture>
+			
+		<parameter>
+			<name>/* Foxioo Plants VS Zombies Adventures Flower Cooldown (Texture) Shader | 1.0 (24.11.2025) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>The shader emits the cooldown effect of flowers from the game Plants VS Zombies Adventure, dividing the texture into two parts so that the gray level and brightness of each part can be changed separately..</description>
+		</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Time</name>
+				<variable>_Time</variable>
+				
+				<description>The variable defines the cooldown time (from 0 to 1), i.e., it defines where on the Y axis the intersection into two halves should be.</description>
+
+				<type>float</type>
+
+				<value>0.5</value>
+			</parameter>
+
+			<parameter>
+				<name>In Gray Scale</name>
+				<variable>_InGray</variable>
+				
+				<description>This variable determines the gray level of the lower part (from 0 to 1).</description>
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>In Multiplicaton</name>
+				<variable>_InMul</variable>
+				
+				<description>This variable determines the color multiplication level of the lower part.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Out Gray Scale</name>
+				<variable>_OutGray</variable>
+				
+				<description>This variable determines the gray level of the upper part (from 0 to 1).</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Out Multiplicaton</name>
+				<variable>_OutMul</variable>
+				
+				<description>This variable determines the color multiplication level of the upper part.</description>
+
+				<type>float</type>
+
+				<value>0.35</value>
+			</parameter>
+
+        <parameter>
+            <name>/* */</name>
+            <property>checkbox</property>
+            <variable>___</variable>
+        </parameter>
+
+</effect>

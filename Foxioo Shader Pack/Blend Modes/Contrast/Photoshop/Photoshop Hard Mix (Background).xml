@@ -1,5 +1,5 @@
 <effect>
-	<Name>Photoshop Hard Mix (Background)</Name>
+	<name>Photoshop Hard Mix (Background)</name>
 		<description>(The effect comes from the Photoshop) Adds the red, green and blue channel values of the blend color to the RGB values of the base color. If the resulting sum for a channel is 255 or greater, it receives a value of 255; if less than 255, a value of 0. Therefore, all blended pixels have red, green, and blue channel values of either 0 or 255. This changes all pixels to primary additive colors (red, green, or blue), white, or black</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

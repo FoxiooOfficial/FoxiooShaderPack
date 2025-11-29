@@ -1,5 +1,5 @@
 <effect>
-	<Name>Multiplication With Power (Background)</Name>
+	<name>Multiplication With Power (Background)</name>
 		<description>Base and blend colors are multiplied after which the colors are reduced by the power.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

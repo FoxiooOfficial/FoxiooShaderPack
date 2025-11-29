@@ -1,15 +1,15 @@
 <effect>
-	<Name>Mode 7 (Switch)</Name>
-		<description>Shader giving Mode 7 style perspective effect.</description> 
+	<name>Mode 7 (Switch)</name>
+		<description>Shader giving Mode 7 style perspective effect. (Mainly intended for Tails7)</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 
 		<parameter>
-			<name>/* Foxioo Mode 7 (Switch) Shader | 1.8 (18.10.2025) */</name>
+			<name>/* Foxioo Mode 7 (Switch) Shader | 1.9 (08.11.2025) */</name>
 			<property>checkbox</property>
-			<description>Shader giving Mode 7 style perspective effect.</description>
+			<description>Shader giving Mode 7 style perspective effect. (Mainly intended for Tails7)</description>
 			<variable>_</variable>
 		</parameter>
 
@@ -246,15 +246,46 @@
 			<parameter>
 				<name>Looping Mode!</name>
 				<variable>_Looping_Mode</variable>
-				<description>This variable determines how the texture is to be looped: 0 - REPEAT (Repeats the texture image); 1 - MIRRORED REPEAT (Repeats the texture image, but reflects the image at each repetition); 2 - CLAMP TO EDGE (Extends the texture after crossing coordinates 0 and 1); 3 - CLAMP TO BORDER (After crossing coordinates 0 and 1, the texture will be invisible). For more information, visit: https://learnopengl.com/Getting-started/Textures</description>
-				<!-- For more information, visit: https://learnopengl.com/Getting-started/Textures -->
+				<description>
+					This variable determines how the texture is repeated: 
+					REPEAT (repeats the texture image); 
+					MIRRORED (repeats the texture image, but mirrors it with each repetition); 
+					CLAMP (extends the texture beyond coordinates 0 and 1); 
+					BORDER (the texture will be invisible after exceeding coordinates 0 and 1). 
+
+					For more information, visit: https://learnopengl.com/Getting-started/Textures
+
+					List of modes for separately (X, Y) by _Looping_Mode:
+					0: (REPEAT, REPEAT);
+					1: (MIRRORED, MIRRORED);
+					2: (CLAMP, CLAMP);
+					3: (BORDER, BORDER); //
+
+					4: (MIRRORED, REPEAT);
+					5: (CLAMP, REPEAT);
+					6: (BORDER, REPEAT); //
+
+					7: (REPEAT, MIRRORED);
+					8: (CLAMP, MIRRORED);
+					9: (BORDER, MIRRORED); //
+
+					10: (REPEAT, CLAMP);
+					11: (MIRRORED, CLAMP);
+					12: (BORDER, CLAMP); //
+
+					13: (REPEAT, BORDER);
+					14: (MIRRORED, BORDER);
+					15: (CLAMP, BORDER); //
+
+					Please note that _Looping_Mode from 0 to 15 only works for Direct3D11 and OpenGL (Android, iOS and Mac); For Direct3D9, only 0 to 3 are available.
+				</description>
 
 				<type>int</type>
 				<property>SLIDER</property>
 
 				<value>0</value>
 				<min>0</min>
-				<max>3</max>
+				<max>15</max>
 			</parameter>
 
 
@@ -325,6 +356,10 @@
 
 	<sampler>
 		<index>0</index>
+		<filter>point</filter>
+	</sampler>
+	<sampler>
+		<index>1</index>
 		<filter>point</filter>
 	</sampler>
 </effect>

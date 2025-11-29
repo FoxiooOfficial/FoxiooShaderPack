@@ -1,5 +1,5 @@
 <effect>
-	<Name>Blend Color Magenta (Background)</Name>
+	<name>Blend Color Magenta (Background)</name>
 		<description>Shader applies magenta colors from base to blend.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

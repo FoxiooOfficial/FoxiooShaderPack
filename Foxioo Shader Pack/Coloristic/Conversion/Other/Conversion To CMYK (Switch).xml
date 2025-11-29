@@ -1,5 +1,5 @@
 <effect>
-	<Name>Conversion To CYMK (Switch)</Name>
+	<name>Conversion To CYMK (Switch)</name>
 		<description>This shader converts colors from the RGB standard to the CYMK standard.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

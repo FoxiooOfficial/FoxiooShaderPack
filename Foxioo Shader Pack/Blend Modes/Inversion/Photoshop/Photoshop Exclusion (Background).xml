@@ -1,5 +1,5 @@
 <effect>
-	<Name>Photoshop Exclusion (Background)</Name>
+	<name>Photoshop Exclusion (Background)</name>
 		<description>(The effect comes from the Photoshop) Creates an effect similar to but lower in contrast than the Difference mode. Blending with white inverts the base color values. Blending with black produces no change</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

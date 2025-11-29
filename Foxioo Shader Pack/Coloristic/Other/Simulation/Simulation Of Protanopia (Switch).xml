@@ -1,5 +1,5 @@
 <effect>
-	<Name>Simulation Of Protanopia (Switch)</Name>
+	<name>Simulation Of Protanopia (Switch)</name>
 		<description>Shader simulates protanopic color blindness.</description> 
 			<author>Foxioo (Special thanks to: MaPePeR)</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

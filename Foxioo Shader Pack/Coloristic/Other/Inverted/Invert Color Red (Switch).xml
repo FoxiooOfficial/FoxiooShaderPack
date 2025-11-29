@@ -1,5 +1,5 @@
 <effect>
-	<Name>Invert Color Red (Switch)</Name>
+	<name>Invert Color Red (Switch)</name>
 		<description>This shader reverses the colors that produce the color red.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

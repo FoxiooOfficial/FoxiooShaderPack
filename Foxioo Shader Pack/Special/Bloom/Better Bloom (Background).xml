@@ -1,5 +1,5 @@
 <effect>
-	<Name>Better Bloom (Background)</Name>
+	<name>Better Bloom (Background)</name>
 		<description>WARNING! THIS SHADER IS A HUGE OVERLOAD FOR GRAPHICS CARDS! This shader is a modification of the "Bloom 30" shader created by: Looki, NaitorStudios and fnkycoldmadeanr.</description> 
 			<author>Foxioo, Looki, NaitorStudios, fnkycoldmadeanr</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

@@ -1,5 +1,5 @@
 <effect>
-	<Name>Photoshop Hue (Background)</Name>
+	<name>Photoshop Hue (Background)</name>
 		<description>(The effect comes from the Photoshop) Creates a result color with the luminance and saturation of the base color and the hue of the blend color.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

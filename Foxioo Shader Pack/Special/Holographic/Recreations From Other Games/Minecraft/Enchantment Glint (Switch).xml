@@ -1,5 +1,5 @@
 <effect>
-	<Name>Enchantment Glint (Switch)</Name>
+	<name>Enchantment Glint (Switch)</name>
 		<description>The shader gives a glint effect similar to the Minecraft game. Special thanks to Daniel Ilett</description> 
 			<author>Foxioo, Special thanks to Daniel Ilett</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

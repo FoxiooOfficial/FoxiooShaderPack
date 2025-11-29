@@ -1,5 +1,5 @@
 <effect>
-	<Name>HSI (Switch)</Name>
+	<name>HSI (Switch)</name>
 		<description>Shader allows changing hue, saturation and intensity.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

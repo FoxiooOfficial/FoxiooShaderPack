@@ -1,5 +1,5 @@
 <effect>
-	<Name>Deltarune Freeze (Texture)</Name>
+	<name>Deltarune Freeze (Texture)</name>
 		<description>This shader recreates freeze enemy effect in the game DELTARUNE (Chapter 2) created by Toby Fox.</description> 
 			<author>Foxioo, Toby Fox</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

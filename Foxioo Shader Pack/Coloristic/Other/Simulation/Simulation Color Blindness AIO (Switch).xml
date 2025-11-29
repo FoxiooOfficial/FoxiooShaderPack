@@ -1,5 +1,5 @@
 <effect>
-	<Name>Simulation Color Blindness AIO (Switch)</Name>
+	<name>Simulation Color Blindness AIO (Switch)</name>
 		<description>The shader contains all color blindness effects in one.</description> 
 			<author>Foxioo (Special thanks to: MaPePeR)</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

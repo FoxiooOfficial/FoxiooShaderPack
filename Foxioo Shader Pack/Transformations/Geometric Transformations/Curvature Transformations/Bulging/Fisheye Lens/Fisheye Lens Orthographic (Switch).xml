@@ -1,5 +1,5 @@
 <effect>
-	<Name>Fisheye Lens Orthographic (Switch)</Name>
+	<name>Fisheye Lens Orthographic (Switch)</name>
 		<description>This shader makes a fisheye lens (Orthographic) distortion effect.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

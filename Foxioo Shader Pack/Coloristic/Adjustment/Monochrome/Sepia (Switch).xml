@@ -1,5 +1,5 @@
 <effect>
-	<Name>Sepia (Switch)</Name>
+	<name>Sepia (Switch)</name>
 		<description>This shader changes colors, giving a sepia tone.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

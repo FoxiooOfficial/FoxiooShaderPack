@@ -1,5 +1,5 @@
 <effect>
-	<Name>Krita Penumbra A (Background)</Name>
+	<name>Krita Penumbra A (Background)</name>
 		<description>(The effect comes from the Krita) Creates a linear penumbra falloff. This means most tones will be in the midtone ranges.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

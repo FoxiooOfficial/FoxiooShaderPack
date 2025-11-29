@@ -1,5 +1,5 @@
 <effect>
-	<Name>Polar (Switch)</Name>
+	<name>Polar (Switch)</name>
 		<description>The shader distorts the texture to circle.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

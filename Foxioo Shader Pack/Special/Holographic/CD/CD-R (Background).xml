@@ -1,5 +1,5 @@
 <effect>
-	<Name>CD-R (Background)</Name>
+	<name>CD-R (Background)</name>
 		<description>The shader simulates the effect on the CDs underneath.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

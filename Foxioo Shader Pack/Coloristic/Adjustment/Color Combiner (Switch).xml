@@ -1,5 +1,5 @@
 <effect>
-	<Name>Color Combiner (Switch)</Name>
+	<name>Color Combiner (Switch)</name>
 		<description>The shader modifies colors using the equation (_A - _B) * _C + _D, where _A is the texture color.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

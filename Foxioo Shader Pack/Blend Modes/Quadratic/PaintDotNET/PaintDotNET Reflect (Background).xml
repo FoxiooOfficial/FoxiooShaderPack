@@ -1,5 +1,5 @@
 <effect>
-	<Name>PaintDOTNet Reflect (Background)</Name>
+	<name>PaintDOTNet Reflect (Background)</name>
 		<description>(The effect comes from the Paint.NET) This blend mode can be used for adding shiny objects or areas of light</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

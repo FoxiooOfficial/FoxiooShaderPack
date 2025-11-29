@@ -1,0 +1,211 @@
+<effect>
+	<name>Ambient (Switch)</name>
+		<description>This shader is designed to manipulate colors to create ambient. With the right settings, it can simulate color effects of nighttime, storms, and similar conditions.</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+			
+		<parameter>
+			<name>/* Foxioo Ambient (Switch) Shader | 1.0 (21.11.2025) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>This shader is designed to manipulate colors to create ambient. With the right settings, it can simulate color effects of nighttime, storms, and similar conditions.</description>
+		</parameter>
+
+			<parameter>
+				<name>Blending Mode</name>
+				<variable>_Blending_Mode</variable>
+				
+				<description>This variable manages which color will be reduced. Set to 0 is the blend color will be reduced and set to 1 is the base color will be reduced.</description>
+
+				<type>bool</type>
+				<property>checkbox</property>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Exposure</name>
+				<variable>_Exposure</variable>
+				
+				<description>This variable determines the brightness of the texture.</description>
+
+				<type>float</type>
+
+				<value>120</value>
+			</parameter>
+
+			<parameter>
+				<name>Contrast</name>
+				<variable>_Contrast</variable>
+				
+				<description>This variable determines the difference between dark and light areas.</description>
+
+				<type>float</type>
+
+				<value>110</value>
+			</parameter>
+
+			<parameter>
+				<name>Saturation</name>
+				<variable>_Saturation</variable>
+				
+				<description>This variable determines the saturation of texture colors.</description>
+
+				<type>float</type>
+
+				<value>100</value>
+			</parameter>
+
+			<parameter>
+				<name>Vibrance</name>
+				<variable>_Vibrance</variable>
+				
+				<description>This variable determines the saturation of colors that are less saturated.</description>
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Power</name>
+				<variable>_Power</variable>
+				
+				<description>The variable determines to what power the colors should be raised.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Time</name>
+				<variable>_Time</variable>
+				
+				<description>This variable is responsible for the time (0 - 24 Hours).</description>
+
+				<type>float</type>
+
+				<value>14</value>
+			</parameter>
+
+			<parameter>
+				<name>Temperature</name>
+				<variable>_Temperature</variable>
+
+				<description>This variable sets the color temperature.</description>
+
+				<type>float</type>
+
+				<value>10</value>
+			</parameter>
+
+			<parameter>
+				<name>Bloom</name>
+				<variable>_Bloom</variable>
+				
+				<description>This variable determines the intensity of the bloom color effect.</description>
+
+				<type>float</type>
+
+				<value>0.2</value>
+			</parameter>
+
+			<parameter>
+				<name>Bloom Threshold</name>
+				<variable>_BloomThreshold</variable>
+				
+				<description>This variable determines the brightness level at which the bloom color effect begins to appear.</description>
+
+				<type>float</type>
+
+				<value>0.8</value>
+			</parameter>
+
+			<parameter>
+				<name>Addition Power</name>
+				<variable>_Add</variable>
+				
+				<description>The variable determines how much color should be added.</description>
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Addition Color</name>
+				<variable>_AddColor</variable>
+				
+				<description>The variable specifies exactly which color should be used for adding.</description>
+
+				<type>int_float4</type>
+				<property>color</property>
+
+				<value>16777215</value>
+			</parameter>
+
+			<parameter>
+				<name>Multiplication Power</name>
+				<variable>_Mul</variable>
+				
+				<description>The variable determines how much the color should be multiplied.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+	
+			<parameter>
+				<name>Multiplication Color</name>
+				<variable>_MulColor</variable>
+				
+				<description>The variable specifies exactly which color should be used for multiplication.</description>
+
+				<type>int_float4</type>
+				<property>color</property>
+
+				<value>16777215</value>
+			</parameter>
+
+		<parameter>
+			<name>( Compatibility )</name>
+			<property>checkbox</property>
+			<description>Here you will find options that have changed, but you can still achieve the previous effect.</description>
+
+			<variable>__</variable>
+		</parameter>
+            <parameter>
+                <name>Is Fusion Version Older Than 296?</name>
+                <variable>_Is_Pre_296_Build</variable>
+                <property>checkbox</property>
+                
+                <description>(Only applies to Android and iOS!) This variable determines whether to use the newer background formatting. In Clickteam Fusion 2.5 for build 295.10 and earlier, the background texture was flipped along the Y axis, but this was changed in build 296.1. Check this option if you are using an older build!</description>
+
+                <type>int</type>
+
+                <value>0</value>
+            </parameter>
+
+        <parameter>
+            <name>/* */</name>
+            <property>checkbox</property>
+            <variable>___</variable>
+        </parameter>
+
+</effect>

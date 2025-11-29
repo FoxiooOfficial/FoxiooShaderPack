@@ -1,0 +1,140 @@
+/***********************************************************/
+
+/* Autor shader: Foxioo and Adam Hawker (aka Sketchy / MuddyMole) */
+/* Version shader: 1.0 (09.11.2025) */
+/* My GitHub: https://github.com/FoxiooOfficial */
+
+/***********************************************************/
+
+/***********************************************************/
+
+//@Begin_vertex
+
+#ifdef GL_ES
+ precision mediump float;
+#endif
+
+uniform mat4 transformMatrix;
+uniform mat4 projectionMatrix;
+
+attribute vec4 position;
+attribute vec2 texCoord;
+
+varying vec2 In;
+
+void main(void)
+{
+    In = texCoord;
+    gl_Position = projectionMatrix * transformMatrix * position;
+}
+
+//@End
+
+/***********************************************************/
+
+//@Begin_fragment
+
+#ifdef GL_ES
+ precision mediump float;
+#endif
+
+varying vec2 In;
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+uniform sampler2D imgTexture;
+uniform sampler2D bckgTexture;
+
+uniform lowp vec4 blendColor;
+uniform float fPixelWidth;
+uniform float fPixelHeight;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+uniform float xA;
+uniform float yA;
+uniform float xB;
+uniform float yB;
+uniform float xC;
+uniform float yC;
+uniform float xD;
+uniform float yD;
+
+/***********************************************************/
+/* Main */
+/***********************************************************/
+
+vec2 Fun_Quad(vec2 UV)
+{
+    float a = ((xA - UV.x) * (yB - UV.y) - (xB - UV.x) * (yA - UV.y));
+    float b = ((xB - UV.x) * (yC - UV.y) - (xC - UV.x) * (yB - UV.y));
+    float c = ((xC - UV.x) * (yD - UV.y) - (xD - UV.x) * (yC - UV.y));
+    float d = ((xD - UV.x) * (yA - UV.y) - (xA - UV.x) * (yD - UV.y));
+
+    if (sign(a)==sign(b) && sign(b)==sign(c) && sign(c)==sign(d))
+    {
+        vec2 p0 = vec2(xA, yA);
+        vec2 p1 = vec2(xB, yB);
+        vec2 p2 = vec2(xC, yC);
+        vec2 p3 = vec2(xD, yD);
+        
+        vec2 v0 = p1 - p0;
+        vec2 v1 = p2 - p0;
+        vec2 v2 = UV - p0;
+        
+        float d00 = dot(v0, v0);
+        float d01 = dot(v0, v1);
+        float d11 = dot(v1, v1);
+        float d20 = dot(v2, v0);
+        float d21 = dot(v2, v1);
+
+            float denom = d00 * d11 - d01 * d01;
+
+            float v = (d11 * d20 - d01 * d21) / denom;
+            float w = (d00 * d21 - d01 * d20) / denom;
+            float u = 1.0 - v - w;
+        
+        if (u >= 0.0 && w >= 0.0 && v >= 0.0) { return vec2(v + w, w);}
+        else
+        {
+            v0 = p2 - p0;
+            v1 = p3 - p0;
+            v2 = UV - p0;
+            
+            d00 = dot(v0, v0);
+            d01 = dot(v0, v1);
+            d11 = dot(v1, v1);
+            d20 = dot(v2, v0);
+            d21 = dot(v2, v1);
+
+                denom = d00 * d11 - d01 * d01;
+                
+                v = (d11 * d20 - d01 * d21) / denom;
+                w = (d00 * d21 - d01 * d20) / denom;
+                u = 0.0 - v - w;
+            
+            return vec2(v, v + w);
+        }
+    }
+    else return vec2(-1.0);
+}
+
+vec2 Fun_PSXFloat(vec2 UV) { return floor(UV * 256.0) / 256.0; }
+
+void main(void)
+{
+    vec2 _In = Fun_PSXFloat(Fun_Quad(Fun_PSXFloat(In)));
+    float _Border = (_In.x <= 0.0 || _In.x >= 1.0 || _In.y <= 0.0 || _In.y >= 1.0) ? 0.0 : 1.0;
+
+        vec4 _Render_Texture = texture2D(imgTexture, _In) * blendColor;
+
+        _Render_Texture.a *= _Border;
+
+    gl_FragColor = _Render_Texture;
+}
+
+//@End

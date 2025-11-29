@@ -1,5 +1,5 @@
 <effect>
-	<Name>Liquid Wave Bending (Switch)</Name>
+	<name>Liquid Wave Bending (Switch)</name>
 		<description>The shader modifies the texture coordinates to give an effect similar to a liquid wave pattern.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Genshin Impact Natlan Outline (Background) Shader | 1.1 (18.10.2025) */</name>
+			<name>/* Foxioo Liquid Wave Bending (Switch) Shader | 1.1 (18.10.2025) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

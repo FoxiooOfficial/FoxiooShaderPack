@@ -15,17 +15,22 @@
 
 ___
 
-🥳 The package currently has **301 Shaders** 🎉
+🥳 The package currently has **327 Shaders** 🎉
 
-🗓️ Last updated description dated **October 19, 2025 (UTC+02:00)**
+🗓️ Last updated description dated **November 29, 2025 (UTC+01:00)**
 
-🗓️ Last update of shaders from **October 19, 2025 (UTC+02:00)**
+🗓️ Last update of shaders from **November 29, 2025 (UTC+01:00)**
 
 ℹ️ Shaders currently work under:
-- Windows **(Direct3D 9, Direct3D 11, Direct3D 11 Pre)**
+- Windows **(Direct3D 9, Direct3D 11 Non-premultiplied Alpha, Direct3D 11 Premultiplied Alpha)**
 - Android
 - iOS
 - MacOS **(Some effects may have a problem)**
+
+**The whole thing is based on MIT License**
+
+- You can modify the code and distribute it as you like.
+- You must credit the authors of the shader in your games/projects.
   
 ### ⚠️‼️‼️ **If you have been using an older version and are updating to the new one, be warned that there may be compatibility issues! (Make backup Effects folder and MFA project before)** ‼️‼️⚠️
 
@@ -41,7 +46,13 @@ ___
 ## 🌠 Star History
 
 **History of stars earned on this repository**<br>
-[![Star History Chart](https://api.star-history.com/svg?repos=FoxiooOfficial/FoxiooShaderPack&type=Date)](https://www.star-history.com/#FoxiooOfficial/FoxiooShaderPack&Date)
+<a href="https://www.star-history.com/#FoxiooOfficial/FoxiooShaderPack&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=FoxiooOfficial/FoxiooShaderPack&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=FoxiooOfficial/FoxiooShaderPack&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=FoxiooOfficial/FoxiooShaderPack&type=date&legend=top-left" />
+ </picture>
+</a>
 
 ---
 
@@ -49,7 +60,7 @@ ___
 
 | Person(s)                                                  | Description of how they helped me                                                      |
 |------------------------------------------------------------|----------------------------------------------------------------------------------------|
-| <a href="https://github.com/NaitorStudios">NaitorStudios</a>                                              | Help in explaining how to rewrite shaders for DX3D11 to DX3D11 Premultiplied.          |
+| <a href="https://github.com/NaitorStudios">NaitorStudios</a>                                              | Help in explaining how to rewrite shaders for D3D11 Non-premultiplied Alpha to D3D11 Premultiplied Alpha.          |
 | <a href="https://linktr.ee/just_andrimal">Andrimal</a>                                                   | He composed the music for the trailer.                                                 |
 | [Acerola](https://www.youtube.com/@Acerola_t)                                                    | Explanation in videos of how shaders work.                                             |
 | [KYwoo](https://linktr.ee/KYwoo.socialss)                                                      | She helps create the Mangaish shader.                                                             |

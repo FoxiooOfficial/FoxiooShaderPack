@@ -1,0 +1,76 @@
+<effect>
+	<name>Geometry Dash Glass Block (Background)</name>
+		<description>The shader is an attempt to recreate the glass block effect from the game Geometry Dash, created by RobTop.</description> 
+			<author>Foxioo, RobTop</author>
+			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+			
+		<parameter>
+			<name>/* Foxioo Geometry Dash Glass Block (Background) Shader | 1.0 (28.11.2025) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>The shader is an attempt to recreate the glass block effect from the game Geometry Dash, created by RobTop.</description>
+		</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Background Multiplication</name>
+				<variable>_Mul</variable>
+				
+				<description>This variable defines the background multiplication factor. In previous versions of FSP shaders, it was _Mixing, but this has now been fixed.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Distance</name>
+				<variable>_Distance</variable>
+				
+				<description>This variable determines the distance between the camera and the object that has this shader. Divide the value so that it mainly ranges from 0 to about 1 or 1.5.</description>
+
+				<type>float</type>
+
+				<value>0.5</value>
+			</parameter>
+
+		<parameter>
+			<name>( Compatibility )</name>
+			<property>checkbox</property>
+			<description>Here you will find options that have changed, but you can still achieve the previous effect.</description>
+
+			<variable>__</variable>
+		</parameter>
+            <parameter>
+                <name>Is Fusion Version Older Than 296?</name>
+                <variable>_Is_Pre_296_Build</variable>
+                <property>checkbox</property>
+                
+                <description>(Only applies to Android and iOS!) This variable determines whether to use the newer background formatting. In Clickteam Fusion 2.5 for build 295.10 and earlier, the background texture was flipped along the Y axis, but this was changed in build 296.1. Check this option if you are using an older build!</description>
+
+                <type>int</type>
+
+                <value>0</value>
+            </parameter>
+
+        <parameter>
+            <name>/* */</name>
+            <property>checkbox</property>
+            <variable>___</variable>
+        </parameter>
+
+</effect>

@@ -1,5 +1,5 @@
 <effect>
-	<Name>Krita Interpolation (Background)</Name>
+	<name>Krita Interpolation (Background)</name>
 		<description>(The effect comes from the Krita) Subtract 0.5f by 1/4 of cosine of base layer subtracted by 1/4 of cosine of blend layer assuming 0-1 range. The result is similar to Allanon mode (Blend Average), but with more contrast and functional difference to 50% opacity.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

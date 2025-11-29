@@ -1,5 +1,5 @@
 <effect>
-	<Name>Premultiplied To Straight Alpha (Texture)</Name>
+	<name>Premultiplied To Straight Alpha (Texture)</name>
 		<description>This shader converts Premultiplied Alpha to Straight Alpha.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

@@ -1,5 +1,5 @@
 <effect>
-	<Name>Photoshop Lighten (Background)</Name>
+	<name>Photoshop Lighten (Background)</name>
 		<description>(The effect comes from the Photoshop) Looks at the color information in each channel and selects the base or blend color - whichever is lighter - as the result color. Pixels darker than the blend color are replaced, and pixels lighter than the blend color do not change</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

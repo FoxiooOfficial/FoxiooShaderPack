@@ -1,5 +1,5 @@
 <effect>
-	<Name>Windows Aero (Background)</Name>
+	<name>Windows Aero (Background)</name>
 		<description>Shader simulates the Windows 7/Vista window effect.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

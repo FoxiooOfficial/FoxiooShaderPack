@@ -1,5 +1,5 @@
 <effect>
-	<Name>Chromatic Aberration (Switch)</Name>
+	<name>Chromatic Aberration (Switch)</name>
 		<description>This effect allows you to move, scale, and (for DX11 and OpenGL ES only) rotate colors separately.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

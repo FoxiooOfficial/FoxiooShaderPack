@@ -1,5 +1,5 @@
 <effect>
-	<Name>Segmented Liquid-Crystal Display (Switch)</Name>
+	<name>Segmented Liquid-Crystal Display (Switch)</name>
 		<description>The shader simulates the effect of a segmented liquid crystal display.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

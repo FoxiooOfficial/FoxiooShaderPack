@@ -1,5 +1,5 @@
 <effect>
-	<Name>Photoshop Darker Color (Background)</Name>
+	<name>Photoshop Darker Color (Background)</name>
 		<description>(The effect comes from the Photoshop) Compares the total of all channel values for the blend and base color and displays the lower value color. Darker Color does not produce a third color, which can result from the Darken blend, because it chooses the lowest channel values from both the base and the blend color to create the result color</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

@@ -1,5 +1,5 @@
 <effect>
-	<Name>End Portal (Switch)</Name>
+	<name>End Portal (Switch)</name>
 		<description>This shader recreates the end portal effect from Minecraft.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

@@ -1,5 +1,5 @@
 <effect>
-	<Name>Addition With Hyperbolic Secant (Background)</Name>
+	<name>Addition With Hyperbolic Secant (Background)</name>
 		<description>Base and blend colors are subtracted after which the colors are reduced by the hyperbolic secant function.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

@@ -1,5 +1,5 @@
 <effect>
-	<Name>Simulation Of Deuteranomaly (Switch)</Name>
+	<name>Simulation Of Deuteranomaly (Switch)</name>
 		<description>Shader simulates deuteranomal color blindness.</description> 
 			<author>Foxioo (Special thanks to: MaPePeR)</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

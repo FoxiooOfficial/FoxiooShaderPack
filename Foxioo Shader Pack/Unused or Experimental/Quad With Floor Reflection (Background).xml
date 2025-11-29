@@ -1,5 +1,5 @@
 <effect>
-	<Name>Quad With Floor Reflections (Background)</Name>
+	<name>Quad With Floor Reflections (Background)</name>
 		<description>This shader is a modification of the Quad shader created by Adam Hawker (aka Sketchy / MuddyMole) however, this shader contains “pseudo reflections” which emit reflections on the metal surface.</description> 
 			<author>Foxioo and Adam Hawker (aka Sketchy / MuddyMole)</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

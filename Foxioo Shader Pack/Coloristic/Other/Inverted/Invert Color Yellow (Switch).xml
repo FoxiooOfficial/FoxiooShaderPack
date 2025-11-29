@@ -1,5 +1,5 @@
 <effect>
-	<Name>Invert Color Yellow (Switch)</Name>
+	<name>Invert Color Yellow (Switch)</name>
 		<description>This shader reverses the colors that produce the color yellow.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

@@ -1,5 +1,5 @@
 <effect>
-	<Name>Oscillation (Switch)</Name>
+	<name>Oscillation (Switch)</name>
 		<description>This effect ripples the texture like the backgrounds in the SNES game EarthBound.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

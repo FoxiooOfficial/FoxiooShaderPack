@@ -1,5 +1,5 @@
 <effect>
-	<Name>Flip (Switch)</Name>
+	<name>Flip (Switch)</name>
 		<description>This effect allows you to flip the X and Y axes of texture separately.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

@@ -1,5 +1,5 @@
 <effect>
-	<Name>Freeze (Switch)</Name>
+	<name>Freeze (Switch)</name>
 		<description>The shader gives a freezing effect.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

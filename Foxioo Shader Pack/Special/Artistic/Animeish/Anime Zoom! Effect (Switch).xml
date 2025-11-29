@@ -1,5 +1,5 @@
 <effect>
-	<Name>Anime Zoom! Effect (Switch)</Name>
+	<name>Anime Zoom! Effect (Switch)</name>
 		<description>This shader is a port of the "Actionlines Comic – Anime" shader created by EriNixie to works on Fusion. It gives a characteristic zoom effect from Anime.</description> 
 			<author>Foxioo, (Orginal shader created by EriNixie. https://godotshaders.com/shader/actionlines-comic-anime/)</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

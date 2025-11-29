@@ -1,5 +1,5 @@
 <effect>
-	<Name>Logical NAND (Background)</Name>
+	<name>Logical NAND (Background)</name>
 		<description>This shader is a modification of the "AND" shader created by Cazra. The colors are bit by a logic gate NAND for base and blend colors.</description> 
 			<author>Foxioo, Cazra</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

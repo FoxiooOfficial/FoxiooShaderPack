@@ -1,5 +1,5 @@
 <effect>
-	<Name>Photoshop Screen (Background)</Name>
+	<name>Photoshop Screen (Background)</name>
 		<description>(The effect comes from the Photoshop) Looks at each channels color information and multiplies the inverse of the blend and base colors. The result color is always a lighter color. Screening with black leaves the color unchanged. Screening with white produces white. The effect is similar to projecting multiple photographic slides on top of each other</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

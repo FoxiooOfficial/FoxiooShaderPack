@@ -1,5 +1,5 @@
 <effect>
-	<Name>Burn (Switch)</Name>
+	<name>Burn (Switch)</name>
 		<description>The shader gives a burning effect.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
@@ -50,10 +50,10 @@
 			</parameter>
 
 			<parameter>
-				<name>Ice Texutre</name>
-				<varible>_Texture_Ice</varible>
-				<code>_Texture_Ice</code>			
-				<description>This variable is responsible for the texture that is supposed to give the freezing effect.</description>			
+				<name>Fire Texutre</name>
+				<varible>_Texture_Fire</varible>
+				<code>_Texture_Fire</code>			
+				<description>This variable is responsible for the texture that is supposed to give the burning effect.</description>			
 				<type>image</type>
 				<property>image</property>			
 				<value>Fire.png</value>

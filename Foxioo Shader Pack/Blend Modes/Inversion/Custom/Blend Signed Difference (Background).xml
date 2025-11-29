@@ -1,5 +1,5 @@
 <effect>
-	<Name>Blend Signed Difference (Background)</Name>
+	<name>Blend Signed Difference (Background)</name>
 		<description>The blend color is subtracted from the base color, then this is divided by 2, and 0.6 is added at the very end</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

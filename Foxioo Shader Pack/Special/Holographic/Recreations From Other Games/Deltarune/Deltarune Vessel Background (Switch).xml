@@ -1,5 +1,5 @@
 <effect>
-	<Name>Deltarune Vessel Background (Switch)</Name>
+	<name>Deltarune Vessel Background (Switch)</name>
 		<description>This shader recreates the background effect used in the creation of Vessel in DELTARUNE (Chapter 1) created by Toby Fox.</description> 
 			<author>Foxioo, Toby Fox</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

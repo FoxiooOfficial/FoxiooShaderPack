@@ -1,5 +1,5 @@
 <effect>
-	<Name>Blend Inverted (Background)</Name>
+	<name>Blend Inverted (Background)</name>
 		<description>Shader inverts the base allowing you to also take into account the colors of the blend</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>

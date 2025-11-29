@@ -1,0 +1,145 @@
+<effect>
+	<name>Quad Colored Vertex (Texture)</name>
+		<description>This shader is a modification of the Quad shader created by Adam Hawker (aka Sketchy / MuddyMole) and colors each vertex with its own color. (Mainly intended for Tails7)</description> 
+			<author>Foxioo and Adam Hawker (aka Sketchy / MuddyMole)</author>
+			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>0</BackgroundTexture>
+			
+		<parameter>
+			<name>/* Foxioo Quad Colored Vertex (Texture) | 1.1 (18.11.2025) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>This shader is a modification of the Quad shader created by Adam Hawker (aka Sketchy / MuddyMole) and colors each vertex with its own color. (Mainly intended for Tails7)</description>
+		</parameter>
+
+			<parameter>
+				<name>Color A (-X -Y)</name>
+				<variable>_ColorA</variable>
+				<description>Color of point A (Top left point)</description>
+				<type>int_float4</type>
+				<property>color</property>
+
+				<value>255</value>
+			</parameter>
+			
+			<parameter>
+				<name>Color B (+X -Y)</name>
+				<variable>_ColorB</variable>
+				<description>Color of point B (Top right point)</description>
+				<type>int_float4</type>
+				<property>color</property>
+
+				<value>65280</value>
+			</parameter>
+
+			<parameter>
+				<name>Color C (+X +Y)</name>
+				<variable>_ColorC</variable>
+				<description>Color of point C (Bottom right point)</description>
+				<type>int_float4</type>
+				<property>color</property>
+
+				<value>16711680</value>
+			</parameter>
+
+			<parameter>
+				<name>Color D (-X +Y)</name>
+				<variable>_ColorD</variable>
+				<description>Color of point D (Bottom left point)</description>
+				<type>int_float4</type>
+				<property>color</property>
+
+				<value>16777215</value>
+			</parameter>
+
+			<parameter>
+				<name>xA (-X -Y)</name>
+				<code>xA</code>
+				<variable>xA</variable>
+				<description>X of point A (Top left point)</description>
+				<type>float</type>
+				<property>edit</property>
+				<value>0</value>
+				<preview_value>0</preview_value>
+		</parameter>
+		<parameter>
+				<name>yA (-X -Y)</name>
+				<code>yA</code>
+				<variable>yA</variable>
+				<description>Y of point A (Top left point)</description>
+				<type>float</type>
+				<property>edit</property>
+				<value>0</value>
+				<preview_value>0</preview_value>
+		</parameter>
+		<parameter>
+				<name>xB (+X -Y)</name>
+				<code>xB</code>
+				<variable>xB</variable>
+				<description>X of point B (Top right point)</description>
+				<type>float</type>
+				<property>edit</property>
+				<value>1</value>
+				<preview_value>0.75</preview_value>
+		</parameter>
+		<parameter>
+				<name>yB (+X -Y)</name>
+				<code>yB</code>
+				<variable>yB</variable>
+				<description>Y of point B (Top right point)</description>
+				<type>float</type>
+				<property>edit</property>
+				<value>0</value>
+				<preview_value>0.25</preview_value>
+		</parameter>
+		<parameter>
+				<name>xC (+X +Y)</name>
+				<code>xC</code>
+				<variable>xC</variable>
+				<description>X of point C (Bottom right point)</description>
+				<type>float</type>
+				<property>edit</property>
+				<value>1</value>
+				<preview_value>1</preview_value>
+		</parameter>
+		<parameter>
+				<name>yC (+X +Y)</name>
+				<code>yC</code>
+				<variable>yC</variable>
+				<description>Y of point C (Bottom right point)</description>
+				<type>float</type>
+				<property>edit</property>
+				<value>1</value>
+				<preview_value>1</preview_value>
+		</parameter>
+		<parameter>
+				<name>xD (-X +Y)</name>
+				<code>xD</code>
+				<variable>xD</variable>
+				<description>X of point D (Bottom left point)</description>
+				<type>float</type>
+				<property>edit</property>
+				<value>0</value>
+				<preview_value>0.25</preview_value>
+		</parameter>
+		<parameter>
+				<name>yD (-X +Y)</name>
+				<code>yD</code>
+				<variable>yD</variable>
+				<description>Y of point D (Bottom left point)</description>
+				<type>float</type>
+				<property>edit</property>
+				<value>1</value>
+				<preview_value>0.75</preview_value>
+		</parameter>
+
+		<parameter>
+			<name>/*  */</name>
+			<property>checkbox</property>
+
+			<variable>__</variable>
+		</parameter>
+</effect>
