@@ -3,8 +3,9 @@
 
 # ✨ December 22 2025 | Release ID: 11
 ## 📝 Notes (Abbreviated) 
-- The number of shaders has been increased from 327 to 300: **“Composite Video Compression (Texture)”**, “**Composite Video Compression (Background)”**, **“Liquid Glass Blurry (Background)”**.
-- The repository will now feature examples of how to use the effects; there are currently several of them.
+- The number of shaders has been increased from 327 to 330.
+- Added: "Composite Video Compression (Texture)", "Composite Video Compression (Background)", "Liquid Glass Blurry (Background)".
+- The repository will now feature examples of how to use the effects; there are currently several of them. You can find them here: https://github.com/FoxiooOfficial/FoxiooShaderPack/tree/main/Examples/Foxioo%20Shader%20Pack
 
 ---
 
