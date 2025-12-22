@@ -15,11 +15,11 @@
 
 ___
 
-🥳 The package currently has **327 Shaders** 🎉
+🥳 The package currently has **330 Shaders** 🎉
 
-🗓️ Last updated description dated **November 29, 2025 (UTC+01:00)**
+🗓️ Last updated description dated **December 22, 2025 (UTC+01:00)**
 
-🗓️ Last update of shaders from **November 29, 2025 (UTC+01:00)**
+🗓️ Last update of shaders from **December 22, 2025 (UTC+01:00)**
 
 ℹ️ Shaders currently work under:
 - Windows **(Direct3D 9, Direct3D 11 Non-premultiplied Alpha, Direct3D 11 Premultiplied Alpha)**

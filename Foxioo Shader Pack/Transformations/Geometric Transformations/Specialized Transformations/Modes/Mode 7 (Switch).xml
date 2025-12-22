@@ -44,7 +44,7 @@
 			<parameter>
 				<name>Position Z</name>
 				<variable>_PosZ</variable>
-				<description>*Variable that specifies the position of the texture in the Z-axis. (Otherwise known as _OffsetY).</description> 
+				<description>A variable that specifies the position of the texture in the Z-axis.</description> 
 
 				<type>float</type>
 
