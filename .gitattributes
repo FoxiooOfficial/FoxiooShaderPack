@@ -2,3 +2,5 @@
 *.fxmo linguist-language=GLSL
 *.fxh5 linguist-language=GLSL
 *.fx linguist-language=HLSL
+*.fxc linguist-language=HLSL
+*.hlsl linguist-language=HLSL
