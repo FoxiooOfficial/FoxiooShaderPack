@@ -1,0 +1,135 @@
+/***********************************************************/
+
+/* Autor shader: Foxioo */
+/* Version shader: 1.0 (25.12.2025) */
+/* My GitHub: https://github.com/FoxiooOfficial */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_vertex
+
+#ifdef GL_ES
+ precision mediump float;
+#endif
+uniform mat4 transformMatrix;
+uniform mat4 projectionMatrix;
+
+attribute vec4 position;
+attribute vec2 texCoord;
+varying vec2 In;
+
+void main(void)
+{
+	In = texCoord;
+	gl_Position = projectionMatrix * transformMatrix * position;
+}
+
+//@End
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+#ifdef GL_ES
+ precision mediump float;
+#endif
+
+varying vec2 In;
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+uniform sampler2D imgTexture;
+//uniform sampler2D bckgTexture;
+
+uniform lowp vec4 blendColor;
+uniform float fPixelWidth;
+uniform float fPixelHeight;
+
+/***********************************************************/
+/* Varibles */
+/***********************************************************/
+
+uniform float _Mixing;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+void main(void)
+{
+    vec4 _Render_Texture = texture2D(imgTexture, In) * blendColor;
+    
+    vec2 _In = In;
+
+        _In *= 1.12;
+        _In.x -= 0.05;
+        vec4 _Result = vec4(_In, 0.0, 1.0);
+
+        vec2 _Center = vec2(_In * 2.0) - 1.2;
+        float _Cirl = sqrt(_Center.x * _Center.x + _Center.y * _Center.y);
+
+        
+        vec2 _CenterTopShadow = vec2(_In * 2.0) - vec2(1.5, 0.3);
+            float _CenterTopShadowCirl = sqrt(_CenterTopShadow.x * _CenterTopShadow.x + _CenterTopShadow.y * _CenterTopShadow.y);
+
+        vec2 _CenterBottomShadow = vec2(_In * 2.0) - vec2(1.5, 1.3);
+            float _CenterBottomShadowCirl = sqrt(_CenterBottomShadow.x * _CenterBottomShadow.x + _CenterBottomShadow.y * _CenterBottomShadow.y);
+
+        if(_In.y > 0.55) 
+        _Cirl *= mix(0.96, 1.0, 1.0 - pow(_In.y - 0.55, 0.2));
+
+            vec3 _TopColor = mix(vec3(0.9921, 0.79215, 0.0), vec3(0.69803, 0.56078, 0.0), _CenterTopShadowCirl * _CenterTopShadowCirl);
+            float _Depth = pow(abs(0.55 - _In.y), 3.0);
+            vec3 _BottomColor = mix(vec3(1.0, 0.9176, 0.0), vec3(0.70196, 0.64313, 0.0), (_CenterBottomShadowCirl));
+            _BottomColor *= pow(_Depth, 0.001);
+
+            _Result.a = float(_Cirl < 0.90);
+            _Result.rgb = mix(_TopColor, _BottomColor * 1.1, float(_In.y > 0.55));
+
+            vec2 _Fish1_In = _In;
+                _Fish1_In.x -= 0.27;
+                _Fish1_In.y += 0.65;
+                _Fish1_In.x *= 1.1;
+                float _Fish1 = ((_Fish1_In.y + (pow(_Fish1_In.x, 0.15 - pow(_Fish1_In.x, 3.0)) * (1.0 - _Fish1_In.x * 1.2)) * 0.5) * float(0.5 > 0.5)) * float(_Fish1_In.x > 0.0) * float(_Fish1_In.y < 1.0) * float(_Fish1_In.x < 0.6);
+                _Result = mix(_Result,vec4(_TopColor, 1.0), _Fish1);
+
+            //////////////////////////////////////
+            vec2 _Center2 = ((vec2(_In * 2.0) - 1.1) / vec2(0.2, 0.3)) + vec2(4.3, 0.0);
+            _Center2.x += _In.y;
+            vec2 _CenterTailDist = ((vec2(_In * 2.0) - 1.1) / vec2(0.2, 0.3)) + vec2(4.3, 0.5);
+            float _CenterTail = sqrt(_CenterTailDist.x * _CenterTailDist.x + _CenterTailDist.y * _CenterTailDist.y);
+            vec4 _TailColor = mix(vec4(0.69803, 0.56078, 0.0, 1.0), vec4(1.0, 0.9176, 0.0, 1.0), 1.0 - _CenterTail * 0.5);
+
+            float _Fish2 = float(sqrt(_Center2.x * _Center2.x + _Center2.y * _Center2.y) < 0.9);
+            _Result = mix(_Result, _TailColor, _Fish2);
+
+            //////////////////////////////////////
+            vec2 _Center3 = ((vec2(_In * 2.0) - 1.1) / vec2(0.4 / _In.y * 0.5, 0.3)) + vec2(0.35, _In.x * 0.5 - 0.5);
+            float _Fish3 = sqrt(_Center3.x * _Center3.x + _Center3.y * _Center3.y);
+
+            vec2 _Center3Mid = _Center3 - vec2(0.1, -0.2);
+            float _FishMid = sqrt(_Center3Mid.x * _Center3Mid.x + _Center3Mid.y * _Center3Mid.y);
+            vec3 _MidColor = mix(vec3(0.9921, 0.79215, 0.0), vec3(0.69803, 0.56078, 0.0), _FishMid * _FishMid);
+            _Result.rgb = mix(_Result.rgb, _MidColor, float(_Fish3 < 0.9));
+    
+            //////////////////////////////////////
+            vec2 _EyeCenter = (vec2(_In * 2.0) - 1.1) + vec2(-0.57, 0.2);
+            float _Eye = sqrt(_EyeCenter.x * _EyeCenter.x + _EyeCenter.y * _EyeCenter.y);
+
+            vec2 _EyeBloomCenter = (vec2(_In * 2.0) - 1.1) + vec2(-0.54, 0.23);
+            float _EyeBloomCirl = sqrt(_EyeBloomCenter.x * _EyeBloomCenter.x + _EyeBloomCenter.y * _EyeBloomCenter.y) * 7.0;
+
+                vec3 _EyeBloom = mix(vec3( 0.6, 0.6, 0.6), vec3(0.1137, 0.1137, 0.1137), pow(_EyeBloomCirl, 0.25));
+                _Result.rgb = mix(_Result.rgb, _EyeBloom, float(_Eye < 0.11));
+        
+        _Result.a *= _Render_Texture.a;
+        _Result = mix(_Render_Texture, _Result, _Mixing);
+
+    gl_FragColor = _Result;
+}
+
+//@End

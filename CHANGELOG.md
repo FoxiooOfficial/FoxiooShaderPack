@@ -1,6 +1,13 @@
 # ℹ️ Change Log
 **All notable changes to this project will be documented in this file.**
 
+# ✨ December 31 2025 | Release ID: 12
+## 📝 Notes (Abbreviated) 
+- The number of shaders has been increased from 330 to 332.
+- Added: "Water Reflected (Background)" and "Fish (Texture)".
+- Two examples have also been added: "ChurchProphecyPanel.mfa" and "ReflectionTest.mfa"
+
+
 # ✨ December 22 2025 | Release ID: 11
 ## 📝 Notes (Abbreviated) 
 - The number of shaders has been increased from 327 to 330.
