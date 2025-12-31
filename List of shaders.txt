@@ -1,4 +1,4 @@
-Here is the list of all shaders from the December 31, 2025 (UTC+0100) release.
+Here is the list of all shaders from the January 01, 2026 (UTC+0100) release.
 
 1: | Addition (Background)
 2: | Addition With Hyperbolic Cosinus (Background)
@@ -251,7 +251,7 @@ Here is the list of all shaders from the December 31, 2025 (UTC+0100) release.
 249: | Normal Map (Switch)
 250: | Sharpness (Switch)
 251: | MS Paint (Switch)
-252: | Aura (Switch)
+252: | Aura (Background)
 253: | Burn (Switch)
 254: | Freeze (Switch)
 255: | Frutiger Aero (Background)
