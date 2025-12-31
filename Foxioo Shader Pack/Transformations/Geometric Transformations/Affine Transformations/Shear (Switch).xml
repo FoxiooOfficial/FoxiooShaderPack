@@ -1,5 +1,5 @@
 <effect>
-	<name>Shaer (Switch)</name>
+	<name>Shear (Switch)</name>
 		<description>An effect that shifts the X-axis relative to the Y-axis and the Y-axis relative to the X-axis.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 
 		<parameter>
-			<name>/* Foxioo Shaer (Switch) Shader | 1.1 (18.10.2025) */</name>
+			<name>/* Foxioo Shear (Switch) Shader | 1.1 (18.10.2025) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

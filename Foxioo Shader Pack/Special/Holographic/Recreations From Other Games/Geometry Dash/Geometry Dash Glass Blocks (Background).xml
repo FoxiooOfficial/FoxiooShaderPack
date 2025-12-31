@@ -1,5 +1,5 @@
 <effect>
-	<name>Geometry Dash Glass Block (Background)</name>
+	<name>Geometry Dash Glass Blocks (Background)</name>
 		<description>The shader is an attempt to recreate the glass block effect from the game Geometry Dash, created by RobTop.</description> 
 			<author>Foxioo, RobTop</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Geometry Dash Glass Block (Background) Shader | 1.0 (28.11.2025) */</name>
+			<name>/* Foxioo Geometry Dash Glass Blocks (Background) Shader | 1.0 (28.11.2025) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

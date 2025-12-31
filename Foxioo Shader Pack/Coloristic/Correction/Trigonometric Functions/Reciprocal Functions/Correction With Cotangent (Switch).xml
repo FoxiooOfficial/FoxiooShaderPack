@@ -1,5 +1,5 @@
 <effect>
-	<name>Correction With Cotanget (Switch)</name>
+	<name>Correction With Cotangent (Switch)</name>
 		<description>Base or blend colors are reduced by the cotanget function.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Correction With Cotanget (Switch) Shader | 1.2 (18.10.2025) */</name>
+			<name>/* Foxioo Correction With Cotangent (Switch) Shader | 1.2 (18.10.2025) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

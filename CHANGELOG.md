@@ -1,6 +1,22 @@
 # ℹ️ Change Log
 **All notable changes to this project will be documented in this file.**
 
+# ✨ January 1, 2026 (Happy new year!) | Release ID: 13 / Hotfix
+## 📝 Notes (Abbreviated) 
+- Correction of numerous typos in shader names for:
+- Addition With Hyperbolic Cotangent (Background) -> Division With Hyperbolic Cotangent (Background)
+- Addition With Hyperbolic Secant (Background) -> Division With Hyperbolic Secant (Background)
+- Addition With Hyperbolic Cotangent (Background) -> Subtraction With Hyperbolic Cotangent (Background)
+- Addition With Hyperbolic Secant (Background) -> Subtraction With Hyperbolic Secant (Background)
+- Shaer (Switch) -> Shear (Switch)
+- Foilage Wind (Switch) -> Foliage Wind (Switch)
+- Correction With Cotanget (Background) -> Correction With Cotangent (Background)
+- Conversion To CYMK (Switch) -> Conversion To CYMK (Switch)
+- Geometry Dash Glass Block (Background) -> Geometry Dash Glass Blocks (Background)
+- Unity Bloom (Texutre+Background) -> Unity Bloom (Texture+Background)
+- Aura (Switch) -> Aura (Background)
+- End Portal (Switch) -> End Portal (Texture)
+
 # ✨ December 31 2025 | Release ID: 12
 ## 📝 Notes (Abbreviated) 
 - The number of shaders has been increased from 330 to 332.

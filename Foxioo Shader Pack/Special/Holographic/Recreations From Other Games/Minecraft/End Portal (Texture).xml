@@ -1,5 +1,5 @@
 <effect>
-	<name>End Portal (Switch)</name>
+	<name>End Portal (Texture)</name>
 		<description>This shader recreates the end portal effect from Minecraft.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
@@ -7,7 +7,7 @@
 				<BackgroundTexture>0</BackgroundTexture>
 
 		<parameter>
-			<name>/* Foxioo End Portal (Switch) Shader | 1.1 (18.10.2025) */</name>
+			<name>/* Foxioo End Portal (Texture) Shader | 1.1 (18.10.2025) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

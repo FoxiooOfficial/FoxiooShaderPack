@@ -1,13 +1,13 @@
 <effect>
-	<name>Conversion To CYMK (Switch)</name>
-		<description>This shader converts colors from the RGB standard to the CYMK standard.</description> 
+	<name>Conversion To CMYK (Switch)</name>
+		<description>This shader converts colors from the RGB standard to the CMYK standard.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Conversion To YUV (Switch) Shader | 1.2 (18.10.2025) */</name>
+			<name>/* Foxioo Conversion To CMYK (Switch) Shader | 1.2 (18.10.2025) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
