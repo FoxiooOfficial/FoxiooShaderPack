@@ -2,7 +2,7 @@
 	<name>Quad Colored Vertex (Texture) [Legacy]</name>
 		<description>This shader is a modification of the Quad shader created by Adam Hawker (aka Sketchy / MuddyMole) and colors each vertex with its own color. (Mainly intended for Tails7) (This version uses older texCoord calculations, which have the advantage of being less demanding on the GPU, but have the disadvantage of causing artifacts.)</description> 
 			<author>Foxioo and Adam Hawker (aka Sketchy / MuddyMole)</author>
-			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>0</BackgroundTexture>
 			

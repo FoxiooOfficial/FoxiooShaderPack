@@ -1,8 +1,8 @@
 <effect>
 	<name>Logical XIMPLY (Background)</name>
-		<description>This shader is a modification of the "AND" shader created by Cazra. The colors are bit by a logic gate XIMPLY for base and blend colors.</description> 
+		<description>This shader is a modification of the "AND" shader created by Cazra. The colors are bit by a logic gate XIMPLY (CONVERSE) for base and blend colors.</description> 
 			<author>Foxioo, Cazra</author>
-			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 			
@@ -19,7 +19,7 @@
 				<name>Mixing</name>
 				<variable>_Mixing</variable>
 				
-				<description>This shader is a modification of the "AND" shader created by Cazra. The colors are bit by a logic gate XIMPLY for base and blend colors.</description>
+				<description>This shader is a modification of the "AND" shader created by Cazra. The colors are bit by a logic gate XIMPLY (CONVERSE) for base and blend colors.</description>
 
 				<type>float</type>
 

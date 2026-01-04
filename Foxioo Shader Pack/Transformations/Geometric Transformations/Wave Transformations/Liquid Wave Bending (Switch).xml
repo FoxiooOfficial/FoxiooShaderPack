@@ -2,7 +2,7 @@
 	<name>Liquid Wave Bending (Switch)</name>
 		<description>The shader modifies the texture coordinates to give an effect similar to a liquid wave pattern.</description> 
 			<author>Foxioo</author>
-			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 			

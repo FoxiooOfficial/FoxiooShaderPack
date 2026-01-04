@@ -2,7 +2,7 @@
 	<name>Photoshop Hard Light (Background)</name>
 		<description>(The effect comes from the Photoshop) Multiplies or screens the colors, depending on the blend color. The effect is similar to shining a harsh spotlight on the image. If the blend color (light source) is lighter than 50% gray, the image is lightened, as if it were screened. This is useful for adding highlights to an image. If the blend color is darker than 50% gray, the image is darkened, as if it were multiplied. This is useful for adding shadows to an image. Painting with pure black or white results in pure black or white</description> 
 			<author>Foxioo</author>
-			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 

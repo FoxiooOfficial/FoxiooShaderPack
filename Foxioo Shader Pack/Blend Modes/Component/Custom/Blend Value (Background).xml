@@ -2,7 +2,7 @@
 	<name>Blend Value (Background)</name>
 		<description>Creates a result color with the hue and saturation of the base color and the value (brightness) of the blend color. This mode creates an effect similar to the inverse of the Color mode, but operates based on value rather than luminance.</description> 
 			<author>Foxioo</author>
-			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 			

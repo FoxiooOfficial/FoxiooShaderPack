@@ -2,7 +2,7 @@
 	<name>Mangaish (Switch)</name>
 		<description>(Special thanks to KYwoo for the idea and telling me what to improve for a better effect) The shader changes the colors from the texture, giving the effect of a manga image.</description> 
 			<author>Foxioo, KYwoo</author>
-			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 			

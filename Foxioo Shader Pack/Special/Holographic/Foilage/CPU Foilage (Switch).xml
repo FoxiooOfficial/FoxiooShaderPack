@@ -2,7 +2,7 @@
 	<name>CPU Foilage (Switch)</name>
 		<description>This shader gives a foil effect similar to those on the CPU. This shader was created at the request of GlitchyDust.</description> 
 			<author>Foxioo</author>
-			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 			

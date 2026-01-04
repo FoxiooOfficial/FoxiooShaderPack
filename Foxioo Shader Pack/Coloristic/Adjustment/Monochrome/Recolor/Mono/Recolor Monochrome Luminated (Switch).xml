@@ -2,7 +2,7 @@
 	<name>Recolor Monochrome Luminated (Switch)</name>
 		<description>The effect converts colors to monochrome and multiplies them by a specified color. The effect also takes luminance into account.</description> 
 			<author>Foxioo</author>
-			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 			

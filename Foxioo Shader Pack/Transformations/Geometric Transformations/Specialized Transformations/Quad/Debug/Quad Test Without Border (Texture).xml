@@ -2,7 +2,7 @@
 	<name>Quad Test Without Border (Texture)</name>
 		<description>This shader is a modification of the Quad shader created by Adam Hawker (aka Sketchy / MuddyMole ) and does not remove texture border for testing purposes. (Mainly intended for Tails7)</description> 
 			<author>Foxioo and Adam Hawker (aka Sketchy / MuddyMole)</author>
-			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>0</BackgroundTexture>
 			

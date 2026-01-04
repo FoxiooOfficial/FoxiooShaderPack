@@ -2,7 +2,7 @@
 	<name>Plants VS Zombies Adventures Flower Cooldown (Texture)</name>
 		<description>The shader emits the cooldown effect of flowers from the game Plants VS Zombies Adventure, dividing the texture into two parts so that the gray level and brightness of each part can be changed separately.</description> 
 			<author>Foxioo (Made for speedinggames44)</author>
-			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>0</BackgroundTexture>
 			

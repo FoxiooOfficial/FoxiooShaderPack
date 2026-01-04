@@ -2,7 +2,7 @@
 	<name>Krita Hard Mix Softer (Background)</name>
 		<description>(The effect comes from the Krita) This is the Hard Mix blending mode as it is implemented in Photoshop for texturing brushes. It produces softer edges than the normal Hard Mix (Photoshop). This is like the Inverse Subtract mode but the two terms are scaled up to increase the contrast. This is not really a Hard Mix mode in the sense that it doesn’t choose between a result or another based on a threshold, although in most cases the result looks like the normal Hard Mix (Photoshop) but with softer edges.</description> 
 			<author>Foxioo</author>
-			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 			

@@ -15,17 +15,20 @@
 
 ___
 
-🥳 The package currently has **332 Shaders** 🎉
+🥳 The package currently has **350 Shaders** 🎉
 
-🗓️ Last updated description dated **December 31, 2025 (UTC+01:00)**
+🗓️ Last updated description dated **January 04, 2026 (UTC+01:00)**
 
-🗓️ Last update of shaders from **December 31, 2025 (UTC+01:00)**
+🗓️ Last update of shaders from **January 04, 2026 (UTC+01:00)**
 
-ℹ️ Shaders currently work under:
+✅ Shaders work on:
 - Windows **(Direct3D 9, Direct3D 11 Non-premultiplied Alpha, Direct3D 11 Premultiplied Alpha)**
 - Android
 - iOS
-- MacOS **(Some effects may have a problem)**
+- macOS **(Some effects may have a problem)**
+❌ Shaders do NOT work on:
+- Windows **(Direct3D 8)** / *No information on how to make a custom effect work in this Display Mode. (I know it has to be written in Assembler, but there are no instructions on whether it should be a separate file, and if so, what extension it should have, etc.)*
+- HTML5 / *Currently, the HTML5 exporter does not support effects.*
 
 **The whole thing is based on MIT License**
 

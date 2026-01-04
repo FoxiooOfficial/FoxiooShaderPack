@@ -2,7 +2,7 @@
 	<name>Krita Freeze (Background)</name>
 		<description>(The effect comes from the Krita) Inversion of the Reflect blending mode.</description> 
 			<author>Foxioo</author>
-			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 			

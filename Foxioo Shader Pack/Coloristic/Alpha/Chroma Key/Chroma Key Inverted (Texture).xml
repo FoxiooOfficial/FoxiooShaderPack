@@ -2,7 +2,7 @@
 	<name>Chroma Key Color Inverted (Texture)</name>
 		<description>This shader keep the selected color causing the color to be visible but others color are invisible.</description> 
 			<author>Foxioo</author>
-			<copyright>Copyright (C) 2024-2025 Foxioo</copyright>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 			
 		<parameter>
