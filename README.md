@@ -26,6 +26,7 @@ ___
 - Android
 - iOS
 - macOS **(Some effects may have a problem)**
+
 ❌ Shaders do NOT work on:
 - Windows **(Direct3D 8)** / *No information on how to make a custom effect work in this Display Mode. (I know it has to be written in Assembler, but there are no instructions on whether it should be a separate file, and if so, what extension it should have, etc.)*
 - HTML5 / *Currently, the HTML5 exporter does not support effects.*
