@@ -1,6 +1,29 @@
 # ℹ️ Change Log
 **All notable changes to this project will be documented in this file.**
 
+# ✨ January 4, 2026 | Release ID: 14
+## 📝 Notes (Abbreviated) 
+- Updated README appearance
+- The number of shaders has been increased from 332 to 350 (Added):
+- **"Logical ARLEFTSHIFT Base (Background)"**
+- **"Logical ARLEFTSHIFT Blend (Background)"**
+- **"Logical ARRIGHTSHIFT Base (Background)"**
+- **"Logical ARRIGHTSHIFT Blend (Background)"**
+- **"Logical ROTATELEFT Base (Background)"**
+- **"Logical ROTATELEFT Blend (Background)"**
+- **"Logical ROTATERIGHT Base (Background)"**
+- **"Logical ROTATERIGHT Blend (Background)"**
+- **"Logical LEFTSHIFT Base (Background)"**
+- **"Logical LEFTSHIFT Blend (Background)"**
+- **"Logical RIGHTSHIFT Base (Background)"**
+- **"Logical RIGHTSHIFT Blend (Background)"**
+- **"Comparison Different (Background)"**
+- **"Comparison Equal (Background)"**
+- **"Comparison Greater (Background)"**
+- **"Comparison Greater Equal (Background)"**
+- **"Comparison Less (Background)"**
+- **"Comparison Less Equal (Background)"**
+
 # ✨ January 1, 2026 (Happy new year!) | Release ID: 13 / Hotfix
 ## 📝 Notes (Abbreviated) 
 - Correction of numerous typos in shader names for:
