@@ -36,7 +36,6 @@
 - **"Comparison Less (Background)"**
 - **"Comparison Less Equal (Background)"**
 
-
 # ✨ January 1, 2026 (Happy new year!) | Release ID: 13 / Hotfix
 ## 📝 Notes (Abbreviated) 
 - Correction of numerous typos in shader names for:
