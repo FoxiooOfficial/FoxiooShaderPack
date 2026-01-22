@@ -1,0 +1,217 @@
+<effect>
+	<name>Tails7 Polygon Colored Vertex With Subtraction (Texture) [Gouraud Shading]</name>
+		<description>The shader transforms the texture to give a polygon effect based on points A, B, C, and D also subtracts the color of the polygon by the colors assigned to the points [Gouraud Shading]. (Mainly intended for Tails7)</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>0</BackgroundTexture>
+			
+		<parameter>
+			<name>/* Foxioo Tails7 Polygon Colored Vertex With Subtraction (Texture) [Gouraud Shading] | 1.0 (12.01.2026) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>The shader transforms the texture to give a polygon effect based on points A, B, C, and D also subtracts the color of the polygon by the colors assigned to the points [Gouraud Shading]. (Mainly intended for Tails7)</description>
+		</parameter>
+
+			<parameter>
+				<name>Color A (-X -Y)</name>
+				<variable>_ColorA</variable>
+				<description>Color of point A (Top left point)</description>
+				<type>int_float4</type>
+				<property>color</property>
+
+				<value>255</value>
+			</parameter>
+			
+			<parameter>
+				<name>Color B (+X -Y)</name>
+				<variable>_ColorB</variable>
+				<description>Color of point B (Top right point)</description>
+				<type>int_float4</type>
+				<property>color</property>
+
+				<value>65280</value>
+			</parameter>
+
+			<parameter>
+				<name>Color C (+X +Y)</name>
+				<variable>_ColorC</variable>
+				<description>Color of point C (Bottom right point)</description>
+				<type>int_float4</type>
+				<property>color</property>
+
+				<value>16711680</value>
+			</parameter>
+
+			<parameter>
+				<name>Color D (-X +Y)</name>
+				<variable>_ColorD</variable>
+				<description>Color of point D (Bottom left point)</description>
+				<type>int_float4</type>
+				<property>color</property>
+
+				<value>16777215</value>
+			</parameter>
+			
+			<parameter>
+				<name>Reversed screen width</name>
+				<code>_Width</code>
+				<variable>_Width</variable>
+				<description>This variable must store (1.0 / Frame Width) to set the error threshold for the X axis so that there are fewer artifacts.</description>
+				<type>float</type>
+				<property>edit</property>
+				<value>0.0</value>
+			</parameter>
+
+			<parameter>
+				<name>Reversed screen height</name>
+				<code>_Height</code>
+				<variable>_Height</variable>
+				<description>This variable must store (1.0 / Frame Height) to set the error threshold for the Y axis so that there are fewer artifacts.</description>
+				<type>float</type>
+				<property>edit</property>
+				<value>0.0</value>
+			</parameter>
+
+			<parameter>
+				<name>A (Visibility)</name>
+				<code>_A</code>
+				<variable>_A</variable>
+				<description>This variable must store the visibility information of the object to determine whether point A is behind or in front of the camera.</description>
+
+				<property>checkbox</property>
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>xA (-X -Y)</name>
+				<code>xA</code>
+				<variable>xA</variable>
+				<description>X of point A (Top left point)</description>
+				<type>float</type>
+				<property>edit</property>
+				<value>0</value>
+				<preview_value>0.25</preview_value>
+			</parameter>
+		<parameter>
+				<name>yA (-X -Y)</name>
+				<code>yA</code>
+				<variable>yA</variable>
+				<description>Y of point A (Top left point)</description>
+				<type>float</type>
+				<property>edit</property>
+				<value>0</value>
+				<preview_value>0.25</preview_value>
+		</parameter>
+
+			<parameter>
+				<name>B (Visibility)</name>
+				<code>_B</code>
+				<variable>_B</variable>
+				<description>This variable must store the visibility information of the object to determine whether point B is behind or in front of the camera.</description>
+
+				<property>checkbox</property>
+				<value>1</value>
+			</parameter>
+
+		<parameter>
+				<name>xB (+X -Y)</name>
+				<code>xB</code>
+				<variable>xB</variable>
+				<description>X of point B (Top right point)</description>
+				<type>float</type>
+				<property>edit</property>
+				<value>1</value>
+				<preview_value>1</preview_value>
+		</parameter>
+		<parameter>
+				<name>yB (+X -Y)</name>
+				<code>yB</code>
+				<variable>yB</variable>
+				<description>Y of point B (Top right point)</description>
+				<type>float</type>
+				<property>edit</property>
+				<value>0</value>
+				<preview_value>0</preview_value>
+		</parameter>
+
+			<parameter>
+				<name>C (Visibility)</name>
+				<code>_C</code>
+				<variable>_C</variable>
+				<description>This variable must store the visibility information of the object to determine whether point C is behind or in front of the camera.</description>
+
+				<property>checkbox</property>
+				<value>1</value>
+			</parameter>
+
+		<parameter>
+				<name>xC (+X +Y)</name>
+				<code>xC</code>
+				<variable>xC</variable>
+				<description>X of point C (Bottom right point)</description>
+				<type>float</type>
+				<property>edit</property>
+				<value>1</value>
+				<preview_value>1</preview_value>
+		</parameter>
+		<parameter>
+				<name>yC (+X +Y)</name>
+				<code>yC</code>
+				<variable>yC</variable>
+				<description>Y of point C (Bottom right point)</description>
+				<type>float</type>
+				<property>edit</property>
+				<value>1</value>
+				<preview_value>1</preview_value>
+		</parameter>
+
+			<parameter>
+				<name>D (Visibility)</name>
+				<code>_D</code>
+				<variable>_D</variable>
+				<description>This variable must store the visibility information of the object to determine whether point D is behind or in front of the camera.</description>
+
+				<property>checkbox</property>
+				<value>1</value>
+			</parameter>
+
+		<parameter>
+				<name>xD (-X +Y)</name>
+				<code>xD</code>
+				<variable>xD</variable>
+				<description>X of point D (Bottom left point)</description>
+				<type>float</type>
+				<property>edit</property>
+				<value>0</value>
+				<preview_value>0</preview_value>
+		</parameter>
+		<parameter>
+				<name>yD (-X +Y)</name>
+				<code>yD</code>
+				<variable>yD</variable>
+				<description>Y of point D (Bottom left point)</description>
+				<type>float</type>
+				<property>edit</property>
+				<value>1</value>
+				<preview_value>0.75</preview_value>
+		</parameter>
+
+		<parameter>
+			<name>/*  */</name>
+			<property>checkbox</property>
+
+			<variable>__</variable>
+		</parameter>
+
+		<sampler>
+			<index>0</index>
+			<filter>point</filter>
+			<addressU>border</addressU>
+			<addressV>border</addressV>
+			<bordercolor>0</bordercolor>
+		</sampler>
+
+</effect>

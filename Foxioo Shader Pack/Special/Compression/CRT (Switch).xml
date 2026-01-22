@@ -1,0 +1,146 @@
+<effect>
+	<name>CRT (Switch)</name>
+		<description>(The shader is based on the Mangaish (Switch) shader, which KYwoo helped me with). The shader gives the effect of an image output from a CRT monitor.</description> 
+			<author>Foxioo, KYwoo</author>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+			
+		<parameter>
+			<name>/* Foxioo CRT (Switch) Shader | 1.0 (21.01.2026) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>(The shader is based on the Mangaish (Switch) shader, which KYwoo helped me with). The shader gives the effect of an image output from a CRT monitor.</description>
+		</parameter>
+
+			<parameter>
+				<name>Blending Mode</name>
+				<variable>_Blending_Mode</variable>
+
+				<description>This variable determines what the base should be. Setting it to 0 sets the base as the texture of the object on which the effect is applied, and setting it to 1 sets this as the background.</description>
+
+				<type>int</type>
+				<property>checkbox</property>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Time</name>
+				<variable>_Time</variable>
+				
+				<description>The variable defines the time positions of the distortion animation.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Anti-aliasing Size</name>
+				<variable>_DotsAntialiasing</variable>
+				
+				<description>This variable determines the level of Anti-Aliasing visibility. For 0, there is no visibility, and for 0.1, there is sufficient visibility.</description>
+
+				<type>float</type>
+
+				<value>0.333333</value>
+			</parameter>
+
+			<parameter>
+				<name>Transparency Of Dots</name>
+				<variable>_DotsTranparent</variable>
+				
+				<description>This variable determines the transparency of the dot pattern, invisible for 0 and visible for 1.</description>
+
+				<type>float</type>
+
+				<value>1.0</value>
+			</parameter>
+
+			<parameter>
+				<name>Dots Size</name>
+				<variable>_DotsSize</variable>
+				
+				<description>This variable determines the size of the dot grid. Recommended values: from 2 to 4.</description>
+
+				<type>float</type>
+
+				<value>2.0</value>
+			</parameter>
+
+			<parameter>
+				<name>Dots Coverage Multiplication</name>
+				<variable>_DotsCoverage</variable>
+				
+				<description>This variable determines the level of pattern coverage; the higher it is, the more dots there will be for light colors.</description>
+
+				<type>float</type>
+
+				<value>1.0</value>
+			</parameter>
+			
+			
+			<parameter>
+				<name>Inverted Pattern</name>
+				<variable>_DotsInvertedPattern</variable>
+
+				<description>This flag specifies whether the pattern should be inverted.</description>
+
+				<type>int</type>
+				<property>checkbox</property>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Inverted Colors</name>
+				<variable>_DotsInvertedColors</variable>
+
+				<description>This flag specifies whether the colors should be inverted.</description>
+
+				<type>int</type>
+				<property>checkbox</property>
+
+				<value>0</value>
+			</parameter>
+
+		<parameter>
+			<name>( Compatibility )</name>
+			<property>checkbox</property>
+			<description>Here you will find options that have changed, but you can still achieve the previous effect.</description>
+
+			<variable>__</variable>
+		</parameter>
+            <parameter>
+                <name>Is Fusion Version Older Than 296?</name>
+                <variable>_Is_Pre_296_Build</variable>
+                <property>checkbox</property>
+                
+                <description>(Only applies to Android and iOS!) This variable determines whether to use the newer background formatting. In Clickteam Fusion 2.5 for build 295.10 and earlier, the background texture was flipped along the Y axis, but this was changed in build 296.1. Check this option if you are using an older build!</description>
+
+                <type>int</type>
+
+                <value>0</value>
+            </parameter>
+
+        <parameter>
+            <name>/* */</name>
+            <property>checkbox</property>
+            <variable>___</variable>
+        </parameter>
+
+</effect>

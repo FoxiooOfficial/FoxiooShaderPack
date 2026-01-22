@@ -1,0 +1,149 @@
+<effect>
+	<name>Screen Space Reflection (Texture)</name>
+		<description>This shader provides a Screen Space Reflection effect and should be applied to a layer. All objects are reflected, and this shader can also be used as a shadow. It should be used in games/applications that use Direct3D11 or OpenGL ES, as the Direct3D9 version is severely limited and does not function properly like the original.</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>0</BackgroundTexture>
+			
+		<parameter>
+			<name>/* Foxioo Screen Space Reflection (Texture) Shader | 1.0 (18.01.2026) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>This shader provides a Screen Space Reflection effect and should be applied to a layer. All objects are reflected, and this shader can also be used as a shadow. It should be used in games/applications that use Direct3D11 or OpenGL ES, as the Direct3D9 version is severely limited and does not function properly like the original.</description>
+		</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Reflection Angle</name>
+				<variable>_Angle</variable>
+				
+				<description>The variable determines the direction of the reflection vector angle. (0 - Left; 90 - Up; 180 - Right; 270 - Down)</description>
+
+				<type>float</type>
+
+				<value>270</value>
+			</parameter>
+
+			<parameter>
+				<name>Reflection Size</name>
+				<variable>_Size</variable>
+				
+				<description>The variable defines the size of the reflection in pixels.</description>
+
+				<type>float</type>
+
+				<value>2</value>
+			</parameter>
+
+			<parameter>
+				<name>Reflection Jump Pixel</name>
+				<variable>_Jump</variable>
+				
+				<description>The variable determines the size of the jump pixels at the next reflection line.</description>
+
+				<type>float</type>
+
+				<value>2</value>
+			</parameter>
+
+
+			<parameter>
+				<name>Reflection Strength</name>
+				<variable>_Strength</variable>
+				
+				<description>The variable determines the visibility strength of reflection.</description>
+
+				<type>float</type>
+
+				<value>0.9</value>
+			</parameter>
+
+			<parameter>
+				<name>Reflection Alpha Threshold</name>
+				<variable>_Threshold</variable>
+				
+				<description>The variable determines at what alpha color level the reflection should appear.</description>
+
+				<type>float</type>
+
+				<value>0.1</value>
+			</parameter>
+
+			<parameter>
+				<name>Reflection Alpha Fade</name>
+				<variable>_Fade</variable>
+				
+				<description>This variable determines to what power the reflection attenuation should be raised.</description>
+
+				<type>float</type>
+
+				<value>0.5</value>
+			</parameter>
+
+
+			<parameter>
+				<name>Reflection Color</name>
+				<variable>_Color</variable>
+				
+				<description>This variable multiplies the colors of the reflection.</description>
+
+				<type>int_float4</type>
+				<property>color</property>
+
+				<value>16777215</value>
+			</parameter>
+
+			<parameter>
+				<name>Reflection Ignore Color</name>
+				<variable>_ColorIgnore</variable>
+				
+				<description>The variable determines which color is to be ignored (it will not be visible and will not be reflected), with the exception of black, which disables the ignore system.</description>
+
+				<type>int_float4</type>
+				<property>color</property>
+
+				<value>16711935</value>
+			</parameter>
+
+			<parameter>
+				<name>Offset X</name>
+				<variable>_OffsetX</variable>
+				
+				<description>The variable defines the offset of the reflection in the X axis in pixels.</description>
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Offset Y</name>
+				<variable>_OffsetY</variable>
+				
+				<description>The variable defines the offset of the reflection in the Y axis in pixels.</description>
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+        <parameter>
+            <name>/* */</name>
+            <property>checkbox</property>
+            <variable>__</variable>
+        </parameter>
+
+</effect>

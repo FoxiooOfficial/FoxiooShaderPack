@@ -1,0 +1,25 @@
+<effect>
+	<name>Direct3D8 Test Shader (Texture)</name>
+		<description>A test shader that works under Direct3D8 and Direct3D9.</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+				<dx8>yes</dx8>
+		
+
+		<parameter>
+			<name>/* Foxioo Direct3D8 Test Shader (Texture) | 1.0 (22.01.2026) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>A test shader that works under Direct3D8 and Direct3D9.</description>
+		</parameter>
+
+        <parameter>
+            <name>/* */</name>
+            <property>checkbox</property>
+            <variable>___</variable>
+        </parameter>
+</effect>

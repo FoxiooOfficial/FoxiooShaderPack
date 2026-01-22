@@ -1,0 +1,171 @@
+/***********************************************************/
+
+/* Shader author: Foxioo */
+/* Version shader: 1.0 (16.01.2026) */
+/* My GitHub: https://github.com/FoxiooOfficial */
+
+/***********************************************************/
+
+/***********************************************************/
+
+//@Begin_vertex
+
+#ifdef GL_ES
+ precision mediump float;
+#endif
+
+uniform mat4 transformMatrix;
+uniform mat4 projectionMatrix;
+
+attribute vec4 position;
+attribute vec2 texCoord;
+
+varying vec2 In;
+
+void main(void)
+{
+    In = texCoord;
+    gl_Position = projectionMatrix * transformMatrix * position;
+}
+
+//@End
+
+/***********************************************************/
+
+///@Begin_fragment
+
+#ifdef GL_ES
+ precision highp float;
+ precision highp int;
+#endif
+
+varying vec2 In;
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+uniform sampler2D imgTexture;
+uniform sampler2D bckgTexture;
+
+uniform lowp vec4 blendColor;
+uniform float fPixelWidth;
+uniform float fPixelHeight;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+uniform float xA;
+uniform float yA;
+uniform float xB;
+uniform float yB;
+uniform float xC;
+uniform float yC;
+uniform float xD;
+uniform float yD;
+
+uniform bool _A;
+uniform bool _B;
+uniform bool _C;
+uniform bool _D;
+
+uniform float _Width;
+uniform float _Height;
+
+uniform vec4 _ColorA;
+uniform vec4 _ColorC;
+
+/***********************************************************/
+/* Main */
+/***********************************************************/
+
+vec4 Fun_Polygon(vec2 UV)
+{
+    vec2 _DistX = vec2(min(min(xA, xB), min(xC, xD)), max(max(xA, xB), max(xC, xD)));
+    vec2 _DistY = vec2(min(min(yA, yB), min(yC, yD)), max(max(yA, yB), max(yC, yD)));
+
+    if ((_DistX.y - _DistX.x) < (_Width) ||
+        (_DistY.y - _DistY.x) < (_Height))
+        return vec4(0.0, 0.0, 1.0, -1.0);
+
+    float a11 = xC - xB;
+    float a12 = xC - xD;
+    float b1  = xB + xD - xA - xC;
+
+    float a21 = yC - yB;
+    float a22 = yC - yD;
+    float b2  = yB + yD - yA - yC;
+
+    float _Denom = a11 * a22 - a12 * a21;
+
+    if (abs(_Denom) < 1e-4)
+        return vec4(0.0, 0.0, 1.0, 0.0);
+
+    float H20 = (b1 * a22 - a12 * b2) / _Denom;
+    float H21 = (a11 * b2 - b1 * a21) / _Denom;
+
+    float H00 = xB * (H20 + 1.0) - xA;
+    float H10 = yB * (H20 + 1.0) - yA;
+    float H01 = xD * (H21 + 1.0) - xA;
+    float H11 = yD * (H21 + 1.0) - yA;
+
+    float DET_H =
+        H00 * (H11 - yA * H21) -
+        H01 * (H10 - yA * H20) +
+        xA  * (H10 * H21 - H11 * H20);
+
+    if (abs(DET_H) < 1e-4)
+        return vec4(0.0, 0.0, 1.0, 0.0);
+
+    float INV_H = 1.0 / DET_H;
+
+    float C00 = (H11 - yA * H21) * INV_H;
+    float C01 = (yA * H20 - H10) * INV_H;
+    float C02 = (H10 * H21 - H11 * H20) * INV_H;
+
+    float C10 = (xA * H21 - H01) * INV_H;
+    float C11 = (H00 - xA * H20) * INV_H;
+    float C12 = (H01 * H20 - H00 * H21) * INV_H;
+
+    float C20 = (H01 * yA - xA * H11) * INV_H;
+    float C21 = (xA * H10 - H00 * yA) * INV_H;
+    float C22 = (H00 * H11 - H01 * H10) * INV_H;
+
+    float _U = C00 * UV.x + C10 * UV.y + C20;
+    float _V = C01 * UV.x + C11 * UV.y + C21;
+    float _W = C02 * UV.x + C12 * UV.y + C22;
+
+    float _WReflected = 0.0;
+
+    if (_A == true)      _WReflected = C02 * xA + C12 * yA + C22;
+    else if (_B == true) _WReflected = C02 * xB + C12 * yB + C22;
+    else if (_C == true) _WReflected = C02 * xC + C12 * yC + C22;
+    else if (_D == true) _WReflected = C02 * xD + C12 * yD + C22;
+
+    if (abs(_WReflected) < 1e-4)
+        _WReflected = _W;
+
+    return vec4(_U, _V, _W, _WReflected);
+}
+
+void main(void)
+{
+    vec4 _Polygon = Fun_Polygon(In);
+
+        if (_Polygon.z != _Polygon.z || _Polygon.w != _Polygon.w)       discard;
+        if (abs(_Polygon.z) <= 1e-4)                                    discard;
+        if (_Polygon.z * _Polygon.w <= 0.0)                             discard;
+
+        vec2 _UV = vec2(_Polygon.x, _Polygon.y) / _Polygon.z;
+
+        if (_UV.x < 0.0 || _UV.x > 1.0 || _UV.y < 0.0 || _UV.y > 1.0)   discard;
+
+    vec4    _Render_Texture;
+            _Render_Texture.rgb = _UV.x + _UV.y <= 1.0 ? _ColorA.rgb : _ColorC.rgb;
+            _Render_Texture.a = texture2D(imgTexture, _UV).a * blendColor.a;
+
+    gl_FragColor = _Render_Texture;
+}
+
+//@End

@@ -1,0 +1,77 @@
+<effect>
+	<name>BIOS (Switch)</name>
+		<description>This shader uses the classic 16-color palette from BIOS and also adds dithering.</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+			
+		<parameter>
+			<name>/* Foxioo BIOS (Switch) Shader | 1.0 (19.10.2026) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>This shader uses the classic 16-color palette from MS Paint and also adds dithering.</description>
+		</parameter>
+
+			<parameter>
+				<name>Blending Mode</name>
+				<variable>_Blending_Mode</variable>
+				
+				<description>This variable manages which color will be reduced. Set to 0 is the blend color will be reduced and set to 1 is the base color will be reduced.</description>
+
+				<type>bool</type>
+				<property>checkbox</property>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Dithering Size</name>
+				<variable>_DitheringSize</variable>
+				
+				<description>(Direct3D11 and OpenGL only) This variable determines how visible Dithering should be.</description>
+
+				<type>float</type>
+
+				<value>0.2</value>
+			</parameter>
+
+		<parameter>
+			<name>( Compatibility )</name>
+			<property>checkbox</property>
+			<description>.</description>
+
+			<variable>__</variable>
+		</parameter>
+            <parameter>
+                <name>Is Fusion Version Older Than 296?</name>
+                <variable>_Is_Pre_296_Build</variable>
+                <property>checkbox</property>
+                
+                <description>(Only applies to Android and iOS!) This variable determines whether to use the newer background formatting. In Clickteam Fusion 2.5 for build 295.10 and earlier, the background texture was flipped along the Y axis, but this was changed in build 296.1. Check this option if you are using an older build!</description>
+
+                <type>int</type>
+
+                <value>0</value>
+            </parameter>
+
+        <parameter>
+            <name>/* */</name>
+            <property>checkbox</property>
+            <variable>___</variable>
+        </parameter>
+
+</effect>

@@ -1,6 +1,6 @@
 /***********************************************************/
 
-/* Autor shader: Foxioo and Adam Hawker (aka Sketchy / MuddyMole) */
+/* Shader author: Foxioo and Adam Hawker (aka Sketchy / MuddyMole) */
 /* Version shader: 1.0 (11.11.2025) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 

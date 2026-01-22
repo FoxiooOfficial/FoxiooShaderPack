@@ -1,6 +1,42 @@
 # ℹ️ Change Log
 **All notable changes to this project will be documented in this file.**
 
+# ✨ January 22, 2026 | Release ID: 15
+## 📝 Notes (Abbreviated) 
+- The number of shaders has been increased from 350 to 374 (Added):
+- Added many shaders for Polygons under Tails7 R1.0.3, which will be updated soon
+- Added **Screen Space Reflection (Texture)** shader, which should be applied to the layer *(full implementation in Direct3D11 and Android, iOS, Mac, Direct3D9 pixel shader 2.x is very limitated)*
+- Added **CRT (Switch)**
+- Added **BIOS (Switch)** (similar to MS Paint (Switch) but uses 16 colors that the BIOS itself has)
+- Added **Spectrogram (Switch)**
+- Added **D3D8Test (Texture)** *(Probably the only custom shader currently working under Direct3D8 / Currently only for testing, but it works!)*
+
+- **ScreenSpaceReflection.mfa** has been added as an example.
+
+# ✨ January 4, 2026 | Release ID: 14
+## 📝 Notes (Abbreviated) 
+- Updated README appearance
+- The number of shaders has been increased from 332 to 350 (Added):
+- **"Logical ARLEFTSHIFT Base (Background)"**
+- **"Logical ARLEFTSHIFT Blend (Background)"**
+- **"Logical ARRIGHTSHIFT Base (Background)"**
+- **"Logical ARRIGHTSHIFT Blend (Background)"**
+- **"Logical ROTATELEFT Base (Background)"**
+- **"Logical ROTATELEFT Blend (Background)"**
+- **"Logical ROTATERIGHT Base (Background)"**
+- **"Logical ROTATERIGHT Blend (Background)"**
+- **"Logical LEFTSHIFT Base (Background)"**
+- **"Logical LEFTSHIFT Blend (Background)"**
+- **"Logical RIGHTSHIFT Base (Background)"**
+- **"Logical RIGHTSHIFT Blend (Background)"**
+- **"Comparison Different (Background)"**
+- **"Comparison Equal (Background)"**
+- **"Comparison Greater (Background)"**
+- **"Comparison Greater Equal (Background)"**
+- **"Comparison Less (Background)"**
+- **"Comparison Less Equal (Background)"**
+
+
 # ✨ January 1, 2026 (Happy new year!) | Release ID: 13 / Hotfix
 ## 📝 Notes (Abbreviated) 
 - Correction of numerous typos in shader names for:
@@ -11,7 +47,7 @@
 - Shaer (Switch) -> Shear (Switch)
 - Foilage Wind (Switch) -> Foliage Wind (Switch)
 - Correction With Cotanget (Background) -> Correction With Cotangent (Background)
-- Conversion To CYMK (Switch) -> Conversion To CYMK (Switch)
+- Conversion To CYMK (Switch) -> Conversion To CMYK (Switch)
 - Geometry Dash Glass Block (Background) -> Geometry Dash Glass Blocks (Background)
 - Unity Bloom (Texutre+Background) -> Unity Bloom (Texture+Background)
 - Aura (Switch) -> Aura (Background)

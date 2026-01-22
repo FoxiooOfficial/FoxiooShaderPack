@@ -43,7 +43,7 @@
 
 				<type>float</type>
 
-				<value>3</value>
+				<value>1</value>
 			</parameter>
 
 			<parameter>
@@ -54,7 +54,7 @@
 
 				<type>float</type>
 
-				<value>3</value>
+				<value>2</value>
 			</parameter>
 
 			<parameter>
@@ -65,7 +65,7 @@
 
 				<type>float</type>
 
-				<value>0.5</value>
+				<value>1</value>
 			</parameter>
 
 		<parameter>
@@ -138,7 +138,7 @@
 
 				<type>float</type>
 
-				<value>1.75</value>
+				<value>1</value>
 			</parameter>
 
 			<parameter>
@@ -149,7 +149,7 @@
 
 				<type>float</type>
 
-				<value>2</value>
+				<value>1</value>
 			</parameter>
 
 		<parameter>

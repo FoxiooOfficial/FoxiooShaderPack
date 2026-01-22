@@ -1,0 +1,161 @@
+/***********************************************************/
+
+/* Shader author: Foxioo */
+/* Version shader: 1.0 (18.01.2026) */
+/* My GitHub: https://github.com/FoxiooOfficial */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_vertex
+
+#ifdef GL_ES
+ precision mediump float;
+#endif
+uniform mat4 transformMatrix;
+uniform mat4 projectionMatrix;
+
+attribute vec4 position;
+attribute vec2 texCoord;
+varying vec2 In;
+
+void main(void)
+{
+	In = texCoord;
+	gl_Position = projectionMatrix * transformMatrix * position;
+}
+
+//@End
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+#ifdef GL_ES
+ precision highp float;
+#endif
+
+varying vec2 In;
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+uniform sampler2D imgTexture;
+//uniform sampler2D bckgTexture;
+
+uniform lowp vec4 blendColor;
+uniform float fPixelWidth;
+uniform float fPixelHeight;
+
+/***********************************************************/
+/* Varibles */
+/***********************************************************/
+
+uniform float _Mixing;
+uniform float _Angle;
+uniform float _Size;
+uniform float _Jump;
+uniform float _Strength;
+uniform float _Threshold;
+uniform float _Fade;
+uniform vec4 _Color;
+uniform vec4 _ColorIgnore;
+uniform float _OffsetX;
+uniform float _OffsetY;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+const int _MaxSteps = 64;
+
+bool Fun_Comp(vec3 _Color)
+{
+    if (_ColorIgnore.r == 0.0 && _ColorIgnore.g == 0.0 && _ColorIgnore.b == 0.0)
+        return false;
+
+    vec3 _Render = abs(_Color.rgb - _ColorIgnore.rgb);
+    return (_Render.r <= 0.01 && _Render.g <= 0.01 && _Render.b <= 0.01);
+}
+
+void main(void)
+{
+    vec4 _Render_Texture = texture2D(imgTexture, In) * blendColor;
+    
+    if (Fun_Comp(_Render_Texture.rgb))
+    {
+        gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
+        return;
+    }
+    else if (_Render_Texture.a > 0.95)
+    {
+        gl_FragColor = _Render_Texture;
+        return;
+    }
+
+    /* Screenspace Reflection! */
+
+    float _Rad = _Angle * 0.0174532925199444; //(3.14159265359 / 180.0);
+    vec2 _Ray = vec2(cos(_Rad), sin(_Rad)) * vec2(fPixelWidth, fPixelHeight) * _Size;
+
+    vec2 UV = In + vec2(_OffsetX, _OffsetY) * vec2(fPixelWidth, fPixelHeight);
+    vec4 _Render_Reflection = texture2D(imgTexture, UV) * blendColor;
+    vec2 _Hit = vec2(0.0, 0.0);
+
+    /* raymarching */
+    for (int i = 1; i <= _MaxSteps; i++)
+    {
+        UV += _Ray;
+
+        if (UV.x < 0.0 || UV.x > 1.0 || UV.y < 0.0 || UV.y > 1.0)
+            break;
+
+        vec4 _Render_Reflected = texture2D(imgTexture, UV) * blendColor;
+        
+        if (Fun_Comp(_Render_Reflected.rgb))
+            continue;
+
+        if (_Render_Reflected.a > _Threshold)
+        {
+            vec2 UV_Ref = In + (_Ray * float(i) * _Jump);
+
+            if (UV_Ref.x >= 0.0 && UV_Ref.x <= 1.0 && UV_Ref.y >= 0.0 && UV_Ref.y <= 1.0)
+            {
+                vec4 _Render = texture2D(imgTexture, UV_Ref) * blendColor;
+                _Render.rgb *= _Color.rgb;
+
+                if (_Render.a > _Threshold && !Fun_Comp(_Render.rgb))
+                {
+                    _Render_Reflection = _Render;
+                    _Hit = vec2((float(i) * 2.0) / float(_MaxSteps), 1.0);
+                    break;
+                }
+            }
+            break;
+        }
+    }
+
+    /* fade :3 */
+    if (bool(_Hit.y))
+    {
+        //gl_FragColor = vec4(_Hit.x, _Hit.x, _Hit.x, 1.0);
+        //return;
+        float _FFade = 1.0 - _Hit.x; 
+        _FFade = clamp(pow(_FFade * _FFade, _Fade), 0.0, 1.0);
+
+        _Render_Reflection *= blendColor;
+        float _Alpha = _Strength * _FFade * _Render_Reflection.a;
+
+        vec4 _Render;
+        _Render.rgb = mix(_Render_Texture.rgb, _Render_Reflection.rgb, _Alpha);
+        _Render.a = max(_Render_Texture.a, _Alpha);
+        _Render = mix(_Render_Texture, _Render, _Mixing);
+
+        gl_FragColor = _Render;
+    }
+    else
+        gl_FragColor = _Render_Texture;
+}
+//@End

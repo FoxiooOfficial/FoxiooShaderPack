@@ -1,6 +1,6 @@
 /***********************************************************/
 
-/* Autor shader: Foxioo */
+/* Shader author: Foxioo */
 /* Version shader: 1.1 (20.12.2025) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 
