@@ -32,17 +32,19 @@ All information is based on:
 
 Każdy shader jest powiązany z plikiem **.xml**, w tym pliku deklaruje się informacje o shaderze i jego parametrach.
 
-Przykładowy plik:
+[Przykładowy plik](http://library.clickteam.com/manuals/miscellaneous/hwa-direct3d/create-your-own-effects/):
 ```xml
 <effect>
-  <name>Put here the effect name</name>
-  <description>Put here a description of the effect, displayed in the Effects dialog box</description>
-  <author>Your name here</author>
-  <company>Your company here</company>
-  <copyright>Copyright @ 2010 Your Company</copyright>
-  <website>www.your_web_site.com</website>
-  <email>someone@somewhere.com</email>
-  <dx8>yes or no, depends if your shader works with DirectX 8</dx8>
+  <name>Addition (Background)</name>                              <!-- Shader name. -->
+  <description>Base and blend colors are added./description>      <!-- A short description that describes what your effect is. -->
+  <author>Foxioo</author>                                         <!-- Your name / nickname information. -->
+  <company>Some company</company>                                 <!-- Your company information. -->
+  <copyright>Copyright (C) 2024-2026 Foxioo</copyright>           <!-- Copyright information. -->
+  <website>https://github.com/FoxiooOfficial</website>            <!-- Link to your website. -->
+  <email>someone@somewhere.com</email>                            <!-- Information about your e-mail address to contact you in case of any problems. -->
+  <dx8>no</dx8>                                                   <!-- "yes" or "no", depending on whether the .fx file is written in assembler and whether you are targeting it to run on Direct3D8 (usually not due to limitations) -->
+  <BackgroundTexture>1</BackgroundTexture>                        <!-- If your shader should use the background texture, set it to 1, otherwise set it to 0 -->
+    
 
     <parameter>
         <name>Name of parameter 1, displayed in the properties</name>
@@ -66,6 +68,9 @@ Przykładowy plik:
 etc...
 </effect>
 ```
+
+## Deklaracja parametrów (Przykłady)
+
 
 # Windows
 
