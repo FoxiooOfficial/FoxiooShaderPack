@@ -107,7 +107,7 @@ technique tech_main
 - Zawierają stałe dane. Dane można załadować do rejestru stałego za pomocą instrukcji `def`. Rejestry stałe nie nadają się do wykorzystania w instrukcjach adresowania tekstur. Jedynym wyjątkiem jest instrukcja `texm3x3spec`, która wykorzystuje stały rejestr do dostarczenia wektora promieniowania oka.
 
 **Temporary register:**
-- Służą do przechowywania wyników pośrednich. r0 służy dodatkowo jako wyjście shadera pikseli. Wartość w r0 na końcu shadera to kolor piksela dla shadera.
+- Służą do przechowywania wyników pośrednich. `r0` służy dodatkowo jako wyjście shadera pikseli. Wartość w r0 na końcu shadera to kolor piksela dla shadera.
 
 **Texture register**
 - W przypadku shaderów pikseli w wersjach od `ps.1.1` do `ps.1.3` rejestry tekstur zawierają dane tekstur lub współrzędne tekstur.<br>
