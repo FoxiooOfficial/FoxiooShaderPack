@@ -245,6 +245,46 @@ There are several types of pixel shader instructions, as shown in the following 
 
 **Instruction set for Vertex Shader**
 
+This section contains reference information for the vertex shader version `ps.1.1` instructions.
+
+There are several types of vertex shader instructions, as shown in the table. Columns to the right mean the following:
+- **Instruction slots** - Number of instruction slots used by each instruction.
+- **Setup** - Non-arithmetic instructions. Every shader must have a version instruction and it must be the first instruction.
+- **Arithmetic** - These instructions provide the mathematical operations in a shader.
+
+| **Type** | **Instruction** | **Description**                | **Instruction slots** | **Setup** | **Arithmetic** | ``vs.1.0`` | ``vs.1.1`` | **Note** |
+|----------|-----------------|--------------------------------|-----------------------|-----------|----------------|------------|------------|----------|
+| ``asm``  | `add`           | Add two vectors                | 1                     |           | ☑️              | ❔          | ✅          |          |
+| ``asm``  | `dcl_usage`     | Declare input vertex registers | 0                     | ☑️         |                | ❔          | ✅          |          |
+| ``asm``  | `def`           | Define constants               | 0                     | ☑️         |                | ❔          | ✅          |          |
+| ``asm``  | `dp3`           | Three-component dot product    | 1                     |           | ☑️              | ❔          | ✅          |          |
+| ``asm``  | `dp4`           | Four-component dot product     | 1                     |           | ☑️              | ❔          | ✅          |          |
+| ``asm``  | `dst`           | Calculate the distance vector  | 1                     |           | ☑️              | ❔          | ✅          |          |
+| ``asm``  | `exp`           | Full precision 2^x             | 10                    |           | ☑️              | ❔          | ✅          |          |
+| ``asm``  | `expp`          | Partial precision 2^x          | 1                     |           | ☑️              | ❔          | ✅          |          |
+| ``asm``  | `frc`           | Fractional component           | 3                     |           | ☑️              | ❔          | ✅          |          |
+| ``asm``  | `lit`           | Partial lighting calculation   | 1                     |           | ☑️              | ❔          | ✅          |          |
+| ``asm``  | `log`           | Full precision log₂(x)         | 10                    |           | ☑️              | ❔          | ✅          |          |
+| ``asm``  | `logp`          | Partial precision log₂(x)      | 1                     |           | ☑️              | ❔          | ✅          |          |
+| ``asm``  | `m3x2`          | 3x2 multiply                   | 2                     |           | ☑️              | ❔          | ✅          |          |
+| ``asm``  | `m3x3`          | 3x3 multiply                   | 3                     |           | ☑️              | ❔          | ✅          |          |
+| ``asm``  | `m3x4`          | 3x4 multiply                   | 4                     |           | ☑️              | ❔          | ✅          |          |
+| ``asm``  | `m4x3`          | 4x3 multiply                   | 3                     |           | ☑️              | ❔          | ✅          |          |
+| ``asm``  | `m4x4`          | 4x4 multiply                   | 4                     |           | ☑️              | ❔          | ✅          |          |
+| ``asm``  | `mad`           | Multiply and add               | 1                     |           | ☑️              | ❔          | ✅          |          |
+| ``asm``  | `max`           | Maximum                        | 1                     |           | ☑️              | ❔          | ✅          |          |
+| ``asm``  | `min`           | Minimum                        | 1                     |           | ☑️              | ❔          | ✅          |          |
+| ``asm``  | `mov`           | Move                           | 1                     |           | ☑️              | ❔          | ✅          |          |
+| ``asm``  | `mul`           | Multiply                       | 1                     |           | ☑️              | ❔          | ✅          |          |
+| ``asm``  | `nop`           | No operation                   | 1                     |           | ☑️              | ❔          | ✅          |          |
+| ``asm``  | `rcp`           | Reciprocal square root         | 1                     |           | ☑️              | ❔          | ✅          |          |
+| ``asm``  | `sge`           | Greater than or equal compare  | 1                     |           | ☑️              | ❔          | ✅          |          |
+| ``asm``  | `sit`           | Less than compare              | 1                     |           | ☑️              | ❔          | ✅          |          |
+| ``asm``  | `sub`           | Subtract                       | 1                     |           | ☑️              | ❔          | ✅          |          |
+| ``asm``  | `vs`            | Declare vertex shader version  | 0                     | ☑️         |                | ❔          | ✅          |          |
+
+---
+
 ### Modifiers Set [(Source)](https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx9-graphics-reference-asm-ps-instructions-modifiers-ps-1-x)
 | **Type** | **Modifier** | **Description**               | **Syntax**          | ``ps.1.0`` | ``ps.1.1`` | ``ps.1.2`` | ``ps.1.3`` | ``ps.1.4`` | **Note** |
 |----------|--------------|-------------------------------|---------------------|---------|---------|---------|---------|---------|----------|
