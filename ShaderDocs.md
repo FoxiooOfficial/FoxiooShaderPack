@@ -67,13 +67,14 @@ technique tech_main
 
 ### Pixel Shader and Vertex Shader Version Differences [(Source)](https://en.wikipedia.org/wiki/High-Level_Shader_Language#Pixel_shader_comparison)
 
-Asembler pixel shader składa się z zestawu instrukcji, które działają na danych pikseli zawartych w rejestrach. 
-Operacje wyrażane są jako instrukcje składające się z operatora i jednego lub większej liczby operandów. 
-Instrukcje wykorzystują rejestry do przesyłania danych do i z shadera piksele ALU. Niektóre instrukcje mogą również wykorzystywać rejestry do przechowywania wyników tymczasowych.
+A pixel shader assembly consists of a set of instructions that operate on pixel data stored in registers.
+Operations are expressed as instructions consisting of an operator and one or more operands.
+Instructions use registers to transfer data to and from the pixel shader ALU. Some instructions may also use registers to store temporary results.
 
 <br>
 
-Każda wersja obsługuje inną liczbę maksymalnych slotów instrukcji.
+Each version supports a different number of maximum instruction slots.
+**It is important that the Pixel Shader works in a D3D8 environment, so using (`ps.1.0`, `ps.1.1`, `ps.1.2`, `ps.1.3` or `ps.1.4`). Using (`ps_1_0`, `ps_1_1`, `ps_1_2`, `ps_1_3` or `ps_1_4`) will cause the effect to fail, similarly to the Vertex Shader.**
 
 **Pixel Shader Versions**
 | **Type**  | **Version**  | **Works** | **Dependent<br>texture<br>limit** | **Texture <br>instruction<br>limit** | **Arithmetic<br>instruction<br>limit** | **Position<br>register** | **Instruction<br>slots** | **Executed<br>instructions** | **Texture<br>indirections** | **Interpolated<br>registers** | **Instruction<br>predication** | **Index<br>input<br>registers** | **Temp<br>registers** | **Constant<br>registers** | **Arbitrary<br>swizzling** | **Gradient<br>instructions** | **Loop <br>count <br>register** | **Face<br>register** | **Dynamic<br>flow<br>control** | **Bitwise<br>Operators** | **Native<br>Integers** | **Note** |
