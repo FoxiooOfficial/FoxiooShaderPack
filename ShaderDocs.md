@@ -113,7 +113,7 @@ technique tech_main
 - W przypadku shaderów pikseli w wersjach od `ps.1.1` do `ps.1.3` rejestry tekstur zawierają dane tekstur lub współrzędne tekstur.<br>
   Dane tekstury są ładowane do rejestru tekstur podczas próbkowania tekstury.<br>
   Próbkowanie tekstury wykorzystuje współrzędne tekstury do wyszukiwania lub próbkowania wartości koloru na określonych współrzędnych *(U'V, W'Q)*, biorąc pod uwagę atrybuty stanu etapu tekstury.<br>
-  Dane współrzędnych tekstury są interpolowane z danych współrzędnych tekstury wierzchołka i są powiązane z określonym etapem tekstury.<br>
+  Dane współrzędnych tekstury są **interpolowane** z danych współrzędnych tekstury wierzchołka i są powiązane z określonym etapem tekstury.<br>
   Istnieje domyślne powiązanie jeden do jednego pomiędzy numerem etapu tekstury a kolejnością deklaracji współrzędnych tekstury.<br>
   Domyślnie pierwszy zestaw współrzędnych tekstury zdefiniowanych w formacie wierzchołka jest powiązany z etapem tekstury 0.<br>
 
@@ -121,7 +121,7 @@ technique tech_main
 
 - W przypadku Pixel Shader w wersji `ps.1.4` rejestry tekstur `(t#)` zawierają dane współrzędnych tekstur tylko do odczytu.<br>
   Oznacza to, że zestaw współrzędnych tekstury i numer etapu tekstury są od siebie niezależne. Numer etapu tekstury *(z którego można pobrać próbkę tekstury)* jest określany przez numer rejestru docelowego **(r0 do r5)**.<br>
-  W przypadku instrukcji texld zestaw współrzędnych tekstury jest określany przez rejestr źródłowy **(t0 do t5)**, dzięki czemu zestaw współrzędnych tekstury można odwzorować na dowolny etap tekstury.<br>
+  W przypadku instrukcji `texld` zestaw współrzędnych tekstury jest określany przez rejestr źródłowy **(t0 do t5)**, dzięki czemu zestaw współrzędnych tekstury można odwzorować na dowolny etap tekstury.<br>
   Ponadto rejestr źródłowy *(określający współrzędne tekstury)* dla `texld` może być również rejestrem tymczasowym `(r#)`, w którym to przypadku zawartość rejestru tymczasowego jest używana jako współrzędne tekstury.<br>
 
 **Color register:**
