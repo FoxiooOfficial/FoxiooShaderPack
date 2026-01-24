@@ -30,6 +30,43 @@ All information is based on:
 
 # XML File
 
+Każdy shader jest powiązany z plikiem **.xml**, w tym pliku deklaruje się informacje o shaderze i jego parametrach.
+
+Przykładowy plik:
+```xml
+<effect>
+  <name>Put here the effect name</name>
+  <description>Put here a description of the effect, displayed in the Effects dialog box</description>
+  <author>Your name here</author>
+  <company>Your company here</company>
+  <copyright>Copyright @ 2010 Your Company</copyright>
+  <website>www.your_web_site.com</website>
+  <email>someone@somewhere.com</email>
+  <dx8>yes or no, depends if your shader works with DirectX 8</dx8>
+
+    <parameter>
+        <name>Name of parameter 1, displayed in the properties</name>
+        <variable>Variable name in the .fx file (and used in the event editor)</variable>
+        <code>Variable name in the .fxao/.fxmo file (and used in the event editor)</code>
+        <description>This variable does this...</description>
+  
+        <type>variable type : either INT, FLOAT, INT_FLOAT4, IMAGE</type>
+        <property>Property type : EDIT, SPIN, SLIDER, CHECKBOX, COLOR, IMAGE</property>
+        <value>initial value</value>
+        <min>minimum value</min>
+        <max>maximum value</max>
+        <delta>step value, for FLOAT + SPIN only</delta>
+        <preview_value>value used for the preview in the Effects dialog box</preview_value>
+    </parameter>
+  
+    <parameter>
+        <name>Name of parameter 2</name>
+        etc...
+    </parameter>
+etc...
+</effect>
+```
+
 # Windows
 
 ## Direct3D 8
@@ -74,6 +111,7 @@ Instructions use registers to transfer data to and from the pixel shader ALU. So
 <br>
 
 Each version supports a different number of maximum instruction slots.
+
 **It is important that the Pixel Shader works in a D3D8 environment, so using (`ps.1.0`, `ps.1.1`, `ps.1.2`, `ps.1.3` or `ps.1.4`). Using (`ps_1_0`, `ps_1_1`, `ps_1_2`, `ps_1_3` or `ps_1_4`) will cause the effect to fail, similarly to the Vertex Shader.**
 
 **Pixel Shader Versions**
