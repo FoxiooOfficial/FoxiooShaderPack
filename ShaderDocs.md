@@ -65,7 +65,7 @@ technique tech_main
 
 ---
 
-### Różnice w danych wersjach Pixel Shader i Vertex Shader [(Źródło)](https://en.wikipedia.org/wiki/High-Level_Shader_Language)
+### Różnice w danych wersjach Pixel Shader i Vertex Shader [(Źródło)](https://en.wikipedia.org/wiki/High-Level_Shader_Language#Pixel_shader_comparison)
 
 **Wersje Pixel Shader**
 | **Type**  | **Version**  | **Works** | **Dependent<br>texture<br>limit** | **Texture <br>instruction<br>limit** | **Arithmetic<br>instruction<br>limit** | **Position<br>register** | **Instruction<br>slots** | **Executed<br>instructions** | **Texture<br>indirections** | **Interpolated<br>registers** | **Instruction<br>predication** | **Index<br>input<br>registers** | **Temp<br>registers** | **Constant<br>registers** | **Arbitrary<br>swizzling** | **Gradient<br>instructions** | **Loop <br>count <br>register** | **Face<br>register** | **Dynamic<br>flow<br>control** | **Bitwise<br>Operators** | **Native<br>Integers** | **Note**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |
