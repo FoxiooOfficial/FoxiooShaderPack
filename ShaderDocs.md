@@ -91,15 +91,15 @@ technique tech_main
         Texture[0] = <T_Image>;
         PixelShader = asm
         {
-            ps.1.3                          // <- Pixel Shader Version (ps.1.0, ps.1.1, ps.1.2, ps.1.3 or ps.1.4)
-            def c0, 1.0, 1.0, 1.0, 0.0      // <- Constant value declaration (Red: 1.0, Green: 1.0, Blue: 1.0, Alpha: 0.0)
+            ps.1.3;                         // <- Pixel Shader Version (ps.1.0, ps.1.1, ps.1.2, ps.1.3 or ps.1.4)
+            def c0, 1.0, 1.0, 1.0, 0.0;     // <- Constant value declaration (Red: 1.0, Green: 1.0, Blue: 1.0, Alpha: 0.0)
 
             tex t0;                         // <- Load the T_Image texture
             
-            mov r0, t0                      // <- Assigning colors from the texture to the result.
-            sub r0, c0, t0                  // <- Subtract colors (c0.rgba - t0.rgba)
+            mov r0, t0;                     // <- Assigning colors from the texture to the result.
+            sub r0, c0, t0;                 // <- Subtract colors (c0.rgba - t0.rgba)
 
-            mov r0.a, t0.a                  // <- Assigning alpha color from texture
+            mov r0.a, t0.a;                 // <- Assigning alpha color from texture
         };
     }
 }
@@ -134,13 +134,15 @@ Each version supports a different number of maximum instruction slots.
 
 <br>
 
-Programowalny moduł cieniujący wierzchołki składa się z zestawu instrukcji działających na danych wierzchołków.
-Rejestry przesyłają dane do i z jednostki ALU.
-Można zastosować dodatkową kontrolę w celu modyfikacji instrukcji, wyników lub tego, jakie dane zostaną zapisane.
+A programmable vertex shader consists of a set of instructions that operate on vertex data. 
+
+Registers transfer data to and from the ALU. 
+
+Additional controls can be applied to modify instructions, results, or what data is written.
 
 <br>
 
-Każda wersja obsługuje różną liczbę maksymalnych slotów instrukcji.
+Each version supports a different number of maximum instruction slots.
 
 **Vertex Shader Versions**
 | **Type**  | **Version**  | **Works** | **Number of<br>instruction<br>slots** | **Max<br>number of<br>instructions<br>executed** | **Instruction<br>predication** | **Temp<br>register** | **Number<br>constant<br>registers** | **Address<br>register** | **Static<br>flow<br>control** | **Dynamic<br>flow<br>control** | **Dynamic<br>flow<br>control<br>depth** | **Vertex<br>texture<br>fetch** | **Number of<br>texture<br>samplers** | **Geometry<br>instancing<br>support** | **Bitwise<br>operators** | **Native<br>integers** | **Note** |
@@ -340,6 +342,55 @@ There are several types of vertex shader instructions, as shown in the table. Co
 | ``asm``  | `_d4`        | Divide by 4                   | `#instruction#_d4`  | ❔       | ✅       | ✅       | ✅       | ✅       |          |
 | ``asm``  | `_d8`        | Divide by 8                   | `#instruction#_d8`  | ❔       | ❌       | ❌       | ❌       | ✅       |          |
 | ``asm``  | `_sat`       | Saturate (clamp from 0 and 1) | `#instruction#_sat` | ❔       | ✅       | ✅       | ✅       | ✅       |          |
+
+---
+
+## More examples:
+
+**1. Showing texCoords from a texture:**
+```hlsl
+texture img;
+
+technique tech_main
+{
+    pass P0
+    {
+        Texture[0] = <img>;
+        PixelShader = asm
+        {
+            ps.1.4;                // <- We use Pixel Shader 1.4
+
+            texld r0, t0;          // <- We declare the texture "img" to `r0`
+            texcrd r1.rgb, t0;     // <- Assigning to `r1` the colors showing the texCoord from the texture "img"
+
+            mov r0.rgb, r1;        // <- Assigning RGB colors from `r1` to `r0`
+        };
+    }
+}
+```
+
+**2. Monochrome colors:**
+```hlsl
+texture img;
+
+technique tech_main
+{
+    pass P0
+    {
+        Texture[0] = <img>;
+        PixelShader = asm
+        {
+            ps.1.1;                                   // <- We use Pixel Shader 1.1
+            def c0, 0.299f, 0.587f, 0.114f, 0.0f      // <- We declare a constant
+  
+            tex t0;                                   // <- We declare the texture "img" to `t0`
+            dp3 r0.rgb, c0, t0                        // <- Multiplying a constant with texture colors
+
+            mov r0.a, t0.a                            // <- Alpha color assignment again
+        };
+    }
+}
+```
 
 ---
 
