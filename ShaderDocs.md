@@ -34,11 +34,11 @@ All information is based on:
 
 ## Direct3D 8
 
-Shadery pisane dla Direct3D 8 są pisane w **asemblerze**, dany kod powinien się znajdować w pliku **.fx** w którym też piszemy shadery dla Direct3D 9, jeśli shader pod D3D8 działa, również zadziała pod D3D9, jednak to jest kompatybiliność w jedną stronę tz. D3D8 nie wspiera języka HLSL w pełni.
+Shaders written for Direct3D 8 are written in **assembler**, the code should be located in the .fx file in which we also write shaders for Direct3D 9, if a shader works for D3D8, it will also work for D3D9, but this is one-way compatibility, i.e. D3D8 does not fully support the HLSL language.
 
-Aby efekt ten musiał zadziałać, należy również w pliku **.xml** wstawić `dx8>yes</dx8>`
+For the D3D8 effect to work, you must also insert `dx8>yes</dx8>` in the **.xml** file
 
-[Przykładowy kod](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Release/Unused%20or%20Experimental/D3D8Test%20(Texture).zip) efektu działającego pod D3D8:
+[Example code](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Release/Unused%20or%20Experimental/D3D8Test%20(Texture).zip):
 ```hlsl
 texture T_Image;                            // <- Main texture
 
@@ -88,6 +88,71 @@ technique tech_main
 
 ---
 
+### Register Types / Read Port Limit / Read-only, Read/Write and Range [(Source)](https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx9-graphics-reference-asm-ps-registers-ps-1-x)
+**Dla Pixel Shader od 1.0 do 1.4, opierają się na rejestrach w celu:**
+- Pobierania danych wierzchołkowych
+- Wyprowadzania danych pikselowych
+- Przechowywania tymczasowych wyników podczas obliczeń
+- Dentyfikowania etapów próbkowania tekstur
+
+<br>
+
+**Legenda:**
+- W kolumnie Register jest opisany jak wygląda, w miejscu `#` powinna być wartość, przykład: `c0`, `t1`, `r0`, `v2`. W opisie jest napisane do czego służy rejestr.
+- Read Port Limit opisuje ograniczenia dotyczące korzystania z wielu rejestrów w jednej instrukcji.
+- Read-Only lub Read/Write opisuje, które rejestry mogą być używane do odczytu, zapisu lub obu.
+- Zakres opisuje zakres danych komponentu *(W Fusion 2.5 nie wiadomo jaka jest wartość `PixelShader1xMaxValue` i `MaxTextureRepeat`)*
+
+**Constant register:**
+- Zawierają stałe dane. Dane można załadować do rejestru stałego za pomocą instrukcji `def`. Rejestry stałe nie nadają się do wykorzystania w instrukcjach adresowania tekstur. Jedynym wyjątkiem jest instrukcja `texm3x3spec`, która wykorzystuje stały rejestr do dostarczenia wektora promieniowania oka.
+
+**Temporary register:**
+- Służą do przechowywania wyników pośrednich. r0 służy dodatkowo jako wyjście shadera pikseli. Wartość w r0 na końcu shadera to kolor piksela dla shadera.
+
+**Texture register**
+- W przypadku shaderów pikseli w wersjach od `ps.1.1` do `ps.1.3` rejestry tekstur zawierają dane tekstur lub współrzędne tekstur.<br>
+  Dane tekstury są ładowane do rejestru tekstur podczas próbkowania tekstury.<br>
+  Próbkowanie tekstury wykorzystuje współrzędne tekstury do wyszukiwania lub próbkowania wartości koloru na określonych współrzędnych *(U'V, W'Q)*, biorąc pod uwagę atrybuty stanu etapu tekstury.<br>
+  Dane współrzędnych tekstury są interpolowane z danych współrzędnych tekstury wierzchołka i są powiązane z określonym etapem tekstury.<br>
+  Istnieje domyślne powiązanie jeden do jednego pomiędzy numerem etapu tekstury a kolejnością deklaracji współrzędnych tekstury.<br>
+  Domyślnie pierwszy zestaw współrzędnych tekstury zdefiniowanych w formacie wierzchołka jest powiązany z etapem tekstury 0.<br>
+
+- W przypadku tych wersji shaderów pikseli rejestry tekstur zachowują się tak samo jak rejestry tymczasowe, gdy są używane przez instrukcje arytmetyczne.
+
+- W przypadku Pixel Shader w wersji `ps.1.4` rejestry tekstur `(t#)` zawierają dane współrzędnych tekstur tylko do odczytu.<br>
+  Oznacza to, że zestaw współrzędnych tekstury i numer etapu tekstury są od siebie niezależne. Numer etapu tekstury *(z którego można pobrać próbkę tekstury)* jest określany przez numer rejestru docelowego **(r0 do r5)**.<br>
+  W przypadku instrukcji texld zestaw współrzędnych tekstury jest określany przez rejestr źródłowy **(t0 do t5)**, dzięki czemu zestaw współrzędnych tekstury można odwzorować na dowolny etap tekstury.<br>
+  Ponadto rejestr źródłowy *(określający współrzędne tekstury)* dla `texld` może być również rejestrem tymczasowym `(r#)`, w którym to przypadku zawartość rejestru tymczasowego jest używana jako współrzędne tekstury.<br>
+
+**Color register:**
+- Służą do przekazywania danych z Vertex Shadera do Pixel Shadera.
+
+<br>
+
+**Read limit:**
+- Limit portu odczytu określa liczbę różnych rejestrów każdego typu rejestru, które mogą być użyte jako rejestr źródłowy w jednej instrukcji.
+
+<br>
+
+**Read-Only and Read/Write:**
+- Typy rejestrów są identyfikowane zgodnie z możliwością tylko do odczytu **(Read-Only)** lub możliwością odczytu/zapisu **(Read/Write)**. Rejestry tylko do odczytu mogą być używane tylko jako rejestry źródłowe w instrukcji; nigdy nie mogą być używane jako rejestr docelowy.
+
+<br>
+
+**Range:**
+- Zakres to maksymalna i minimalna wartość danych rejestru. Zakresy różnią się w zależności od rodzaju rejestru.
+- Wczesny sprzęt do cieniowania pikseli reprezentuje dane w rejestrach przy użyciu liczby stałoprzecinkowej. Ogranicza to precyzję do maksymalnie około ośmiu bitów dla ułamkowej części liczby.
+
+<br>
+
+| **Type** | **Register** | **Description**    | ``1.0`` | ``1.1``                                                                                                                      | ``1.2``                                                                                                                      | ``1.3``                                                                                                                      | ``1.4``                                                                                                                      | **Note** |
+|----------|--------------|--------------------|---------|------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------|----------|
+| ``asm``  | `c#`         | Constant register  | ❔     | Quantity: **8**<br>Read limit: **2**<br><br>**Read-Only**<br><br>Range: **-1 to 1**                                          | Quantity: **8**<br>Read limit: **2**<br><br>**Read-Only**<br><br>Range: **-1 to 1**                                          | Quantity: **8**<br>Read limit: **2**<br><br>**Read-Only**<br><br>Range: **-1 to 1**                                          | Quantity: **8**<br>Read limit: **2**<br><br>**Read-Only**<br><br>Range: **-1 to 1**                                          |          |
+| ``asm``  | `r#`         | Temporary register | ❔     | Quantity: **2**<br>Read limit: **2**<br><br>**Read/Write**<br><br>Range: **-PixelShader1xMaxValue to PixelShader1xMaxValue** | Quantity: **2**<br>Read limit: **2**<br><br>**Read/Write**<br><br>Range: **-PixelShader1xMaxValue to PixelShader1xMaxValue** | Quantity: **2**<br>Read limit: **2**<br><br>**Read/Write**<br><br>Range: **-PixelShader1xMaxValue to PixelShader1xMaxValue** | Quantity: **6**<br>Read limit: **3**<br><br>**Read/Write**<br><br>Range: **-PixelShader1xMaxValue to PixelShader1xMaxValue** |          |
+| ``asm``  | `t#`         | Texture register   | ❔     | Quantity: **4**<br>Read limit: **2**<br><br>**Read/Write**<br><br>Range: **-MaxTextureRepeat to MaxTextureRepeat**           | Quantity: **4**<br>Read limit: **3**<br><br>**Read/Write**<br><br>Range: **-MaxTextureRepeat to MaxTextureRepeat**           | Quantity: **4**<br>Read limit: **3**<br><br>**Read/Write**<br><br>Range: **-MaxTextureRepeat to MaxTextureRepeat**           | Quantity: **6**<br>Read limit: **1**<br><br>-<br><br>Range: **-MaxTextureRepeat to MaxTextureRepeat**                        |          |
+| ``asm``  | `v#`         | Color register     | ❔     | Quantity: **4**<br>Read limit: **2**<br><br>**Read/Write**<br><br>Range: **0 to 1**                                          | Quantity: **2**<br>Read limit: **2**<br><br>**Read-Only**<br><br>Range: **0 to 1**                                           | Quantity: **2**<br>Read limit: **2**<br><br>**Read-Only**<br><br>Range: **0 to 1**                                           | Quantity: **2** in **phase 2**<br><br>Read limit: **2**<br><br>**Read-Only**<br><br>Range: **0 to 1**                        |          |
+
+
 ### Instruction Set [(Source 1)](https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx9-graphics-reference-asm-ps-instructions-ps-1-x) [(Source 2)](https://web.archive.org/web/20120911164630/https://user.xmission.com/~legalize/book/download/13-Pixel%20Shaders.pdf)
 
 **Instruction set for Pixel Shader**
@@ -136,6 +201,19 @@ technique tech_main
 | ``asm``  | `texreg2ar`            | Sample a texture using the alpha and red components                           | 1                     | ✅       | ✅       | ✅       | ✅       | ❌       |                                                                                                                                                                                                   |
 | ``asm``  | `texreg2gb`            | Sample a texture using the green and blue components                          | 1                     | ✅       | ✅       | ✅       | ✅       | ❌       |                                                                                                                                                                                                   |
 | ``asm``  | `texreg2rgb`           | Sample a texture using the red, green and blue components                     | 1                     | ❌       | ❌       | ✅       | ✅       | ❌       |                                                                                                                                                                                                   |
+
+**Instruction set for Vertex Shader**
+
+### Modifiers Set [(Source)](https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx9-graphics-reference-asm-ps-instructions-modifiers-ps-1-x)
+| **Type** | **Modifier** | **Description**               | **Syntax**          | ``1.0`` | ``1.1`` | ``1.2`` | ``1.3`` | ``1.4`` | **Note** |
+|----------|--------------|-------------------------------|---------------------|---------|---------|---------|---------|---------|----------|
+| ``asm``  | `_x2`        | Multiply by 2                 | `#instruction#_x2`  | ❔       | ✅       | ✅       | ✅       | ✅       |          |
+| ``asm``  | `_x4`        | Multiply by 4                 | `#instruction#_x4`  | ❔       | ✅       | ✅       | ✅       | ✅       |          |
+| ``asm``  | `_x8`        | Multiply by 8                 | `#instruction#_x8`  | ❔       | ❌       | ❌       | ❌       | ✅       |          |
+| ``asm``  | `_d2`        | Divide by 2                   | `#instruction#_d2`  | ❔       | ✅       | ✅       | ✅       | ✅       |          |
+| ``asm``  | `_d4`        | Divide by 4                   | `#instruction#_d4`  | ❔       | ✅       | ✅       | ✅       | ✅       |          |
+| ``asm``  | `_d8`        | Divide by 8                   | `#instruction#_d8`  | ❔       | ❌       | ❌       | ❌       | ✅       |          |
+| ``asm``  | `_sat`       | Saturate (clamp from 0 and 1) | `#instruction#_sat` | ❔       | ✅       | ✅       | ✅       | ✅       |          |
 
 ---
 
