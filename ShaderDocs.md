@@ -1,4 +1,4 @@
-# Unofficial documentation on shaders in Clickteam Fusion
+# Unofficial documentation on shaders in Clickteam Fusion (Temporary file, documentation will be in .chm file)
 
 ### This is an information library designed to organize what works and what doesn't work in Clickteam Fusion.
 All information is based on:
