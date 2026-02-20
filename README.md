@@ -20,7 +20,7 @@
 ---
 
 ### ⚠️ Note
-- The description was last updated on **January 22, 2026 (CET)**.
+- The description was last updated on **February 20, 2026 (CET)**.
 - The update of shaders was last updated on **January 22, 2026 (CET)**.
 - FSP is licensed under the **MIT license**.
 
@@ -53,6 +53,7 @@
 | Android (OpenGL ES)                 | ✅        | -                                                                                                                                                                                                                                            |
 | iOS / macOS (OpenGL ES)             | ✅        | *There may be problems for macOS with some effects.*                                                                                                                                                                                         |
 | HTML5 (WebGL)                       | ❌        | *Currently HTML5 exporter does not support effects.*                                                                                                                                                                                         |
+| Haxe (Linux & WebGL)                       | ❌        | *The exporter has been announced but is not yet released.*                                                                                                                                                                                         |
 
 ---
 
