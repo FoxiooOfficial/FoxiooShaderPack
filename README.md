@@ -20,7 +20,7 @@
 ---
 
 ### ⚠️ Note
-- The description was last updated on **February 20, 2026 (CET)**.
+- The description was last updated on **April 11, 2026 (CET)**.
 - The update of shaders was last updated on **January 22, 2026 (CET)**.
 - FSP is licensed under the **MIT license**.
 
@@ -46,13 +46,13 @@
 ## ❓ What does FSP support?
 | Graphics API / Exporter             | Support? | Note                                                                                                                                                                                                                                         |
 |-------------------------------------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Windows (Direct3D 8)                | 🟨        | *I found a way to make shaders work under Direct3D8, but without additional variables and textures. I will continue experimenting to achieve full compatibility. (I would like D3D9 and D3D8 to be separated...)* |
-| Windows (Direct3D 9)                | ✅        | *Some advanced effects are not the same as other games due to Pixel Shader 2 limitations.*                                                                                                                                                  |
+| Windows (Direct3D 8)                | 🟨        | *I've figured out how to create effects in Direct3D 8; variables and external textures work; I’d like Clickteam to add this to Fusion so that these effects are stored as separate files (D3D8 uses .fx files just like D3D9, so creating an effect for D3D8 at the expense of D3D9, which will be limited by ps_1_x), e.g., .fxd8, .fxasm, I'll add effect ports* |
+| Windows (Direct3D 9)                | ✅        | *Some advanced effects are not the same as other games due to ps_2_x limitations. (Technically, ps_3_0 works, but texCoords are broken; this can be fixed using a Vertex Shader, but I'd rather wait until it's fixed in Fusion)*                                                                                                                                                  |
 | Windows (Direct3D 11)               | ✅        | -                                                                                                                                                                                                                                            |
 | Windows (Direct3D 11 Premultiplied) | ✅        | -                                                                                                                                                                                                                                            |
 | Android (OpenGL ES)                 | ✅        | -                                                                                                                                                                                                                                            |
 | iOS / macOS (OpenGL ES)             | ✅        | *There may be problems for macOS with some effects.*                                                                                                                                                                                         |
-| HTML5 (WebGL)                       | ❌        | *Currently HTML5 exporter does not support effects.*                                                                                                                                                                                         |
+| HTML5                       | ❌        | *Currently HTML5 exporter does not support effects.*                                                                                                                                                                                         |
 | Haxe (Linux & WebGL)                       | ❌        | *The exporter has been announced but is not yet released.*                                                                                                                                                                                         |
 
 ---
