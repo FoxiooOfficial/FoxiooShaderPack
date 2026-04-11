@@ -40,7 +40,7 @@
 | Background                              | These shaders use the object texture and the background texture for calculations **OR** only background texture.                     | 205 |
 | Switch                                  | These shaders use either the object texture **OR** the background texture depending on the setting of the `_Blending_Mode` variable. | 117 |
 | Texture                                 | These shaders use **ONLY** the object texture or external texture                                                                    | 50  |
-| Texture+Background / Background+Texture | **Mix** of Background and Switch types                                                                                               | 2   |
+| Texture+Background / Background+Texture | *I don't remember why I created this category, but looking at it now after all this time, it's simply "Background" 💀 (I'll remove this in the next issue)*                                                                                               | 2   |
 |                                         | **Number of effects**                                                                                                                | **374** 🎉 |
 
 ## ❓ What does FSP support?
