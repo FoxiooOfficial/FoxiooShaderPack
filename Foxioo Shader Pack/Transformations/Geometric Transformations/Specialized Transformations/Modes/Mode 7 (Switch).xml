@@ -1,15 +1,15 @@
 <effect>
 	<name>Mode 7 (Switch)</name>
-		<description>Shader giving Mode 7 style perspective effect. (Mainly intended for Tails7)</description> 
+		<description>Shader giving Mode 7 style perspective effect. (Mainly intended for Tails7 R1.0.3+)</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 
 		<parameter>
-			<name>/* Foxioo Mode 7 (Switch) Shader | 1.9 (08.11.2025) */</name>
+			<name>/* Foxioo Mode 7 (Switch) Shader | 2.0 (21.03.2026) Tails7 R1.0.3 */</name>
 			<property>checkbox</property>
-			<description>Shader giving Mode 7 style perspective effect. (Mainly intended for Tails7)</description>
+			<description>Shader giving Mode 7 style perspective effect. (Mainly intended for Tails7 R1.0.3+)</description>
 			<variable>_</variable>
 		</parameter>
 
@@ -153,7 +153,6 @@
 
 				<value>0</value>
 			</parameter>
-
 
 			<parameter>
 				<name>Distortion Of Perspective</name>

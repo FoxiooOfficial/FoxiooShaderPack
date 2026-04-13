@@ -11,6 +11,7 @@
 /***********************************************************/
 /* Samplers */
 /***********************************************************/
+
 Texture2D<float4> S2D_Image : register(t0);
 SamplerState S2D_ImageSampler : register(s0);
 

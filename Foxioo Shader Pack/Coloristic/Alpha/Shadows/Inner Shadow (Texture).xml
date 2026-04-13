@@ -1,0 +1,134 @@
+<effect>
+	<name>Inner Shadow (Texture)</name>
+		<description>This shaders adds an inner shadow.</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>0</BackgroundTexture>
+		<parameter>
+			<name>/* Foxioo Inner Shadow (Texture) Shader | 1.0 (28.03.2026) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>This shaders adds an inner shadow.</description>
+		</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Offset in X-Axis</name>
+				<variable>_PosX</variable>
+				
+				<description>This variable specifies the offset along the X-axis.</description>
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Offset in Y-Axis</name>
+				<variable>_PosY</variable>
+				
+				<description>This variable specifies the offset along the Y-axis.</description>
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Size</name>
+				<variable>_Size</variable>
+				
+				<description>This variable specifies the shadow size in pixels</description>
+
+				<type>float</type>
+
+				<value>8</value>
+			</parameter>
+
+			<parameter>
+				<name>(RGB) Shadow Color</name>
+				<variable>_Color</variable>
+				
+				<description>This variable specifies the shadow color (RGB)</description>
+
+				<type>int_float4</type>
+				<property>color</property>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>(RGB) Shadow Color Accent</name>
+				<variable>_ColorAccent</variable>
+				
+				<description>This variable specifies the accent color of the shadow (RGB); it appears in the shadow's alpha color gradient (the lower the alpha value, the more prominent the color).</description>
+
+				<type>int_float4</type>
+				<property>color</property>
+
+				<value>255</value>
+			</parameter>
+
+			<parameter>
+				<name>(Alpha) Shadow Color</name>
+				<variable>_ColorAlpha</variable>
+				
+				<description>Can mask or blend the color depending on whether the value is negative or positive.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Alpha Multiplier</name>
+				<variable>_AlphaMul</variable>
+				
+				<description>Specifies the alpha multiplier for the shadow color; it can make the shadow sharper at high values (when greater than 1) or determine whether the shadow should be less visible when the value is between 0 and 1.</description>
+
+				<type>float</type>
+
+				<value>2</value>
+			</parameter>
+
+			<parameter>
+				<name>Alpha Base Multiplier</name>
+				<variable>_AlphaBack</variable>
+				
+				<description>This variable specifies the alpha color multiplier for the base texture.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+        <parameter>
+            <name>/* */</name>
+            <property>checkbox</property>
+            <variable>__</variable>
+        </parameter>
+
+	<sampler>
+		<index>0</index>
+		<bordercolor>0</bordercolor>
+		<addressU>Border</addressU>
+		<addressV>Border</addressV>
+	</sampler>
+
+</effect>
+
+<!-- Please ignore this; the script that automatically compresses files into a ZIP archive needs to be aware of the additional files :3 -->
+<!-- InnerShadow.mfa -->

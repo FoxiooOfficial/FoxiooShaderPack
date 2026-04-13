@@ -1,0 +1,90 @@
+<effect>
+	<name>Bavel Smooth (Texture)</name>
+		<description>Shader adds simple lighting to create a sense of depth; the lighting is soft.</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>0</BackgroundTexture>
+		<parameter>
+			<name>/* Foxioo Bavel Smooth (Texture) Shader | 1.0 (07.04.2026) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>Shader adds simple lighting to create a sense of depth; the lighting is soft.</description>
+		</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>0.85</value>
+			</parameter>
+
+			<parameter>
+				<name>Light Direction</name>
+				<variable>_Dir</variable>
+				
+				<description>This variable specifies the offset along the X-axis.</description>
+
+				<type>float</type>
+
+				<value>40</value>
+			</parameter>
+
+			<parameter>
+				<name>Size</name>
+				<variable>_Size</variable>
+				
+				<description>This variable specifies the shadow size in pixels</description>
+
+				<type>float</type>
+
+				<value>8</value>
+			</parameter>
+
+			<parameter>
+				<name>(RGB) Color Light</name>
+				<variable>_ColorLight</variable>
+				
+				<description>This variable specifies the color used for the lightest color.</description>
+
+				<type>int_float4</type>
+				<property>color</property>
+
+				<value>16777215</value>
+			</parameter>
+
+			<parameter>
+				<name>(RGB) Color Shadow</name>
+				<variable>_ColorShadow</variable>
+				
+				<description>This variable specifies the color used for the darkness color.</description>
+
+				<type>int_float4</type>
+				<property>color</property>
+
+				<value>0</value>
+			</parameter>
+
+        <parameter>
+            <name>/* */</name>
+            <property>checkbox</property>
+            <variable>__</variable>
+        </parameter>
+
+	<sampler>
+		<index>0</index>
+		<bordercolor>0</bordercolor>
+		<addressU>Border</addressU>
+		<addressV>Border</addressV>
+	</sampler>
+
+</effect>
+
+<!-- Please ignore this; the script that automatically compresses files into a ZIP archive needs to be aware of the additional files :3 -->
+<!-- InnerShadow.mfa -->

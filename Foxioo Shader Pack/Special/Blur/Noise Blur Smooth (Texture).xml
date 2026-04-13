@@ -1,0 +1,42 @@
+<effect>
+	<name>Noise Blur Smooth (Texture)</name>
+		<description>This effect blurs the texture using noise and smoothing it out slightly.</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>0</BackgroundTexture>
+			
+		<parameter>
+			<name>/* Foxioo Noise Blur Smooth (Texture) Shader | 1.0 (13.04.2026) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>This effect blurs the texture using noise and smoothing it out slightly.</description>
+		</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>0.1</value>
+			</parameter>
+
+        <parameter>
+            <name>/* */</name>
+            <property>checkbox</property>
+            <variable>__</variable>
+        </parameter>
+
+		<sampler>
+			<index>0</index>
+			<filter>point</filter>
+			<addressU>border</addressU>
+			<addressV>border</addressV>
+			<bordercolor>0</bordercolor>
+		</sampler>
+</effect>

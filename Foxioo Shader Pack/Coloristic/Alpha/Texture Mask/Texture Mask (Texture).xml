@@ -14,7 +14,7 @@
 			<description>This shader excludes the selected color causing the color to be invisible.</description> 
 		</parameter>
 
-<parameter>
+	<parameter>
 			<name>( Position )</name>
 			<property>checkbox</property>
 			<description>Here are the variables for changing the position in the texture.</description>
@@ -161,7 +161,7 @@
 			<!-- #################################### -->
 
 			<parameter>
-				<name>(Red) Texutre</name>
+				<name>(Red) Texture</name>
 				<varible>_Texture_Red</varible>
 				<code>_Texture_Red</code>			
 				<description>Here you declare the texture that is to be the mask.</description>			
@@ -208,7 +208,7 @@
 			<!-- #################################### -->
 
 			<parameter>
-				<name>(Green) Texutre</name>
+				<name>(Green) Texture</name>
 				<varible>_Texture_Green</varible>
 				<code>_Texture_Green</code>			
 				<description>Here you declare the texture that is to be the mask.</description>			
@@ -253,7 +253,7 @@
 			<!-- #################################### -->
 
 			<parameter>
-				<name>(Blue) Texutre</name>
+				<name>(Blue) Texture</name>
 				<varible>_Texture_Blue</varible>
 				<code>_Texture_Blue</code>			
 				<description>Here you declare the texture that is to be the mask.</description>			
@@ -298,7 +298,7 @@
 			<!-- #################################### -->
 
 			<parameter>
-				<name>(Alpha) Texutre</name>
+				<name>(Alpha) Texture</name>
 				<varible>_Texture_Alpha</varible>
 				<code>_Texture_Alpha</code>			
 				<description>Here you declare the texture that is to be the mask.</description>			
@@ -347,3 +347,16 @@
 			<variable>__</variable>
 		</parameter>
 </effect>
+
+<!-- Please ignore this; the script that automatically compresses files into a ZIP archive needs to be aware of the additional files :3 -->
+<!-- INCLUDE TEXTUREMASK_0.png -->
+<!-- INCLUDE TEXTUREMASK_1.png -->
+<!-- INCLUDE TEXTUREMASK_2.png -->
+<!-- INCLUDE TEXTUREMASK_3.png -->
+<!-- INCLUDE TEXTUREMASK_4.png -->
+<!-- INCLUDE TEXTUREMASK_5.png -->
+<!-- INCLUDE TEXTUREMASK_6.png -->
+<!-- INCLUDE TEXTUREMASK_7.png -->
+<!-- INCLUDE TEXTUREMASK_8.png -->
+<!-- INCLUDE TEXTUREMASK_9.png -->
+<!-- INCLUDE TEXTUREMASK_10.png -->

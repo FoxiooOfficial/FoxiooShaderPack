@@ -50,7 +50,7 @@
 			</parameter>
 
 			<parameter>
-				<name>Ice Texutre</name>
+				<name>Ice Texture</name>
 				<varible>_Texture_Ice</varible>
 				<code>_Texture_Ice</code>			
 				<description>This variable is responsible for the texture that is supposed to give the freezing effect.</description>			
@@ -60,7 +60,7 @@
 			</parameter>
 
 			<parameter>
-				<name>Mask Texutre</name>
+				<name>Mask Texture</name>
 				<varible>_Texture_Mask</varible>
 				<code>_Texture_Mask</code>			
 				<description>This variable is responsible for mask effect for _Mixing.</description>			

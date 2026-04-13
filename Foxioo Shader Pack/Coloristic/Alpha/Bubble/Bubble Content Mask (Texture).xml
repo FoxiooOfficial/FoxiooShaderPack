@@ -1,0 +1,120 @@
+<effect>
+	<name>Bubble Content Mask (Background)</name>
+		<description>This shader should be applied over the Bubble Mask (Texture) layer, the color will be masked based on the layer underneath.</description> 
+			<author>Foxioo (Made at JayTholen's request)</author>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+		<parameter>
+			<name>/* Foxioo Bubble Content Mask (Background) Shader | 1.1 (02.03.2026) */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>This shader should be applied over the Bubble Mask (Texture) layer, the color will be masked based on the layer underneath.</description>
+		</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>1.0</value>
+			</parameter>
+
+			<parameter>
+				<name>Color Inner</name>
+				<variable>_ColorIn</variable>
+				
+				<description>This variable determines the color from the mask, i.e. if the color matches, the mask will be visible.</description>
+
+				<type>int_float4</type>
+				<property>color</property>
+
+				<value>13650874</value>
+				<preview_value>16775640</preview_value>
+			</parameter>
+
+			<parameter>
+				<name>Background Color</name>
+				<variable>_ColorBackground</variable>
+				
+				<description>The variable defines the background color visible in the content mask.</description>
+
+				<type>int_float4</type>
+				<property>color</property>
+
+				<value>16777215</value>
+			</parameter>
+
+			<parameter>
+				<name>Outline Color</name>
+				<variable>_OutlineColor</variable>
+				
+				<description>The variable defines the red, green and blue color of the outline.</description>
+
+				<type>int_float4</type>
+				<property>color</property>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Outline Alpha</name>
+				<variable>_OutlineAlpha</variable>
+				
+				<description>The variable defines the alpha color of the outline.</description>
+
+				<type>float</type>
+
+				<value>1.0</value>
+			</parameter>
+
+			<parameter>
+				<name>Outline Offset</name>
+				<variable>_OutlineOffset</variable>
+				
+				<description>The variable defines the size of the outline.</description>
+
+				<type>float</type>
+
+				<value>1.0</value>
+			</parameter>
+
+			<parameter>
+				<name>Outline Corner</name>
+				<variable>_OutlineCorner</variable>
+				
+				<description>Determines whether the outline is 4-way or 8-way.</description>
+
+            	<property>checkbox</property>
+
+				<value>1</value>
+			</parameter>
+
+
+			<parameter>
+            <name>/* */</name>
+            <property>checkbox</property>
+            <variable>___</variable>
+        </parameter>
+
+		<sampler>
+			<index>0</index>
+			<filter>point</filter>
+			<addressU>clamp</addressU>
+			<addressV>clamp</addressV>
+			<bordercolor>0</bordercolor>
+		</sampler>
+
+		<sampler>
+			<index>1</index>
+			<filter>point</filter>
+			<addressU>clamp</addressU>
+			<addressV>clamp</addressV>
+			<bordercolor>0</bordercolor>
+		</sampler>
+</effect>

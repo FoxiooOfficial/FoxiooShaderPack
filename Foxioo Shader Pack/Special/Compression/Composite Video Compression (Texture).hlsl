@@ -1,7 +1,7 @@
 /***********************************************************/
 
 /* Shader author: Foxioo */
-/* Version shader: 1.0 (22.12.2025) */
+/* Version shader: 1.1 (10.04.2026) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 
 /***********************************************************/
@@ -11,6 +11,7 @@
 /***********************************************************/
 /* Samplers */
 /***********************************************************/
+
 Texture2D<float4> S2D_Image : register(t0);
 SamplerState S2D_ImageSampler : register(s0);
 
@@ -171,7 +172,7 @@ PS_OUTPUT ps_main( in PS_INPUT In )
                 _Render.g += abs(sin(_Rand * 1204358.0 + _Time) * _Edge * _Y) * pow(_Y, 5.0);
                 _Render.b += abs(cos(_Rand * 7568234.0 + _Time) * _Edge * _Y) * pow(_Y, 5.0);
 
-                _Result.rgb = lerp(_Result.rgb, _Render, _Mixing);
+                _Result.rgb = lerp(_Result.rgb, _Render * In.Tint.rgb, _Mixing);
         _Result.a = _Render_Texture.a;
 
     Out.Color = _Result;
@@ -247,7 +248,7 @@ PS_OUTPUT ps_main_pm( in PS_INPUT In )
                 _Render.g += abs(sin(_Rand * 1204358.0 + _Time) * _Edge * _Y) * pow(_Y, 5.0);
                 _Render.b += abs(cos(_Rand * 7568234.0 + _Time) * _Edge * _Y) * pow(_Y, 5.0);
 
-                _Result.rgb = lerp(_Result.rgb, _Render, _Mixing);
+                _Result.rgb = lerp(_Result.rgb, _Render * In.Tint.rgb, _Mixing);
         _Result.a = _Render_Texture.a;
 
     _Result.rgb *= _Result.a;

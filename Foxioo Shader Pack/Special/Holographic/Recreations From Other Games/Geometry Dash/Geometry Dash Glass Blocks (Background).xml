@@ -74,3 +74,6 @@
         </parameter>
 
 </effect>
+
+<!-- Please ignore this; the script that automatically compresses files into a ZIP archive needs to be aware of the additional files :3 -->
+<!-- INCLUDE GlassBlocks.mfa -->

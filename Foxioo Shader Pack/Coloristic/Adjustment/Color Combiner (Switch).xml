@@ -62,7 +62,7 @@
 			</parameter>
 
 			<parameter>
-				<name>(B) Texutre</name>
+				<name>(B) Texture</name>
 				<varible>_Texture_B</varible>
 				<code>_Texture_B</code>			
 				<description>The texture that will be used for parameter B when in texture mode.</description>			
@@ -94,7 +94,7 @@
 			</parameter>
 
 			<parameter>
-				<name>(C) Texutre</name>
+				<name>(C) Texture</name>
 				<varible>_Texture_C</varible>
 				<code>_Texture_C</code>			
 				<description>The texture that will be used for parameter C when in texture mode.</description>			
@@ -126,7 +126,7 @@
 			</parameter>
 
 			<parameter>
-				<name>(D) Texutre</name>
+				<name>(D) Texture</name>
 				<varible>_Texture_D</varible>
 				<code>_Texture_D</code>			
 				<description>The texture that will be used for parameter D when in texture mode.</description>			

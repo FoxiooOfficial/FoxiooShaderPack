@@ -1,7 +1,7 @@
 /***********************************************************/
 
 /* Shader author: Foxioo */
-/* Version shader: 1.9 (08.11.2025) */
+/* Version shader: 2.0 (21.03.2026) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 
 /***********************************************************/
@@ -90,40 +90,30 @@ uniform bool _Is_Pre_296_Build;
 
 vec2 Fun_Mode7(vec2 In)
 {
-    vec2 _UV = In;
-    _UV.x += _OffsetX - 0.5;
-    _UV /= (In.y * _Distortion) - 0.5;
+    /* THE REAL, M O D E  7  E F F E C T (the best function :3) */
+
+        /* Perspective */
+        vec2 _UV = In / (In.y * _Distortion - 0.5);
+
     return _UV * _PosZ;
 }
 
-vec2 Fun_RotationX(vec2 In)
+vec2 Fun_Rotation(vec2 In, vec2 _Pivot, float _Mul, float _Off, float _Rot, float _RotSub)
 {
-    vec2 _UV = vec2(In.x + _RotXPointX, In.y + _RotXPointY) * 0.5;
-    float _RotX_Temp = _RotX * RAD;
+    vec2 _UV = vec2(In.x + _Pivot.x, In.y + _Pivot.y) * _Mul;
 
-    float _CosR = cos(_RotX_Temp);
-    float _SinR = sin(_RotX_Temp);
+    float _Rot_Temp = (_Rot - _RotSub) * RAD;
 
-    return vec2(
-        _UV.x * _CosR + _UV.y * _SinR,
-        -_UV.x * _SinR + _UV.y * _CosR
-    );
-}
+        float _CosR = cos(_Rot_Temp);
+        float _SinR = sin(_Rot_Temp);
 
-vec2 Fun_RotationY(vec2 In)
-{
-    vec2 _UV = vec2(In.x + _RotYPointX, In.y + _RotYPointY);
-    float _RotY_Temp = (_RotY - 180.0) * RAD;
+        vec2 _OffsetUV = _UV - _Off;
 
-    float _CosR = cos(_RotY_Temp);
-    float _SinR = sin(_RotY_Temp);
-
-    vec2 _OffsetUV = _UV - 0.5;
-
-    return 0.5 + vec2(
+    return _Off + vec2(
         _OffsetUV.x * _CosR + _OffsetUV.y * _SinR,
         -_OffsetUV.x * _SinR + _OffsetUV.y * _CosR
     );
+
 }
 
 float Fun_Loop(float _UV, int _Mode)
@@ -177,46 +167,81 @@ void main(void)
 {   
     vec2 In_Background = vec2(In.x, 1.0 - In.y);
     
+    /* _RotY -> Rotation around the CENTER of the screen (camera viewpoint) */
     vec2 In_RotY;
     if(_Is_Pre_296_Build && _Blending_Mode)
-        In_RotY = Fun_RotationY(In_Background);
+        In_RotY = Fun_Rotation(In_Background, vec2(_RotYPointX, _RotYPointY), 1.0, 0.5, _RotY, 180.0);
     else
-        In_RotY = Fun_RotationY(In);
+        In_RotY = Fun_Rotation(In, vec2(_RotYPointX, _RotYPointY), 1.0, 0.5, _RotY, 180.0);
 
+    /* _RotZ -> Y-axis offset of texCoords; */
     float _RotZ_Temp = _RotZ * RAD;
-    
-        vec2 _In_Old = In_RotY;
+
+        //vec2 _In_Old = In_RotY;
         vec2 _In_Mod = In_RotY;
+
         _In_Mod.y += _RotZ_Temp;
-        
+        _In_Mod.x +=  _OffsetX - 0.5; /* ALSO OFFSET IN X AXIS RAHHHHHHH */
+
+        /* Set Mode 7 Distortion! -> Set perspective depth OR orthographic projection!!! */
+        /* TODO: add option to change the POV */
         vec2 _UV = Fun_Mode7(_In_Mod);
-        vec2 _Pos = vec2(-_PosX, _PosY);
-        vec2 _PosOffset = vec2(-_PosOffsetX, _PosOffsetY - 0.5);
-        vec2 _Scale_Temp = (vec2(_ScaleX, _ScaleY)) * _Scale;
         
-        _UV = Fun_RotationX(_UV);
-        _UV -= _PosOffset;
-        _UV *= _Scale_Temp;
-        _UV -= _Pos - 0.5;
+            /* _PosX -> Camera rotation AROUND ITSELF */
+            _UV = Fun_Rotation(_UV, vec2(_RotXPointX, _RotXPointY), 0.5, 0.0, _RotX, 0.0);
+
+            /* "Translation"
+                (why is it called that? :sob:) ugh, whatever, change of position... wait
+                these are points for scale!!!??
+                AHHH WHY AM I EVEN COMMENTING ON THIS
+            */
+            /* +X; -Y */
+            _UV += vec2(_PosOffsetX, -_PosOffsetY + 0.5);
+
+            /* "Scale"
+                Changing the scale of texCoords -> the closer to zero, the larger texture!
+            */
+            _UV *= vec2(_ScaleX, _ScaleY) * _Scale;
+
+            /* "Translation" (but for real)
+                The actual change in the "camera" position!!!
+            */
+            /* +X; -Y */
+            _UV += vec2(_PosX, -_PosY) + vec2(0.5, 0.5);
         
             ivec2 _Mode;
             _Mode = Fun_SetLoop(_Looping_Mode);
             vec2 _In_Orginal = _UV;
             
+            /* "Looping Mode"
+                Specifies how the texture should loop
+            */
                 _UV = vec2(
                     Fun_Loop(_UV.x, _Mode.x),
                     Fun_Loop(_UV.y, _Mode.y)
                 );
+
+                if(Fun_CheckEdge(_In_Orginal.x, _Mode.x) || Fun_CheckEdge(_In_Orginal.y, _Mode.y))  discard;
+            /* HEL YEA */
     
     /* Rendering */
-    vec4 _Render;
-    if(!_Blending_Mode) { _Render = texture2D(imgTexture, _UV) * blendColor; }
-    else { _Render = texture2D(bckgTexture, _UV); _Render.a = texture2D(imgTexture, In).a; }
+    vec4 _Render_Texture = texture2D(imgTexture, _UV);
+    vec4 _Render_Background = texture2D(bckgTexture, _UV);
+
+    vec4 _Render = mix(_Render_Texture, vec4(_Render_Background.rgb, _Render_Texture.a), float(_Blending_Mode));
     
-        if(Fun_CheckEdge(_In_Orginal.x, _Mode.x) || Fun_CheckEdge(_In_Orginal.y, _Mode.y))  { _Render = vec4(0.0); }
-        if(((_In_Old.y + _RotZ_Temp) * _Distortion) > 0.5 && !_Render_Sky)                  { _Render = vec4(0.0); }
-    
-    gl_FragColor = _Render;
+        /* REMOVE THE SKY WHEN *necessary*; 
+
+        -> check if _PosZ is positive
+        -> check if the ground render is greater than 0.5
+
+            I tried using IF/ELSE, but main goal is to get this function working on D3D9 at all
+
+            (i have to comment on this because the code is becoming less readable due to optimization :sob:)
+        */
+        _Render *= mix(vec4(abs(step(0.0, _PosZ) - step(0.5, _In_Mod.y * _Distortion))), vec4(1.0), float(_Render_Sky));
+
+    gl_FragColor = _Render * blendColor;
 }
 
 //@End

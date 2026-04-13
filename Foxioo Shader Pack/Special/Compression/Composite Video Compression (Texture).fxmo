@@ -1,7 +1,7 @@
 /***********************************************************/
 
 /* Shader author: Foxioo */
-/* Version shader: 1.0 (22.12.2025) */
+/* Version shader: 1.1 (10.04.2026) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 
 /***********************************************************/
@@ -188,7 +188,7 @@ void main(void)
                 _Render.g += abs(sin(_Rand * 1204358.0 + _Time) * _Edge * _Y) * pow(_Y, 5.0);
                 _Render.b += abs(cos(_Rand * 7568234.0 + _Time) * _Edge * _Y) * pow(_Y, 5.0);
 
-                _Result.rgb = mix(_Result.rgb, _Render, _Mixing);
+                _Result.rgb = mix(_Result.rgb, _Render * blendColor.rgb, _Mixing);
         _Result.a = _Render_Texture.a;
 
     fragColor = _Result;

@@ -7,7 +7,7 @@
 				<BackgroundTexture>0</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Composite Video Compression (Texture) Shader | 1.0 (22.12.2025) */</name>
+			<name>/* Foxioo Composite Video Compression (Texture) Shader | 1.1 (10.04.2026) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

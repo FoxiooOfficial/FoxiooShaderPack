@@ -1,6 +1,6 @@
 <effect>
 	<name>Quad With Reflections (Background) [Legacy]</name>
-		<description>This shader is a modification of the Quad shader created by Adam Hawker (aka Sketchy / MuddyMole) however, this shader contains "pseudo reflections". (Mainly intended for Tails7) (This version uses older texCoord calculations, which have the advantage of being less demanding on the GPU, but have the disadvantage of causing artifacts.)</description> 
+		<description>This shader is a modification of the Quad shader created by Adam Hawker (aka Sketchy / MuddyMole) however, this shader contains "pseudo reflections". (Mainly intended for Tails7 R1.0.1+) (This version uses older texCoord calculations, which have the advantage of being less demanding on the GPU, but have the disadvantage of causing artifacts.)</description> 
 			<author>Foxioo and Adam Hawker (aka Sketchy / MuddyMole)</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
@@ -12,7 +12,7 @@
 
 			<variable>_</variable>
 
-			<description>This shader is a modification of the Quad shader created by Adam Hawker (aka Sketchy / MuddyMole) however, this shader contains "pseudo reflections". (Mainly intended for Tails7) (This version uses older texCoord calculations, which have the advantage of being less demanding on the GPU, but have the disadvantage of causing artifacts.)</description>
+			<description>This shader is a modification of the Quad shader created by Adam Hawker (aka Sketchy / MuddyMole) however, this shader contains "pseudo reflections". (Mainly intended for Tails7 R1.0.1+) (This version uses older texCoord calculations, which have the advantage of being less demanding on the GPU, but have the disadvantage of causing artifacts.)</description>
 		</parameter>
 
 			<parameter>

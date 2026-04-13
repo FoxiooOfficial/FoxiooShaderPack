@@ -1,18 +1,18 @@
 <effect>
-	<name>Normal Map (Switch)</name>
-		<description>This effect transforms colors to return the color vector as in Normal Map.</description> 
+	<name>Normal Map (Switch) [OpenGL]</name>
+		<description>This effect transforms colors to return the color vector as in Normal Map (OpenGL type).</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Normal Map (Switch) Shader | 1.1 (18.10.2025) */</name>
+			<name>/* Foxioo Normal Map (Switch) [OpenGL] Shader | 1.2 (06.04.2026) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
 
-			<description>This effect transforms colors to return the color vector as in Normal Map.</description>
+			<description>This effect transforms colors to return the color vector as in Normal Map (OpenGL type).</description>
 		</parameter>
 
 			<parameter>

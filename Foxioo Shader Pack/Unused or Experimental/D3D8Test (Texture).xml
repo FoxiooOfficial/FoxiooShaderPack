@@ -5,8 +5,8 @@
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
+				<PSVersion>1.3</PSVersion>
 				<dx8>yes</dx8>
-		
 
 		<parameter>
 			<name>/* Foxioo Direct3D8 Test Shader (Texture) | 1.0 (22.01.2026) */</name>

@@ -1,7 +1,7 @@
 /***********************************************************/
 
 /* Shader author: Foxioo */
-/* Version shader: 1.0 (12.01.2026) */
+/* Version shader: 1.2 (05.04.2026) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 
 /***********************************************************/
@@ -25,22 +25,36 @@ cbuffer PS_VARIABLES : register(b0)
     bool _;
     float _Mixing;
     float _Mul;
+
     float _Width;
     float _Height;
+    float _Error;
+
+    float _PosX;
+    float _PosY;
+
+    float _Scale;
+    float _ScaleX;
+    float _ScaleY;
+
     bool _A;
     float xA;
     float yA;
+
     bool _B;
     float xB;
     float yB;
+
     bool _C;
     float xC;
     float yC;
+
     bool _D;
     float xD;
     float yD;
     bool __;
 };
+
 
 struct PS_INPUT
 {
@@ -59,20 +73,12 @@ cbuffer PS_PIXELSIZE : register(b1)
 	float fPixelHeight;
 };
 
-
 /************************************************************/
 /* Main */
 /************************************************************/
 
 float4 Fun_Polygon(float2 UV)
 {
-    float2 _DistX = float2(min(min(xA, xB), min(xC, xD)), max(max(xA, xB), max(xC, xD)));
-    float2 _DistY = float2(min(min(yA, yB), min(yC, yD)), max(max(yA, yB), max(yC, yD)));
-
-    if ((_DistX.y - _DistX.x) < (_Width) ||
-        (_DistY.y - _DistY.x) < (_Height))
-        return float4(0.0, 0.0, 1.0, -1.0);
-
     float a11 = xC - xB;
     float a12 = xC - xD;
     float b1  = xB + xD - xA - xC;
@@ -83,7 +89,7 @@ float4 Fun_Polygon(float2 UV)
 
     float _Denom = a11 * a22 - a12 * a21;
 
-    if (abs(_Denom) < 1e-4)
+    if (abs(_Denom) < _Error)
         return float4(0, 0, 1, 0);
 
     float H20 = (b1 * a22 - a12 * b2) / _Denom;
@@ -99,7 +105,7 @@ float4 Fun_Polygon(float2 UV)
         H01 * (H10 - yA * H20) +
         xA  * (H10 * H21 - H11 * H20);
 
-    if (abs(DET_H) < 1e-4)
+    if (abs(DET_H) < _Error)
         return float4(0, 0, 1, 0);
 
     float INV_H = 1.0 / DET_H;
@@ -121,14 +127,23 @@ float4 Fun_Polygon(float2 UV)
     float _W = C02 * UV.x + C12 * UV.y + C22;
 
     float _WReflected = 0.0;
-
-    if (_A == 1)      _WReflected = C02 * xA + C12 * yA + C22;
-    else if (_B == 1) _WReflected = C02 * xB + C12 * yB + C22;
-    else if (_C == 1) _WReflected = C02 * xC + C12 * yC + C22;
-    else if (_D == 1) _WReflected = C02 * xD + C12 * yD + C22;
+    if (_A == 1)        _WReflected = C02 * xA + C12 * yA + C22;
+    else if (_B == 1)   _WReflected = C02 * xB + C12 * yB + C22;
+    else if (_C == 1)   _WReflected = C02 * xC + C12 * yC + C22;
+    else if (_D == 1)   _WReflected = C02 * xD + C12 * yD + C22;
+    else                _WReflected = C02 * xA + C12 * yA + C22;
 
     if (abs(_WReflected) < 1e-4)
-        _WReflected = _W;
+    {
+        float wB = C02 * xB + C12 * yB + C22;
+        float wC = C02 * xC + C12 * yC + C22;
+        float wD = C02 * xD + C12 * yD + C22;
+                
+        if      (abs(wB) > 1e-4)    _WReflected = wB;
+        else if (abs(wC) > 1e-4)    _WReflected = wC;
+        else if (abs(wD) > 1e-4)    _WReflected = wD;
+        else                        _WReflected = 1.0;
+    }
 
     return float4(_U, _V, _W, _WReflected);
 }
@@ -138,17 +153,22 @@ PS_OUTPUT ps_main(in PS_INPUT In)
     PS_OUTPUT Out;
 
     float4 _Polygon = Fun_Polygon(In.texCoord);
-    
+
+        /* polygon checks */
         if (_Polygon.z != _Polygon.z || _Polygon.w != _Polygon.w)       clip(-1);
-        if (abs(_Polygon.z) <= 1e-6)                                    clip(-1);
-        if (_Polygon.z * _Polygon.w <= 0)                               clip(-1);
+        if (abs(_Polygon.z) <= 1e-4)                                    clip(-1);
+        if (_Polygon.z * _Polygon.w <= 0.0)                             clip(-1);
 
         float2 _UV = float2(_Polygon.x, _Polygon.y) / _Polygon.z;
 
-        if (_UV.x < 0.0 || _UV.x > 1.0 || _UV.y < 0.0 || _UV.y > 1.0)   clip(-1);
+        if (any(_UV < 0.0 || _UV > 1.0))                                clip(-1);
 
-    float4 _Render = S2D_Image.Sample(S2D_ImageSampler, _UV) * In.Tint;
-    _Render.rgb = lerp(_Render.rgb, S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord).rgb * _Mul / _Render.rgb, _Mixing); 
+        /* pixel shader */
+        float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, frac(_UV * _Scale * float2(_ScaleX, _ScaleY) + float2(_PosX, _PosY))) * In.Tint;
+        float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
+
+            float4 _Render = _Render_Texture;
+            _Render.rgb = lerp(_Render.rgb, _Render_Background.rgb * _Mul / _Render.rgb, _Mixing); 
 
     Out.Color = _Render;
     return Out;
@@ -170,17 +190,22 @@ PS_OUTPUT ps_main_pm(in PS_INPUT In)
     PS_OUTPUT Out;
 
     float4 _Polygon = Fun_Polygon(In.texCoord);
-    
+
+        /* polygon checks */
         if (_Polygon.z != _Polygon.z || _Polygon.w != _Polygon.w)       clip(-1);
         if (abs(_Polygon.z) <= 1e-4)                                    clip(-1);
-        if (_Polygon.z * _Polygon.w <= 0)                               clip(-1);
+        if (_Polygon.z * _Polygon.w <= 0.0)                             clip(-1);
 
         float2 _UV = float2(_Polygon.x, _Polygon.y) / _Polygon.z;
 
-        if (_UV.x < 0.0 || _UV.x > 1.0 || _UV.y < 0.0 || _UV.y > 1.0)   clip(-1);
+        if (any(_UV < 0.0 || _UV > 1.0))                                clip(-1);
 
-    float4 _Render = Demultiply(S2D_Image.Sample(S2D_ImageSampler, _UV)) * In.Tint;
-    _Render.rgb = lerp(_Render.rgb, S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord).rgb * _Mul / _Render.rgb, _Mixing); 
+        /* pixel shader */
+        float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, frac(_UV * _Scale * float2(_ScaleX, _ScaleY) + float2(_PosX, _PosY)))) * In.Tint;
+        float4 _Render_Background = Demultiply(S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord));
+
+            float4 _Render = _Render_Texture;
+            _Render.rgb = lerp(_Render.rgb, _Render_Background.rgb * _Mul / _Render.rgb, _Mixing); 
 
     _Render.rgb *= _Render.a;
 

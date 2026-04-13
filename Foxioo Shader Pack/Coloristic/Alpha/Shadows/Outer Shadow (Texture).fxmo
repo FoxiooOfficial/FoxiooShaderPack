@@ -1,0 +1,120 @@
+/***********************************************************/
+
+/* Shader author: Foxioo */
+/* Version shader: 1.0 (28.03.2026) */
+/* My GitHub: https://github.com/FoxiooOfficial */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_vertex
+//version_####
+
+uniform mat3 transformMatrix;
+uniform mat3 projectionMatrix;
+uniform mat3 objectMatrix;
+uniform mat3 textureMatrix;
+
+in vec2 position;
+out vec2 In;
+void main()
+{
+    vec3 pos = vec3(position, 1.0);
+    In = (textureMatrix * pos).xy;
+    gl_Position = vec4(projectionMatrix * transformMatrix * objectMatrix * pos, 1.0);
+}
+//@End
+
+/* ####################################################### */
+
+//@Begin_fragment
+//version_####
+
+#ifdef GL_ES
+    #if defined(GL_FRAGMENT_PRECISION_HIGH) || defined(GL_OES_standard_derivatives)
+        #define HIGH_PRECISION_SUPPORTED
+    #endif
+#else
+    #define HIGH_PRECISION_SUPPORTED    
+#endif
+
+#ifdef HIGH_PRECISION_SUPPORTED
+    precision highp float;
+#else
+    precision mediump float;
+#endif
+
+in vec2 In;
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+uniform sampler2D imgTexture;
+//uniform sampler2D bckgTexture;
+
+uniform lowp vec4 blendColor;
+uniform float fPixelWidth;
+uniform float fPixelHeight;
+
+/***********************************************************/
+/* Varibles */
+/***********************************************************/
+
+uniform float _Mixing;
+uniform float _Size;
+uniform float _PosX;
+uniform float _PosY;
+
+uniform float _AlphaMul;
+uniform float _AlphaBack;
+uniform float _ColorAlpha;
+
+uniform vec4 _Color;
+uniform vec4 _ColorAccent;
+
+const int _Samples = 8;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+out vec4 fragColor;
+void main(void)
+{
+    vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
+
+    float _Alpha = 0.0;
+    float _Idx = 0.0;
+
+    for(int y = 0; y <= _Samples; y++)
+    {
+        for(int x = 0; x <= _Samples; x++)
+        {
+            vec2 _Offset = (vec2(x, y) / float(_Samples) - 0.5) * _Size;
+            
+            _Offset = vec2(fPixelWidth, fPixelHeight) * (_Offset + vec2(_PosX, _PosY));
+            
+            _Alpha += texture(imgTexture, In + _Offset).a;
+            _Idx += 1.0;
+        }
+    }
+    
+    _Alpha /= _Idx;
+
+        float _OuterMask = (1.0 - _Render_Texture.a) * _Alpha;
+    
+        _OuterMask = clamp(_OuterMask * _AlphaMul, 0.0, 1.0);
+
+            vec4 _OutlineColor = mix(_ColorAccent, _Color, _OuterMask);
+            _OutlineColor.a = (1.0 - _Render_Texture.a) * _ColorAlpha;
+
+        vec4 _Render = _Render_Texture;
+        _Render.a *= _AlphaBack;
+
+        _Render = mix(_Render, _OutlineColor, _OuterMask * _Mixing);
+
+    fragColor = _Render;
+}
+//@End

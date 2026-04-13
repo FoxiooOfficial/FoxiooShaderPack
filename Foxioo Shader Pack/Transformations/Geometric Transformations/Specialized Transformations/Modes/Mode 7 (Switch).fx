@@ -1,7 +1,7 @@
 /***********************************************************/
 
 /* Shader author: Foxioo */
-/* Version shader: 1.9 (08.11.2025) */
+/* Version shader: 2.0 (21.03.2026) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 
 /***********************************************************/
@@ -14,24 +14,31 @@
 
 sampler2D S2D_Image : register(s0) = sampler_state 
 {
-    MinFilter = POINT;
+    MinFilter = Point;
+    MagFilter = Point;
+    AddressU = Border;
+    AddressV = Border;
+    BorderColor = float4(0, 0, 1, 0);
 };
+
 sampler2D S2D_Background : register(s1) = sampler_state 
 {
-    MinFilter = POINT;
+    MinFilter = Point;
+    MagFilter = Point;
+    AddressU = Border;
+    AddressV = Border;
+    BorderColor = float4(0, 0, 1, 0);
 };
 
 /***********************************************************/
 /* Varibles */
 /***********************************************************/
-
+            
     float   _PosX, _PosY, _PosZ,
 
-            _OffsetX,
+            _RotX, _RotY, _RotZ, _OffsetX,
 
             _ScaleX, _ScaleY, _Scale,
-
-            _RotX, _RotY, _RotZ,
             _Distortion,
 
             _RotXPointX, _RotXPointY,
@@ -43,7 +50,12 @@ sampler2D S2D_Background : register(s1) = sampler_state
 
     bool    _Render_Sky, _Blending_Mode;
 
-#define RAD 0.0174532925
+    #define RAD 0.0174532925
+
+    struct PS_OUTPUT
+    {
+        float4 Color : COLOR0;
+    };
 
 /***********************************************************/
 /* Mode 7 */
@@ -51,33 +63,38 @@ sampler2D S2D_Background : register(s1) = sampler_state
 
 float2 Fun_Mode7(float2 In)
 {
-    float2 _UV = In;
+    /* THE REAL, M O D E  7  E F F E C T (the best function :3) */
 
-        _UV.x += _OffsetX - 0.5;
-        _UV /= (In.y * _Distortion) - 0.5;
+        /* Perspective */
+        float2 _UV = In / (In.y * _Distortion - 0.5);
 
     return _UV * _PosZ;
 }
 
-float2 Fun_RotationX(float2 In)
+
+float2 Fun_Rotation(float2 In, float2 _Pivot, float _Mul, float _Off, float _Rot, float _RotSub)
 {
-    float2 _UV = float2(In.x + _RotXPointX, In.y + _RotXPointY) * 0.5;
+    float2 _UV = float2(In.x + _Pivot.x, In.y + _Pivot.y) * _Mul;
 
-    float _RotX_Temp = _RotX * RAD;
+    float _Rot_Temp = (_Rot - _RotSub) * RAD;
 
-        _UV = mul(float2x2(cos(_RotX_Temp), sin(_RotX_Temp), -sin(_RotX_Temp), cos(_RotX_Temp)), _UV);
+        float _Sin, _Cos;
+        /*  sincos(_Rot_Temp, _Sin, _Cos)?
+            Theoretically more optimized than this:
+                -> cos(_Rot_Temp);
+                -> sin(_Rot_Temp);
+        */
+        sincos(_Rot_Temp, _Sin, _Cos);
+    
+        /*  It could be optimized, but since it's working fine RIGHT NOW,
+            I'm not going to touch it; 
 
-    return _UV;
-
-}
-
-float2 Fun_RotationY(float2 In)
-{
-    float2 _UV = float2(In.x + _RotYPointX, In.y + _RotYPointY);
-
-    float _RotY_Temp = (_RotY - 180.0) * RAD;
-
-    _UV = 0.5 + mul(float2x2(cos(_RotY_Temp), sin(_RotY_Temp), -sin(_RotY_Temp), cos(_RotY_Temp)), _UV - 0.5);
+            +-->I might change it in future updates if it goes over the limit in ps_2_x AGAIN
+            |       wait, this should be in TODO... ^^^ ah right...
+            +-------(TODO:)
+                    fixed.
+        */
+        _UV = _Off + mul(float2x2(_Cos, _Sin, -_Sin, _Cos), _UV - _Off);
 
     return _UV;
 }
@@ -86,37 +103,90 @@ float2 Fun_RotationY(float2 In)
 /* Main */
 /************************************************************/
 
-float4 Main(float2 In: TEXCOORD) : COLOR
+PS_OUTPUT Main(float2 In: TEXCOORD)
 {   
-    In = Fun_RotationY(In);
+    PS_OUTPUT Out;
 
-    float _RotZ_Temp = _RotZ * RAD;
+    /* _RotY -> Rotation around the CENTER of the screen (camera viewpoint) */
+    In = Fun_Rotation(In, float2(_RotYPointX, _RotYPointY), 1.0, 0.5, _RotY, 180.0);
 
-    float2 _In_Old = In;
-    In.y += _RotZ_Temp;
+    /* _RotZ -> Y-axis offset of texCoords; Pseudo-3D (possibly true 3D in the future...? i NEED ps_3_0!!!!) */
+    In.y += _RotZ * RAD;
+    In.x += _OffsetX - 0.5; /* ALSO OFFSET IN X AXIS RAHHHHHHH */
 
-    float2  _UV = Fun_Mode7(In),
-            _Pos = float2(-_PosX, _PosY),
-            _PosOffset = float2(-_PosOffsetX, _PosOffsetY - 0.5),
-            _Scale_Temp = (float2(_ScaleX, _ScaleY)) * _Scale;
+    /* Set Mode 7 Distortion! -> Set perspective depth OR orthographic projection!!! */
+    /* TODO: add option to change the POV */
+    float2 _UV = Fun_Mode7(In);
 
-            _UV = Fun_RotationX(_UV);
-            _UV -= _PosOffset;
-            _UV *= _Scale_Temp;
-            _UV -= _Pos - 0.5;
+        /* _PosX -> Camera rotation AROUND ITSELF */
+        _UV = Fun_Rotation(_UV, float2(_RotXPointX, _RotXPointY), 0.5, 0.0, _RotX, 0.0);
 
-    if(_Looping_Mode == 0)      {   _UV = frac(_UV);    }
-    else if(_Looping_Mode == 1) {   _UV = abs(frac(_UV / 2.0) * 2.0 - 1.0);    }
+        /* "Translation"
+            (why is it called that? :sob:) ugh, whatever, change of position... wait
+            these are points for scale!!!??
+            AHHH WHY AM I EVEN COMMENTING ON THIS
+        */
+        /* +X; -Y */
+         _UV += float2(_PosOffsetX, -_PosOffsetY + 0.5);
 
-    /* Rendering */
-    float4 _Render;
-    if(!_Blending_Mode) { _Render = tex2D(S2D_Image, _UV); }
-    else { _Render = tex2D(S2D_Background, _UV); _Render.a = tex2D(S2D_Image, In).a; }
+        /* "Scale"
+            Changing the scale of texCoords -> the closer to zero, the larger texture!
+        */
+        _UV *= float2(_ScaleX, _ScaleY) * _Scale;
 
-        if (_Looping_Mode == 3 && any(_UV < 0.0 || _UV > 1.0))                  {   _Render = 0.0;    }
-        if(((_In_Old.y + _RotZ_Temp) * _Distortion) > 0.5 && !_Render_Sky)      {   _Render = 0.0;    }
+        /* "Translation" (but for real)
+            The actual change in the "camera" position!!!
+        */
+        /* +X; -Y */
+       _UV += float2(_PosX, -_PosY) + float2(0.5, 0.5);
 
-    return _Render;
+            /* "Looping Mode"
+                Specifies how the texture should loop
+                TODO: if possible (probably not for ps_2_x), add all 16 looping modes
+
+                I DON'T KNOW WHY THIS "OPTIMIZATION" WORKS, BUT IT DOES;
+                the shader fits into the temporary registers (31) because there are no IF/ELSE statements
+
+                    that's how it was originally supposed to be: 
+                    if      (_Looping_Mode == 0) _UV = frac(_UV);
+                    else if (_Looping_Mode == 1) _UV = abs(frac(_UV / 2.0) * 2.0 - 1.0);
+                    else if (_Looping_Mode == 2) _UV = range(_UV, 0.0, 0.999);
+            */
+            float2 _UV_REPEAT = frac(_UV);
+            float2 _UV_MIRROR = abs(frac(_UV / 2.0) * 2.0 - 1.0);
+            float2 _UV_CLAMP  = clamp(_UV, 0.0, 0.999);
+
+                float _1 = step(0.5, _Looping_Mode); /* It's Looping Mode >= 1? */
+                float _2 = step(1.5, _Looping_Mode); /* It's Looping Mode >= 2? */
+                float _3 = step(2.5, _Looping_Mode); /* It's Looping Mode >= 3? */
+
+                _UV = lerp(
+                            _UV_REPEAT,         /* IF _Looping_Mode <= 0;   Return REPEAT! */
+                            lerp(_UV_MIRROR,    /* IF _Looping_Mode == 1;   Return MIRROR! */
+                            lerp(_UV_CLAMP,     /* IF _Looping_Mode == 2;   Return CLAMP!  */
+                            _UV,                /* ELSE;                    Return BORDER! */
+                        _3), _2), _1);
+                /* HEL YEA */
+
+        /* Rendering */
+        float4 _Render_Texture = tex2D(S2D_Image, _UV);
+        float4 _Render_Background = tex2D(S2D_Background, _UV);
+
+        float4 _Render = lerp(_Render_Texture, float4(_Render_Background.rgb, _Render_Texture.a), _Blending_Mode);
+
+        /* REMOVE THE SKY WHEN *necessary*; 
+
+        -> check if _PosZ is positive
+        -> check if the ground render is greater than 0.5
+
+            I tried using IF/ELSE, but main goal is to get this function working on D3D9 at all
+
+            (i have to comment on this because the code is becoming less readable due to optimization :sob:)
+        */
+        _Render *= lerp(abs(step(0.0, _PosZ) - step(0.5, In.y * _Distortion)), 1.0, _Render_Sky);
+
+    Out.Color = _Render;
+    return Out;
 }
 
 /************************************************************/

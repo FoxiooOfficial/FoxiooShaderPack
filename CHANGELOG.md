@@ -1,8 +1,43 @@
 # ℹ️ Change Log
 **All notable changes to this project will be documented in this file.**
 
+# ✨ April 13, 2026 | Release ID: 16
+## 📝 Notes
+- MFA files have been moved to the same location as the shader files
+- There are now 3 shader categories instead of 4, since the 4th category (Background+Texture)/(Texture+Background) is simply (Background), which means that the names of some shaders have been changed
+- Fixed **Mode 7** shaders; now correctly supports negative _PosZ
+- Many changes to the polygon shaders for Tails7; for D3D9, most calculations were moved to the Vertex Shader, and several new variables were added for texture translation and scaling. (Tails7 R1.0.3 is getting closer)
+- Corrected typos such as "***(T E X U T R E)***"
+- Increased the number of shaders from 374 to 420 (Added):
+- Added **Semi-Transparent (Background)**
+- Added **Bubble Content Mask (Background)**
+- Added **Bubble Mask (Texture)**
+- Added **Inner Shadow (Texture)**
+- Added **Outer Shadow (Texture)**
+- Added **ClearType (Switch)**
+- Added **FXAA Fast Approximate Anti-Aliasing (Switch)**
+- Added **Arithmetic Mean Filter (Switch)**
+- Added **Geometric Mean Filter (Switch)**
+- Added **Harmonic Mean Filter (Switch)**
+- Added **Maximum Filter (Switch)**
+- Added **Midpoint Filter (Switch)**
+- Added **Minimum Filter (Switch)**
+- Added **Range Filter (Switch)**
+- Added **Noise Blur Smooth (Background)**
+- Added **Noise Blur Smooth (Texture)**
+- Added **Hologram (Switch)**
+- Added **LCD (Switch)**
+- Added **Bavel Smooth (Texture)**
+- Added **Normal Map (Switch) [Direct3D]** *(previously listed as "Normal Map (Switch)")*
+- Added **Normal Map (Switch) [OpenGL]**
+- Added **Mode 7 (Texture) [Z-Buffer]** *Experiment*
+- Added **Tails7 Polygon Inverted Mask Overwrite (Texture)**
+- Added **Tails7 Polygon Mask Overwrite (Texture)**
+- Added **Tails7 Sprite (Texture)** *Experiment*
+*(and much more)*
+
 # ✨ January 22, 2026 | Release ID: 15
-## 📝 Notes (Abbreviated) 
+## 📝 Notes
 - The number of shaders has been increased from 350 to 374 (Added):
 - Added many shaders for Polygons under Tails7 R1.0.3, which will be updated soon
 - Added **Screen Space Reflection (Texture)** shader, which should be applied to the layer *(full implementation in Direct3D11 and Android, iOS, Mac, Direct3D9 pixel shader 2.x is very limitated)*
@@ -14,7 +49,7 @@
 - **ScreenSpaceReflection.mfa** has been added as an example.
 
 # ✨ January 4, 2026 | Release ID: 14
-## 📝 Notes (Abbreviated) 
+## 📝 Notes
 - Updated README appearance
 - The number of shaders has been increased from 332 to 350 (Added):
 - **"Logical ARLEFTSHIFT Base (Background)"**
@@ -37,7 +72,7 @@
 - **"Comparison Less Equal (Background)"**
 
 # ✨ January 1, 2026 (Happy new year!) | Release ID: 13 / Hotfix
-## 📝 Notes (Abbreviated) 
+## 📝 Notes
 - Correction of numerous typos in shader names for:
 - Addition With Hyperbolic Cotangent (Background) -> Division With Hyperbolic Cotangent (Background)
 - Addition With Hyperbolic Secant (Background) -> Division With Hyperbolic Secant (Background)
@@ -53,14 +88,14 @@
 - End Portal (Switch) -> End Portal (Texture)
 
 # ✨ December 31 2025 | Release ID: 12
-## 📝 Notes (Abbreviated) 
+## 📝 Notes
 - The number of shaders has been increased from 330 to 332.
 - Added: "Water Reflected (Background)" and "Fish (Texture)".
 - Two examples have also been added: "ChurchProphecyPanel.mfa" and "ReflectionTest.mfa"
 
 
 # ✨ December 22 2025 | Release ID: 11
-## 📝 Notes (Abbreviated) 
+## 📝 Notes 
 - The number of shaders has been increased from 327 to 330.
 - Added: "Composite Video Compression (Texture)", "Composite Video Compression (Background)", "Liquid Glass Blurry (Background)".
 - The repository will now feature examples of how to use the effects; there are currently several of them. You can find them here: https://github.com/FoxiooOfficial/FoxiooShaderPack/tree/main/Examples/Foxioo%20Shader%20Pack
@@ -68,7 +103,7 @@
 ---
 
 # ✨ November 29 2025 | Release ID: 10
-## 📝 Notes (Abbreviated) 
+## 📝 Notes 
 - The number of shaders has been increased from 301 to 327:
 - *(Mainly polygon shaders for Tails7 R1.0.2)* but also: **"PVZA Flower Cooldown (Texture)"**, **"Geometry Dash Glass Blocks (Background)"**, **"Cut-Off Alpha Test (Texture)"**, **"Chroma Key Inverted (Texture)"** and **"Ambient (Switch)"**.
 - For **"Mode 7 (Switch)"** and **"Mode 7 (Switch) [Antialiasing]"** *(which was added in this release)*, increased the number of **"_Looping_Mode"** for D3D11 and GLES (Android, iOS, Mac) from 4 different looping texture modes to 16! (D3D9 is still limited to 4, due to Pixel Shader 2.x limitations)
@@ -78,7 +113,7 @@
 
 
 # ✨ October 19 2025 | Release ID: 9
-## 📝 Notes (Abbreviated) 
+## 📝 Notes
 - Added **iOS** and **Mac** support for every effect
 - Added a new shader, "Simulation Color Blindness AIO (Switch)" which combines all color blindness simulation effects into one
 - Fixed "Deltarune Church Prophecy Panel (Texture)" variable with texture **(.xml)**
@@ -86,14 +121,14 @@
 ---
 
 # ✨ October 12 2025 | Release ID: 8 / Hotfix
-## 📝 Notes (Abbreviated) 
+## 📝 Notes
 - Fixed distortion in the "Liquid Glass (Background)" shader for **(.fxao)** Android *(cause: incorrect texCoord reference)*
 - Corrected description in "Rainbow Foliage (Switch)" **(.xml)**
 
 ---
 
 # ✨ 28 September 2025 | Release ID: 7
-## 📝 Notes (Abbreviated) 
+## 📝 Notes
 - Android support for ALL shaders.
 - The number of shaders is now 300!
 - Many bugs have been fixed (too many to remember ;w;)

@@ -124,7 +124,7 @@
 			</parameter>
 
 			<parameter>
-				<name>Texutre</name>
+				<name>Texture</name>
 				<varible>_Texture</varible>
 				<code>_Texture</code>
 
@@ -181,3 +181,6 @@
 			<variable>_____</variable>
 		</parameter>
 </effect>
+
+<!-- Please ignore this; the script that automatically compresses files into a ZIP archive needs to be aware of the additional files :3 -->
+<!-- INCLUDE ChurchProphecyPanel.mfa -->

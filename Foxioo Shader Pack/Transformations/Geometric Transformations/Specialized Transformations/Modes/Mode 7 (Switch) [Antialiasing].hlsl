@@ -1,7 +1,7 @@
 /***********************************************************/
 
 /* Shader author: Foxioo */
-/* Version shader: 1.9 (08.11.2025) */
+/* Version shader: 2.0 (21.03.2026) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 
 /***********************************************************/
@@ -76,33 +76,38 @@ struct PS_OUTPUT
 
 float2 Fun_Mode7(float2 In)
 {
-    float2 _UV = In;
+    /* THE REAL, M O D E  7  E F F E C T (the best function :3) */
 
-        _UV.x += _OffsetX - 0.5;
-        _UV /= (In.y * _Distortion) - 0.5;
+        /* Perspective */
+        float2 _UV = In / (In.y * _Distortion - 0.5);
 
     return _UV * _PosZ;
 }
 
-float2 Fun_RotationX(float2 In)
+
+float2 Fun_Rotation(float2 In, float2 _Pivot, float _Mul, float _Off, float _Rot, float _RotSub)
 {
-    float2 _UV = float2(In.x + _RotXPointX, In.y + _RotXPointY) * 0.5;
+    float2 _UV = float2(In.x + _Pivot.x, In.y + _Pivot.y) * _Mul;
 
-    float _RotX_Temp = _RotX * RAD;
+    float _Rot_Temp = (_Rot - _RotSub) * RAD;
 
-        _UV = mul(float2x2(cos(_RotX_Temp), sin(_RotX_Temp), -sin(_RotX_Temp), cos(_RotX_Temp)), _UV);
+        float _Sin, _Cos;
+        /*  sincos(_Rot_Temp, _Sin, _Cos)?
+            Theoretically more optimized than this:
+                -> cos(_Rot_Temp);
+                -> sin(_Rot_Temp);
+        */
+        sincos(_Rot_Temp, _Sin, _Cos);
+    
+        /*  It could be optimized, but since it's working fine RIGHT NOW,
+            I'm not going to touch it; 
 
-    return _UV;
-
-}
-
-float2 Fun_RotationY(float2 In)
-{
-    float2 _UV = float2(In.x + _RotYPointX, In.y + _RotYPointY);
-
-    float _RotY_Temp = (_RotY - 180.0) * RAD;
-
-    _UV = 0.5 + mul(float2x2(cos(_RotY_Temp), sin(_RotY_Temp), -sin(_RotY_Temp), cos(_RotY_Temp)), _UV - 0.5);
+            +-->I might change it in future updates if it goes over the limit in ps_2_x AGAIN
+            |       wait, this should be in TODO... ^^^ ah right...
+            +-------(TODO:)
+                    fixed.
+        */
+        _UV = _Off + mul(float2x2(_Cos, _Sin, -_Sin, _Cos), _UV - _Off);
 
     return _UV;
 }
@@ -165,23 +170,46 @@ PS_OUTPUT ps_main(PS_INPUT In)
     PS_OUTPUT Out;
 
     float2 _In = In.texCoord;
-    _In = Fun_RotationY(_In);
+    /* _RotY -> Rotation around the CENTER of the screen (camera viewpoint) */
+    _In = Fun_Rotation(In.texCoord, float2(_RotYPointX, _RotYPointY), 1.0, 0.5, _RotY, 180.0);
 
     float _RotZ_Temp = _RotZ * RAD;
 
         float2 _In_Old = _In;
+        /* _RotZ -> Y-axis offset of texCoords; */
         _In.y += _RotZ_Temp;
+        _In.x += _OffsetX - 0.5; /* ALSO OFFSET IN X AXIS RAHHHHHHH */
 
-        float2 _UV = Fun_Mode7(_In);
-        float2 _Pos = float2(-_PosX, _PosY);
-        float2 _PosOffset = float2(-_PosOffsetX, _PosOffsetY - 0.5);
-        float2 _Scale_Temp = (float2(_ScaleX, _ScaleY)) * _Scale;
+    /* Set Mode 7 Distortion! -> Set perspective depth OR orthographic projection!!! */
+    /* TODO: add option to change the POV */
+    float2 _UV = Fun_Mode7(_In);
 
-        _UV = Fun_RotationX(_UV);
-        _UV -= _PosOffset;
-        _UV *= _Scale_Temp;
-        _UV -= _Pos - 0.5;
+        /* _PosX -> Camera rotation AROUND ITSELF */
+        _UV = Fun_Rotation(_UV, float2(_RotXPointX, _RotXPointY), 0.5, 0.0, _RotX, 0.0);
 
+        /* "Translation"
+            (why is it called that? :sob:) ugh, whatever, change of position... wait
+            these are points for scale!!!??
+            AHHH WHY AM I EVEN COMMENTING ON THIS
+        */
+        /* +X; -Y */
+         _UV += float2(_PosOffsetX, -_PosOffsetY + 0.5);
+
+
+        /* "Scale"
+            Changing the scale of texCoords -> the closer to zero, the larger texture!
+        */
+        _UV *= float2(_ScaleX, _ScaleY) * _Scale;
+        
+        /* "Translation" (but for real)
+            The actual change in the "camera" position!!!
+        */
+        /* +X; -Y */
+       _UV += float2(_PosX, -_PosY) + float2(0.5, 0.5);
+
+            /* "Looping Mode"
+                Specifies how the texture should loop
+            */
             int2 _Mode;
             float2 _In_Orginal = _UV;
             Fun_SetLoop(_Looping_Mode, _Mode);
@@ -191,13 +219,25 @@ PS_OUTPUT ps_main(PS_INPUT In)
                     Fun_Loop(_UV.y, _Mode.y)
                 );
 
-    /* Rendering */
-    float4 _Render;
-    if(!_Blending_Mode) { _Render = S2D_Image.Sample(S2D_ImageSampler, _UV); }
-    else { _Render = S2D_Background.Sample(S2D_BackgroundSampler, _UV); _Render.a = S2D_Image.Sample(S2D_ImageSampler, In.texCoord).a;}
+            if(Fun_CheckEdge(_In_Orginal.x, _Mode.x) || Fun_CheckEdge(_In_Orginal.y, _Mode.y)) discard;
+            /* HEL YEA */
 
-        if(Fun_CheckEdge(_In_Orginal.x, _Mode.x) || Fun_CheckEdge(_In_Orginal.y, _Mode.y))      {   _Render = 0.0;    }
-        if(((_In_Old.y + _RotZ_Temp) * _Distortion) > 0.5 && !_Render_Sky)                      {   _Render = 0.0;    }
+    /* Rendering */
+    float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, _UV);
+    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, _UV);
+
+    float4 _Render = lerp(_Render_Texture, float4(_Render_Background.rgb, _Render_Texture.a), _Blending_Mode);
+
+        /* REMOVE THE SKY WHEN *necessary*; 
+
+        -> check if _PosZ is positive
+        -> check if the ground render is greater than 0.5
+
+            I tried using IF/ELSE, but main goal is to get this function working on D3D9 at all
+
+            (i have to comment on this because the code is becoming less readable due to optimization :sob:)
+        */
+        _Render *= lerp(abs(step(0.0, _PosZ) - step(0.5, _In.y * _Distortion)), 1.0, _Render_Sky);
 
     _Render *= In.Tint;
 
@@ -221,23 +261,46 @@ PS_OUTPUT ps_main_pm( in PS_INPUT In )
     PS_OUTPUT Out;
 
     float2 _In = In.texCoord;
-    _In = Fun_RotationY(_In);
+    /* _RotY -> Rotation around the CENTER of the screen (camera viewpoint) */
+    _In = Fun_Rotation(In.texCoord, float2(_RotYPointX, _RotYPointY), 1.0, 0.5, _RotY, 180.0);
 
     float _RotZ_Temp = _RotZ * RAD;
 
         float2 _In_Old = _In;
+        /* _RotZ -> Y-axis offset of texCoords; */
         _In.y += _RotZ_Temp;
+        _In.x += _OffsetX - 0.5; /* ALSO OFFSET IN X AXIS RAHHHHHHH */
 
-        float2 _UV = Fun_Mode7(_In);
-        float2 _Pos = float2(-_PosX, _PosY);
-        float2 _PosOffset = float2(-_PosOffsetX, _PosOffsetY - 0.5);
-        float2 _Scale_Temp = (float2(_ScaleX, _ScaleY)) * _Scale;
+    /* Set Mode 7 Distortion! -> Set perspective depth OR orthographic projection!!! */
+    /* TODO: add option to change the POV */
+    float2 _UV = Fun_Mode7(_In);
 
-        _UV = Fun_RotationX(_UV);
-        _UV -= _PosOffset;
-        _UV *= _Scale_Temp;
-        _UV -= _Pos - 0.5;
+        /* _PosX -> Camera rotation AROUND ITSELF */
+        _UV = Fun_Rotation(_UV, float2(_RotXPointX, _RotXPointY), 0.5, 0.0, _RotX, 0.0);
 
+        /* "Translation"
+            (why is it called that? :sob:) ugh, whatever, change of position... wait
+            these are points for scale!!!??
+            AHHH WHY AM I EVEN COMMENTING ON THIS
+        */
+        /* +X; -Y */
+         _UV += float2(_PosOffsetX, -_PosOffsetY + 0.5);
+
+
+        /* "Scale"
+            Changing the scale of texCoords -> the closer to zero, the larger texture!
+        */
+        _UV *= float2(_ScaleX, _ScaleY) * _Scale;
+        
+        /* "Translation" (but for real)
+            The actual change in the "camera" position!!!
+        */
+        /* +X; -Y */
+       _UV += float2(_PosX, -_PosY) + float2(0.5, 0.5);
+
+            /* "Looping Mode"
+                Specifies how the texture should loop
+            */
             int2 _Mode;
             float2 _In_Orginal = _UV;
             Fun_SetLoop(_Looping_Mode, _Mode);
@@ -247,13 +310,25 @@ PS_OUTPUT ps_main_pm( in PS_INPUT In )
                     Fun_Loop(_UV.y, _Mode.y)
                 );
 
-    /* Rendering */
-    float4 _Render;
-    if(!_Blending_Mode) { _Render = Demultiply(S2D_Image.Sample(S2D_ImageSampler, _UV)); }
-    else { _Render = S2D_Background.Sample(S2D_BackgroundSampler, _UV); _Render.a = S2D_Image.Sample(S2D_ImageSampler, In.texCoord).a;}
+            if(Fun_CheckEdge(_In_Orginal.x, _Mode.x) || Fun_CheckEdge(_In_Orginal.y, _Mode.y)) discard;
+            /* HEL YEA */
 
-        if(Fun_CheckEdge(_In_Orginal.x, _Mode.x) || Fun_CheckEdge(_In_Orginal.y, _Mode.y))      {   _Render = 0.0;    }
-        if(((_In_Old.y + _RotZ_Temp) * _Distortion) > 0.5 && !_Render_Sky)                      {   _Render = 0.0;    }
+    /* Rendering */
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, _UV));
+    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, _UV);
+
+    float4 _Render = lerp(_Render_Texture, float4(_Render_Background.rgb, _Render_Texture.a), _Blending_Mode);
+
+        /* REMOVE THE SKY WHEN *necessary*; 
+
+        -> check if _PosZ is positive
+        -> check if the ground render is greater than 0.5
+
+            I tried using IF/ELSE, but main goal is to get this function working on D3D9 at all
+
+            (i have to comment on this because the code is becoming less readable due to optimization :sob:)
+        */
+        _Render *= lerp(abs(step(0.0, _PosZ) - step(0.5, _In.y * _Distortion)), 1.0, _Render_Sky);
 
     _Render *= In.Tint;
 

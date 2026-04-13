@@ -103,7 +103,7 @@
 				<name>Texture Alpha</name>
 				<variable>_Alpha</variable>
 				
-				<description>This variable is responsible for visiblity texutre.</description>
+				<description>This variable is responsible for visiblity texture.</description>
 
 				<type>float</type>
 
