@@ -1,7 +1,7 @@
 /***********************************************************/
 
 /* Shader author: Foxioo */
-/* Version shader: 1.2 (18.10.2025) */
+/* Version shader: 1.3 (21.06.2026) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 
 /***********************************************************/
@@ -20,8 +20,6 @@ sampler2D S2D_Background : register(s1);
 /***********************************************************/
 
     float _Mixing;
-
-    bool _Blending_Mode;
 
 /************************************************************/
 /* Main */
@@ -47,8 +45,11 @@ float3 Fun_ClipColor(float3 _Color)
     float _ColorMin = min(_Color.r, min(_Color.g, _Color.b));
     float _ColorMax = max(_Color.r, max(_Color.g, _Color.b));
 
-    if(_ColorMin < 0) { _Color = _Y + (((_Color - _Y) * _Y) / (_Y - _ColorMin)); }
-    if(_ColorMax > 1) { _Color = _Y + (((_Color - _Y) * (1 - _Y)) / (_ColorMax - _Y)); }
+    float _Div = _ColorMax - _Y;
+    if(_Div == 0.0) _Div = 1e7;
+
+    if(_ColorMin < 0.0) { _Color = _Y + (((_Color - _Y) * _Y) / (_Y - _ColorMin)); }
+    if(_ColorMax > 1.0) { _Color = _Y + (((_Color - _Y) * (1.0 - _Y)) / _Div); }
 
     return _Color;
 }
@@ -73,7 +74,7 @@ float3 Fun_SetSat(float3 _Color, float _Sat)
 {
     float _CurSat = Fun_Sat(_Color);
 
-        if (_CurSat > 0) { _Color = lerp(0.5, _Color, _Sat / _CurSat); }
+        if (_CurSat > 0.0) { _Color = lerp(0.5, _Color, _Sat / _CurSat); }
         else { _Color = 0.5; }
     
     return _Color;
@@ -84,14 +85,14 @@ float3 Fun_SetSat(float3 _Color, float _Sat)
 float4 Main(in float2 In : TEXCOORD0) : COLOR0
 {
     float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In) * _Mixing;
+    float4 _Render_Background = tex2D(S2D_Background, In);
 
-    float4 _Render, _Result;
-    
-    _Render.rgb = Fun_SetLum(Fun_SetSat(_Render_Texture.rgb, Fun_Sat(_Render_Background.rgb)), Fun_Luminance(_Render_Background.rgb));
-
-    _Result.rgb = lerp(_Render_Texture.rgb, _Render.rgb, _Mixing);
-    _Result.a = _Render_Texture.a;
+        float4 _Render, _Result;
+        
+            _Render.rgb = Fun_SetLum(Fun_SetSat(_Render_Texture.rgb, Fun_Sat(_Render_Background.rgb)), Fun_Luminance(_Render_Background.rgb));
+            _Result.rgb = lerp(_Render_Texture.rgb, _Render.rgb, _Mixing);
+        
+        _Result.a = _Render_Texture.a;
 
     return _Result;
 }
