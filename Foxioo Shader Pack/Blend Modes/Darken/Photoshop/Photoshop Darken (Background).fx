@@ -1,7 +1,7 @@
 /***********************************************************/
 
 /* Shader author: Foxioo */
-/* Version shader: 1.5 (18.10.2025) */
+/* Version shader: 1.6 (21.06.2026) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 
 /***********************************************************/
@@ -32,9 +32,9 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
 
         float4 _Result = 0;
 
-            _Result.rgb = lerp(_Render_Texture.rgb, min(_Render_Background.rgb * _Mixing, _Render_Texture.rgb), _Mixing);
+            _Result.rgb = lerp(_Render_Texture.rgb, min(_Render_Background.rgb, _Render_Texture.rgb), _Mixing);
 
-    _Result.a = _Render_Texture.a;
+        _Result.a = _Render_Texture.a;
 
     return _Result;
 }
