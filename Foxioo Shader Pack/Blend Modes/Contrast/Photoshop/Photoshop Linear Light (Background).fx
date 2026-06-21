@@ -1,7 +1,7 @@
 /***********************************************************/
 
 /* Shader author: Foxioo */
-/* Version shader: 1.5 (18.10.2025) */
+/* Version shader: 1.6 (21.06.2026) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 
 /***********************************************************/
@@ -30,9 +30,9 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In);
 
-        float4 _Result = 0;
+        float4 _Result;
         
-        _Result.rgb = lerp(_Render_Texture, (_Render_Texture + 2 * (_Render_Background * _Mixing) - 1), _Mixing);
+            _Result.rgb = lerp(_Render_Texture, (_Render_Texture + 2.0 * _Render_Background - 1.0), _Mixing);
 
         _Result.a = _Render_Texture.a;
 

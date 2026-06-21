@@ -1,7 +1,7 @@
 /***********************************************************/
 
 /* Shader author: Foxioo */
-/* Version shader: 1.5 (18.10.2025) */
+/* Version shader: 1.6 (21.06.2026) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 
 /***********************************************************/
@@ -27,7 +27,6 @@ cbuffer PS_VARIABLES : register(b0)
     bool _;
     float _Mixing;
     bool __;
-
 	bool _Is_Pre_296_Build;
 	bool ___;
 };
@@ -60,15 +59,15 @@ PS_OUTPUT ps_main( in PS_INPUT In )
     float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
 
-        float4 _Result = 0;
+        float4 _Result;
 
-        _Result.r = lerp(_Render_Texture.r, (_Render_Texture.r + (_Render_Background.r * _Mixing)) > 1 ? 1 : 0, _Mixing);
-        _Result.g = lerp(_Render_Texture.g, (_Render_Texture.g + (_Render_Background.g * _Mixing)) > 1 ? 1 : 0, _Mixing);
-        _Result.b = lerp(_Render_Texture.b, (_Render_Texture.b + (_Render_Background.b * _Mixing)) > 1 ? 1 : 0, _Mixing);
+            _Result.r = lerp(_Render_Texture.r, (_Render_Texture.r + (_Render_Background.r * _Mixing)) > 1.0 ? 1.0 : 0.0, _Mixing);
+            _Result.g = lerp(_Render_Texture.g, (_Render_Texture.g + (_Render_Background.g * _Mixing)) > 1.0 ? 1.0 : 0.0, _Mixing);
+            _Result.b = lerp(_Render_Texture.b, (_Render_Texture.b + (_Render_Background.b * _Mixing)) > 1.0 ? 1.0 : 0.0, _Mixing);
 
-    _Result.a = _Render_Texture.a;
+        _Result.a = _Render_Texture.a;
+        
     Out.Color = _Result;
-    
     return Out;
 }
 /************************************************************/
@@ -85,17 +84,17 @@ PS_OUTPUT ps_main_pm( in PS_INPUT In )
 {
     PS_OUTPUT Out;
 
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint);
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
 
-        float4 _Result = 0;
+        float4 _Result;
 
-        _Result.r = lerp(_Render_Texture.r, (_Render_Texture.r + (_Render_Background.r * _Mixing)) > 1 ? 1 : 0, _Mixing);
-        _Result.g = lerp(_Render_Texture.g, (_Render_Texture.g + (_Render_Background.g * _Mixing)) > 1 ? 1 : 0, _Mixing);
-        _Result.b = lerp(_Render_Texture.b, (_Render_Texture.b + (_Render_Background.b * _Mixing)) > 1 ? 1 : 0, _Mixing);
+            _Result.r = lerp(_Render_Texture.r, (_Render_Texture.r + (_Render_Background.r * _Mixing)) > 1.0 ? 1.0 : 0.0, _Mixing);
+            _Result.g = lerp(_Render_Texture.g, (_Render_Texture.g + (_Render_Background.g * _Mixing)) > 1.0 ? 1.0 : 0.0, _Mixing);
+            _Result.b = lerp(_Render_Texture.b, (_Render_Texture.b + (_Render_Background.b * _Mixing)) > 1.0 ? 1.0 : 0.0, _Mixing);
 
-    _Result.a = _Render_Texture.a;
-    _Result.rgb *= _Result.a;
+        _Result.a = _Render_Texture.a;
+        _Result.rgb *= _Result.a;
 
     Out.Color = _Result;
     return Out;  

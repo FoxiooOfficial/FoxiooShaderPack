@@ -2,7 +2,7 @@
 /***********************************************************/
 
 /* Shader author: Foxioo */
-/* Version shader: 1.2 (18.10.2025) */
+/* Version shader: 1.3 (21.06.2026) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 
 /***********************************************************/
@@ -29,13 +29,13 @@ sampler2D S2D_Background : register(s1);
 float4 Main(in float2 In : TEXCOORD0) : COLOR0
 {
     float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In) * _Mixing;
+    float4 _Render_Background = tex2D(S2D_Background, In);
 
         float4 _Result = _Render_Texture;
 
             _Result.rgb = lerp(_Render_Texture.rgb, _Render_Texture.rgb - _Render_Background.rgb + 0.5, _Mixing);
 
-        _Result.a = _Render_Texture.a;
+        //_Result.a = _Render_Texture.a;
 
     return _Result;
 }
