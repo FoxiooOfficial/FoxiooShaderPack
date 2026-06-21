@@ -123,7 +123,7 @@ Shaders are amazing; thanks to them, I created another project called [Tails7](h
 ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Usage/2.png?raw=true).<br>
 
 ## Support and Social Media
-You can support the project or me by making a donation on [Kofi](https://ko-fi.com/foxioo)<br>
+You can support the project or me by making a donation on [ko-fi](https://ko-fi.com/foxioo)<br>
 Here you can find my [social media accounts](https://foxiooofficial.github.io/links.html)
 
 It’s thanks to ALL OF YOU that FSP has gained so much attention.<br>
