@@ -21,7 +21,7 @@
 
 ### ⚠️ Note
 - The description was last updated on **April 11, 2026 (CET)**.
-- The update of shaders was last updated on ***April 13, 2026 (CET)**.
+- The update of shaders was last updated on **April 13, 2026 (CET)**.
 - FSP is licensed under the **MIT license**.
 
 ## 📚 What is FSP? 
