@@ -108,6 +108,7 @@ Shaders are amazing; thanks to them, I created another project called [Tails7](h
 | [小二今天吃啥啊](https://space.bilibili.com/437528440)                                              | He created a shader that mimics the skin of characters from the game Genshin Impact.   |
 
 ## Installation
+
 1. Click on the **"Code"** button then **"Download ZIP"**.<br><br>
 ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Installaton/1.png?raw=true)<br>
 2. Open Clickteam Fusion, go to the **"Tools"** tab and click **"Windows Explorer"**. **This will show you a window where Clickteam Fusion is installed.**<br><br>
@@ -137,8 +138,6 @@ It’s thanks to ALL OF YOU that FSP has gained so much attention.<br>
     </a>
   </p>
 </details>
-
----
 
 ## License
 This project is available under the terms of the **MIT** license
