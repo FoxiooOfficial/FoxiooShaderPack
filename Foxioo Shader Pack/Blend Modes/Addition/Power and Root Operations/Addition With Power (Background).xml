@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Addition With Power (Background) Shader | 1.6 (20.06.2026) */</name>
+			<name>/* Foxioo Addition With Power (Background) Shader | 1.7 (25.06.2026) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
@@ -55,7 +55,8 @@
 			<description>Here you will find options that have changed, but you can still achieve the previous effect.</description>
 
 			<variable>__</variable>
-		</parameter>
+				    <preview_value>0</preview_value>
+</parameter>
             <parameter>
                 <name>Is Fusion Version Older Than 296?</name>
                 <variable>_Is_Pre_296_Build</variable>

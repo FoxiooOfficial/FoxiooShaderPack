@@ -1,7 +1,7 @@
 /***********************************************************/
 
 /* Shader author: Foxioo */
-/* Version shader: 1.6 (20.06.2026) */
+/* Version shader: 1.7 (25.06.2026) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 
 /***********************************************************/
@@ -60,7 +60,7 @@ PS_OUTPUT ps_main( in PS_INPUT In )
     float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
 
-            float4 _Result = rsqrt(_Render_Texture + (_Render_Background * _Mul));
+            float4 _Result = rsqrt(abs(_Render_Texture + (_Render_Background * _Mul)));
             _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
 
         _Result.a = _Render_Texture.a;
@@ -86,7 +86,7 @@ PS_OUTPUT ps_main_pm( in PS_INPUT In )
     float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint);
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
 
-            float4 _Result = rsqrt(_Render_Texture + (_Render_Background * _Mul));
+            float4 _Result = rsqrt(abs(_Render_Texture + (_Render_Background * _Mul)));
             _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
 
         _Result.a = _Render_Texture.a;
