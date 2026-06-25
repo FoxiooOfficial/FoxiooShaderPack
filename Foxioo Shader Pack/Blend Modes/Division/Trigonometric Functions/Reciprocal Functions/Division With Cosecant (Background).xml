@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Division With Cosecant (Background) Shader | 1.2 (18.10.2025) */</name>
+			<name>/* Foxioo Division With Cosecant (Background) Shader | 1.3 (25.06.2026) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

@@ -1,7 +1,7 @@
 /***********************************************************/
 
 /* Shader author: Foxioo */
-/* Version shader: 1.5 (18.10.2025) */
+/* Version shader: 1.6 (25.06.2026) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 
 /***********************************************************/
@@ -55,12 +55,47 @@ cbuffer PS_PIXELSIZE : register(b1)
 /* Main */
 /************************************************************/
 
-float4 Fun_Acos(float4 _Color)
-{  
-    float4 _2Color = _Color * _Color;
-    return 3.14159265359 / 2 - (_Color + (_2Color * _Color) / 6 + (3 * _2Color * _2Color * _Color) / 40 + (5 * _2Color * _2Color * _2Color * _Color) / 112);
-}
+#define M_PI 3.14159265359
+#define M_PI_2 1.57079632679
 
+float3 Fun_Acos(float3 _Color, int _Case)
+{   
+    float3 _Render = acos(_Color);
+
+    if(_Case == 0)
+        return _Render;
+
+    else if(_Case == 1) // D3D9 simulated
+    { 
+        float a = -1.0 / M_PI * 1.07596f;
+        float p = -M_PI;
+
+        if(any(_Color < -1.0))
+            return M_PI_2 - (a * pow((_Color - p), 2.0f));
+
+        else if(any(_Color > 1.0))
+            return M_PI_2 - (-a * pow((-_Color - p), 2.0f));
+
+        else
+            return _Render;
+    }
+
+    else if(_Case == 2) // D3D11, OGL simulated
+    {
+        float NaN = _Mixing < 0.0f ? 0x7FC00000 : 0.0;
+
+        float3 _Result;
+
+			_Result.r = abs(_Color.r) > 1.0f ? NaN : _Render.r;
+			_Result.g = abs(_Color.g) > 1.0f ? NaN : _Render.g;
+			_Result.b = abs(_Color.b) > 1.0f ? NaN : _Render.b;
+			// _Result.a = abs(_Color.a) > 1.0f ? NaN : _Render.a;
+
+        return _Result;
+    }
+
+    else return float3(0.0f, 0.0f, 0.0f);
+}
 
 PS_OUTPUT ps_main( in PS_INPUT In )
 {
@@ -68,39 +103,20 @@ PS_OUTPUT ps_main( in PS_INPUT In )
 
     float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
-    float4 _Result = float4(0, 0, 0, 0);
 
-        switch (_Render_Switch)
-        {
-            case 0: // Acos mode from Direct3D11
-                if (_Blending_Mode == 0)
-                    _Result = acos(_Render_Texture / (_Render_Background * _Mul));
-                else
-                    _Result = acos((_Render_Background * _Mul) / _Render_Texture);
-                break;
+        float4 _Result, _Render;
 
-            case 1: // Acos mode SYMULATED from Direct3D9
-                if (_Blending_Mode == 0)
-                    _Result = abs(Fun_Acos(_Render_Texture / (_Render_Background * _Mul)));
-                else
-                    _Result = abs(Fun_Acos((_Render_Background * _Mul) / _Render_Texture));
-                break;
+            if(!_Blending_Mode) { _Result.rgb = Fun_Acos(_Render_Texture.rgb / (_Render_Background.rgb * _Mul), _Render_Switch); _Render = _Render_Texture; }
+            else                { _Result.rgb = Fun_Acos((_Render_Background.rgb * _Mul) / _Render_Texture.rgb, _Render_Switch); _Render = _Render_Background; } 
+ 
+            _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
+                if(_Mixing == 0.0) _Result.rgb = _Render.rgb;
 
-            case 2: // Acos mode SYMULATED from Direct3D11
-                if (_Blending_Mode == 0)
-                    _Result = Fun_Acos(_Render_Texture / (_Render_Background * _Mul));
-                else
-                    _Result = Fun_Acos((_Render_Background * _Mul) / _Render_Texture);
-                break;
-        };
+        _Result.a = _Render_Texture.a;
 
-    _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
-    _Result.a = _Render_Texture.a;
     Out.Color = _Result;
-    
     return Out;
 }
-
 /************************************************************/
 /* Premultiplied Alpha */
 /************************************************************/
@@ -115,37 +131,19 @@ PS_OUTPUT ps_main_pm( in PS_INPUT In )
 {
     PS_OUTPUT Out;
 
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint);
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
-    float4 _Result = float4(0, 0, 0, 0);
 
-        switch (_Render_Switch)
-        {
-            case 0: // Acos mode from Direct3D11
-                if (_Blending_Mode == 0)
-                    _Result = acos(_Render_Texture / (_Render_Background * _Mul));
-                else
-                    _Result = acos((_Render_Background * _Mul) / _Render_Texture);
-                break;
+        float4 _Result, _Render;
 
-            case 1: // Acos mode SYMULATED from Direct3D9
-                if (_Blending_Mode == 0)
-                    _Result = abs(Fun_Acos(_Render_Texture / (_Render_Background * _Mul)));
-                else
-                    _Result = abs(Fun_Acos((_Render_Background * _Mul) / _Render_Texture));
-                break;
-
-            case 2: // Acos mode SYMULATED from Direct3D11
-                if (_Blending_Mode == 0)
-                    _Result = Fun_Acos(_Render_Texture / (_Render_Background * _Mul));
-                else
-                    _Result = Fun_Acos((_Render_Background * _Mul) / _Render_Texture);
-                break;
-        }
-
-    _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
-    _Result.a = _Render_Texture.a;
-    _Result.rgb *= _Result.a;
+            if(!_Blending_Mode) { _Result.rgb = Fun_Acos(_Render_Texture.rgb / (_Render_Background.rgb * _Mul), _Render_Switch); _Render = _Render_Texture; }
+            else                { _Result.rgb = Fun_Acos((_Render_Background.rgb * _Mul) / _Render_Texture.rgb, _Render_Switch); _Render = _Render_Background; } 
+ 
+            _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
+                if(_Mixing == 0.0) _Result.rgb = _Render.rgb;
+            
+        _Result.a = _Render_Texture.a;
+        _Result.rgb *= _Result.a;
 
     Out.Color = _Result;
     return Out;  

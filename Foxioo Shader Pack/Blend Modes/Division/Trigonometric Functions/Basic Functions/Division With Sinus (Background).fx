@@ -1,7 +1,7 @@
 /***********************************************************/
 
 /* Shader author: Foxioo */
-/* Version shader: 1.5 (18.10.2025) */
+/* Version shader: 1.6 (25.06.2026) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 
 /***********************************************************/
@@ -32,18 +32,16 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In);
 
-        float4 _Result = _Render_Texture;
+        float4 _Result, _Render;
 
-        if(_Blending_Mode == 0)
-        {
-            _Result.rgb = sin(_Render_Texture.rgb / (_Render_Background.rgb * _Mul));
-        }
-        else
-        {
-            _Result.rgb = sin((_Render_Background.rgb * _Mul) / _Render_Texture.rgb);
-        }
-        _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
+            if(!_Blending_Mode) { _Result.rgb = sin(_Render_Texture.rgb / (_Render_Background.rgb * _Mul)); _Render = _Render_Texture; }
+            else                { _Result.rgb = sin((_Render_Background.rgb * _Mul) / _Render_Texture.rgb); _Render = _Render_Background; }
+
+            _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
+                if(_Mixing == 0.0) _Result.rgb = _Render.rgb;
+
         _Result.a = _Render_Texture.a;
+
     return _Result;
 }
 
