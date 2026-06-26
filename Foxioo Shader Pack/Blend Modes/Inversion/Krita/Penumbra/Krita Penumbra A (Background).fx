@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.1 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -27,12 +28,13 @@ sampler2D S2D_Background : register(s1);
 
 float4 Main(in float2 In : TEXCOORD0) : COLOR0
 {
-    float4 _Render_Texture = (tex2D(S2D_Image, In));
+    float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In);
 
-        float4 _Result = 0.5 - abs(_Render_Background - _Render_Texture - 0.5);
-
-        _Result = lerp(_Render_Texture, _Result, _Mixing);
+        float4 _Result;
+            
+            _Result.rgb = 0.5 - abs(_Render_Background.rgb - _Render_Texture.rgb - 0.5);
+            _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
 
         _Result.a = _Render_Texture.a;
 
