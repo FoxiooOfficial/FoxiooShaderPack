@@ -1,7 +1,7 @@
 /***********************************************************/
 
 /* Shader author: Foxioo */
-/* Version shader: 1.6 (25.06.2026) */
+/* Version shader: 1.7 (26.06.2026) */
 /* My GitHub: https://github.com/FoxiooOfficial */
 
 /***********************************************************/
@@ -70,15 +70,15 @@ void main(void)
     vec4 _Render_Texture = texture2D(imgTexture, In) * blendColor;
     vec4 _Render_Background = texture2D(bckgTexture, In_Background);
 
-        vec4 _Result;
+        vec4 _Result, _Render;
 
-            if(!_Blending_Mode) _Result.rgb = _Render_Texture.rgb / (_Render_Background.rgb * _Mul);
-            else                _Result.rgb = (_Render_Background.rgb * _Mul) / _Render_Texture.rgb;
+            if(!_Blending_Mode) { _Result.rgb = _Render_Texture.rgb / (_Render_Background.rgb * _Mul); _Render = _Render_Texture; }
+            else                { _Result.rgb = (_Render_Background.rgb * _Mul) / _Render_Texture.rgb; _Render = _Render_Background; }
 
-            _Result.rgb = mix(_Render_Texture.rgb, _Result.rgb, _Mixing);
+            _Result.rgb = mix(_Render.rgb, _Result.rgb, _Mixing);
+                if(_Mixing == 0.0) _Result.rgb = _Render.rgb;
 
         _Result.a = _Render_Texture.a;
-
 
     gl_FragColor = _Result;
 }
