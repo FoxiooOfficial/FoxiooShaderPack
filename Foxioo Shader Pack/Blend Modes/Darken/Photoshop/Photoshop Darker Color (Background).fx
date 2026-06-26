@@ -33,8 +33,10 @@ float4 Main( in float2 In : TEXCOORD0) : COLOR0
 
         float4 _Result = _Render_Texture;
 
-        float _Average_Texture = (_Render_Texture.r + _Render_Texture.g + _Render_Texture.b) / 3.0;
-        float _Average_Background = (_Render_Background.r + _Render_Background.g + _Render_Background.b) / 3.0;
+        const float3 _Lum = float3(0.2126, 0.7152, 0.0722);
+
+        float _Average_Texture = dot(_Render_Texture.rgb, _Lum);
+        float _Average_Background = dot(_Render_Background.rgb, _Lum);
 
             if (_Average_Background < _Average_Texture * _Mixing) { _Result.rgb = _Render_Background.rgb; }
 

@@ -31,9 +31,10 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In);
 
-        float4 _Result = 0;
-
-            _Result.rgb = lerp(_Render_Texture.rgb, min(_Render_Background.rgb, _Render_Texture.rgb), _Mixing);
+        float4 _Result;
+        
+            _Result.rgb = min(_Render_Background.rgb, _Render_Texture.rgb);
+            _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
 
         _Result.a = _Render_Texture.a;
 

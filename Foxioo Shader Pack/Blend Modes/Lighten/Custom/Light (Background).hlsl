@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.8 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -31,7 +32,6 @@ cbuffer PS_VARIABLES : register(b0)
     float _Mixing;
     float _Alpha;
     bool __;
-
 	bool _Is_Pre_296_Build;
 	bool ___;};
 
@@ -55,6 +55,8 @@ struct PS_OUTPUT
 /************************************************************/
 /* Main */
 /************************************************************/
+
+// todo: rewrite 
 
 PS_OUTPUT ps_main(PS_INPUT In)
 {
@@ -99,7 +101,7 @@ PS_OUTPUT ps_main_pm( in PS_INPUT In )
 {
     PS_OUTPUT Out;
 
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint);
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
 
     _Render_Texture.rgb *= _Alpha * _Render_Texture.a;

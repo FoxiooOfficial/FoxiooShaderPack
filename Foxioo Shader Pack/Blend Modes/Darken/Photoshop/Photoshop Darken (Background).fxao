@@ -70,9 +70,10 @@ void main(void)
     vec4 _Render_Background = texture2D(bckgTexture, In_Background);
 
         vec4 _Result;
+        
+            _Result.rgb = min(_Render_Background.rgb, _Render_Texture.rgb);
+            _Result.rgb = mix(_Render_Texture.rgb, _Result.rgb, _Mixing);
 
-            _Result.rgb = mix(_Render_Texture.rgb, min(_Render_Background.rgb, _Render_Texture.rgb), _Mixing);
-    
         _Result.a = _Render_Texture.a;
 
     gl_FragColor = _Result;

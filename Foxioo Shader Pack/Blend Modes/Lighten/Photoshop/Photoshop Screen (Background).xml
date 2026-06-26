@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 
 		<parameter>
-			<name>/* Foxioo Photoshop Screen (Background) Shader | 1.4 (18.10.2025) */</name>
+			<name>/* Foxioo Photoshop Screen (Background) Shader | 2026.06.26 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

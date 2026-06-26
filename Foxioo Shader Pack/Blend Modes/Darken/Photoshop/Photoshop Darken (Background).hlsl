@@ -60,9 +60,10 @@ PS_OUTPUT ps_main( in PS_INPUT In )
     float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
 
-        float4 _Result ;
-
-            _Result.rgb = lerp(_Render_Texture.rgb, min(_Render_Background.rgb, _Render_Texture.rgb), _Mixing);
+        float4 _Result;
+        
+            _Result.rgb = min(_Render_Background.rgb, _Render_Texture.rgb);
+            _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
 
         _Result.a = _Render_Texture.a;
 
@@ -87,8 +88,9 @@ PS_OUTPUT ps_main_pm( in PS_INPUT In )
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
 
         float4 _Result;
-
-            _Result.rgb = lerp(_Render_Texture.rgb, min(_Render_Background.rgb, _Render_Texture.rgb), _Mixing);
+        
+            _Result.rgb = min(_Render_Background.rgb, _Render_Texture.rgb);
+            _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
 
         _Result.a = _Render_Texture.a;
         _Result.rgb *= _Result.a;

@@ -1,7 +1,0 @@
-Here is the list of all shaders from the June 21, 2026 (UTC+0200) release.
-
-1: | Blend Stamp (Background)
-2: | Photoshop Color Burn (Background)
-3: | Photoshop Darken (Background)
-4: | Photoshop Darker Color (Background)
-5: | Photoshop Linear Burn (Background)
