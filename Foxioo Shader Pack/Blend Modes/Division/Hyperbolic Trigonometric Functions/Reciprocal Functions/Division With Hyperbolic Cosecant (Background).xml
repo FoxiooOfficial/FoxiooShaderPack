@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Addition With Hyperbolic Cosecant (Background) Shader | 1.3 (25.06.2026) */</name>
+			<name>/* Foxioo Division With Hyperbolic Cosecant (Background) Shader | 2026.06.26 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

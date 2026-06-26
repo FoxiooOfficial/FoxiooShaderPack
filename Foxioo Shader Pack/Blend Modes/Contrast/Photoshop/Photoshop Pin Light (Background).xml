@@ -6,7 +6,7 @@
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 		<parameter>
-			<name>/* Foxioo Photoshop Pin Light (Background) Shader | 1.6 (21.06.2026) */</name>
+			<name>/* Foxioo Photoshop Pin Light (Background) Shader | 2026.06.26 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Krita Interpolation (Background) Shader | 1.2 (21.06.2026) */</name>
+			<name>/* Foxioo Krita Interpolation (Background) Shader | 2026.06.26 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
