@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Logical LEFTSHIFT Blend (Background) Shader | 1.0 (04.01.2026) */</name>
+			<name>/* Foxioo Logical LEFTSHIFT Blend (Background) Shader | 2026.07.01 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

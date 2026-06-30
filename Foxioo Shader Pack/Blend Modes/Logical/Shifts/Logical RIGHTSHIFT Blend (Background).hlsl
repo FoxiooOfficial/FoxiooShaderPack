@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.0 (04.01.2026) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -27,15 +28,15 @@ cbuffer PS_VARIABLES : register(b0)
     bool _;
     float _Mixing;
     bool __;
-
 	bool _Is_Pre_296_Build;
 	bool ___;
 };
 
 struct PS_INPUT
 {
-  float4 Tint : COLOR0;
-  float2 texCoord : TEXCOORD0;
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float4 Position : SV_POSITION;
 };
 
 struct PS_OUTPUT
@@ -71,6 +72,9 @@ void Fun_Bitwise(out bool _Result[8], bool _Base[8], bool _Blend[8])
     //_Result[6] = _Base[6] >> _Blend[6];
     //_Result[7] = _Base[7] >> _Blend[7];
 
+    // thanks for help, naitor
+    // TODO: fox, keep in mind that [unroll] exists in D3D11!
+    [unroll]
     for (int i = 0; i < 8; ++i)
     {
         if (i + 1 < 8)  _Result[i] = _Blend[i + _Base[i]];
@@ -92,65 +96,23 @@ float Fun_ByteColor(bool _Blend[8])
     return _Result /= 255.0;
 }
 
-PS_OUTPUT ps_main(in PS_INPUT In)
+float4 Demultiply(float4 _Render, bool _Premultiplied)
 {
-    PS_OUTPUT Out;
-
-    float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord) * _Mixing;
-
-    bool _Byte_Dummy[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
-    
-        bool _Byte_Texture_Red[8];          Fun_ByteArray(_Byte_Texture_Red, _Render_Texture.r);
-        bool _Byte_Texture_Green[8];        Fun_ByteArray(_Byte_Texture_Green, _Render_Texture.g);
-        bool _Byte_Texture_Blue[8];         Fun_ByteArray(_Byte_Texture_Blue, _Render_Texture.b);
-
-        bool _Byte_Background_Red[8];       Fun_ByteArray(_Byte_Background_Red, _Render_Background.r);
-        bool _Byte_Background_Green[8];     Fun_ByteArray(_Byte_Background_Green, _Render_Background.g);
-        bool _Byte_Background_Blue[8];      Fun_ByteArray(_Byte_Background_Blue, _Render_Background.b);
-
-            Fun_Bitwise(_Byte_Texture_Red, _Byte_Texture_Red, _Byte_Background_Red);
-            Fun_Bitwise(_Byte_Texture_Green, _Byte_Texture_Green, _Byte_Background_Green);
-            Fun_Bitwise(_Byte_Texture_Blue, _Byte_Texture_Blue, _Byte_Background_Blue);
-
-    float4 _Result = 0;
-    
-        _Result.r = Fun_ByteColor(_Byte_Texture_Red);
-        _Result.g = Fun_ByteColor(_Byte_Texture_Green);
-        _Result.b = Fun_ByteColor(_Byte_Texture_Blue);
-
-        _Result.rgb = _Result.rgb * clamp(_Mixing, 0.0, 1.0);
-        _Result.rgb += _Render_Texture.rgb * (1.0 - clamp(_Mixing, 0.0, 1.0));
-
-    _Result.a = _Render_Texture.a;
-    Out.Color = _Result;
-
-    return Out;
-}
-
-/************************************************************/
-/* Premultiplied Alpha */
-/************************************************************/
-
-float4 Demultiply(float4 _color)
-{
-    float4 color = _color;
-    if (color.a != 0)
+    if(_Premultiplied)
     {
-        color.rgb /= color.a;
+	    if ( _Render.a != 0.0 ) {
+            _Render.rgb /= _Render.a;
+        }
     }
-    return color;
+
+	return _Render;
 }
 
-PS_OUTPUT ps_main_pm(in PS_INPUT In)
+float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
 {
-    PS_OUTPUT Out;
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
+    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
 
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord) * _Mixing;
-
-    bool _Byte_Dummy[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
-    
         bool _Byte_Texture_Red[8];          Fun_ByteArray(_Byte_Texture_Red, _Render_Texture.r);
         bool _Byte_Texture_Green[8];        Fun_ByteArray(_Byte_Texture_Green, _Render_Texture.g);
         bool _Byte_Texture_Blue[8];         Fun_ByteArray(_Byte_Texture_Blue, _Render_Texture.b);
@@ -163,19 +125,32 @@ PS_OUTPUT ps_main_pm(in PS_INPUT In)
             Fun_Bitwise(_Byte_Texture_Green, _Byte_Texture_Green, _Byte_Background_Green);
             Fun_Bitwise(_Byte_Texture_Blue, _Byte_Texture_Blue, _Byte_Background_Blue);
 
-    float4 _Result = 0;
+    float4 _Result;
     
-        _Result.r = Fun_ByteColor(_Byte_Texture_Red);
-        _Result.g = Fun_ByteColor(_Byte_Texture_Green);
-        _Result.b = Fun_ByteColor(_Byte_Texture_Blue);
+            _Result.r = Fun_ByteColor(_Byte_Texture_Red);
+            _Result.g = Fun_ByteColor(_Byte_Texture_Green);
+            _Result.b = Fun_ByteColor(_Byte_Texture_Blue);
 
-        _Result.rgb = _Result.rgb * clamp(_Mixing, 0.0, 1.0);
-        _Result.rgb += _Render_Texture.rgb * (1.0 - clamp(_Mixing, 0.0, 1.0));
+            _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
 
-    _Result.a = _Render_Texture.a;
-    _Result.rgb *= _Result.a;
+        _Result.a = _Render_Texture.a;
 
-    Out.Color = _Result;
+    return _Result;
+}
 
-    return Out;
+/************************************************************/
+/* Render */
+/************************************************************/
+
+float4 ps_main(in PS_INPUT In) : SV_TARGET {
+    float4 _Render = Main(In, false);
+    return _Render;
+}
+
+float4 ps_main_pm(in PS_INPUT In) : SV_TARGET
+{
+    float4 _Render = Main(In, true);
+    _Render.rgb *= _Render.a;
+
+    return _Render;
 }
