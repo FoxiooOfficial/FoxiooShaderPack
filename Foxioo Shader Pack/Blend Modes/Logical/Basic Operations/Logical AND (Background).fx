@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.2 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -64,9 +65,7 @@ float Fun_ByteColor(bool _Blend[8])
 float4 Main(in float2 In : TEXCOORD0) : COLOR0
 {
     float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In) * _Mixing;
-
-    bool _Byte_Dummy[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    float4 _Render_Background = tex2D(S2D_Background, In);
     
         bool _Byte_Texture_Red[8];          Fun_ByteArray(_Byte_Texture_Red, _Render_Texture.r);
         bool _Byte_Texture_Green[8];        Fun_ByteArray(_Byte_Texture_Green, _Render_Texture.g);
@@ -86,10 +85,9 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
         _Result.g = Fun_ByteColor(_Byte_Texture_Green);
         _Result.b = Fun_ByteColor(_Byte_Texture_Blue);
 
-        _Result.rgb = _Result.rgb * clamp(_Mixing, 0.0, 1.0);
-        _Result.rgb += _Render_Texture.rgb * (1.0 - clamp(_Mixing, 0.0, 1.0));
+            _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
 
-    _Result.a = _Render_Texture.a;
+        _Result.a = _Render_Texture.a;
     
     return _Result;
 }
