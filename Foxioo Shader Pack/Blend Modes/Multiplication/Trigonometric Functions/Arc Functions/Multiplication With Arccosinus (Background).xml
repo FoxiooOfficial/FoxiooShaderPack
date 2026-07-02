@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Multiplication With Arccosinus (Background) Shader | 1.6 (18.10.2025) */</name>
+			<name>/* Foxioo Multiplication With Arccosinus (Background) Shader | 2026.07.02 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
@@ -69,7 +69,7 @@
 					<min>0</min>
 					<max>2</max>
 
-				<value>0</value>
+				<value>2</value>
 			</parameter>
 
         <parameter>

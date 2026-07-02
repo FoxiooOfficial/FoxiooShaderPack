@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Division With Power (Background) Shader | 2026.06.26 */</name>
+			<name>/* Foxioo Division With Power (Background) Shader | 2026.07.02 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
@@ -56,7 +56,7 @@
 
 				<type>float</type>
 
-				<value>1</value>
+				<value>2.0</value>
 			</parameter>	
 
 		<parameter>

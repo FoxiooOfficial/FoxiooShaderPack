@@ -5,9 +5,8 @@
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
-			
 		<parameter>
-			<name>/* Foxioo Multiplication (Background) Shader | 1.5 (18.10.2025) */</name>
+			<name>/* Foxioo Multiplication (Background) Shader | 2026.07.02 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
@@ -34,9 +33,8 @@
 
 				<type>float</type>
 
-				<value>1</value>
+				<value>1.0</value>
 			</parameter>
-
 
 		<parameter>
 			<name>( Compatibility )</name>

@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.6 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -29,14 +30,15 @@ cbuffer PS_VARIABLES : register(b0)
     float _Mul;
     bool __;
 	bool _Is_Pre_296_Build;
-	int _Render_Switch;
+    int _Render_Switch;
 	bool ___;
 };
 
 struct PS_INPUT
 {
-  float4 Tint : COLOR0;
-  float2 texCoord : TEXCOORD0;
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float4 Position : SV_POSITION;
 };
 
 struct PS_OUTPUT
@@ -50,81 +52,91 @@ cbuffer PS_PIXELSIZE : register(b1)
 	float fPixelHeight;
 };
 
+#define M_PI 3.14159265359
+
 /************************************************************/
 /* Main */
 /************************************************************/
 
-float4 Fun_Asin(float4 _Color, int _Mod)
-{  
-    float4 _2Color = _Color * (_Color * _Mod);
-    return  (_Color + (_2Color * _Color) / 6 + (3 * _2Color * _2Color * _Color) / 40 + (5 * _2Color * _2Color * _2Color * _Color) / 112);
+float4 Demultiply(float4 _Render, bool _Premultiplied)
+{
+    if(_Premultiplied)
+    {
+	    if ( _Render.a != 0.0 ) {
+            _Render.rgb /= _Render.a;
+        }
+    }
+
+	return _Render;
 }
 
-PS_OUTPUT ps_main( in PS_INPUT In )
-{
-    PS_OUTPUT Out;
+float3 Fun_Asin(float3 _Color, int _Case)
+{   
+    float3 _Render = asin(_Color);
 
-    float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
+    if(_Case == 0) // Native
+        return _Render;
+
+    else if(_Case == 1) // D3D9
+    { 
+        float a = -1.0 / M_PI * 1.07596f;
+        float p = -M_PI;
+
+        if(any(_Color < -1.0))
+            return a * pow((_Color - p), 2.0f);
+
+        else if(any(_Color > 1.0))
+            return -a * pow((-_Color - p), 2.0f);
+
+        else
+            return _Render;
+    }
+
+    else if(_Case == 2) // D3D11, OGL
+    {
+        float NaN = _Mixing < 0.0f ? 0x7FC00000 : 0.0f;
+
+        float3 _Result;
+
+            _Result.r = abs(_Color.r) > 1.0f ? NaN : _Render.r;
+            _Result.g = abs(_Color.g) > 1.0f ? NaN : _Render.g;
+            _Result.b = abs(_Color.b) > 1.0f ? NaN : _Render.b;
+            //_Result.a = abs(_Color.a) > 1.0 ? NaN : _Render.a;
+
+        return _Result;
+    }
+
+    else return float3(0.0f, 0.0f, 0.0f);
+}
+
+float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
+{
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
 
-        // _Render_Switch = 0 (Asin mode from Direct3D11)
-		float4 _Result = asin(_Render_Texture * (_Render_Background * _Mul));
+		float4 _Result = _Render_Texture * (_Render_Background * _Mul);
 
-		// _Render_Switch = 1 (Asin mode SYMULATED from Direct3D9)
-		if (_Render_Switch == 1) 
-		{
-			_Result = Fun_Asin(_Render_Texture * (_Render_Background * _Mul), -1);
-		}
+            _Result.rgb = Fun_Asin(_Result.rgb, clamp(_Render_Switch, 0, 2));
+            _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
 
-		// _Render_Switch = 2 (Asin mode SYMULATED from Direct3D11)
-		else if (_Render_Switch == 2) 
-		{
-			_Result = Fun_Asin(_Render_Texture * (_Render_Background * _Mul), 1);
-		}
+        _Result.a = _Render_Texture.a;
 
-    _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
-    _Result.a = _Render_Texture.a;
-    Out.Color = _Result;
-    
-    return Out;
+    return _Result;
 }
 
 /************************************************************/
-/* Premultiplied Alpha */
+/* Render */
 /************************************************************/
 
-float4 Demultiply(float4 _Color)
-{
-	if ( _Color.a != 0 )   _Color.rgb /= _Color.a;
-	return _Color;
+float4 ps_main(in PS_INPUT In) : SV_TARGET{
+    float4 _Render = Main(In, false);
+    return _Render;
 }
 
-PS_OUTPUT ps_main_pm( in PS_INPUT In ) 
+float4 ps_main_pm(in PS_INPUT In) : SV_TARGET
 {
-    PS_OUTPUT Out;
+    float4 _Render = Main(In, true);
+    _Render.rgb *= _Render.a;
 
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
-
-        // _Render_Switch = 0 (Asin mode from Direct3D11)
-		float4 _Result = asin(_Render_Texture * (_Render_Background * _Mul));
-
-		// _Render_Switch = 1 (Asin mode SYMULATED from Direct3D9)
-		if (_Render_Switch == 1) 
-		{
-			_Result = Fun_Asin(_Render_Texture * (_Render_Background * _Mul), -1);
-		}
-
-		// _Render_Switch = 2 (Asin mode SYMULATED from Direct3D11)
-		else if (_Render_Switch == 2) 
-		{
-			_Result = Fun_Asin(_Render_Texture * (_Render_Background * _Mul), 1);
-		}
-
-    _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
-    _Result.a = _Render_Texture.a;
-    _Result.rgb *= _Result.a;
-
-    Out.Color = _Result;
-    return Out;
+    return _Render;
 }
