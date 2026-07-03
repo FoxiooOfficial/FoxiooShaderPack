@@ -1,9 +1,10 @@
 
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.1 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -29,13 +30,11 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
 {
     float4 _Render_Texture = tex2D(S2D_Image, In);
 
-    float _Random = frac(sin(dot(In.xy, float2(12.9898, 78.233))) * 43758.5453);
-    float4 _Result = _Render_Texture;
+        float _Random = frac(sin(dot(In, float2(12.9898, 78.233))) * 43758.5453);
+        float4 _Result = _Render_Texture;
     
-    if (_Random < _Mixing)
-    {
-        _Result.a = 0;
-    }
+            if (_Random < _Mixing)
+                _Result.a = 0.0;
 
     return _Result;
 }
