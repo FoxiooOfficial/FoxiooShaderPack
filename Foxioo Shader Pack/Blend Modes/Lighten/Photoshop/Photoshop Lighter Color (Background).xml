@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 				
 		<parameter>
-			<name>/* Foxioo Photoshop Lighter Color (Background) Shader | 2026.06.26 */</name>
+			<name>/* Foxioo Photoshop Lighter Color (Background) Shader | 2026.07.05 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
