@@ -28,7 +28,7 @@ sampler2D S2D_Background : register(s1);
 
 float4 Main(in float2 In : TEXCOORD0) : COLOR0
 {
-    float4 _Render_Texture = (tex2D(S2D_Image, In));
+    float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In);
 
         float4 _Result = smoothstep(0.9, 1.1, _Render_Background + _Render_Texture);

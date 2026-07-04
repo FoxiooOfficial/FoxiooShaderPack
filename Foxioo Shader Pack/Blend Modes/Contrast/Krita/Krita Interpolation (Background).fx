@@ -28,7 +28,7 @@ sampler2D S2D_Background : register(s1);
 
 float4 Main(in float2 In : TEXCOORD0) : COLOR0
 {
-    float4 _Render_Texture = (tex2D(S2D_Image, In));
+    float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In);
 
         float4 _Result = 0.5 - 0.25 * cos(3.14159265 * _Render_Background) - 0.25 * cos(3.14159265 * _Render_Texture);
