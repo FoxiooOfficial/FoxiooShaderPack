@@ -38,8 +38,8 @@ Shaders are amazing; thanks to them, I created another project called [Tails7](h
 ## Technical Specifications
 
 - FSP currently has **420** effects;
-- Description was last updated on **June 27, 2026**
-- Effects were last updated on **June 26, 2026**
+- Description was last updated on **July 4, 2026**
+- Effects were last updated on **July 4, 2026**
 - Latest full release is from **[April 13, 2026](https://github.com/FoxiooOfficial/FoxiooShaderPack/releases/)**
 - Supported Fusion version in FSP:
    - Minimum: **Build 295.10** *(Due to the `_Is_Pre_296_Build` flag, but starting with Fusion build 297, support will be removed and the target version-along with the minimum-will be the latest; if you are using old Fusion build, why?)*
@@ -132,11 +132,13 @@ It’s thanks to ALL OF YOU that FSP has gained so much attention.<br>
 
 <details>
   <summary><b>Star History Chart</b></summary>
-  <p align="center">
-    <a href="https://star-history.com">
-      <img src="https://api.star-history.com/svg?repos=FoxiooOfficial/FoxiooShaderPack&type=date" alt="Star History Chart" width="100%">
-    </a>
-  </p>
+   <a href="https://www.star-history.com/?repos=FoxiooOfficial%2FFoxiooShaderPack&type=date&legend=top-left">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=FoxiooOfficial/FoxiooShaderPack&type=date&theme=dark&legend=top-left" />
+      <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=FoxiooOfficial/FoxiooShaderPack&type=date&legend=top-left" />
+      <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=FoxiooOfficial/FoxiooShaderPack&type=date&legend=top-left" />
+    </picture>
+   </a>
 </details>
 
 ## License
