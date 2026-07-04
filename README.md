@@ -132,11 +132,13 @@ It’s thanks to ALL OF YOU that FSP has gained so much attention.<br>
 
 <details>
   <summary><b>Star History Chart</b></summary>
-  <p align="center">
-    <a href="https://star-history.com">
-      <img src="https://api.star-history.com/svg?repos=FoxiooOfficial/FoxiooShaderPack&type=date" alt="Star History Chart" width="100%">
-    </a>
-  </p>
+   <a href="https://www.star-history.com/?repos=FoxiooOfficial%2FFoxiooShaderPack&type=date&legend=top-left">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=FoxiooOfficial/FoxiooShaderPack&type=date&theme=dark&legend=top-left" />
+      <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=FoxiooOfficial/FoxiooShaderPack&type=date&legend=top-left" />
+      <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=FoxiooOfficial/FoxiooShaderPack&type=date&legend=top-left" />
+    </picture>
+   </a>
 </details>
 
 ## License
