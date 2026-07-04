@@ -56,15 +56,21 @@ cbuffer PS_PIXELSIZE : register(b1)
 /* Main */
 /************************************************************/
 
-/************************************************************/
-/* Main */
-/************************************************************/
-
-PS_OUTPUT ps_main( in PS_INPUT In )
+float4 Demultiply(float4 _Render, bool _Premultiplied)
 {
-    PS_OUTPUT Out;
+    if(_Premultiplied)
+    {
+	    if ( _Render.a != 0.0 ) {
+            _Render.rgb /= _Render.a;
+        }
+    }
 
-    float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
+	return _Render;
+}
+
+float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
+{
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
 
         float4 _Result, _Render;
@@ -77,37 +83,23 @@ PS_OUTPUT ps_main( in PS_INPUT In )
 
         _Result.a = _Render_Texture.a;
 
-    Out.Color = _Result;
-    return Out;
+    return _Result;
 }
+
 /************************************************************/
-/* Premultiplied Alpha */
+/* Render */
 /************************************************************/
 
-float4 Demultiply(float4 _Color)
-{
-	if ( _Color.a != 0 )   _Color.rgb /= _Color.a;
-	return _Color;
+float4 ps_main(in PS_INPUT In) : SV_TARGET{
+    float4 _Render = Main(In, false);
+    return _Render;
 }
 
-PS_OUTPUT ps_main_pm( in PS_INPUT In ) 
+float4 ps_main_pm(in PS_INPUT In) : SV_TARGET
 {
-    PS_OUTPUT Out;
+    float4 _Render = Main(In, true);
+    _Render.rgb *= _Render.a;
 
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint);
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
-
-        float4 _Result, _Render;
-
-            if(!_Blending_Mode) { _Result.rgb = 1.0 / cos(_Render_Texture.rgb / (_Render_Background.rgb * _Mul)); _Render = _Render_Texture; }
-            else                { _Result.rgb = 1.0 / cos((_Render_Background.rgb * _Mul) / _Render_Texture.rgb); _Render = _Render_Background; }
-
-            _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
-                if(_Mixing == 0.0) _Result.rgb = _Render.rgb;
-
-        _Result.a = _Render_Texture.a;
-        _Result.rgb *= _Result.a;
-
-    Out.Color = _Result;
-    return Out;  
+    return _Render;
 }
+
