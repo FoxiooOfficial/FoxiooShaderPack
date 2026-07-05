@@ -1,13 +1,13 @@
 <effect>
 	<name>Krita Gleat (Background)</name>
-		<description>(The effect comes from the Krita) The Gleat Blending Mode Shader is similar to the Helow blending mode but with swapped conditions for the blending modes. When the sum of the layer values is less than or equal to 1, it uses the Heat blending mode; otherwise, it uses the Glow blending mode.</description> 
+		<description>(The effect comes from the Krita) The Gleat Blending Mode Shader is similar to the Helow blending mode but with swapped conditions for the blending modes. When the sum of the layer values is less than or equal to 1, it uses the Heat blending mode; otherwise, it uses the Glow blending mode; The result is slightly different from the ORIGINAL mode because it does the same &quot;Heat-Glow&quot; effect.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Krita Gleat (Background) Shader | 1.2 (18.10.2025) */</name>
+			<name>/* Foxioo Krita Gleat (Background) Shader | 2026.07.05 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

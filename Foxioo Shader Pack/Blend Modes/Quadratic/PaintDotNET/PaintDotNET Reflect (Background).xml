@@ -1,5 +1,5 @@
 <effect>
-	<name>PaintDOTNet Reflect (Background)</name>
+	<name>PaintDotNET Reflect (Background)</name>
 		<description>(The effect comes from the Paint.NET) This blend mode can be used for adding shiny objects or areas of light</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo PaintDOTNet Reflect (Background) Shader | 1.3 (18.10.2025) */</name>
+			<name>/* Foxioo PaintDotNET Reflect (Background) Shader | 2026.07.05 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

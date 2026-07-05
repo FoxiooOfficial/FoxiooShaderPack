@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.2 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -30,15 +31,17 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In);
 
-        float4 _Result, _Render_Freeze, _Render_Reflect = 0;
+        float4 _Result;
+        float3 _Freeze, _Reflect, _Lerp;
 
-            _Render_Freeze.rgb = clamp(1 - pow(1 - _Render_Background.rgb, 2) / _Render_Texture.rgb, 0.0, 1.0);
-            _Render_Reflect.rgb = clamp(pow(abs(_Render_Background * _Mixing), 2) / (1 - _Render_Texture), 0, 1);
+            _Freeze = clamp(1.0 - pow(1.0 - _Render_Background.rgb, 2.0) / _Render_Texture.rgb, 0.0, 1.0);
+            _Reflect = clamp(pow(_Render_Background.rgb, 2.0) / (1.0 - _Render_Texture.rgb), 0.0, 1.0);
+                
+                    _Lerp = step(1.0, _Render_Background.rgb + _Render_Texture.rgb);
+                    _Result.rgb = lerp(_Reflect.rgb, _Freeze.rgb, _Mixing);
 
-            _Result.rgb = (_Render_Background.rgb + _Render_Texture.rgb > 1.0) ? _Render_Freeze.rgb : _Render_Reflect.rgb;
+                _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
 
-            _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb * _Mixing, _Mixing);
-        
         _Result.a = _Render_Texture.a;
 
     return _Result;

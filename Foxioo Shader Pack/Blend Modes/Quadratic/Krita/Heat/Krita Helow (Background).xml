@@ -1,13 +1,13 @@
 <effect>
 	<name>Krita Helow (Background)</name>
-		<description>(The effect comes from the Krita) The Helow Blending Mode Shader combines the Heat and Glow blending modes to produce smooth and detailed results. When the sum of the layer values exceeds 1, it uses the Heat blending mode; otherwise, it uses the Glow blending mode.</description> 
+		<description>(The effect comes from the Krita) The Helow Blending Mode Shader combines the Heat and Glow blending modes to produce smooth and detailed results. When the sum of the layer values exceeds 1, it uses the Heat blending mode; otherwise, it uses the Glow blending mode; The result is slightly different from the ORIGINAL mode because it does the same &quot;Glow-Heat&quot; effect.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Krita Helow (Background) Shader | 1.2 (18.10.2025) */</name>
+			<name>/* Foxioo Krita Helow (Background) Shader | 2026.07.05 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
