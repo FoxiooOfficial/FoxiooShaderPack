@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Subtraction With Arcsinus (Background) Shader | 1.5 (18.10.2025) */</name>
+			<name>/* Foxioo Subtraction With Arcsinus (Background) Shader | 2026.07.05 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
@@ -48,7 +48,6 @@
 
 				<value>1</value>
 			</parameter>
-
 		<parameter>
 			<name>( Compatibility )</name>
 			<property>checkbox</property>
@@ -72,7 +71,7 @@
 				<name>Render Switch</name>
 				<variable>_Render_Switch</variable>
 				
-				<description>This variable specifies which mode of the arcsinus function is to be used. A setting value of 0 uses the arcsinus function used in the current graphics API. A value set to 1 uses the arcsinus function *simulated* from Direct3D9 (not an exact copy) and a value set to 2 uses the arcsinus function *simulated* from Direct3D11 and OpenGL (not an exact copy).</description>
+				<description>This variable specifies which mode of the arcsinus function is to be used. A setting value of 0 uses the arcosinus function used in the current graphics API. A value set to 1 uses the arcsinus function *simulated* from Direct3D9 (not an exact copy) and a value set to 2 uses the arcsinus function *simulated* from Direct3D11 and OpenGL (not an exact copy).</description>
 
 				<type>int</type>
 				<property>slider</property>
@@ -80,7 +79,7 @@
 					<min>0</min>
 					<max>2</max>
 
-				<value>0</value>
+				<value>2</value>
 			</parameter>
 
         <parameter>

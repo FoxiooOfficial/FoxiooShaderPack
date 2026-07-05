@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Subtraction With Hyperbolic Cosecant (Background) Shader | 1.2 (18.10.2025) */</name>
+			<name>/* Foxioo Subtraction With Hyperbolic Cosecant (Background) Shader | 2026.07.05 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
@@ -47,8 +47,7 @@
 				<type>float</type>
 
 				<value>1</value>
-			</parameter>
-			
+			</parameter>			
 		<parameter>
 			<name>( Compatibility )</name>
 			<property>checkbox</property>

@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Subtraction With Arccosinus (Background) Shader | 1.5 (18.10.2025) */</name>
+			<name>/* Foxioo Subtraction With Arccosinus (Background) Shader | 2026.07.05 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
@@ -48,7 +48,6 @@
 
 				<value>1</value>
 			</parameter>
-
 		<parameter>
 			<name>( Compatibility )</name>
 			<property>checkbox</property>
@@ -80,9 +79,8 @@
 					<min>0</min>
 					<max>2</max>
 
-				<value>0</value>
+				<value>2</value>
 			</parameter>
-
 
         <parameter>
             <name>/* */</name>

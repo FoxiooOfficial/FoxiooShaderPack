@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.5 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -19,7 +20,7 @@ sampler2D S2D_Background : register(s1);
 /* Varibles */
 /***********************************************************/
 
-    float _Mul, _Denom, _Mixing;
+    float _Mul, _Mixing, _Denom;
 
     bool _Blending_Mode;
 
@@ -32,20 +33,15 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In);
 
-        float4 _Result = _Render_Texture;
+        float4 _Result, _Render;
 
-        if(_Blending_Mode == 0)
-        {
-            _Result.rgb = fmod(_Render_Texture.rgb - (_Render_Background.rgb * _Mul), _Denom);
-        }
-        else
-        {
-            _Result.rgb = fmod((_Render_Background * _Mul) - _Render_Texture, _Denom);
-        }
+            if(!_Blending_Mode) { _Result.rgb = fmod(_Render_Texture.rgb - (_Render_Background.rgb * _Mul), _Denom); _Render = _Render_Texture; }
+            else                { _Result.rgb = fmod((_Render_Background.rgb * _Mul) - _Render_Texture.rgb, _Denom); _Render = _Render_Background; }
 
-        _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
+            _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
+
         _Result.a = _Render_Texture.a;
-
+        
     return _Result;
 }
 

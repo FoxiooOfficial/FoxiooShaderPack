@@ -64,9 +64,14 @@ uniform bool _Is_Pre_296_Build;
 /* Main */
 /************************************************************/
 
+vec3 Fun_Trunc(vec3 _Value)
+{
+    return sign(_Value) * floor(abs(_Value));
+}
+
 vec3 Fun_FMod(vec3 _Value, float _Denom)
 {
-    return _Value - _Denom * floor(_Value / _Denom);
+    return _Value - _Denom * Fun_Trunc(_Value / _Denom);
 }
 
 void main(void)
