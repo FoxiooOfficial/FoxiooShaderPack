@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.1 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -49,11 +50,11 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
         float4 _Result = _Blending_Mode ? _Render_Background : _Render_Texture;
         float _Lum = Fun_Luminance(_Result.rgb);
 
-        float3 _Difference = abs(_Result.rgb - _Color.rgb);
-        float _DifferenceMax = max(_Difference.r, max(_Difference.g, _Difference.b)) * _Mixing;
+            float3 _Difference = abs(_Result.rgb - _Color.rgb);
+            float _DifferenceMax = max(_Difference.r, max(_Difference.g, _Difference.b)) * _Mixing;
 
-            float _Mask = abs(_Invert - saturate(1.0 + (_DifferenceMax - 1.0)));
-            _Result.rgb = lerp(_Result.rgb, _Lum, _Mask);
+                float _Mask = abs(_Invert - saturate(1.0 + (_DifferenceMax - 1.0)));
+                _Result.rgb = lerp(_Result.rgb, _Lum, _Mask);
 
         _Result.a = _Render_Texture.a;
 

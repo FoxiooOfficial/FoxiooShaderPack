@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.2 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -43,44 +44,41 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In);
 
-    float4 _Result, _Render;
+        float4 _Result, _Render;
 
-    if (_Blending_Mode == 0)
-    {   
-        _Render = _Render_Texture; 
-        _Result = _Render_Texture;
-    }
-    else
-    {
-        _Render = _Render_Background; 
-        _Result = _Render_Background;
-    }
-        
-        // 😭🙏 What I wrote here
-        _Time = fmod(_Time, 24.0);
-        if (_Time < 0) _Time = 24.0 - abs(_Time);
-
-            if (_Time < 4.0) {
-                _Render.rgb *= lerp(_Blend[0], _Blend[1], _Time / 4.0);
-            }
-            else if (_Time < 6.0) {
-                _Render.rgb *= lerp(_Blend[1], _Blend[2], (_Time - 4.0) / 2.0);
-            }
-            else if (_Time < 12.0) {
-                _Render.rgb *= lerp(_Blend[2], _Blend[3], (_Time - 6.0) / 6.0);
-            }
-            else if (_Time < 16.0) {
-                _Render.rgb *= lerp(_Blend[3], _Blend[4], (_Time - 12.0) / 4.0);
-            }
-            else if (_Time < 18.0) {
-                _Render.rgb *= lerp(_Blend[4], _Blend[5], (_Time - 16.0) / 2.0);
+            if (!_Blending_Mode) {   
+                _Render = _Render_Texture; 
+                _Result = _Render_Texture;
             }
             else {
-                _Render.rgb *= lerp(_Blend[5], _Blend[0], (_Time - 18.0) / 6.0);
+                _Render = _Render_Background; 
+                _Result = _Render_Background;
             }
 
-    _Result = lerp(_Result, _Render, _Mixing);
-    _Result.a = _Render_Texture.a;
+                float _TimeFix = fmod(_Time, 24.0);
+                if (_TimeFix < 0.0) _TimeFix = 24.0 - abs(_TimeFix);
+
+                    if (_TimeFix < 4.0)
+                        _Render.rgb *= lerp(_Blend[0], _Blend[1], _TimeFix / 4.0);
+
+                    else if (_TimeFix < 6.0)
+                        _Render.rgb *= lerp(_Blend[1], _Blend[2], (_TimeFix - 4.0) / 2.0);
+
+                    else if (_TimeFix < 12.0)
+                        _Render.rgb *= lerp(_Blend[2], _Blend[3], (_TimeFix - 6.0) / 6.0);
+
+                    else if (_TimeFix < 16.0)
+                        _Render.rgb *= lerp(_Blend[3], _Blend[4], (_TimeFix - 12.0) / 4.0);
+
+                    else if (_TimeFix < 18.0)
+                        _Render.rgb *= lerp(_Blend[4], _Blend[5], (_TimeFix - 16.0) / 2.0);
+
+                    else
+                        _Render.rgb *= lerp(_Blend[5], _Blend[0], (_TimeFix - 18.0) / 6.0);
+
+            _Result.rgb = lerp(_Result.rgb, _Render.rgb, _Mixing);
+
+        _Result.a = _Render_Texture.a;
 
     return _Result;
 }
