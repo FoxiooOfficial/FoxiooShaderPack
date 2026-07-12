@@ -1,6 +1,6 @@
 <effect>
 	<name>Examoon Text Shading (Switch)</name>
-		<description>An effect that adds a gradient to text; intended only for String Objects and also designed for the Examoon project-though that doesn't mean you can't use it in your own project, of course.
+		<description>An effect that adds a gradient to text; intended only for String Objects and also designed for the Examoon project-though that doesn't mean you can't use it in your own project, of course. (For Direct3D 11, it is recommended to disable String optimization in the application's Properties.)
 		</description>
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
@@ -8,12 +8,12 @@
 				<BackgroundTexture>0</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Examoon Text Shading (Switch) Shader | 2026.07.12 */</name>
+			<name>/* Foxioo Examoon Text Shading (Switch) Shader | 2026.07.12a */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
 
-			<description>An effect that adds a gradient to text; intended only for String Objects and also designed for the Examoon project-though that doesn't mean you can't use it in your own project, of course.
+			<description>An effect that adds a gradient to text; intended only for String Objects and also designed for the Examoon project-though that doesn't mean you can't use it in your own project, of course. (For Direct3D 11, it is recommended to disable String optimization in the application's Properties.)
 			</description>
 		</parameter>
 
@@ -91,7 +91,7 @@
 				<name>Gradient Scale</name>
 				<variable>_ScaleY</variable>
 				
-				<description>This variable determines the gradient scale; smaller values make the gradient LOOOOONGEEER, while larger values make it shorter.</description>
+				<description>This variable determines the gradient scale; smaller values make the gradient LOOOOONGEEER, while larger values make it shorter; (Recommended values are divided/multiplied by 2: 0.125, 0.25, 0.5, 1.0, 2.0, 4.0, etc.).</description>
 
 				<type>float</type>
 
