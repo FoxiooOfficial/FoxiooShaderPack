@@ -7,7 +7,7 @@
 				<BackgroundTexture>0</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Premultiplied To Straight Alpha (Texture) Shader | 1.0 (13.11.2025) */</name>
+			<name>/* Foxioo Cut-Off Alpha Test (Texture) Shader | 2026.07.13 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
