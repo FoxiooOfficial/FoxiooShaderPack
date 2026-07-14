@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.0 (28.03.2026) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -32,7 +33,7 @@ void main()
 //version_####
 
 #ifdef GL_ES
-    #if defined(GL_FRAGMENT_PRECISION_HIGH) || defined(GL_OES_standard_derivatives)
+    #if defined(GL_FRAGMENT_PRECISION_HIGH)
         #define HIGH_PRECISION_SUPPORTED
     #endif
 #else
@@ -74,7 +75,7 @@ uniform float _ColorAlpha;
 uniform vec4 _Color;
 uniform vec4 _ColorAccent;
 
-const int _Samples = 8;
+const int _Samples = 16;
 
 /************************************************************/
 /* Main */
@@ -96,7 +97,7 @@ void main(void)
             
             _Offset = vec2(fPixelWidth, fPixelHeight) * (_Offset + vec2(_PosX, _PosY));
             
-            _Alpha += texture(imgTexture, In + _Offset).a;
+            _Alpha += texture(imgTexture, In + _Offset).a * blendColor.a;
             _Idx += 1.0;
         }
     }

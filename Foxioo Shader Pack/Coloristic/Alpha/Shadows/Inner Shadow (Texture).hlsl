@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.0 (28.03.2026) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -42,8 +43,9 @@ cbuffer PS_VARIABLES : register(b0)
 
 struct PS_INPUT
 {
-  float4 Tint : COLOR0;
-  float2 texCoord : TEXCOORD0;
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float4 Position : SV_POSITION;
 };
 
 struct PS_OUTPUT
@@ -63,14 +65,23 @@ cbuffer PS_PIXELSIZE : register(b1)
 
 static const int _Samples = 16;
 
-PS_OUTPUT ps_main( in PS_INPUT In )
+float4 Demultiply(float4 _Render, bool _Premultiplied)
 {
-    PS_OUTPUT Out;
+    if(_Premultiplied)
+    {
+	    if ( _Render.a != 0.0 ) {
+            _Render.rgb /= _Render.a;
+        }
+    }
 
-    float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
+	return _Render;
+}
 
-    float _Alpha = 0.0;
-    float _Idx = 0.0;
+float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
+{
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
+    
+    float _Alpha = 0.0, _Idx = 0.0;
 
     for(int y = 0; y <= _Samples; y++)
     {
@@ -80,7 +91,7 @@ PS_OUTPUT ps_main( in PS_INPUT In )
             
             _Offset = float2(fPixelWidth, fPixelHeight) * (_Offset + float2(_PosX, _PosY));
             
-            _Alpha += S2D_Image.Sample(S2D_ImageSampler, In.texCoord + _Offset).a;
+            _Alpha += S2D_Image.Sample(S2D_ImageSampler, In.texCoord + _Offset).a * In.Tint.a;
             _Idx += 1.0;
         }
     }
@@ -99,57 +110,22 @@ PS_OUTPUT ps_main( in PS_INPUT In )
 
         _Render = lerp(_Render, _OutlineColor, _InnerMask * _Mixing);
 
-    Out.Color = _Render;
-    return Out;
+    return _Render;
 }
 
 /************************************************************/
-/* Premultiplied Alpha */
+/* Render */
 /************************************************************/
 
-float4 Demultiply(float4 _Color)
-{
-	if ( _Color.a != 0 )   _Color.rgb /= _Color.a;
-	return _Color;
+float4 ps_main(in PS_INPUT In) : SV_TARGET { 
+    float4 _Render = Main(In, false);
+    return _Render;
 }
 
-PS_OUTPUT ps_main_pm( in PS_INPUT In ) 
+float4 ps_main_pm(in PS_INPUT In) : SV_TARGET
 {
-    PS_OUTPUT Out;
-
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
-
-    float _Alpha = 0.0;
-    float _Idx = 0.0;
-
-    for(int y = 0; y <= _Samples; y++)
-    {
-        for(int x = 0; x <= _Samples; x++)
-        {
-            float2 _Offset = (float2(x, y) / (float)_Samples - 0.5) * _Size;
-            
-            _Offset = float2(fPixelWidth, fPixelHeight) * (_Offset + float2(_PosX, _PosY));
-            
-            _Alpha += S2D_Image.Sample(S2D_ImageSampler, In.texCoord + _Offset).a;
-            _Idx += 1.0;
-        }
-    }
-    
-    _Alpha /= _Idx;
-
-        float _InnerMask = _Render_Texture.a * (1.0 - _Alpha);
-    
-        _InnerMask = saturate(_InnerMask * _AlphaMul);
-
-            float4 _OutlineColor = lerp(_ColorAccent, _Color, _InnerMask);
-            _OutlineColor.a = _Render_Texture.a * _ColorAlpha;
-
-        float4 _Render = _Render_Texture;
-        _Render.a *= _AlphaBack;
-
-        _Render = lerp(_Render, _OutlineColor, _InnerMask * _Mixing);
-        
+    float4 _Render = Main(In, true);
     _Render.rgb *= _Render.a;
-    Out.Color = _Render;
-    return Out;
+
+    return _Render;
 }

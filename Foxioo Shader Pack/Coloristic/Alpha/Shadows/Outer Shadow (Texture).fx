@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.0 (28.03.2026) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -44,14 +45,13 @@ sampler2D S2D_Image : register(s0) = sampler_state
 /* Main */
 /************************************************************/
 
-static const int _Samples = 3;
+static const int _Samples = 4;
 
 float4 Main(in float2 In : TEXCOORD0) : COLOR0
 {
     float4 _Render_Texture = tex2D(S2D_Image, In);
     
-    float _Alpha = 0.0;
-    float _Idx = 0.0;
+    float _Alpha = 0.0, _Idx = 0.0;
 
     for(int y = 0; y <= _Samples; y++)
     {
