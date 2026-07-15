@@ -27,17 +27,19 @@ cbuffer PS_VARIABLES : register(b0)
     bool _;
     bool _Blending_Mode;
     float _Mixing;
-    float _DitheringSize; 
+    float _DitheringSize;
+    float _Add;
+    float _Mul;
     bool __;
-
 	bool _Is_Pre_296_Build;
 	bool ___;
 };
 
 struct PS_INPUT
 {
-  float4 Tint : COLOR0;
-  float2 texCoord : TEXCOORD0;
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float4 Position : SV_POSITION;
 };
 
 struct PS_OUTPUT
@@ -55,9 +57,11 @@ cbuffer PS_PIXELSIZE : register(b1)
 /* Main */
 /************************************************************/
 
+#define _Bits 3
+
 float Fun_Quant(float _Color)
 {
-    return floor(_Color * 3.0 + 0.5) / 3.0;
+    return floor(_Color * (float)_Bits + 0.5) / (float)_Bits;
 }
 
 static const float _Dithering[16] =
@@ -73,80 +77,70 @@ float3 Fun_Convert(float3 _Color)
     return float3(Fun_Quant(_Color.r), Fun_Quant(_Color.g), Fun_Quant(_Color.b));
 }
 
-PS_OUTPUT ps_main( in PS_INPUT In )
+float4 Demultiply(float4 _Render, bool _Premultiplied)
 {
-    PS_OUTPUT Out;
+    if(_Premultiplied)
+    {
+	    if ( _Render.a != 0.0 ) {
+            _Render.rgb /= _Render.a;
+        }
+    }
 
-    float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
-
-        float4 _Result;
-        float4 _Render;
-
-        if(_Blending_Mode == 0) {   _Result = _Render_Texture;      _Render = _Render_Texture;  }
-        else                    {   _Result = _Render_Background;   _Render = _Render_Background; }
-
-            int2 _Dith = int2(  fmod(In.texCoord.x / fPixelWidth, 4.0), 
-                                fmod(In.texCoord.y / fPixelHeight, 4.0)
-                            );
-
-                int _Index = _Dith.x + _Dith.y * 4;
-                float _DithValue = _Dithering[_Index];
-                
-                    float3 _Color = _Result.rgb + (_DithValue - 0.5) * _DitheringSize;
-                    _Color = saturate(_Color);
-
-            _Result.rgb = Fun_Convert(_Color);
-
-            _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);  
-
-    _Result.a = _Render_Texture.a;
-    Out.Color = _Result;
-    
-    return Out;
+	return _Render;
 }
 
-/************************************************************/
-/* Premultiplied Alpha */
-/************************************************************/
-
-float4 Demultiply(float4 _Color)
+float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
 {
-	if ( _Color.a != 0 )   _Color.rgb /= _Color.a;
-	return _Color;
-}
-
-PS_OUTPUT ps_main_pm( in PS_INPUT In ) 
-{
-    PS_OUTPUT Out;
-
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
 
-        float4 _Result;
-        float4 _Render;
+    _Render_Texture.rgb = _Render_Texture.rgb * _Mul + _Add;
+    _Render_Background.rgb = _Render_Background.rgb * _Mul + _Add;
 
-        if(_Blending_Mode == 0) {   _Result = _Render_Texture;      _Render = _Render_Texture;  }
-        else                    {   _Result = _Render_Background;   _Render = _Render_Background; }
+        float4 _Result, _Render;
 
-            int2 _Dith = int2(  fmod(In.texCoord.x / fPixelWidth, 4.0), 
-                                fmod(In.texCoord.y / fPixelHeight, 4.0)
-                            );
-
-                int _Index = _Dith.x + _Dith.y * 4;
-                float _DithValue = _Dithering[_Index];
-                
-                    float3 _Color = _Result.rgb + (_DithValue - 0.5) * _DitheringSize;
-                    _Color = saturate(_Color);
-
-            _Result.rgb = Fun_Convert(_Color);
+        if(!_Blending_Mode)
+        {
+            _Result = _Render_Texture;
+            _Render = _Render_Texture;
+        }
+        else
+        {
+            _Result.rgb = _Render_Background.rgb;
+            _Result.a = _Render_Texture.a;
             
-            _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing); 
+            _Render = _Render_Background;
+        }
 
-    _Result.a = _Render_Texture.a;
-    
-    _Result.rgb *= _Result.a;
+        int2 _Dith = int2(  fmod(In.texCoord.x / fPixelWidth,   4.0), 
+                            fmod(In.texCoord.y / fPixelHeight,  4.0)
+                        );
 
-    Out.Color = _Result;
-    return Out;  
+        int _Index = _Dith.x + _Dith.y * 4;
+        float _DithValue = _Dithering[_Index];
+                
+            float3 _Color = _Result.rgb + (_DithValue - 0.5) * _DitheringSize;
+            _Color = saturate(_Color);
+
+        _Result.rgb = Fun_Convert(_Color);
+        _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing); 
+
+    return _Result;
+}
+
+/************************************************************/
+/* Render */
+/************************************************************/
+
+float4 ps_main(in PS_INPUT In) : SV_TARGET { 
+    float4 _Render = Main(In, false);
+    return _Render;
+}
+
+float4 ps_main_pm(in PS_INPUT In) : SV_TARGET
+{
+    float4 _Render = Main(In, true);
+    _Render.rgb *= _Render.a;
+
+    return _Render;
 }
