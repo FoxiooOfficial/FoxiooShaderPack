@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.0 (12.04.2026) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -57,63 +58,166 @@ uniform float _Mixing;
 uniform bool _Blending_Mode;
 uniform float _DitheringSize;
 uniform bool _Is_Pre_296_Build;
+uniform float _Add;
+uniform float _Mul;
 
 /************************************************************/
 /* Main */
 /************************************************************/
 
-float Fun_Quant(float _Color)
-{
-    return floor(_Color * 5.0 + 0.5) / 5.0;
-}
+float _Dither[16];
 
-float Fun_Dithering(int _Index)
+float Fun_Trunc(float _Value)
 {
-    /* i hate this code too. */
-         if (_Index == 0)  return  0.0 / 16.0; else if (_Index == 1)  return  8.0 / 16.0;  else if (_Index == 2)  return   2.0 / 16.0;  else if (_Index == 3) return 10.0 / 16.0;
-    else if (_Index == 4)  return 12.0 / 16.0; else if (_Index == 5)  return  4.0 / 16.0;  else if (_Index == 6)  return  14.0 / 16.0;  else if (_Index == 7) return  6.0 / 16.0;
-    else if (_Index == 8)  return  3.0 / 16.0; else if (_Index == 9)  return 11.0 / 16.0;  else if (_Index == 10) return   1.0 / 16.0;  else if (_Index == 11) return  9.0 / 16.0;
-    else if (_Index == 12) return 15.0 / 16.0; else if (_Index == 13) return  7.0 / 16.0;  else if (_Index == 14) return  13.0 / 16.0;  return  5.0 / 16.0;
-
-    /* why there no arrays in es 2.0 and switch/case :( ). */
-}
-
-vec3 Fun_Convert(vec3 _Color)
-{
-    return vec3(Fun_Quant(_Color.r), Fun_Quant(_Color.g), Fun_Quant(_Color.b));
+    return sign(_Value) * floor(abs(_Value));
 }
 
 float Fun_FMod(float _Value, float _Denom)
 {
-    return _Value - _Denom * floor(_Value / _Denom);
+    return _Value - _Denom * Fun_Trunc(_Value / _Denom);
+}
+
+// https://gist.github.com/cesarmiquel/1780ab6078b9735371d1f10a9d60d233
+float _Level_Lum[3];
+float _Level_Sat[3];
+
+float Fun_Quant(float _Level, vec3 _Color, out int _Out)
+{
+    vec3 _Diff = abs(_Level - _Color);
+
+    if(_Diff.x <= _Diff.y && _Diff.x <= _Diff.z)
+    {
+        _Out = 0;
+        return _Color.x;
+    }
+    else if(_Diff.y <= _Diff.x && _Diff.y <= _Diff.z)
+    {
+        _Out = 1;
+        return _Color.y;
+    }
+    else
+    {
+        _Out = 2;
+        return _Color.z;
+    }
+}
+
+vec3 Fun_Convert(vec3 _Color)
+{
+    _Level_Lum[0] = 1.0;
+    _Level_Lum[1] = 27.909 / 63.0;
+    _Level_Lum[2] = 16.002 / 63.0;
+
+    _Level_Sat[0] = 0.0;
+    _Level_Sat[1] = 0.5;
+    _Level_Sat[2] = 5.0 / 7.0;
+
+    float _V = max(_Color.r, max(_Color.g, _Color.b));
+    float _Min = min(_Color.r, min(_Color.g, _Color.b));
+    float _Diff = _V - _Min;
+
+    float _Sat = _V > 0.001 ? _Diff / _V : 0.0;
+
+    // gray map
+    if(_Sat < 0.06 || _V < 0.02)
+        return floor(_Color * 15.0 + 0.5) / 15.0;
+
+        int _V_In;
+        float _V_High = Fun_Quant(_V, vec3(_Level_Lum[0], _Level_Lum[1], _Level_Lum[2]), _V_In);
+
+        int _S_In;
+        float _Sat_High = Fun_Quant(_Sat, vec3(_Level_Sat[0], _Level_Sat[1], _Level_Sat[2]), _S_In);
+
+            float _Low = _V_High * (1.0 - _Sat_High);
+
+    float _Hue;
+    if(_V == _Color.r)      _Hue = 60.0 * Fun_FMod((_Color.g - _Color.b) / _Diff, 6.0);
+    else if(_V == _Color.g) _Hue = 60.0 * ((_Color.b - _Color.r) / _Diff + 2.0);
+    else                    _Hue = 60.0 * ((_Color.r - _Color.g) / _Diff + 4.0);
+
+        if(_Hue < 0.0) _Hue += 360.0;
+
+    float _Sec = _Hue / 60.0;
+    int _Step = int(floor(_Sec));
+    float _Angle = floor((_Sec - float(_Step)) * 4.0) / 4.0;
+    float _Vviv;
+
+        if (mod(float(_Step), 2.0) == 0.0)
+            _Vviv = mix(_Low, _V_High, _Angle);
+        else
+            _Vviv = mix(_V_High, _Low, _Angle);
+
+        if     (_Step == 0) return vec3(_V_High, _Vviv, _Low);
+        else if(_Step == 1) return vec3(_Vviv, _V_High, _Low);
+        else if(_Step == 2) return vec3(_Low, _V_High, _Vviv);
+        else if(_Step == 3) return vec3(_Low, _Vviv, _V_High);
+        else if(_Step == 4) return vec3(_Vviv, _Low, _V_High);
+        else if(_Step == 5) return vec3(_V_High, _Low, _Vviv); 
+        else                return vec3(0.0);
+}
+
+float Fun_Dithering(int _Index)
+{
+    _Dither[0]  = 0.0 / 16.0;
+    _Dither[1]  = 8.0 / 16.0;
+    _Dither[2]  = 2.0 / 16.0;
+    _Dither[3]  = 10.0 / 16.0;
+    _Dither[4]  = 12.0 / 16.0;
+    _Dither[5]  = 4.0 / 16.0;
+    _Dither[6]  = 14.0 / 16.0;
+    _Dither[7]  = 6.0 / 16.0;
+    _Dither[8]  = 3.0 / 16.0;
+    _Dither[9]  = 11.0 / 16.0;
+    _Dither[10] = 1.0 / 16.0;
+    _Dither[11] = 9.0 / 16.0;
+    _Dither[12] = 15.0 / 16.0;
+    _Dither[13] = 7.0 / 16.0;
+    _Dither[14] = 13.0 / 16.0;
+    _Dither[15] = 5.0 / 16.0;
+
+    return _Dither[_Index];
 }
 
 void main(void)
 {
-    vec2 In_Background = vec2(In.x, 1.0 - In.y);
+    vec2 In_Background = In;
+    if(_Is_Pre_296_Build) In_Background.y = 1.0 - In_Background.y;
 
     vec4 _Render_Texture = texture2D(imgTexture, In) * blendColor;
-    vec4 _Render_Background = _Is_Pre_296_Build ? texture2D(bckgTexture, In_Background) : texture2D(bckgTexture, In);
+    vec4 _Render_Background = texture2D(bckgTexture, In_Background);
 
-    vec4 _Result = vec4(0.0);
-    vec4 _Render = vec4(0.0);
+    _Render_Texture.rgb = _Render_Texture.rgb * _Mul + _Add;
+    _Render_Background.rgb = _Render_Background.rgb * _Mul + _Add;
 
-    if(_Blending_Mode == false) {   _Result = _Render_Texture;      _Render = _Render_Texture;  }
-    else                        {   _Result = _Render_Background;   _Render = _Render_Background; }
+        vec4 _Result, _Render;
 
-            vec2 _Dith = vec2(Fun_FMod(In.x / fPixelWidth, 4.0), Fun_FMod(In.y / fPixelHeight, 4.0));
-            int _Index = int(_Dith.x) + int(_Dith.y) * 4;
-            float _DithValue = Fun_Dithering(_Index);
+        if(!_Blending_Mode)
+        {
+            _Result = _Render_Texture;
+            _Render = _Render_Texture;
+        }
+        else
+        {
+            _Result.rgb = _Render_Background.rgb;
+            _Result.a = _Render_Texture.a;
+            
+            _Render = _Render_Background;
+        }
 
-                vec3 _Color = _Result.rgb + (_DithValue - 0.5) * _DitheringSize;
-                _Color = clamp(_Color, 0.0, 1.0);
+        vec2 _Dith = vec2(  Fun_FMod(In.x / fPixelWidth,    4.0), 
+                            Fun_FMod(In.y / fPixelHeight,   4.0)
+                        );
 
-            _Result.rgb = Fun_Convert(_Color);
+        int _Index = int(_Dith.x) + int(_Dith.y) * 4;
+        float _DithValue = Fun_Dithering(_Index);
 
+         vec3 _Color = _Result.rgb + (_DithValue - 0.5) * _DitheringSize;
+            
+            _Color = clamp(_Color, 0.0, 1.0);
+
+        _Result.rgb = Fun_Convert(_Color);
         _Result.rgb = mix(_Render.rgb, _Result.rgb, _Mixing);
-        _Result.a = _Render_Texture.a;
 
     gl_FragColor = _Result;
 }
-
 //@End

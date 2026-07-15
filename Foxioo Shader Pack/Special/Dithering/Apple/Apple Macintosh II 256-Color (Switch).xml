@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Apple Macintosh II 256-Color Palette (Switch) Shader | 1.0 (12.04.2026) */</name>
+			<name>/* Foxioo Apple Macintosh II 256-Color Palette (Switch) Shader | 2026.07.15 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
@@ -46,6 +46,28 @@
 				<type>float</type>
 
 				<value>0.2</value>
+			</parameter>
+
+			<parameter>
+				<name>Add Color</name>
+				<variable>_Add</variable>
+				
+				<description>Specifies how much should be added to the RGB colors.</description>
+
+				<type>float</type>
+
+				<value>0.0</value>
+			</parameter>
+
+			<parameter>
+				<name>Multiply Color</name>
+				<variable>_Mul</variable>
+				
+				<description>Specifies by how much the RGB colors should be multiplied.</description>
+
+				<type>float</type>
+
+				<value>1.0</value>
 			</parameter>
 
 		<parameter>
