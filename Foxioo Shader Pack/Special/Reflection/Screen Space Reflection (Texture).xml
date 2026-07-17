@@ -7,7 +7,7 @@
 				<BackgroundTexture>0</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Screen Space Reflection (Texture) Shader | 1.0 (18.01.2026) */</name>
+			<name>/* Foxioo Screen Space Reflection (Texture) Shader | 2026.07.17 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
@@ -30,11 +30,11 @@
 				<name>Reflection Angle</name>
 				<variable>_Angle</variable>
 				
-				<description>The variable determines the direction of the reflection vector angle. (0 - Left; 90 - Up; 180 - Right; 270 - Down)</description>
+				<description>The variable determines the direction of the reflection vector angle. (0 - Up; 90 - Left; 180 - Down; 270 - Right)</description>
 
 				<type>float</type>
 
-				<value>270</value>
+				<value>180</value>
 			</parameter>
 
 			<parameter>
@@ -91,6 +91,17 @@
 				<type>float</type>
 
 				<value>0.5</value>
+			</parameter>
+
+			<parameter>
+				<name>Loop size</name>
+				<variable>_Loop</variable>
+				
+				<description>(For Direct3D 11, iOS, and macOS only) Sets the reflection quality scale; the default value is 64. For Android, this is fixed at 64, and for Direct3D 9, it is 3.</description>
+
+				<type>int</type>
+
+				<value>64</value>
 			</parameter>
 
 
