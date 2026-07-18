@@ -121,8 +121,7 @@ vec3 Fun_Convert(vec3 _Color)
     return mix(_High, _Low, step(_Color, vec3(0.04045)));
 }
 
-float Fun_FMod(float _Value, float _Denom)
-{
+float Fun_FMod(float _Value, float _Denom) {
     return _Value - _Denom * floor(_Value / _Denom);
 }
 
