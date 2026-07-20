@@ -32,7 +32,7 @@ void main()
 //version_####
 
 #ifdef GL_ES
-    #if defined(GL_FRAGMENT_PRECISION_HIGH) || defined(GL_OES_standard_derivatives)
+    #if defined(GL_FRAGMENT_PRECISION_HIGH)
         #define HIGH_PRECISION_SUPPORTED
     #endif
 #else
@@ -62,7 +62,7 @@ uniform float fPixelHeight;
 /* Varibles */
 /***********************************************************/
 
-uniform sampler2D _Texture_Ice;
+uniform sampler2D _Texture_Fire;
 uniform sampler2D _Texture_Mask;
 uniform float _Offset;
 uniform float _Mixing;
@@ -92,7 +92,7 @@ void main(void)
 
     vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
     vec4 _Render_Background = texture(bckgTexture, _UV);
-    vec4 _Render_Ice = texture(_Texture_Ice, In);
+    vec4 _Render_Ice = texture(_Texture_Fire, In);
     vec4 _Render_Mask = texture(_Texture_Mask, In);
 
         vec4 _Result;
@@ -111,11 +111,17 @@ void main(void)
             _Render = _Render_Background;
         }
 
-        _Result.rgb = _Result.rgb * Fun_Luminance(_Render_Ice.rgb) + Fun_Luminance(_Render_Ice.rgb) * 0.75 * _Render_Ice.rgb;
-        _Result.rgb += Fun_Luminance(_Render_Ice.rgb) * 0.35;
+        float _StepAlpha = smoothstep(1.0, 0.0, pow((_Mixing - _Render_Mask.r), 10.0));
+        vec3 _ColorFire = _Render_Ice.rgb * _Render_Ice.rgb * 2.0 + _Render_Ice.rgb + pow(distance(_Render_Mask.r, _Mixing + 0.1), 10.0) * vec3(0.8, 0.7, 0.0);
 
-        _Result = mix(_Render, _Result, smoothstep(Fun_Luminance(_Render_Ice.rgb) * (1.0 - abs(_Mixing)), Fun_Luminance(_Render_Ice.rgb), abs(_Mixing) * (1.0 - _Render_Mask.r)));
-        if(_Blending_Mode) _Result.a = _Render_Texture.a;
+        _Result.rgb = mix(_Render.rgb, vec3(0.0), clamp(pow(distance(_Render_Mask.r, max(0.0, _Mixing) + 0.2), _Offset) * 40.0, 0.0, 1.0));
+        _Result.rgb = mix(_Result.rgb, _ColorFire, pow(distance(_Render_Mask.r, max(0.0, _Mixing) + 0.2), _Offset));
+        _Result.a = mix(_Result.a, _Result.a * _StepAlpha, clamp(_Mixing, 0.0, 1.0));
+
+            _Result.rgb += _Render_Background.rgb * _StepAlpha * pow(distance(_Render_Mask.r, _Mixing + 0.2), _Offset);
+        
+        _Result = mix(_Render, _Result, clamp(_Mixing, 0.0, 1.0));
+        _Result.a *= _Render_Texture.a;
 
     fragColor = _Result;
 }

@@ -1,0 +1,133 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_vertex
+//version_####
+
+uniform mat3 transformMatrix;
+uniform mat3 projectionMatrix;
+uniform mat3 objectMatrix;
+uniform mat3 textureMatrix;
+
+in vec2 position;
+out vec2 In;
+void main()
+{
+    vec3 pos = vec3(position, 1.0);
+    In = (textureMatrix * pos).xy;
+    gl_Position = vec4(projectionMatrix * transformMatrix * objectMatrix * pos, 1.0);
+}
+//@End
+
+/* ####################################################### */
+
+//@Begin_fragment
+//version_####
+
+#ifdef GL_ES
+    #if defined(GL_FRAGMENT_PRECISION_HIGH)
+        #define HIGH_PRECISION_SUPPORTED
+    #endif
+#else
+    #define HIGH_PRECISION_SUPPORTED    
+#endif
+
+#ifdef HIGH_PRECISION_SUPPORTED
+    precision highp float;
+#else
+    precision mediump float;
+#endif
+
+in vec2 In;
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+uniform sampler2D imgTexture;
+uniform sampler2D bckgTexture;
+
+uniform lowp vec4 blendColor;
+//uniform float fPixelWidth;
+//uniform float fPixelHeight;
+
+/***********************************************************/
+/* Varibles */
+/***********************************************************/
+
+uniform float _Mixing;
+uniform float _Time;
+uniform bool _Blending_Mode;
+uniform bool _Is_Pre_296_Build;
+uniform sampler2D _Texture;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+vec3 Fun_Aurora(float _Noise)
+{
+    const vec3 _Light_Hight = vec3(0.3882, 0.8039, 0.9059);
+    const vec3 _Light_Medium = vec3(0.06, 0.7, 0.62);
+    const vec3 _Light_Low = vec3(0.0392, 0.4863, 0.3882);
+    const vec3 _Light_Null = vec3(0.0,0.0, 0.0);
+
+    vec3 _Aurora = mix(_Light_Null, _Light_Low, smoothstep(0.0, 0.33, _Noise));
+    _Aurora = mix(_Aurora, _Light_Medium, smoothstep(0.33, 1.0, _Noise));
+    _Aurora = mix(_Aurora, _Light_Hight,  smoothstep(1.0, 2.0, _Noise));
+
+    return _Aurora;
+}
+
+const float _Max = 25.0;
+
+out vec4 fragColor;
+void main(void)
+{  
+    vec2 In_Background = In;
+    if(_Is_Pre_296_Build) In_Background.y = 1.0 - In_Background.y;
+
+    vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
+    vec4 _Render_Background = texture(bckgTexture, In_Background);
+
+        vec4 _Result = _Blending_Mode ? _Render_Background : _Render_Texture;
+        vec4 _Render = _Result;
+
+        _Result.a = _Render_Texture.a;
+
+        _Result.rgb = vec3(dot(pow(abs(_Result.rgb),  vec3(6.0)),vec3(0.2126, 0.7152, 0.0722)));
+        float Wave = sin(_Mixing * 10.0);
+
+        for (int i = 1; i < int(_Max); i++)
+        {
+            float w = In.x;
+        
+            w += sin((1.0 - In.y) * 2.0 + _Time) / 60.0;
+            w = abs(sin(-w * 10.0 * float(i) / _Max * 2.0 + _Time / float(i)) / 20. + sin(40.0 * float(i) / _Max + _Time) / 18.0) * 35.0;
+
+                w += ((1.0 - In.y) * 2.4 - 1.6);
+                w = smoothstep(0.4, 0.7, w / 5.0) / 20.0;
+
+            float _Color = 1.0 - (abs(In.y - 0.5)) * 3.0;
+            _Color += (In.x + 4.0 + Wave * 0.5 + 0.5) * 0.3;
+
+                vec3 _Perlin = texture(_Texture, fract(In * 0.3 + vec2(_Time * float(i) / 100.0, 0.0))).rgb;
+                float _Lum = (_Perlin.r + _Perlin.g + _Perlin.b) / 32.0;
+
+            _Result.rgb += (5.0 / _Max) * (Fun_Aurora(0.7 * (_Color + In.x + _Time)) * w * 5.0 + Fun_Aurora(_Lum));
+        }
+
+        _Result.rgb += Fun_Aurora(1.0 - abs(In.y * In.y * 2.0 - 0.8)) * In.y;
+        _Result.rgb = mix(_Render.rgb, pow(abs(_Result.rgb), vec3(2.0)) * 1.8, _Mixing);
+
+    fragColor = _Result;
+}
+//@End
