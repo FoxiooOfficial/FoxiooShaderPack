@@ -1,0 +1,169 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_vertex
+//version_####
+
+uniform mat3 transformMatrix;
+uniform mat3 projectionMatrix;
+uniform mat3 objectMatrix;
+uniform mat3 textureMatrix;
+
+in vec2 position;
+out vec2 In;
+void main()
+{
+    vec3 pos = vec3(position, 1.0);
+    In = (textureMatrix * pos).xy;
+    gl_Position = vec4(projectionMatrix * transformMatrix * objectMatrix * pos, 1.0);
+}
+//@End
+
+/* ####################################################### */
+
+//@Begin_fragment
+//version_####
+
+#ifdef GL_ES
+    #if defined(GL_FRAGMENT_PRECISION_HIGH)
+        #define HIGH_PRECISION_SUPPORTED
+    #endif
+#else
+    #define HIGH_PRECISION_SUPPORTED    
+#endif
+
+#ifdef HIGH_PRECISION_SUPPORTED
+    precision highp float;
+#else
+    precision mediump float;
+#endif
+
+in vec2 In;
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+uniform sampler2D imgTexture;
+uniform sampler2D bckgTexture;
+
+uniform lowp vec4 blendColor;
+uniform float fPixelWidth;
+uniform float fPixelHeight;
+
+/***********************************************************/
+/* Varibles */
+/***********************************************************/
+
+uniform float _Mixing;
+uniform float _Time;
+uniform float _Scale;
+uniform bool _Is_Pre_296_Build;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+const float _Size = 8.0;
+const vec4 _Background = vec4(0.51, 0.42, 0.34, 0.25);
+
+vec3 _Palette[4];
+
+vec2 Fun_Round(vec2 x) {
+    return floor(x + 0.5);
+}
+
+vec3 Fun_Square(vec2 In, vec2 _Offset, vec2 _Dir, int _Color)
+{
+    vec2 _PixelSize = vec2(fPixelWidth, fPixelHeight);
+    
+    vec2 _Round = Fun_Round(_Offset * 16.0 / 3.0) / 16.0;
+    vec2 _Grid = (_Round) / _Size;
+
+        vec2 _Anim = (_Time * _Dir) / 16.0;
+        vec2 _Up = _Grid + _Anim;
+
+    vec2 _Off = In - _Up;
+        _Off = fract(_Off + 0.5) - 0.5; // loop!
+
+    // tail
+    vec2 _OffPIXEL = _Off / _PixelSize;
+    vec2 _Norm = _Dir / length(_Dir);
+
+    float _Dot = dot(_OffPIXEL, _Norm);
+    float _DirSide = abs(dot(_OffPIXEL, _Norm.yx));
+
+    vec2 _TailSize = _Size * vec2(15.0, 0.4);
+
+        float _Tail = clamp(1.0 + _Dot / _TailSize.x, 0.0, 1.0);
+        float _TailMask = clamp(1.0 - max(0.0, _DirSide - _TailSize.y), 0.0, 1.0);
+
+        float _Trail = float(_Dot < 0.0) * (_Tail * _TailMask);
+
+    //glow
+    vec2 _Dist = abs(_Off / _PixelSize) - _Size / 2.0;
+    
+    float _Distance = length(max(_Dist, 0.0));
+
+        float _Glow = exp(-_Distance * 0.1) * 0.5;
+        float _Alpha = clamp(float(max(_Dist.x, _Dist.y) <= 0.0) + _Glow + _Trail * 0.35, 0.0, 1.0);
+
+    return _Alpha * _Palette[_Color];
+}
+
+out vec4 fragColor;
+void main(void)
+{ 
+    vec2 In_Background = In;
+    if(_Is_Pre_296_Build) In_Background.y = 1.0 - In_Background.y;
+
+    vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
+    vec4 _Render_Background = texture(bckgTexture, In_Background);
+
+        vec4 _Result = _Render_Background;
+
+        _Palette[0] = vec3(0.98, 0.1, 0.23);
+        _Palette[1] = vec3(0.07, 0.73, 0.98);
+        _Palette[2] = vec3(0.11, 0.91, 0.08);
+        _Palette[3] = vec3(1.0, 0.99, 0.31);
+
+        // Background
+        vec2 _UV = In / 2.0 * _Scale;
+        //vec2 _In_Background = _UV / _Size / vec2(fPixelWidth, fPixelHeight);
+        //vec2 _In_Frac = fract(_In_Background - vec2(0.5, 0.0));
+
+        //_Result.rgb = vec3( 
+        //                mix(_Background.w,
+        //                    mix(_Background.x, mix(_Background.y, _Background.z, step(_In_Frac.x, 0.5)),
+        //                        step(abs((0.5 - _In_Frac.x) / _In_Frac.y * 0.5), 0.5)
+        //                        ),
+        //                    step(abs((0.5 - _In_Frac.x) / (_In_Frac.y - 1.0) * 0.5), 0.5)
+        //                    )
+        //                );
+            
+            //_Result.rgb -= mix(_Background.z, 0.0, step((1.5 - _In_Frac.x), 1.0)) * (1.0 - _Background.w);
+
+            // nexus!
+            _Result.rgb += Fun_Square(_UV, vec2(1.0, 3.0),    vec2(0.0, -1.0),      0);
+            _Result.rgb += Fun_Square(_UV, vec2(5.0, 1.0),    vec2(0.0, 0.5),       1);
+            _Result.rgb += Fun_Square(_UV, vec2(5.0, -7.0),   vec2(-0.25, 0.0),     2);
+            _Result.rgb += Fun_Square(_UV, vec2(1.5, 1.0),    vec2(0.75, 0.0),      3);
+            _Result.rgb += Fun_Square(_UV, vec2(15.0, 11.0),  vec2(-0.5, 0.0),      0);
+            _Result.rgb += Fun_Square(_UV, vec2(-6.0, 5.0),   vec2(0.5, 0.0),       1);
+            _Result.rgb += Fun_Square(_UV, vec2(-4.0, 0.0),   vec2(0.0, 1.0),       3);
+            _Result.rgb += Fun_Square(_UV, vec2(12.0, 1.0),   vec2(0.0, -0.75),     2);
+
+        _Result.rgb = mix(_Render_Background.rgb, _Result.rgb, _Mixing);
+        _Result.a = _Render_Texture.a;
+
+    fragColor = _Result;
+}
+//@End
