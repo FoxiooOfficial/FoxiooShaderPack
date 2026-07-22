@@ -7,7 +7,7 @@
 				<BackgroundTexture>0</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Alpha Fish (Texture) Shader | 1.0 (25.12.2025)  */</name>
+			<name>/* Foxioo Alpha Fish (Texture) Shader | 2025.07.23 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

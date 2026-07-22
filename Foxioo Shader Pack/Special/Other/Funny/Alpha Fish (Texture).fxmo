@@ -32,7 +32,7 @@ void main()
 //version_####
 
 #ifdef GL_ES
-    #if defined(GL_FRAGMENT_PRECISION_HIGH) || defined(GL_OES_standard_derivatives)
+    #if defined(GL_FRAGMENT_PRECISION_HIGH)
         #define HIGH_PRECISION_SUPPORTED
     #endif
 #else
@@ -55,8 +55,8 @@ uniform sampler2D imgTexture;
 //uniform sampler2D bckgTexture;
 
 uniform lowp vec4 blendColor;
-uniform float fPixelWidth;
-uniform float fPixelHeight;
+//uniform float fPixelWidth;
+//uniform float fPixelHeight;
 
 /***********************************************************/
 /* Varibles */
@@ -88,8 +88,8 @@ void main(void)
         vec2 _CenterBottomShadow = vec2(_In * 2.0) - vec2(1.5, 1.3);
             float _CenterBottomShadowCirl = sqrt(_CenterBottomShadow.x * _CenterBottomShadow.x + _CenterBottomShadow.y * _CenterBottomShadow.y);
 
-        if(_In.y > 0.55) 
-        _Cirl *= mix(0.96, 1.0, 1.0 - pow(_In.y - 0.55, 0.2));
+        if(_In.y > 0.57) 
+        _Cirl *= mix(0.95, 1.0, 1.0 - pow(_In.y - 0.55, 0.0));
 
             vec3 _TopColor = mix(vec3(0.9921, 0.79215, 0.0), vec3(0.69803, 0.56078, 0.0), _CenterTopShadowCirl * _CenterTopShadowCirl);
             float _Depth = pow(abs(0.55 - _In.y), 3.0);
@@ -97,13 +97,13 @@ void main(void)
             _BottomColor *= pow(_Depth, 0.001);
 
             _Result.a = float(_Cirl < 0.90);
-            _Result.rgb = mix(_TopColor, _BottomColor * 1.1, float(_In.y > 0.55));
+            _Result.rgb = mix(_TopColor, _BottomColor * vec3(1.1), float(_In.y > 0.57));
 
-            vec2 _Fish1_In = _In;
-                _Fish1_In.x -= 0.27;
-                _Fish1_In.y += 0.65;
-                _Fish1_In.x *= 1.1;
-                float _Fish1 = ((_Fish1_In.y + (pow(_Fish1_In.x, 0.15 - pow(_Fish1_In.x, 3.0)) * (1.0 - _Fish1_In.x * 1.2)) * 0.5) * float(0.5 > 0.5)) * float(_Fish1_In.x > 0.0) * float(_Fish1_In.y < 1.0) * float(_Fish1_In.x < 0.6);
+            vec2 _Fish1In = In;
+                _Fish1In.x -= 0.3;
+                _Fish1In.y += 0.61;
+                _Fish1In.x *= 1.07;
+                float _Fish1 = float((_Fish1In.y + (pow(_Fish1In.x, 0.14 - pow(_Fish1In.x, 3.0)) * (1.0 - _Fish1In.x * 1.2)) * 0.50) * 0.50 > 0.5) * float(_Fish1In.x > 0.0) * float(_Fish1In.y < 1.0) * float(_Fish1In.x < 0.6);
                 _Result = mix(_Result,vec4(_TopColor, 1.0), _Fish1);
 
             //////////////////////////////////////
@@ -135,7 +135,7 @@ void main(void)
                 vec3 _EyeBloom = mix(vec3( 0.6, 0.6, 0.6), vec3(0.1137, 0.1137, 0.1137), pow(_EyeBloomCirl, 0.25));
                 _Result.rgb = mix(_Result.rgb, _EyeBloom, float(_Eye < 0.11));
         
-        _Result.a *= _Render_Texture.a;
+        //_Result.a *= _Render_Texture.a;
         _Result = mix(_Render_Texture, _Result, _Mixing);
 
     fragColor = _Result;

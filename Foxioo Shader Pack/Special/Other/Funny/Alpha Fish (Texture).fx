@@ -44,8 +44,8 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
         float2 _CenterBottomShadow = float2(In * 2.0) - float2(1.5, 1.3);
             float _CenterBottomShadowCirl = sqrt(_CenterBottomShadow.x * _CenterBottomShadow.x + _CenterBottomShadow.y * _CenterBottomShadow.y);
 
-        if(In.y > 0.55) 
-        _Cirl *= lerp(0.96, 1.0, 1.0 - pow(In.y - 0.55, 0.2));
+        if(In.y > 0.57) 
+        _Cirl *= lerp(0.95, 1.0, 1.0 - pow(In.y - 0.55, 0.0));
 
             float3 _TopColor = lerp(float3(0.9921, 0.79215, 0.0), float3(0.69803, 0.56078, 0.0), _CenterTopShadowCirl * _CenterTopShadowCirl);
             float _Depth = pow(abs(0.55 - In.y), 3);
@@ -53,13 +53,13 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
             _BottomColor *= pow(_Depth, 0.001);
 
             _Result.a = _Cirl < 0.90;
-            _Result.rgb = lerp(_TopColor, _BottomColor * 1.1, In.y > 0.55);
+            _Result.rgb = lerp(_TopColor, _BottomColor * 1.1, In.y > 0.57);
 
             float2 _Fish1In = In;
-                _Fish1In.x -= 0.27;
-                _Fish1In.y += 0.65;
-                _Fish1In.x *= 1.1;
-                float _Fish1 = ((_Fish1In.y + (pow(_Fish1In.x, 0.15 - pow(_Fish1In.x, 3.0)) * (1.0 - _Fish1In.x * 1.2)) * 0.5) * 0.5 > 0.5) * (_Fish1In.x > 0.0) * (_Fish1In.y < 1.0) * (_Fish1In.x < 0.6);
+                _Fish1In.x -= 0.3;
+                _Fish1In.y += 0.61;
+                _Fish1In.x *= 1.04;
+                float _Fish1 = ((_Fish1In.y + (pow(_Fish1In.x, 0.14 - pow(_Fish1In.x, 3.0)) * (1.0 - _Fish1In.x * 1.2)) * 0.50) * 0.50 > 0.5) * (_Fish1In.x > 0.0) * (_Fish1In.y < 1.0) * (_Fish1In.x < 0.6);
                 _Result = lerp(_Result,float4(_TopColor, 1.0), _Fish1);
 
             //////////////////////////////////////
@@ -91,7 +91,7 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
                 float3 _EyeBloom = lerp(float3( 0.6, 0.6, 0.6), float3(0.1137, 0.1137, 0.1137), pow(_EyeBloomCirl, 0.25));
                 _Result.rgb = lerp(_Result.rgb, _EyeBloom, _Eye < 0.11);
         
-        _Result.a *= _Render_Texture.a;
+        //_Result.a = _Render_Texture.a;
         _Result = lerp(_Render_Texture, _Result, _Mixing);
 
     return _Result;
