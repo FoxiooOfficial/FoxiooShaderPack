@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.1 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -16,7 +17,7 @@ sampler2D S2D_Image : register(s0) = sampler_state
 {
     AddressU = BORDER;
     AddressV = BORDER;
-    BorderColor = float4(0, 0, 0, 0);
+    BorderColor = float4(0.0, 0.0, 0.0, 0.0);
 };
 
 sampler2D S2D_Background : register(s1);
@@ -49,22 +50,22 @@ float3 Fun_Outline(float2 In, float3 _Color)
     float _Alpha = tex2D(S2D_Image, In).a;
 
     /* Outline DARK! */
-    float aL1 = tex2D(S2D_Image, In + float2(-_PX.x, 0)) .a;
-    float aR1 = tex2D(S2D_Image, In + float2(_PX.x, 0))  .a;
-    float aU1 = tex2D(S2D_Image, In + float2(0, -_PX.y)) .a;
-    float aD1 = tex2D(S2D_Image, In + float2(0, _PX.y))  .a;
+    float aL1 = tex2D(S2D_Image, In + float2(-_PX.x, 0.0)) .a;
+    float aR1 = tex2D(S2D_Image, In + float2(_PX.x, 0.0))  .a;
+    float aU1 = tex2D(S2D_Image, In + float2(0.0, -_PX.y)) .a;
+    float aD1 = tex2D(S2D_Image, In + float2(0.0, _PX.y))  .a;
 
     /* Outline LIGHT! */
-    float aL2 = tex2D(S2D_Image, In + float2(-_PX.x * 2, 0)) .a;
-    float aR2 = tex2D(S2D_Image, In + float2(_PX.x * 2, 0))  .a;
-    float aU2 = tex2D(S2D_Image, In + float2(0, -_PX.y * 2)) .a;
-    float aD2 = tex2D(S2D_Image, In + float2(0, _PX.y * 2))  .a;
+    float aL2 = tex2D(S2D_Image, In + float2(-_PX.x * 2.0, 0.0)) .a;
+    float aR2 = tex2D(S2D_Image, In + float2(_PX.x * 2.0, 0.0))  .a;
+    float aU2 = tex2D(S2D_Image, In + float2(0.0, -_PX.y * 2.0)) .a;
+    float aD2 = tex2D(S2D_Image, In + float2(0.0, _PX.y * 2.0))  .a;
 
     /* no outline. */
-    float aL3 = tex2D(S2D_Image, In + float2(-_PX.x * 1, 0)) .a;
-    float aR3 = tex2D(S2D_Image, In + float2(_PX.x * 1, 0))  .a;
-    float aU3 = tex2D(S2D_Image, In + float2(0, -_PX.y * 1)) .a;
-    float aD3 = tex2D(S2D_Image, In + float2(0, _PX.y * 1))  .a;
+    float aL3 = tex2D(S2D_Image, In + float2(-_PX.x, 0.0)) .a;
+    float aR3 = tex2D(S2D_Image, In + float2(_PX.x, 0.0))  .a;
+    float aU3 = tex2D(S2D_Image, In + float2(0.0, -_PX.y)) .a;
+    float aD3 = tex2D(S2D_Image, In + float2(0.0, _PX.y))  .a;
 
         float _EdgeDark  = step(0.01, abs(aL1 - _Alpha) + abs(aR1 - _Alpha) + abs(aU1 - _Alpha) + abs(aD1 - _Alpha));
         float _EdgeLight = step(0.01, abs(aL2 - _Alpha) + abs(aR2 - _Alpha) + abs(aU2 - _Alpha) + abs(aD2 - _Alpha));
@@ -81,21 +82,13 @@ float2 Fun_Hash21(float2 _Pos)
     _Noise.y = frac(sin(dot(_Pos, float2(63.7264, 10.873))) * 73156.8473) - 0.5;
     return _Noise;
 }
-
-float2 Fun_Noise(float2 _Pos) 
-{
-    float2 _Noise = Fun_Hash21(_Pos);
-
-    return _Noise;
-}
-
 float4 Main(float2 In : TEXCOORD0) : COLOR0
 {
     float4 _Render_Texture = tex2D(S2D_Image, In);
     //float4 _OutlineInter = tex2D(S2D_Background, Fun_Liquid(In, 1).rg);
 
-    float2 _Mask = float2(  Fun_Liquid((In.x, In.x) * _Render_Texture.a, _Intensity * fPixelWidth),
-                            Fun_Liquid((In.y, In.y) * _Render_Texture.a, _Intensity * fPixelHeight));
+    float2 _Mask = float2(  Fun_Liquid(In.xx * _Render_Texture.a, _Intensity * fPixelWidth),
+                            Fun_Liquid(In.yy * _Render_Texture.a, _Intensity * fPixelHeight));
 
 
     float2 _UVB = frac(In * 0.5) * 2.0;
@@ -103,13 +96,13 @@ float4 Main(float2 In : TEXCOORD0) : COLOR0
 
     float2 _UV = lerp(_UVB, _UVM, _Mask * _Mask * _Distortion);
 
-
-        float4 _Render_Background = 0;
-        for(int i = 0; i < 36; i++) {
-            float _Mul = (i % 2) ? 1 : -1;
-            _Render_Background += tex2D(S2D_Background, _UV + Fun_Noise(In) * (5 + i) * _Mul * float2(fPixelWidth, fPixelHeight));
+        float4 _Render_Background = 0.0;
+        for(int i = 0; i < 36; i++)
+        {
+            float _Mul = (i % 2) ? 1.0 : -1.0;
+            _Render_Background += tex2D(S2D_Background, _UV + Fun_Hash21(In) * float(5.0 + i) * _Mul * float2(fPixelWidth, fPixelHeight));
         }
-        _Render_Background /= 36;
+        _Render_Background /= 36.0;
 
         float3 _Outline = Fun_Outline(In, _Render_Background.rgb);
         float4 _Render_Tint = lerp(_Render_Background, _Render_Texture, 0.5);

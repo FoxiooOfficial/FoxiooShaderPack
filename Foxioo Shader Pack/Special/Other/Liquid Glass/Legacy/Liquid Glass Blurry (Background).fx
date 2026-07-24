@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.1 (20.12.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -94,8 +95,8 @@ float4 Main(float2 In : TEXCOORD0) : COLOR0
     float4 _Render_Texture = tex2D(S2D_Image, In);
     //float4 _OutlineInter = tex2D(S2D_Background, Fun_Liquid(In, 1).rg);
 
-    float2 _Mask = float2(  Fun_Liquid((In.x, In.x) * _Render_Texture.a, _Intensity * fPixelWidth),
-                            Fun_Liquid((In.y, In.y) * _Render_Texture.a, _Intensity * fPixelHeight));
+        float2 _Mask = float2(  Fun_Liquid(In.xx * _Render_Texture.a, _Intensity * fPixelWidth),
+                                Fun_Liquid(In.yy * _Render_Texture.a, _Intensity * fPixelHeight));
 
 
     float2 _UVB = frac(In * 0.5) * 2.0;
@@ -104,18 +105,18 @@ float4 Main(float2 In : TEXCOORD0) : COLOR0
     float2 _UV = lerp(_UVB, _UVM, _Mask * _Mask * _Distortion);
 
 
-        float4 _Render_Background = 0;
-        for(int i = 0; i < 36; i++) {
-            float _Mul = (i % 2) ? 1 : -1;
-            _Render_Background += tex2D(S2D_Background, _UV + Fun_Noise(In) * (5 + i) * _Mul * float2(fPixelWidth, fPixelHeight));
+        float4 _Render_Background = float4(0.0, 0.0, 0.0, 0.0);
+        for(int i = 0; i < 11; i++) {
+            float _Mul = fmod(float(i), 2.0) ? 2.0 : -2.0;
+            _Render_Background += tex2D(S2D_Background, _UV + Fun_Hash21(In + i * 0.5) * (10.0 + float(i)) * _Mul * float2(fPixelWidth, fPixelHeight));
         }
-        _Render_Background /= 36;
+        _Render_Background /= 11.0;
 
         float3 _Outline = Fun_Outline(In, _Render_Background.rgb);
         float4 _Render_Tint = lerp(_Render_Background, _Render_Texture, 0.5);
 
     float4 _Render = float4(lerp(_Render_Texture.rgb, (_Render_Tint.rgb * 0.75 + _Outline.rgb * 0.25) * 0.9, _Mixing), _Render_Texture.a);
-
+    
     return _Render;
 }
 
