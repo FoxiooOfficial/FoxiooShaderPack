@@ -10,34 +10,43 @@
 /* ####################################################### */
 
 //@Begin_vertex
+//version_####
 
-#ifdef GL_ES
- precision mediump float;
-#endif
-uniform mat4 transformMatrix;
-uniform mat4 projectionMatrix;
+uniform mat3 transformMatrix;
+uniform mat3 projectionMatrix;
+uniform mat3 objectMatrix;
+uniform mat3 textureMatrix;
 
-attribute vec4 position;
-attribute vec2 texCoord;
-varying vec2 In;
-
-void main(void)
+in vec2 position;
+out vec2 In;
+void main()
 {
-	In = texCoord;
-	gl_Position = projectionMatrix * transformMatrix * position;
+    vec3 pos = vec3(position, 1.0);
+    In = (textureMatrix * pos).xy;
+    gl_Position = vec4(projectionMatrix * transformMatrix * objectMatrix * pos, 1.0);
 }
-
 //@End
 
 /* ####################################################### */
 
 //@Begin_fragment
+//version_####
 
 #ifdef GL_ES
- precision mediump float;
+    #if defined(GL_FRAGMENT_PRECISION_HIGH)
+        #define HIGH_PRECISION_SUPPORTED
+    #endif
+#else
+    #define HIGH_PRECISION_SUPPORTED    
 #endif
 
-varying vec2 In;
+#ifdef HIGH_PRECISION_SUPPORTED
+    precision highp float;
+#else
+    precision mediump float;
+#endif
+
+in vec2 In;
 
 /***********************************************************/
 /* Samplers */
@@ -55,16 +64,11 @@ uniform float fPixelHeight;
 /***********************************************************/
 
 uniform float _Mixing;
-uniform float _Mul;
-uniform float _Radius;
-uniform float _Size;
-uniform float _Liquid;
 uniform bool _Is_Pre_296_Build;
 
 /************************************************************/
 /* Main */
 /************************************************************/
-
 
 #define GOLDEN_ANGLE    2.39996323
 #define PI              3.14159265359
@@ -72,6 +76,10 @@ uniform bool _Is_Pre_296_Build;
 const int SAMPLES_INNER  = 16; 
 const int SAMPLES_BLUR   = 128;
 const float _Sigma       = 40.0;
+const float _Mul         = 0.7;
+const float _Radius      = 16.0;
+const float _Size        = 24.0;
+const float _Liquid      = 0.05;
 
 float Fun_Hash12(vec2 _UV)
 {
@@ -112,7 +120,7 @@ vec3 Fun_Blur(vec2 UV, vec2 _Pixel)
 
         float _Weight = exp(-pow(_Rad * _Radius / 4.0, 2.0) * _SigmaULTRA);
 
-        _Result += texture2D(bckgTexture, UV.xy + _Rot * _Pixel).rgb * _Weight;
+        _Result += texture(bckgTexture, UV.xy + _Rot * _Pixel).rgb * _Weight;
         _Sum += _Weight;
     }
 
@@ -131,7 +139,7 @@ float Fun_Inner(vec2 In, vec2 _Pixel, float _Tint)
             
             _Offset *= _Pixel;
             
-            _Alpha += texture2D(imgTexture, In + _Offset).a * _Tint;
+            _Alpha += texture(imgTexture, In + _Offset).a * _Tint;
             _Idx += 1.0;
         }
     }
@@ -146,42 +154,41 @@ vec2 Fun_Mirror(vec2 In)
     return 1.0 - abs(fract(In / 2.0) * 2.0 - 1.0);
 }
 
+out vec4 fragColor;
 void main(void)
 {  
     vec2 In_Background = In;
     if(_Is_Pre_296_Build) In_Background.y = 1.0 - In_Background.y;
 
-    vec4 _Render_Texture = texture2D(imgTexture, In) * blendColor;
-    vec4 _Render_Texture_NT = texture2D(imgTexture, In);
-    //vec4 _Render_Background = texture2D(bckgTexture, In_Background);
+    vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
+    vec4 _Render_Texture_NT = texture(imgTexture, In);
+    //vec4 _Render_Background = texture(bckgTexture, In_Background);
 
         vec4 _Result = vec4(0.0);
         vec2 _Pixel = vec2(fPixelWidth, fPixelHeight);
             
-            vec2 _UV = In;
+            vec2 _UV = In_Background;
             //_UV.z = max(abs(_UV.x - 0.5), abs(_UV.y - 0.5)) * 2.0;
             //_UV.z = 1.0 - pow(_UV.z, 10.0);
 
-            _UV = Fun_Mirror(In_Background);
+            _UV = Fun_Mirror(_UV);
 
             float _Lum = dot(_Render_Texture_NT.rgb, vec3(0.212, 0.715, 0.072));
             float _Mirror = Fun_Inner(In, _Pixel, blendColor.a);
             float _MirrorCopy = _Mirror;
 
-                _Mirror *= pow(_Lum, 6.0);
-
-            vec2 _Off = Fun_Mirror(_UV + ((_UV - 0.5) / max(0.01, _Mirror)) * _Liquid);
+                _Mirror *= 0.5 + (pow(_Lum, 6.0) / 6.0) * 0.5;
+                vec2 _Off = Fun_Mirror(_UV + ((_UV - 0.5) / max(0.01, _Mirror)) * _Liquid);
 
                 _Result.rgb = Fun_Blur(_Off, _Pixel);
-                _Result.rgb = mix(vec3(0.3, 0.3, 0.3), _Result.rgb, 0.9);
+                //_Result.rgb = lerp(float3(0.3, 0.3, 0.3), _Result.rgb, 0.9);
 
-            _Result.rgb += clamp(smoothstep(0.3, 0.6, _Mirror + abs(1.4 - _MirrorCopy)), 0.0, 1.0) * _Off.x * _Off.y * 0.5;
-            _Result.rgb *= mix(vec3(1.0), _Render_Texture.rgb * _Lum, _Mul);
+            _Result.rgb += pow(abs(_Result.rgb * (1.0 - _MirrorCopy)), vec3(1.5)) * 2.0;
+            _Result.rgb = mix(_Result.rgb + normalize(_Result.rgb), clamp(_Render_Texture.rgb * 0.55 + 0.12, 0.0, 1.0), _Mul);
             _Result.rgb = mix(_Render_Texture.rgb, _Result.rgb, _Mixing);
 
         _Result.a = _Render_Texture.a;
 
-    gl_FragColor = _Result;
+    fragColor = _Result;
 }
-
 //@End

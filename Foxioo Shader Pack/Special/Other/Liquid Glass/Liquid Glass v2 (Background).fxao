@@ -165,7 +165,7 @@ void main(void)
             _UV = Fun_Mirror(In_Background);
 
             float _Lum = dot(_Render_Texture_NT.rgb, vec3(0.212, 0.715, 0.072));
-            float _Mirror = Fun_Inner(_UV, _Pixel, blendColor.a);
+            float _Mirror = Fun_Inner(In, _Pixel, blendColor.a);
             float _MirrorCopy = _Mirror;
 
                 _Mirror *= pow(_Lum, 6.0);

@@ -105,7 +105,7 @@
 
 			<sampler>
 				<index>1</index>
-				<filter>point</filter>
+				<filter>antialiasing</filter>
 				<addressU>mirror</addressU>
 				<addressV>mirror</addressV>
 			</sampler>

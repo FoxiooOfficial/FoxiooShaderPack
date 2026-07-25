@@ -1,18 +1,18 @@
 <effect>
-	<name>Liquid Glass V2 (Background)</name>
-		<description>Shader simulates the iOS 26/MacOS Tahoe window effect.</description> 
+	<name>Liquid Glass V2 Regular High Quality (Background)</name>
+		<description>(It&apos;ll burn out your GPU) Shader simulates the iOS 26/MacOS Tahoe window effect (Regular / Type: 0).</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 
 		<parameter>
-			<name>/* Foxioo Liquid Glass V2 (Background) Shader | 2026.07.24 */</name>
+			<name>/* Foxioo Liquid Glass V2 Regular High Quality (Background) Shader | 2026.07.25 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
 
-			<description>Shader simulates the iOS 26/MacOS Tahoe window effect.</description>
+			<description>(It&apos;ll burn out your GPU) Shader simulates the iOS 26/MacOS Tahoe window effect (Regular / Type: 0).</description>
 		</parameter>
 
 			<parameter>
@@ -24,50 +24,6 @@
 				<type>float</type>
 
 				<value>1</value>
-			</parameter>
-
-			<parameter>
-				<name>Multiplication</name>
-				<variable>_Mul</variable>
-				
-				<description>This value determines the multiplication factor for the colors to be applied; if set to 0, the color will be white; the closer the value is to 1, the more the pixel will be multiplied by the base color.</description>
-
-				<type>float</type>
-
-				<value>0.4</value>
-			</parameter>
-
-			<parameter>
-				<name>Radius</name>
-				<variable>_Radius</variable>
-				
-				<description>This value determines the size of the blur; higher values result in a larger blurred area, while a value of 0 means no blur.</description>
-
-				<type>float</type>
-
-				<value>48.0</value>
-			</parameter>
-
-			<parameter>
-				<name>Size</name>
-				<variable>_Size</variable>
-				
-				<description>This variable specifies the size of the bavel in pixels.</description>
-
-				<type>float</type>
-
-				<value>64.0</value>
-			</parameter>
-
-			<parameter>
-				<name>Liquid</name>
-				<variable>_Liquid</variable>
-				
-				<description>This value indicates the degree of distortion; negative values indicate concave distortion, while positive values indicate convex distortion.</description>
-
-				<type>float</type>
-
-				<value>0.2</value>
 			</parameter>
 
 		<parameter>
