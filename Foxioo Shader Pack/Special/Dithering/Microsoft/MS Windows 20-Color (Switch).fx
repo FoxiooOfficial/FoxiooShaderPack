@@ -20,8 +20,7 @@ sampler2D S2D_Background : register(s1);
 /* Varibles */
 /***********************************************************/
 
-    float   _Mixing, _DitheringSize,
-            fPixelWidth, fPixelHeight;
+    float   _Mixing, _Add, _Mul;
 
     bool    _Blending_Mode;
 
@@ -29,7 +28,7 @@ sampler2D S2D_Background : register(s1);
 /* Main */
 /************************************************************/
 
-#define _Palette_Size 20
+#define _Palette_Size 10
 
 static const float3 _Palette[_Palette_Size] = 
 {
@@ -43,16 +42,6 @@ static const float3 _Palette[_Palette_Size] =
     float3(1.0, 0.99, 0.24),
     float3(0.0, 0.04, 0.49),
     float3(0.0, 0.13, 0.98),
-    float3(0.49, 0.0, 0.49),
-    float3(0.97, 0.01, 0.98),
-    float3(0.1, 0.51, 0.5),
-    float3(0.24, 1.0, 1.0),
-    float3(0.76, 0.86, 0.76),
-    float3(0.65, 0.8, 0.93),
-    float3(1.0, 0.98, 0.94),
-    float3(0.63, 0.63, 0.63),
-    float3(0.75, 0.75, 0.75),
-    float3(1.0, 1.0, 1.0),
 };
 
 float3 Fun_Convert(float3 _Color)
@@ -68,14 +57,27 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In);
 
-        float4 _Result;
-        float4 _Render;
+    _Render_Texture.rgb = _Render_Texture.rgb * _Mul + _Add;
+    _Render_Background.rgb = _Render_Background.rgb * _Mul + _Add;
 
-        if(_Blending_Mode == 0) {   _Result = _Render_Texture;      _Render = _Render_Texture;  }
-        else                    {   _Result = _Render_Background;   _Render = _Render_Background; }
+        float4 _Result, _Render;
 
-            float3 _Lin = Fun_Convert(_Result.rgb);
-            float _Min = 1e9;   int   _Final = 0;
+        if(!_Blending_Mode)
+        {
+            _Result = _Render_Texture;
+            _Render = _Render_Texture;
+        }
+        else
+        {
+            _Result.rgb = _Render_Background.rgb;
+            _Result.a = _Render_Texture.a;
+            
+            _Render = _Render_Background;
+        }
+
+        float3 _Lin = Fun_Convert(_Result.rgb);
+        float _Min = 1e9;
+        int _Final = 0;
 
             for (int i = 0; i < _Palette_Size; ++i)
             {
@@ -88,7 +90,6 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
             _Result.rgb = _Palette[_Final];
 
         _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing); 
-        _Result.a = _Render_Texture.a;
 
     return _Result;
 }
