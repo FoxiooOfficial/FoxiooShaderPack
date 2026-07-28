@@ -31,8 +31,8 @@ sampler2D S2D_Background : register(s1);
 #define GOLDEN_ANGLE    2.39996323
 #define PI              3.14159265359
 
-static const int SAMPLES_INNER  = 2; 
-static const int SAMPLES_BLUR   = 9;
+static const int SAMPLES_INNER  = 12;
+static const int SAMPLES_BLUR   = 16;
 static const float _Sigma       = 40.0;
 static const float _Mul         = 0.7;
 static const float _Radius      = 16.0;
@@ -146,4 +146,4 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_2_a Main(); } }
+technique tech_main { pass P0 { PixelShader = compile ps_3_0 Main(); } }
