@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Liquid Glass V1 Blurry (Background) Shader | 2026.07.24 */</name>
+			<name>/* Foxioo Liquid Glass V1 Blurry (Background) Shader | 2026.07.28 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

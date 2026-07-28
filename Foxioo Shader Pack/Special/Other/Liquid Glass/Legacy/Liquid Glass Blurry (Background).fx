@@ -90,7 +90,7 @@ float2 Fun_Noise(float2 _Pos)
     return _Noise;
 }
 
-float4 Main(float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(float2 In : TEXCOORD0) : COLOR0
 {
     float4 _Render_Texture = tex2D(S2D_Image, In);
     //float4 _OutlineInter = tex2D(S2D_Background, Fun_Liquid(In, 1).rg);
@@ -106,11 +106,11 @@ float4 Main(float2 In : TEXCOORD0) : COLOR0
 
 
         float4 _Render_Background = float4(0.0, 0.0, 0.0, 0.0);
-        for(int i = 0; i < 11; i++) {
+        for(int i = 0; i < 72; i++) {
             float _Mul = fmod(float(i), 2.0) ? 2.0 : -2.0;
             _Render_Background += tex2D(S2D_Background, _UV + Fun_Hash21(In + i * 0.5) * (10.0 + float(i)) * _Mul * float2(fPixelWidth, fPixelHeight));
         }
-        _Render_Background /= 11.0;
+        _Render_Background /= 72.0;
 
         float3 _Outline = Fun_Outline(In, _Render_Background.rgb);
         float4 _Render_Tint = lerp(_Render_Background, _Render_Texture, 0.5);
@@ -124,4 +124,4 @@ float4 Main(float2 In : TEXCOORD0) : COLOR0
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_2_a Main(); } }
+technique tech_main { pass P0 { PixelShader = compile ps_3_0 ps_main(); } }
