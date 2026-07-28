@@ -38,7 +38,7 @@ Shaders are amazing; thanks to them, I created another project called [Tails7](h
 ## Technical Specifications
 
 - Description was last updated on **July 28, 2026**
-- We count the number of effects in the latest release; there are currently **420**
+- I'm count the number of effects in the latest release; there are currently **420**
 - The last release was on **[April 13, 2026](https://github.com/FoxiooOfficial/FoxiooShaderPack/releases/)**
 - FSP release requirements:
    - Minimum: **Build 295.10** *(Due to the `_Is_Pre_296_Build` flag, but starting with Fusion build 297, support will be removed and the target version-along with the minimum-will be the latest; if you are using old Fusion build, why?)*
