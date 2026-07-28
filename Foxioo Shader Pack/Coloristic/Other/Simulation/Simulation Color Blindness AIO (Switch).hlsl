@@ -76,8 +76,12 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
 
         /* The _ColorMatrix variables are taken from: https://github.com/MaPePeR/jsColorblindSimulator */
         float3x3 _ColorMatrix;
+        int _ModeEx = _Mode; 
 
-            switch (_Mode)
+        if(_Mode < 0) // Preview
+            _ModeEx = int(In.texCoord.x * 7.0);
+
+            switch (_ModeEx)
             {
                 case 0: // Achromatomal
                 {

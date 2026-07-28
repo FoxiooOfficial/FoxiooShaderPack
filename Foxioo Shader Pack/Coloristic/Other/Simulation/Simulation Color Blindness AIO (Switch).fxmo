@@ -92,7 +92,12 @@ void main(void)
             /* The _ColorMatrix variables are taken from: https://github.com/MaPePeR/jsColorblindSimulator */
             mat3 _ColorMatrix;
 
-            if(_Mode == 0) // Achromatomal
+            int _ModeEx = _Mode; 
+
+            if(_Mode < 0) // Preview
+                _ModeEx = int(In.x * 7.0);
+
+            if(_ModeEx == 0) // Achromatomal
             {
                 _ColorMatrix = Fun_Rw(
                     vec3(0.618, 0.32,  0.062),
@@ -100,7 +105,7 @@ void main(void)
                     vec3(0.163, 0.32,  0.516)
                 );
             }
-            else if(_Mode == 1) // Achromatopsia
+            else if(_ModeEx == 1) // Achromatopsia
             {
                 _ColorMatrix = Fun_Rw(
                     vec3(0.299, 0.567,  0.114),
@@ -108,7 +113,7 @@ void main(void)
                     vec3(0.299, 0.567,  0.114)
                 );
             }
-            else if(_Mode == 2) // Deuteranomaly
+            else if(_ModeEx == 2) // Deuteranomaly
             {
                 _ColorMatrix = Fun_Rw(
                     vec3(0.80,   0.20,   0.0),
@@ -116,7 +121,7 @@ void main(void)
                     vec3(0.0,    0.14167, 0.85833)
                 );
             }
-            else if(_Mode == 3) // Deuteranopia
+            else if(_ModeEx == 3) // Deuteranopia
             {
                 _ColorMatrix = Fun_Rw(
                     vec3(0.625, 0.375, 0.0),
@@ -124,7 +129,7 @@ void main(void)
                     vec3(0.0,   0.30,  0.70)
                 );
             }
-            else if(_Mode == 4) // Protanomaly
+            else if(_ModeEx == 4) // Protanomaly
             {
                 _ColorMatrix = Fun_Rw(
                     vec3(0.81667, 0.18333, 0.0),
@@ -132,7 +137,7 @@ void main(void)
                     vec3(0.0,     0.125,   0.875)
                 );
             }
-            else if(_Mode == 5) // Protanopia
+            else if(_ModeEx == 5) // Protanopia
             {
                 _ColorMatrix = Fun_Rw(
                     vec3(0.56667, 0.43333, 0.0),
@@ -140,7 +145,7 @@ void main(void)
                     vec3(0.0,     0.24167, 0.75833)
                 );
             }
-            else if(_Mode == 6) // Tritanomaly
+            else if(_ModeEx == 6) // Tritanomaly
             {
                 _ColorMatrix = Fun_Rw(
                     vec3(0.96667, 0.03333, 0.0),
@@ -148,7 +153,7 @@ void main(void)
                     vec3(0.0,     0.18333, 0.81667)
                 );
             }
-            else if(_Mode == 7) // Tritanopia
+            else if(_ModeEx == 7) // Tritanopia
             {
                 _ColorMatrix = Fun_Rw(
                     vec3(0.95,  0.05,   0.0),
