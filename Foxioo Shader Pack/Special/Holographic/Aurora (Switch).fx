@@ -44,7 +44,7 @@ float3 Fun_Aurora(float _Noise)
     return _Aurora;
 }
 
-static const float _Max = 5.0;
+static const float _Max = 25.0;
 
 float4 Main(in float2 In : TEXCOORD0) : COLOR0
 {
@@ -88,4 +88,4 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_2_a Main(); } }
+technique tech_main { pass P0 { PixelShader = compile ps_3_0 Main(); } }
