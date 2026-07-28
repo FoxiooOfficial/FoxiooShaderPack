@@ -1,0 +1,177 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_vertex
+//version_####
+
+uniform mat3 transformMatrix;
+uniform mat3 projectionMatrix;
+uniform mat3 objectMatrix;
+uniform mat3 textureMatrix;
+
+in vec2 position;
+out vec2 In;
+void main()
+{
+    vec3 pos = vec3(position, 1.0);
+    In = (textureMatrix * pos).xy;
+    gl_Position = vec4(projectionMatrix * transformMatrix * objectMatrix * pos, 1.0);
+}
+//@End
+
+/* ####################################################### */
+
+//@Begin_fragment
+//version_####
+
+#ifdef GL_ES
+    #if defined(GL_FRAGMENT_PRECISION_HIGH)
+        #define HIGH_PRECISION_SUPPORTED
+    #endif
+#else
+    #define HIGH_PRECISION_SUPPORTED    
+#endif
+
+#ifdef HIGH_PRECISION_SUPPORTED
+    precision highp float;
+#else
+    precision mediump float;
+#endif
+
+in vec2 In;
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+uniform sampler2D imgTexture;
+//uniform sampler2D bckgTexture;
+
+uniform lowp vec4 blendColor;
+uniform float fPixelWidth;
+uniform float fPixelHeight;
+
+/***********************************************************/
+/* Varibles */
+/***********************************************************/
+
+uniform float _Mixing;
+uniform float _Size;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+const int RADIUS = 4;
+const float ZERO = 0.0;
+
+float Fun_Sign(int x)
+{
+    if(x < 0)       return -1.0;
+    else if(x == 0) return 0.0;
+    else            return 1.0;
+}
+
+vec4 Fun_Kuwahara(vec2 UV, sampler2D _Sampler)
+{
+    vec4 _SumColor[4];
+    _SumColor[0] = vec4(ZERO);
+    _SumColor[1] = vec4(ZERO);
+    _SumColor[2] = vec4(ZERO);
+    _SumColor[3] = vec4(ZERO);
+
+    float _SumLum[4];
+    _SumLum[0] = ZERO;
+    _SumLum[1] = ZERO;
+    _SumLum[2] = ZERO;
+    _SumLum[3] = ZERO;
+
+    float _SumLumSq[4];
+    _SumLumSq[0] = ZERO;
+    _SumLumSq[1] = ZERO;
+    _SumLumSq[2] = ZERO;
+    _SumLumSq[3] = ZERO;
+
+    int _Count[4];
+    _Count[0] = int(ZERO);
+    _Count[1] = int(ZERO);
+    _Count[2] = int(ZERO);
+    _Count[3] = int(ZERO);
+
+    vec2 _Offset = vec2(fPixelWidth, fPixelHeight) * _Size;
+
+        for (int _Y = -RADIUS; _Y <= RADIUS; _Y++)
+        {
+            for (int _X = -RADIUS; _X <= RADIUS; _X++)
+            {
+                vec2 _Off = vec2(_X, _Y) * _Offset;
+                vec4 _Render = texture(_Sampler, UV + _Off);
+
+                float _Lum = dot(_Render.rgb, vec3(0.2126, 0.7152, 0.0722));
+
+                int _R = int((min(Fun_Sign(_X), 0.0) + 1.0) + max(0.0, Fun_Sign(_Y)) * 2.0);
+
+                _SumColor[_R] += _Render;
+                _SumLum[_R] += _Lum;
+                _SumLumSq[_R] += _Lum * _Lum;
+                _Count[_R] += 1;
+            }
+        }
+
+    vec4 _Mean[4];
+    float _Var[4];
+
+        for (int i = 0; i < 4; i++)
+        {
+            if (_Count[i] > 0)
+            {
+                float _Invert = 1.0 / float(_Count[i]);
+                _Mean[i] = _SumColor[i] * _Invert;
+
+                float _E = _SumLum[i] * _Invert;
+                float _P = _SumLumSq[i] * _Invert - _E * _E;
+
+                _Var[i] = max(0.0, _P);
+            }
+            else
+            {
+                _Mean[i] = vec4(ZERO);
+                _Var[i] = 0.0;
+            }
+        }
+
+    int _Best = 0;
+    float _BVar = _Var[0];
+
+        for (int ii = 1; ii < 4; ii++)
+        {
+            if (_Var[ii] < _BVar)
+            {
+                _BVar = _Var[ii];
+                _Best = ii;
+            }
+        }
+
+    return _Mean[_Best];
+}
+
+out vec4 fragColor;
+void main(void)
+{
+    vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
+
+        vec4 _Result = Fun_Kuwahara(In, imgTexture) * blendColor;
+
+            _Result = mix(_Render_Texture, _Result, _Mixing);
+
+    fragColor = _Result;
+}
+//@End
