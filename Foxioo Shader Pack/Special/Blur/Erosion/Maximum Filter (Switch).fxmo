@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.0 (07.04.2026) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -32,7 +33,7 @@ void main()
 //version_####
 
 #ifdef GL_ES
-    #if defined(GL_FRAGMENT_PRECISION_HIGH) || defined(GL_OES_standard_derivatives)
+    #if defined(GL_FRAGMENT_PRECISION_HIGH)
         #define HIGH_PRECISION_SUPPORTED
     #endif
 #else
@@ -65,41 +66,44 @@ uniform float fPixelHeight;
 uniform float _Mixing;
 uniform float _Size;
 uniform bool _Blending_Mode;
-uniform bool _Is_Pre_296_Build;
+uniform int _Quality;
 
 /************************************************************/
 /* Main */
 /************************************************************/
 
-const int _Offset = 8;
-
-vec3 Fun_Filter(sampler2D _Sampler, vec2 In, vec3 _Render)
+vec3 Fun_Filter(sampler2D _Sampler, vec2 In, vec3 _Render, vec4 _Tint)
 {
     vec3 _Result = _Render;
 
-    for(int y = -_Offset; y <= _Offset; y++)
-    {
-        for(int x = -_Offset; x <= _Offset; x++)
+    float _Center = (float(_Quality) - 1.0) / 2.0;
+    vec2 _SizePixel = _Size * vec2(fPixelWidth,  fPixelHeight) / float(_Quality);
+
+    int x; int y;
+    for(y = 0; y < _Quality; y++)
+    {  
+        for(x = 0; x < _Quality; x++)
         {
-            _Result.rgb = max(_Result.rgb, texture(_Sampler, In + (vec2(x, y) / float(_Offset)) * vec2(fPixelWidth, fPixelHeight) * _Size).rgb);
+            float xx = float(x) - _Center;
+            float yy = float(y) - _Center;
+
+            vec2 UV = In + vec2(xx, yy) * _SizePixel;
+
+            _Result = max(_Result.rgb, texture(_Sampler, UV).rgb * _Tint.rgb);
         }
     }
 
     return _Result;
 }
-
 out vec4 fragColor;
 void main(void)
 {
-    vec2 _In = In;
-    if(_Blending_Mode && _Is_Pre_296_Build)
-        _In = vec2(In.x, 1.0 - In.y);
-
-    vec4 _Render_Texture = texture(imgTexture, _In) * blendColor;
-    vec4 _Render_Background =texture(bckgTexture, _In);
+    vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
+    vec4 _Render_Background = texture(bckgTexture, In);
 
         vec4 _Result = _Blending_Mode ? _Render_Background : _Render_Texture;
-        vec3 _Filter = _Blending_Mode ? Fun_Filter(bckgTexture, _In, _Render_Background.rgb) : Fun_Filter(imgTexture, _In, _Render_Texture.rgb) * blendColor.rgb;
+        vec3 _Filter = _Blending_Mode ? Fun_Filter(bckgTexture, In, _Render_Background.rgb, vec4(1.0))
+                                      : Fun_Filter(imgTexture, In, _Render_Texture.rgb, blendColor);
     
         _Result.rgb = mix(_Result.rgb, _Filter, _Mixing);
         _Result.a = _Render_Texture.a;
