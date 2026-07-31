@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.1 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -13,6 +14,10 @@
 
 uniform mat3 transformMatrix;
 uniform mat3 projectionMatrix;
+uniform float _OffsetX;
+uniform float _OffsetY;
+uniform float fPixelWidth;
+uniform float fPixelHeight;
 uniform mat3 objectMatrix;
 uniform mat3 textureMatrix;
 
@@ -67,8 +72,8 @@ uniform float _Mixing;
 
 uniform float _PosX;
 uniform float _PosY;
-uniform float _PosXEcho;
-uniform float _PosYEcho;
+uniform float _OffsetX;
+uniform float _OffsetY;
 
 uniform float _Scale;
 uniform float _ScaleX;
@@ -83,36 +88,41 @@ uniform vec4 _ColorShadow;
 /* Main */
 /************************************************************/
 
-float Fun_Lum (vec4 _Result) { return 0.2126 * _Result.r + 0.7152 * _Result.g + 0.0722 * _Result.b; }
+float Fun_Lum(vec4 _Result) {
+    return dot(_Result.rgb, vec3(0.2126, 0.7152, 0.0722)) * _Result.a;
+}
 
 out vec4 fragColor;
 void main(void)
 {
-    vec2 In_Background = vec2(In.x, 1.0 - In.y);
-
     vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
-    //vec4 _Render_Background = texture(bckgTexture, In);
 
-    /* Main Overlay */
-        vec2 _UV = ((In * 0.0025 + vec2(_PosX, _PosY)) / vec2(fPixelWidth, fPixelHeight)) * vec2(_ScaleX, _ScaleY) * _Scale;
-        _UV = fract(_UV);
+        /* main panel */
+        vec2 UV = In + vec2(_PosX, _PosY);
+        UV = (UV * vec2(_ScaleX, _ScaleY) * _Scale) / 256.0;
+        UV /= vec2(fPixelWidth, fPixelHeight);
+        UV = UV - floor(UV); // frac(UV)?
 
-            vec4 _Result = texture(_Texture, _UV);
-            float _Lum = Fun_Lum(_Result);
-            _Result.a = _Render_Texture.a;
+            float _Render_Texture_Lum = Fun_Lum(_Render_Texture);
+            vec4 _Texture_UV = texture(_Texture, UV);
 
-            /* Sub Texture 1 */
-            vec4 _Echo1 = texture(_Texture, _UV) * texture(imgTexture, In + (vec2(_PosXEcho, _PosYEcho) * vec2(fPixelWidth, fPixelHeight))) * blendColor;
-                _Echo1.a = Fun_Lum(_Echo1);
-                _Result += _Echo1;
+            vec4 _Result = _Texture_UV;
+            float _Result_Lum = Fun_Lum(_Result);
 
-            /* Sub Texture 2 */
-            vec4 _Echo2 = texture(_Texture, _UV) * texture(imgTexture, In + (vec2(_PosXEcho * 2.0, _PosYEcho * 2.0) * vec2(fPixelWidth, fPixelHeight))) * blendColor;
-                _Echo2.a = Fun_Lum(_Echo2);
-                _Result += _Echo2 * 0.5;
+            _Result.a *= _Render_Texture_Lum;
+
+            // sub panels
+            vec2 _UV_Echo = vec2(_OffsetX, _OffsetY) * vec2(fPixelWidth, fPixelHeight);
+            
+                vec4 _Echo1 = texture(imgTexture, In + _UV_Echo) * blendColor;
+                    _Result.a += Fun_Lum(_Echo1) / 2.0;
+
+                vec4 _Echo2 = texture(imgTexture, In + _UV_Echo * 2.0) * blendColor;
+                    _Result.a += Fun_Lum(_Echo2) / 3.0;
 
         /* End */
-        if(_Color) _Result.rgb = mix(_ColorShadow.rgb, _ColorLight.rgb, _Lum);
+            if(_Color)
+                _Result.rgb = mix(_ColorShadow.rgb, _ColorLight.rgb, _Result_Lum);
 
         _Result = mix(_Render_Texture, _Result, _Mixing);
 

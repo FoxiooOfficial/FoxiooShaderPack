@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.1 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -20,11 +21,28 @@ sampler2D _Texture : register(s1);
 /* Varibles */
 /***********************************************************/
 
+float4x4 transformMatrix;
+float4x4 projectionMatrix;
+
+struct VS_INPUT
+{
+    float4 Tint     : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float4 Position : POSITION;
+};
+
+struct PS_INPUT
+{
+    float4 Tint     : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float4 Position : POSITION;
+};
+
     float   _Mixing,
             _PosX, _PosY,
             _Scale, _ScaleX, _ScaleY,
 
-            _PosXEcho, _PosYEcho,
+            _OffsetX, _OffsetY,
 
             fPixelWidth, fPixelHeight;
 
@@ -33,39 +51,89 @@ sampler2D _Texture : register(s1);
     float4  _ColorLight, _ColorShadow;
 
 /************************************************************/
-/* Main */
+/* Vertex Shader */
 /************************************************************/
 
-float Fun_Lum (float4 _Result) { return 0.2126 * _Result.r + 0.7152 * _Result.g + 0.0722 * _Result.b; }
-
-float4 Main(in float2 In : TEXCOORD0) : COLOR0
+/*
+    Based on "Blur (outside rect)"
+    Created by: Sphax - Flavien Clermont / NaitorStudios
+*/
+PS_INPUT Fun_VertexExpand(VS_INPUT input, float2 InOff)
 {
-    float4 _Render_Texture = (tex2D(S2D_Image, In));
-    //float4 _Render_Background = tex2D(S2D_Background, In);
+	PS_INPUT _Output;
 
-        /* Main Overlay */
-        float2 _UV = ((In * 0.0025 + float2(_PosX, _PosY)) / float2(fPixelWidth, fPixelHeight)) * float2(_ScaleX, _ScaleY) * _Scale;
-        _UV = frac(_UV);
+	float2 _PixelSize = float2(fPixelWidth, fPixelHeight);
+	float2 _DirCorner = sign(input.texCoord - 0.5);
+    
+	    float2 _PixelPadding = InOff / _PixelSize; // Radius
+	    float4 _PosExpanded = input.Position;
 
-            float4 _Result = tex2D(_Texture, _UV);
-            float _Lum = Fun_Lum(_Result);
-            _Result.a = _Render_Texture.a;
+	        _PosExpanded.xy += _DirCorner * _PixelPadding;
 
-            /* Sub Texture 1 */
-            float4 _Echo1 = tex2D(_Texture, _UV) * tex2D(S2D_Image, In + (float2(_PosXEcho, _PosYEcho) * float2(fPixelWidth, fPixelHeight)));
-                _Echo1.a = Fun_Lum(_Echo1);
-                _Result += _Echo1;
+	_Output.Position = mul(_PosExpanded, transformMatrix);
+	_Output.Position = mul(_Output.Position, projectionMatrix);
+    
+    _Output.Tint = input.Tint;
+	_Output.texCoord = input.texCoord + _DirCorner * InOff;
 
-            /* Sub Texture 2 */
-            float4 _Echo2 = tex2D(_Texture, _UV) * tex2D(S2D_Image, In + (float2(_PosXEcho * 2.0, _PosYEcho * 2.0) * float2(fPixelWidth, fPixelHeight)));
-                _Echo2.a = Fun_Lum(_Echo2);
-                _Result += _Echo2 * 0.5;
+	return _Output;
+}
+
+PS_INPUT vs_main(VS_INPUT input)
+{
+	return Fun_VertexExpand(input, abs(float2(_OffsetX, _OffsetY) * 2.0));
+}
+
+/************************************************************/
+/* Pixel Shader */
+/************************************************************/
+
+float Fun_PixelInside(float2 In) {
+	return all(In >= 0.0 && In <= 1.0);
+}
+
+float4 Fun_PixelSample(sampler2D _Sampler, float2 In) {
+	return tex2D(_Sampler, saturate(In)) * Fun_PixelInside(In);
+}
+
+float Fun_Lum(float4 _Result) {
+    return dot(_Result.rgb, float3(0.2126, 0.7152, 0.0722)) * _Result.a;
+}
+
+float4 ps_main(PS_INPUT In) : COLOR0
+//float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
+{
+    float4 _Render_Texture = Fun_PixelSample(S2D_Image, In.texCoord);
+
+        /* main panel */
+        float2 UV = In.texCoord + float2(_PosX, _PosY);
+        UV = (UV * float2(_ScaleX, _ScaleY) * _Scale) / 256.0;
+        UV /= float2(fPixelWidth, fPixelHeight);
+        UV = UV - floor(UV); // frac(UV)?
+
+            float _Render_Texture_Lum = Fun_Lum(_Render_Texture);
+            float4 _Texture_UV = Fun_PixelSample(_Texture, UV);
+
+            float4 _Result = _Texture_UV;
+            float _Result_Lum = Fun_Lum(_Result);
+
+            _Result.a *= _Render_Texture_Lum;
+
+            // sub panels
+            float2 _UV_Echo = float2(_OffsetX, _OffsetY) * float2(fPixelWidth, fPixelHeight);
+            
+                float4 _Echo1 = Fun_PixelSample(S2D_Image, In.texCoord + _UV_Echo);
+                    _Result.a += Fun_Lum(_Echo1) / 2.0;
+
+                float4 _Echo2 = Fun_PixelSample(S2D_Image, In.texCoord + _UV_Echo * 2.0);
+                    _Result.a += Fun_Lum(_Echo2) / 3.0;
 
         /* End */
-        if(_Color) _Result.rgb = lerp(_ColorShadow.rgb, _ColorLight.rgb, _Lum);
+            if(_Color)
+                _Result.rgb = lerp(_ColorShadow.rgb, _ColorLight.rgb, _Result_Lum);
 
         _Result = lerp(_Render_Texture, _Result, _Mixing);
-
+    
     return _Result;
 }
 
@@ -73,4 +141,11 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_2_0 Main(); } }
+technique tech_main
+{
+    pass P0
+    {
+        PixelShader = compile ps_2_0 ps_main();
+        VertexShader = compile vs_3_0 vs_main();
+    }
+}

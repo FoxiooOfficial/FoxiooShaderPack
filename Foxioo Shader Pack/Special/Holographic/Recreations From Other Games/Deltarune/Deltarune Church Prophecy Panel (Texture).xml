@@ -7,7 +7,7 @@
 			<BackgroundTexture>0</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Deltarune Church Prophecy Panel (Texture) Shader | 1.1 (18.10.2025) */</name>
+			<name>/* Foxioo Deltarune Church Prophecy Panel (Texture) Shader | 2026.07.31 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
@@ -45,23 +45,23 @@
 			</parameter>
 
 			<parameter>
-				<name>Echo Position X</name>
-				<variable>_PosXEcho</variable>
+				<name>Echo Offset X</name>
+				<variable>_OffsetX</variable>
 				<description>This variable defines the offset of the texture "echo" along the X axis.</description> 
 
 				<type>float</type>
 
-				<value>50</value>
+				<value>10</value>
 			</parameter>
 
 			<parameter>
-				<name>Echo Position Y</name>
-				<variable>_PosYEcho</variable>
+				<name>Echo Offset Y</name>
+				<variable>_OffsetY</variable>
 				<description>This variable defines the offset of the texture "echo" along the Y axis.</description> 
 
 				<type>float</type>
 
-				<value>50</value>
+				<value>10</value>
 			</parameter>
 
 		<parameter>
@@ -77,10 +77,9 @@
 				<description>This variable determines the overall scale of the texture (in X and Y axes).</description>
 
 				<type>float</type>
-
-				<preview_value>1</preview_value>
 				<value>0.5</value>
-			</parameter>
+						    <preview_value>1.0</preview_value>
+</parameter>
 
 
 			<parameter>

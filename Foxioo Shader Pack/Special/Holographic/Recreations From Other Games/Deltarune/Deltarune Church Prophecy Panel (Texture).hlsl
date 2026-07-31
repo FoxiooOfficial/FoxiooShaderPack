@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.1 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -32,15 +33,15 @@ cbuffer PS_VARIABLES : register(b0)
     bool __;
     float _PosX;
     float _PosY;
-    float _PosXEcho;
-    float _PosYEcho;
+    float _OffsetX;
+    float _OffsetY;
     bool ___;
     float _Scale;
     float _ScaleX;
     float _ScaleY;
     bool ____;
     float _Mixing;
-    Texture2D _Texture;
+    //Texture2D _Texture;
     bool _Color;
     float4 _ColorLight;
     float4 _ColorShadow;
@@ -69,84 +70,71 @@ cbuffer PS_PIXELSIZE : register(b1)
 /* Main */
 /************************************************************/
 
-float Fun_Lum (float4 _Result) { return 0.2126 * _Result.r + 0.7152 * _Result.g + 0.0722 * _Result.b; }
-
-PS_OUTPUT ps_main( in PS_INPUT In )
+float4 Demultiply(float4 _Render, bool _Premultiplied)
 {
-    PS_OUTPUT Out;
+    if(_Premultiplied)
+    {
+	    if ( _Render.a != 0.0 ) {
+            _Render.rgb /= _Render.a;
+        }
+    }
 
-    float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
-    //float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
-
-    /* Main Overlay */
-        float2 _UV = ((In.texCoord * 0.0025 + float2(_PosX, _PosY)) / float2(fPixelWidth, fPixelHeight)) * float2(_ScaleX, _ScaleY) * _Scale;
-        _UV = frac(_UV);
-
-            float4 _Result = S2D_Texture.Sample(S2D_TextureSampler, _UV);
-            float _Lum = Fun_Lum(_Result);
-            _Result.a = _Render_Texture.a;
-
-            /* Sub Texture 1 */
-            float4 _Echo1 = S2D_Texture.Sample(S2D_TextureSampler, _UV) * S2D_Image.Sample(S2D_ImageSampler, In.texCoord + (float2(_PosXEcho, _PosYEcho) * float2(fPixelWidth, fPixelHeight))) * In.Tint;
-                _Echo1.a = Fun_Lum(_Echo1);
-                _Result += _Echo1;
-
-            /* Sub Texture 2 */
-            float4 _Echo2 = S2D_Texture.Sample(S2D_TextureSampler, _UV) * S2D_Image.Sample(S2D_ImageSampler, In.texCoord + (float2(_PosXEcho * 2.0, _PosYEcho * 2.0) * float2(fPixelWidth, fPixelHeight))) * In.Tint;
-                _Echo2.a = Fun_Lum(_Echo2);
-                _Result += _Echo2 * 0.5;
-
-        /* End */
-        if(_Color) _Result.rgb = lerp(_ColorShadow.rgb, _ColorLight.rgb, _Lum);
-
-        _Result = lerp(_Render_Texture, _Result, _Mixing);
-    
-    Out.Color = _Result;
-    return Out;
+	return _Render;
 }
 
-/************************************************************/
-/* Premultiplied Alpha */
-/************************************************************/
-
-float4 Demultiply(float4 _Color)
-{
-	if ( _Color.a != 0 )   _Color.rgb /= _Color.a;
-	return _Color;
+float Fun_Lum(float4 _Result) {
+    return dot(_Result.rgb, float3(0.2126, 0.7152, 0.0722)) * _Result.a;
 }
 
-PS_OUTPUT ps_main_pm( in PS_INPUT In ) 
+float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
 {
-    PS_OUTPUT Out;
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
 
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
-    //float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
+        /* main panel */
+        float2 UV = In.texCoord + float2(_PosX, _PosY);
+        UV = (UV * float2(_ScaleX, _ScaleY) * _Scale) / 256.0;
+        UV /= float2(fPixelWidth, fPixelHeight);
+        UV = UV - floor(UV); // frac(UV)?
 
-    /* Main Overlay */
-        float2 _UV = ((In.texCoord * 0.0025 + float2(_PosX, _PosY)) / float2(fPixelWidth, fPixelHeight)) * float2(_ScaleX, _ScaleY) * _Scale;
-        _UV = frac(_UV);
+            float _Render_Texture_Lum = Fun_Lum(_Render_Texture);
+            float4 _Texture_UV = S2D_Texture.Sample(S2D_TextureSampler, UV);
 
-            float4 _Result = Demultiply(S2D_Texture.Sample(S2D_TextureSampler, _UV));
-            float _Lum = Fun_Lum(_Result);
-            _Result.a = _Render_Texture.a;
+            float4 _Result = _Texture_UV;
+            float _Result_Lum = Fun_Lum(_Result);
 
-            /* Sub Texture 1 */
-            float4 _Echo1 = Demultiply(S2D_Texture.Sample(S2D_TextureSampler, _UV)) * Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord + (float2(_PosXEcho, _PosYEcho) * float2(fPixelWidth, fPixelHeight)))) * In.Tint;
-                _Echo1.a = Fun_Lum(_Echo1);
-                _Result += _Echo1;
+            _Result.a *= _Render_Texture_Lum;
 
-            /* Sub Texture 2 */
-            float4 _Echo2 = Demultiply(S2D_Texture.Sample(S2D_TextureSampler, _UV)) * Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord + (float2(_PosXEcho * 2.0, _PosYEcho * 2.0) * float2(fPixelWidth, fPixelHeight)))) * In.Tint;
-                _Echo2.a = Fun_Lum(_Echo2);
-                _Result += _Echo2 * 0.5;
+            // sub panels
+            float2 _UV_Echo = float2(_OffsetX, _OffsetY) * float2(fPixelWidth, fPixelHeight);
+            
+                float4 _Echo1 = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord + _UV_Echo) * In.Tint, _Premultiplied);
+                    _Result.a += Fun_Lum(_Echo1) / 2.0;
+
+                float4 _Echo2 = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord + _UV_Echo * 2.0) * In.Tint, _Premultiplied);
+                    _Result.a += Fun_Lum(_Echo2) / 3.0;
 
         /* End */
-        if(_Color) _Result.rgb = lerp(_ColorShadow.rgb, _ColorLight.rgb, _Lum);
+            if(_Color)
+                _Result.rgb = lerp(_ColorShadow.rgb, _ColorLight.rgb, _Result_Lum);
 
         _Result = lerp(_Render_Texture, _Result, _Mixing);
 
-    _Result.rgb *= _Result.a;
+    return _Result;
+}
 
-    Out.Color = _Result;
-    return Out;
+/************************************************************/
+/* Render */
+/************************************************************/
+
+float4 ps_main(in PS_INPUT In) : SV_TARGET { 
+    float4 _Render = Main(In, false);
+    return _Render;
+}
+
+float4 ps_main_pm(in PS_INPUT In) : SV_TARGET
+{
+    float4 _Render = Main(In, true);
+    _Render.rgb *= _Render.a;
+
+    return _Render;
 }
