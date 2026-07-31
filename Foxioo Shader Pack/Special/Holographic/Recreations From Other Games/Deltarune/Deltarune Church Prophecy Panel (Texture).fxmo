@@ -25,9 +25,22 @@ in vec2 position;
 out vec2 In;
 void main()
 {
-    vec3 pos = vec3(position, 1.0);
-    In = (textureMatrix * pos).xy;
+    vec3 Pos = vec3(position, 1.0);
+    In = (textureMatrix * Pos).xy;
+
+    vec2 _PixelSize = vec2(fPixelWidth, fPixelHeight);
+    vec2 InOff = abs(vec2(_OffsetX, _OffsetY) * _PixelSize * 2.0);
+    vec2 _DirCorner = sign(In - 0.5);
+
+        vec2 _PixelPadding = InOff / _PixelSize; // Radius
+        vec2 _PosExpanded = position;
+
+         _PosExpanded.xy += _DirCorner * _PixelPadding;
+
+    vec3 pos = vec3(_PosExpanded, 1.0);
     gl_Position = vec4(projectionMatrix * transformMatrix * objectMatrix * pos, 1.0);
+
+    In = In + _DirCorner * InOff / _PixelSize;
 }
 //@End
 
