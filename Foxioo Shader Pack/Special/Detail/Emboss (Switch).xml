@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Emboss (Switch) Shader | 1.1 (18.10.2025) */</name>
+			<name>/* Foxioo Emboss (Switch) Shader | 2026.08.02 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
@@ -39,39 +39,31 @@
 			</parameter>
 
 			<parameter>
-				<name>Emboss Size</name>
-				<variable>_Emboss_Size</variable>
+				<name>Normal Map Size</name>
+				<variable>_Size</variable>
 				
-				<description>This variable determines the distance of the emboss size.</description>
+				<description>This variable determines the distance of the normal map size.</description>
 
 				<type>float</type>
 
-				<value>1.0</value>
+				<value>2.0</value>
 			</parameter>
 
-		<parameter>
-			<name>( Compatibility )</name>
-			<property>checkbox</property>
-			<description>Here you will find options that have changed, but you can still achieve the previous effect.</description>
+			<parameter>
+				<name>Angle</name>
+				<variable>_Angle</variable>
+				
+				<description>Specifies the rotation angle of the offset.</description>
 
-			<variable>__</variable>
-		</parameter>
-            <parameter>
-                <name>Is Fusion Version Older Than 296?</name>
-                <variable>_Is_Pre_296_Build</variable>
-                <property>checkbox</property>
-                
-                <description>(Only applies to Android and iOS!) This variable determines whether to use the newer background formatting. In Clickteam Fusion 2.5 for build 295.10 and earlier, the background texture was flipped along the Y axis, but this was changed in build 296.1. Check this option if you are using an older build!</description>
+				<type>float</type>
 
-                <type>int</type>
-
-                <value>0</value>
-            </parameter>
+				<value>0.0</value>
+			</parameter>
 
         <parameter>
             <name>/* */</name>
             <property>checkbox</property>
-            <variable>___</variable>
+            <variable>__</variable>
         </parameter>
 
 </effect>
