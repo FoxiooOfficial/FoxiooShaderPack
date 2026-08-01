@@ -1,0 +1,67 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+/***********************************************************/
+/* Textures */
+/***********************************************************/
+
+texture T_Image;
+texture T_Background;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+float _Mul;
+float _Mixing;
+
+technique tech_main
+{
+    pass P0
+    {
+        Texture[0] = <T_Image>;                     // sampler2D S2D_Image      : register(s0);
+        Texture[2] = <T_Background>;                // sampler2D S2D_Background : register(s1);
+
+        PixelShaderConstant[0] = <_Mixing>;         // c0
+        PixelShaderConstant[1] = <_Mul>;            // c1
+        
+        PixelShader = asm
+        {
+            ps.1.4;
+            
+            /** Consts ************************************************/
+            // None
+
+            /** Samplers ************************************************/
+            /*
+                r0 -> float4 _Render_Texture = tex2D(S2D_Image, In);
+                r1 -> float4 _Render_Background = tex2D(S2D_Background, In);
+
+                t0 -> float2 In : TEXCOORD0;
+            */
+            texld r0, t0;
+            texld r1, t0;
+            
+            /** (r2)_Result = ((r1)_Render_Background * (c1)_Mul) + (r0)_Render_Texture;
+            /*
+                (r2)_Result.rgb = lerp((r2)_Render_Texture.rgb, (r0)_Result.rgb, (c0)_Mixing);
+
+                return float4((r2)_Result.rgb, (r0)_Render_Texture.a);
+            */
+
+            mad r2.rgb, r1, c1.x, r0;
+
+            lrp r2.rgb, c0.x, r2, r0;
+
+            mov r0.rgb, r2;
+        };
+    }
+}
