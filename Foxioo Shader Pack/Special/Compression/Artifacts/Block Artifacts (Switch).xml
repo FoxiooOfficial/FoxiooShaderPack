@@ -1,0 +1,69 @@
+<effect>
+	<name>Block Artifacts (Switch)</name>
+		<description>The effect generates blocky artifacts that shift the texture.</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+
+		<parameter>
+			<name>/* Foxioo Block Artifacts (Switch) Shader | 2026.08.01 */</name>
+			<property>checkbox</property>
+
+			<description>The effect generates blocky artifacts that shift the texture.</description>
+
+			<variable>_</variable>
+		</parameter>
+
+			<parameter>
+				<name>Blending Mode</name>
+				<variable>_Blending_Mode</variable>
+
+				<description>This variable determines what the base should be. Setting it to 0 sets the base as the texture of the object on which the effect is applied, and setting it to 1 sets this as the background.</description>
+
+				<type>int</type>
+				<property>checkbox</property>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+			
+			<parameter>
+				<name>Distortion</name>
+				<variable>_Distortion</variable>
+
+				<description>This variable determines the level of artifact display.</description>
+
+				<type>float</type>
+
+				<value>0.65</value>
+			</parameter>
+
+			<parameter>
+				<name>Seed</name>
+				<variable>_Seed</variable>
+
+				<description>This variable is responsible for the randomness of the pattern, depending on the seed.</description>
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+        <parameter>
+            <name>/* */</name>
+            <property>checkbox</property>
+            <variable>__</variable>
+        </parameter>
+
+</effect>
