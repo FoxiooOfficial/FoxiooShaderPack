@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Sharpness (Switch) Shader | 2026.08.01 */</name>
+			<name>/* Foxioo Sharpness (Switch) Shader | 2026.08.01a */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
