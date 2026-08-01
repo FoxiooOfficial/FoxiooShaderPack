@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.2 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -27,22 +28,20 @@ cbuffer PS_VARIABLES : register(b0)
     bool _;
     bool _Blending_Mode;
     float _Mixing;
-    float _Sharpness_Size;
+    float _Size;
     bool __;
-
-	bool _Is_Pre_296_Build;
-	bool ___;
 };
 
 struct PS_INPUT
 {
     float4 Tint : COLOR0;
     float2 texCoord : TEXCOORD0;
+    float4 Position : SV_POSITION;
 };
 
 struct PS_OUTPUT
 {
-    float4 Color : SV_Target;
+    float4 Color   : SV_TARGET;
 };
 
 cbuffer PS_PIXELSIZE : register(b1)
@@ -55,94 +54,73 @@ cbuffer PS_PIXELSIZE : register(b1)
 /* Main */
 /************************************************************/
 
-PS_OUTPUT ps_main( in PS_INPUT In )
+float3 Fun_Sharp(Texture2D _Texture, SamplerState _Sampler, float2 In, float3 _Render, float2 _Off)
 {
-    PS_OUTPUT Out;
+    _Render = 9.0 * _Render - (
+        _Texture.Sample(_Sampler, In + float2(+_Off.x, +_Off.y)).rgb +
+        _Texture.Sample(_Sampler, In + float2(-_Off.x, -_Off.y)).rgb +
+        _Texture.Sample(_Sampler, In + float2(+_Off.x, -_Off.y)).rgb +
+        _Texture.Sample(_Sampler, In + float2(-_Off.x, +_Off.y)).rgb +
+        _Texture.Sample(_Sampler, In + float2(-_Off.x, 0.0)).rgb +
+        _Texture.Sample(_Sampler, In + float2(+_Off.x, 0.0)).rgb +
+        _Texture.Sample(_Sampler, In + float2(0.0, -_Off.y)).rgb +
+        _Texture.Sample(_Sampler, In + float2(0.0, +_Off.y)).rgb
+    );
 
-    float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
+    return _Render;
+}
+
+float4 Demultiply(float4 _Render, bool _Premultiplied)
+{
+    if(_Premultiplied)
+    {
+	    if ( _Render.a != 0.0 ) {
+            _Render.rgb /= _Render.a;
+        }
+    }
+
+	return _Render;
+}
+
+float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
+{
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
 
-    float4 _Result, _Result_Sharpness;
+        float4 _Result, _Render;
+        float2 _Offset = _Size * float2(fPixelWidth, fPixelHeight);
 
-        if(_Blending_Mode == 0)
-        {
-            _Result = _Render_Texture;
+            if(!_Blending_Mode)
+            {
+                _Result.rgb = _Render_Texture.rgb;
+                _Render.rgb = Fun_Sharp(S2D_Image, S2D_ImageSampler, In.texCoord, _Result.rgb, _Offset) * In.Tint.rgb;
+            }
+            else
+            {
+                _Result.rgb = _Render_Background.rgb;
+                _Render.rgb = Fun_Sharp(S2D_Background, S2D_BackgroundSampler, In.texCoord, _Result.rgb, _Offset);
 
-            _Result_Sharpness = 5 * _Render_Texture - (
-                S2D_Image.Sample(S2D_ImageSampler, In.texCoord + (_Sharpness_Size * float2(fPixelWidth, fPixelHeight))) * In.Tint +
-                S2D_Image.Sample(S2D_ImageSampler, In.texCoord - (_Sharpness_Size * float2(fPixelWidth, fPixelHeight))) * In.Tint +
-                S2D_Image.Sample(S2D_ImageSampler, In.texCoord + (_Sharpness_Size * float2(fPixelWidth, fPixelHeight))) * In.Tint +
-                S2D_Image.Sample(S2D_ImageSampler, In.texCoord - (_Sharpness_Size * float2(fPixelWidth, fPixelHeight))) * In.Tint
-            ); 
-        }
-        else
-        {
-            _Result = _Render_Background;
+            }
 
-            _Result_Sharpness = 5 * _Render_Background - (
-                S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord + (_Sharpness_Size * float2(fPixelWidth, fPixelHeight))) +
-                S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord - (_Sharpness_Size * float2(fPixelWidth, fPixelHeight))) +
-                S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord + (_Sharpness_Size * float2(fPixelWidth, fPixelHeight))) +
-                S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord - (_Sharpness_Size * float2(fPixelWidth, fPixelHeight)))
-            );
-        }
+        _Result.rgb = lerp(_Result.rgb, _Render.rgb, _Mixing);
+        _Result.a = _Render_Texture.a;
 
-        _Result = lerp(_Result, _Result_Sharpness, _Mixing);
-
-    _Result.a *= _Render_Texture.a;
-
-    Out.Color = _Result;
-
-    return Out;
+    return _Result;
 }
 
 /************************************************************/
-/* Premultiplied Alpha */
+/* Render */
 /************************************************************/
 
-float4 Demultiply(float4 _Color)
-{
-	if ( _Color.a != 0 )   _Color.rgb /= _Color.a;
-	return _Color;
+float4 ps_main(in PS_INPUT In) : SV_TARGET{
+    float4 _Render = Main(In, false);
+    return _Render;
 }
 
-PS_OUTPUT ps_main_pm( in PS_INPUT In ) 
+float4 ps_main_pm(in PS_INPUT In) : SV_TARGET
 {
-        PS_OUTPUT Out;
+    float4 _Render = Main(In, true);
+    _Render.rgb *= _Render.a;
 
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
-
-    float4 _Result, _Result_Sharpness;
-
-        if(_Blending_Mode == 0)
-        {
-            _Result = _Render_Texture;
-
-            _Result_Sharpness = 5 * _Render_Texture - (
-                Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord + (_Sharpness_Size * float2(fPixelWidth, fPixelHeight)))) * In.Tint +
-                Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord - (_Sharpness_Size * float2(fPixelWidth, fPixelHeight)))) * In.Tint +
-                Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord + (_Sharpness_Size * float2(fPixelWidth, fPixelHeight)))) * In.Tint +
-                Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord - (_Sharpness_Size * float2(fPixelWidth, fPixelHeight)))) * In.Tint
-            );
-        }
-        else
-        {
-            _Result = _Render_Background;
-
-            _Result_Sharpness = 5 * _Render_Background - (
-                S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord + (_Sharpness_Size * float2(fPixelWidth, fPixelHeight))) +
-                S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord - (_Sharpness_Size * float2(fPixelWidth, fPixelHeight))) +
-                S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord + (_Sharpness_Size * float2(fPixelWidth, fPixelHeight))) +
-                S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord - (_Sharpness_Size * float2(fPixelWidth, fPixelHeight)))
-            );
-        }
-
-        _Result = lerp(_Result, _Result_Sharpness, _Mixing);
-
-    _Result.a *= _Render_Texture.a;
-    _Result.rgb *= _Result.a;
-
-    Out.Color = _Result;
-    return Out;
+    return _Render;
 }

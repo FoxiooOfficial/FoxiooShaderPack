@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.2 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -54,55 +55,52 @@ uniform float fPixelHeight;
 /***********************************************************/
 
 uniform bool _Blending_Mode;
-uniform float _Sharpness_Size;
+uniform float _Size;
 uniform float _Mixing;
-uniform bool _Is_Pre_296_Build;
 
 /************************************************************/
 /* Main */
 /************************************************************/
 
-float Fun_FMod(float _Value, float _Denom)
+vec3 Fun_Sharp(sampler2D _Sampler, vec2 In, vec3 _Render, vec2 _Off)
 {
-    return _Value - _Denom * floor(_Value / _Denom);
+    _Render = 9.0 * _Render - (
+        texture2D(_Sampler, In + vec2(+_Off.x, +_Off.y)).rgb +
+        texture2D(_Sampler, In + vec2(-_Off.x, -_Off.y)).rgb +
+        texture2D(_Sampler, In + vec2(+_Off.x, -_Off.y)).rgb +
+        texture2D(_Sampler, In + vec2(-_Off.x, +_Off.y)).rgb +
+        texture2D(_Sampler, In + vec2(-_Off.x, 0.0)).rgb +
+        texture2D(_Sampler, In + vec2(+_Off.x, 0.0)).rgb +
+        texture2D(_Sampler, In + vec2(0.0, -_Off.y)).rgb +
+        texture2D(_Sampler, In + vec2(0.0, +_Off.y)).rgb
+    );
+
+    return _Render;
 }
 
 void main(void)
 {
-    vec2 In_Background = In;
-    if(_Is_Pre_296_Build == true && _Blending_Mode == true) In_Background = vec2(In.x, 1.0 - In.y);
-
-
     vec4 _Render_Texture = texture2D(imgTexture, In) * blendColor;
-    vec4 _Render_Background = texture2D(bckgTexture, In_Background);
+    vec4 _Render_Background = texture2D(bckgTexture, In);
 
-    vec4 _Result;
-    vec4 _Result_Sharpness;
+        vec4 _Result, _Render;
+        vec2 _Offset = _Size * vec2(fPixelWidth, fPixelHeight);
 
-        if(_Blending_Mode == false)
-        {
-            _Result = _Render_Texture;
+            if(!_Blending_Mode)
+            {
+                _Result.rgb = _Render_Texture.rgb;
+                _Render.rgb = Fun_Sharp(imgTexture, In, _Result.rgb, _Offset) * blendColor.rgb;
+            }
+            else
+            {
+                _Result.rgb = _Render_Background.rgb;
+                _Render.rgb = Fun_Sharp(bckgTexture, In, _Result.rgb, _Offset);
 
-            _Result_Sharpness = 5.0 * _Render_Texture - (
-                texture2D(imgTexture, In + (_Sharpness_Size * vec2(fPixelWidth, fPixelHeight))) * blendColor +
-                texture2D(imgTexture, In - (_Sharpness_Size * vec2(fPixelWidth, fPixelHeight))) * blendColor +
-                texture2D(imgTexture, In + (_Sharpness_Size * vec2(fPixelWidth, fPixelHeight))) * blendColor +
-                texture2D(imgTexture, In - (_Sharpness_Size * vec2(fPixelWidth, fPixelHeight))) * blendColor
-            );
-        }
-        else
-        {
-            _Result = _Render_Background;
+            }
 
-            _Result_Sharpness = 5.0 * _Render_Background - (
-                texture2D(bckgTexture, In + (_Sharpness_Size * vec2(fPixelWidth, fPixelHeight))) +
-                texture2D(bckgTexture, In - (_Sharpness_Size * vec2(fPixelWidth, fPixelHeight))) +
-                texture2D(bckgTexture, In + (_Sharpness_Size * vec2(fPixelWidth, fPixelHeight))) +
-                texture2D(bckgTexture, In - (_Sharpness_Size * vec2(fPixelWidth, fPixelHeight)))
-            );
-        }
-    _Result = mix(_Result, _Result_Sharpness, _Mixing);
-    _Result.a *= _Render_Texture.a;
+        _Result.rgb = mix(_Result.rgb, _Render.rgb, _Mixing);
+        _Result.a = _Render_Texture.a;
+
 
     gl_FragColor = _Result;
 }
