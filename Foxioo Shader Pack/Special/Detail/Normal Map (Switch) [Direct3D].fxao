@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.0 (06.04.2026) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -54,9 +55,9 @@ uniform float fPixelHeight;
 /***********************************************************/
 
 uniform bool _Blending_Mode;
-uniform float _Normal_Size;
+uniform float _Size;
 uniform float _Mixing;
-uniform bool _Is_Pre_296_Build;
+uniform float _Angle;
 
 /************************************************************/
 /* Main */
@@ -73,58 +74,57 @@ float Fun_Luminance(vec3 _Result)
     return _Y;
 }
 
+vec3 Fun_Sharp(sampler2D _Sampler, vec2 In, vec2 _Off)
+{
+    vec2 _Emboss;
+
+    vec3 _NW = texture2D(_Sampler, In + vec2(-_Off.x,  -_Off.y)).rgb;
+    vec3 _N  = texture2D(_Sampler, In + vec2(0.0,      -_Off.y)).rgb;
+    vec3 _NE = texture2D(_Sampler, In + vec2( _Off.x,  -_Off.y)).rgb;
+    vec3 _W  = texture2D(_Sampler, In + vec2(-_Off.x,   0.0))   .rgb;
+    vec3 _C  = texture2D(_Sampler, In)                                 .rgb;
+    vec3 _E  = texture2D(_Sampler, In + vec2( _Off.x,   0.0))   .rgb;
+    vec3 _SW = texture2D(_Sampler, In + vec2(-_Off.x,  _Off.y)) .rgb;
+    vec3 _S  = texture2D(_Sampler, In + vec2(0.0,      _Off.y)) .rgb;
+    vec3 _SE = texture2D(_Sampler, In + vec2( _Off.x,  _Off.y)) .rgb;
+
+        _Emboss.x = (Fun_Luminance(_NE) + 2.0 * Fun_Luminance(_E) + Fun_Luminance(_SE)) - (Fun_Luminance(_NW) + 2.0 * Fun_Luminance(_W) + Fun_Luminance(_SW));
+        _Emboss.y = (Fun_Luminance(_SW) + 2.0 * Fun_Luminance(_S) + Fun_Luminance(_SE)) - (Fun_Luminance(_NW) + 2.0 * Fun_Luminance(_N) + Fun_Luminance(_NE));
+        _Emboss.y = -_Emboss.y;
+
+    vec3 _Render = normalize(vec3(_Emboss.x, _Emboss.y, _Mixing * max(1.0, _Size)));
+    _Render = _Render * 0.5 + 0.5;
+
+    return _Render;
+}
 void main(void)
 {
-    vec2 In_Background = In;
-    if(_Is_Pre_296_Build == true && _Blending_Mode == true) In_Background = vec2(In.x, 1.0 - In.y);
-
     vec4 _Render_Texture = texture2D(imgTexture, In) * blendColor;
-    vec4 _Render_Background = texture2D(bckgTexture, In_Background);
+    vec4 _Render_Background = texture2D(bckgTexture, In);
 
-    vec4 _Result = _Blending_Mode ? _Render_Background : _Render_Texture;
+        vec4 _Result, _Render;
+        vec2 _Offset = _Size * -vec2(fPixelWidth, fPixelHeight);
 
-    vec2 _Off = _Normal_Size * vec2(fPixelWidth, fPixelHeight);
-    float _Scale = _Mixing * max(1.0, _Normal_Size);
-    
-        vec2 _Emboss;
+        float _Sin = sin(radians(_Angle));
+        float _Cos = cos(radians(_Angle));
+        _Offset = vec2(
+            _Offset.x * _Cos - _Offset.y * _Sin,
+            _Offset.x * _Sin + _Offset.y * _Cos
+        );
 
-    if(_Blending_Mode == false)
-    {
-        vec3 _NW = texture2D(imgTexture, In + vec2(-_Off.x,  -_Off.y)).rgb * blendColor.rgb;
-        vec3 _N  = texture2D(imgTexture, In + vec2(0.0,      -_Off.y)).rgb * blendColor.rgb;
-        vec3 _NE = texture2D(imgTexture, In + vec2( _Off.x,  -_Off.y)).rgb * blendColor.rgb;
-        vec3 _W  = texture2D(imgTexture, In + vec2(-_Off.x,   0.0))   .rgb * blendColor.rgb;
-        vec3 _C  = texture2D(imgTexture, In)                          .rgb * blendColor.rgb;
-        vec3 _E  = texture2D(imgTexture, In + vec2( _Off.x,   0.0))   .rgb * blendColor.rgb;
-        vec3 _SW = texture2D(imgTexture, In + vec2(-_Off.x,  _Off.y)) .rgb * blendColor.rgb;
-        vec3 _S  = texture2D(imgTexture, In + vec2(0.0,      _Off.y)) .rgb * blendColor.rgb;
-        vec3 _SE = texture2D(imgTexture, In + vec2( _Off.x,  _Off.y)) .rgb * blendColor.rgb;
+            if(!_Blending_Mode)
+            {
+                _Result.rgb = _Render_Texture.rgb;
+                _Render.rgb = Fun_Sharp(imgTexture, In, _Offset);
+            }
+            else
+            {
+                _Result.rgb = _Render_Background.rgb;
+                _Render.rgb = Fun_Sharp(bckgTexture, In, _Offset);
 
-        _Emboss.x = ( Fun_Luminance(_NE) + 2.0 * Fun_Luminance(_E) + Fun_Luminance(_SE) ) - ( Fun_Luminance(_NW) + 2.0 * Fun_Luminance(_W) + Fun_Luminance(_SW) );
-        _Emboss.y = ( Fun_Luminance(_SW) + 2.0 * Fun_Luminance(_S) + Fun_Luminance(_SE) ) - ( Fun_Luminance(_NW) + 2.0 * Fun_Luminance(_N) + Fun_Luminance(_NE) );
-    }
-    else
-    {
-        vec3 _NW = texture2D(bckgTexture, In + vec2(-_Off.x,  -_Off.y)).rgb;
-        vec3 _N  = texture2D(bckgTexture, In + vec2(0.0,      -_Off.y)).rgb;
-        vec3 _NE = texture2D(bckgTexture, In + vec2( _Off.x,  -_Off.y)).rgb;
-        vec3 _W  = texture2D(bckgTexture, In + vec2(-_Off.x,   0.0))   .rgb;
-        vec3 _C  = texture2D(bckgTexture, In)                          .rgb;
-        vec3 _E  = texture2D(bckgTexture, In + vec2( _Off.x,   0.0))   .rgb;
-        vec3 _SW = texture2D(bckgTexture, In + vec2(-_Off.x,  _Off.y)) .rgb;
-        vec3 _S  = texture2D(bckgTexture, In + vec2(0.0,      _Off.y)) .rgb;
-        vec3 _SE = texture2D(bckgTexture, In + vec2( _Off.x,  _Off.y)) .rgb;
+            }
 
-        _Emboss.x = ( Fun_Luminance(_NE) + 2.0 * Fun_Luminance(_E) + Fun_Luminance(_SE) ) - ( Fun_Luminance(_NW) + 2.0 * Fun_Luminance(_W) + Fun_Luminance(_SW) );
-        _Emboss.y = ( Fun_Luminance(_SW) + 2.0 * Fun_Luminance(_S) + Fun_Luminance(_SE) ) - ( Fun_Luminance(_NW) + 2.0 * Fun_Luminance(_N) + Fun_Luminance(_NE) );
-    }
-
-        _Emboss.y = -_Emboss.y;
-        
-    vec3 _Normal = normalize(vec3(_Emboss.x, _Emboss.y, 1.0 / _Scale));
-    _Normal = _Normal * 0.5 + 0.5;
-
-        _Result.rgb = mix(_Result.rgb, _Normal, clamp(abs(_Mixing), 0.0, 1.0));
+        _Result.rgb = mix(_Result.rgb, _Render.rgb, _Mixing);
         _Result.a = _Render_Texture.a;
 
     gl_FragColor = _Result;

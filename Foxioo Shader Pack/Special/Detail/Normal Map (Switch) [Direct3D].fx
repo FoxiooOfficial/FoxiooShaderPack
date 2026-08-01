@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.0 (06.04.2026) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -20,8 +21,9 @@ sampler2D S2D_Background : register(s1);
 /***********************************************************/
 
     float   _Mixing,
-            _Normal_Size,
-            
+            _Size,
+            _Angle,
+
             fPixelWidth, fPixelHeight;
 
     bool    _Blending_Mode;
@@ -41,56 +43,59 @@ float Fun_Luminance(float3 _Result)
     return _Y;
 }
 
+float3 Fun_Sharp(sampler2D _Sampler, float2 In, float2 _Off)
+{
+    float2 _Emboss;
+
+    float3 _NW = tex2D(_Sampler, In + float2(-_Off.x,  -_Off.y)).rgb;
+    float3 _N  = tex2D(_Sampler, In + float2(0.0,      -_Off.y)).rgb;
+    float3 _NE = tex2D(_Sampler, In + float2( _Off.x,  -_Off.y)).rgb;
+    float3 _W  = tex2D(_Sampler, In + float2(-_Off.x,   0.0))   .rgb;
+    float3 _C  = tex2D(_Sampler, In)                            .rgb;
+    float3 _E  = tex2D(_Sampler, In + float2( _Off.x,   0.0))   .rgb;
+    float3 _SW = tex2D(_Sampler, In + float2(-_Off.x,  _Off.y)) .rgb;
+    float3 _S  = tex2D(_Sampler, In + float2(0.0,      _Off.y)) .rgb;
+    float3 _SE = tex2D(_Sampler, In + float2( _Off.x,  _Off.y)) .rgb;
+
+        _Emboss.x = (Fun_Luminance(_NE) + 2.0 * Fun_Luminance(_E) + Fun_Luminance(_SE)) - (Fun_Luminance(_NW) + 2.0 * Fun_Luminance(_W) + Fun_Luminance(_SW));
+        _Emboss.y = (Fun_Luminance(_SW) + 2.0 * Fun_Luminance(_S) + Fun_Luminance(_SE)) - (Fun_Luminance(_NW) + 2.0 * Fun_Luminance(_N) + Fun_Luminance(_NE));
+        _Emboss.y = -_Emboss.y;
+
+    float3 _Render = normalize(float3(_Emboss.x, _Emboss.y, 1.0 / _Mixing * max(1.0, _Size)));
+    _Render = _Render * 0.5 + 0.5;
+
+    return _Render;
+}
 
 float4 Main(in float2 In : TEXCOORD0) : COLOR0
 {
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In);
-
-    float4 _Result = _Blending_Mode ? _Render_Background : _Render_Texture;
-
-    float2 _Off = _Normal_Size * -float2(fPixelWidth, fPixelHeight);
-    float _Scale = _Mixing * max(1.0, _Normal_Size);
     
-        float2 _Emboss;
+        float4 _Result, _Render;
+        float2 _Offset = _Size * -float2(fPixelWidth, fPixelHeight);
 
-    if(_Blending_Mode == 0)
-    {
-        float3 _NW = tex2D(S2D_Image, In + float2(-_Off.x,  -_Off.y)).rgb;
-        float3 _N  = tex2D(S2D_Image, In + float2(0.0,      -_Off.y)).rgb;
-        float3 _NE = tex2D(S2D_Image, In + float2( _Off.x,  -_Off.y)).rgb;
-        float3 _W  = tex2D(S2D_Image, In + float2(-_Off.x,   0.0))   .rgb;
-        float3 _C  = tex2D(S2D_Image, In)                            .rgb;
-        float3 _E  = tex2D(S2D_Image, In + float2( _Off.x,   0.0))   .rgb;
-        float3 _SW = tex2D(S2D_Image, In + float2(-_Off.x,  _Off.y)) .rgb;
-        float3 _S  = tex2D(S2D_Image, In + float2(0.0,      _Off.y)) .rgb;
-        float3 _SE = tex2D(S2D_Image, In + float2( _Off.x,  _Off.y)) .rgb;
+        float _Sin;
+        float _Cos;
+        sincos(radians(_Angle), _Sin, _Cos);
+        _Offset = float2(
+            _Offset.x * _Cos - _Offset.y * _Sin,
+            _Offset.x * _Sin + _Offset.y * _Cos
+        );
 
-        _Emboss.x = ( Fun_Luminance(_NE) + 2.0 * Fun_Luminance(_E) + Fun_Luminance(_SE) ) - ( Fun_Luminance(_NW) + 2.0 * Fun_Luminance(_W) + Fun_Luminance(_SW) );
-        _Emboss.y = ( Fun_Luminance(_SW) + 2.0 * Fun_Luminance(_S) + Fun_Luminance(_SE) ) - ( Fun_Luminance(_NW) + 2.0 * Fun_Luminance(_N) + Fun_Luminance(_NE) );
-    }
-    else
-    {
-        float3 _NW = tex2D(S2D_Background, In + float2(-_Off.x,  -_Off.y)).rgb;
-        float3 _N  = tex2D(S2D_Background, In + float2(0.0,      -_Off.y)).rgb;
-        float3 _NE = tex2D(S2D_Background, In + float2( _Off.x,  -_Off.y)).rgb;
-        float3 _W  = tex2D(S2D_Background, In + float2(-_Off.x,   0.0))   .rgb;
-        float3 _C  = tex2D(S2D_Background, In)                            .rgb;
-        float3 _E  = tex2D(S2D_Background, In + float2( _Off.x,   0.0))   .rgb;
-        float3 _SW = tex2D(S2D_Background, In + float2(-_Off.x,  _Off.y)) .rgb;
-        float3 _S  = tex2D(S2D_Background, In + float2(0.0,      _Off.y)) .rgb;
-        float3 _SE = tex2D(S2D_Background, In + float2( _Off.x,  _Off.y)) .rgb;
+            if(!_Blending_Mode)
+            {
+                _Result.rgb = _Render_Texture.rgb;
+                _Render.rgb = Fun_Sharp(S2D_Image, In, _Offset);
+            }
+            else
+            {
+                _Result.rgb = _Render_Background.rgb;
+                _Render.rgb = Fun_Sharp(S2D_Background, In, _Offset);
 
-        _Emboss.x = ( Fun_Luminance(_NE) + 2.0 * Fun_Luminance(_E) + Fun_Luminance(_SE) ) - ( Fun_Luminance(_NW) + 2.0 * Fun_Luminance(_W) + Fun_Luminance(_SW) );
-        _Emboss.y = ( Fun_Luminance(_SW) + 2.0 * Fun_Luminance(_S) + Fun_Luminance(_SE) ) - ( Fun_Luminance(_NW) + 2.0 * Fun_Luminance(_N) + Fun_Luminance(_NE) );
-    }
+            }
 
-        _Emboss.y = -_Emboss.y;
-
-    float3 _Normal = normalize(float3(_Emboss.x, _Emboss.y, 1.0 / _Scale));
-    _Normal = _Normal * 0.5 + 0.5;
-
-        _Result.rgb = lerp(_Result.rgb, _Normal, clamp(abs(_Mixing), 0.0, 1.0));
+        _Result.rgb = lerp(_Result.rgb, _Render.rgb, _Mixing);
         _Result.a = _Render_Texture.a;
 
     return _Result;
