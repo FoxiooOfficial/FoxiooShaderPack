@@ -1,0 +1,77 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+/***********************************************************/
+/* Textures */
+/***********************************************************/
+
+texture T_Image;
+texture T_Background;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+float _Mixing;
+float _Blending_Mode;
+
+technique tech_main
+{
+    pass P0
+    {
+        Texture[0] = <T_Image>;                     // sampler2D S2D_Image      : register(s0);
+        Texture[2] = <T_Background>;                // sampler2D S2D_Background : register(s1);
+
+        PixelShaderConstant[0] = <_Mixing>;         // c0
+        PixelShaderConstant[1] = <_Blending_Mode>;  // c1
+        
+        PixelShader = asm
+        {
+            ps.1.4;
+            
+            /** Consts ************************************************/
+            def c2, -1.0f, -1.0f, -1.0f, -1.0f;
+            def c3, 1.0f, 1.0f, 1.0f, 1.0f;
+            
+            /** Samplers ************************************************/
+            /*
+                r0 -> float4 _Render_Texture = tex2D(S2D_Image, In);
+                r1 -> float4 _Render_Background = tex2D(S2D_Background, In);
+
+                t0 -> float2 In : TEXCOORD0;
+            */
+            texld r0, t0;
+            texld r1, t0;
+            
+            /** (r2)_Result = lerp((r0)T_Image, (r1)T_Background, (c1)_Blending_Mode);
+            /*
+                (r3)_Render = (r2)_Result;
+
+                // _Result = 1.0 - _Result
+                (r2)_Result.r *= -1.0;
+                (r2)_Result.r += 1.0;
+
+                (r2)_Result.rgb = lerp((r2)_Result.rgb, (r3)_Render.rgb, (c0)_Mixing);
+
+                return float4((r2)_Result.rgb, (r0)T_Image.a);
+            */
+            lrp r2, c1.x, r1, r0;
+            mov r3, r2;
+
+            mul r2.r, c2.r, r2.r;
+            add r2.r, c3.r, r2.r;
+
+            lrp r2.rgb, c0.x, r2, r3;
+
+            mov r0.rgb, r2
+        };   
+    }
+}
