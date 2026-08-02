@@ -5,4 +5,4 @@
 *.fxc linguist-language=HLSL
 *.hlsl linguist-language=HLSL
 *.fxasm linguist-language=Assembly
-*.xml linguist-language=XML
+*.xml linguist-language=XML linguist-detectable=true
