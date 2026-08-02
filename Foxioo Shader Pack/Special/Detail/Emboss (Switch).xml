@@ -39,7 +39,7 @@
 			</parameter>
 
 			<parameter>
-				<name>Normal Map Size</name>
+				<name>Emboss Size</name>
 				<variable>_Size</variable>
 				
 				<description>This variable determines the distance of the normal map size.</description>

@@ -7,7 +7,7 @@
 				<BackgroundTexture>0</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Active (Texture) Shader | 1.1 (18.10.2025) */</name>
+			<name>/* Foxioo Active (Texture) Shader | 2026.08.02 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
@@ -23,19 +23,66 @@
 
 				<type>float</type>
 
-				<value>1.</value>
+				<value>1.0</value>
 			</parameter>
 
 			<parameter>
-				<name>Sharpness Size</name>
-				<variable>_Sharpness_Size</variable>
+				<name>Emboss Size</name>
+				<variable>_Size</variable>
 				
-				<description>This variable determines the distance of the sharpness size.</description>
+				<description>This variable determines the distance of the normal map size.</description>
 
 				<type>float</type>
 
-				<value>2.0</value>
-                <preview_value>1.0</preview_value>
+				<value>1.08</value>
+				<preview_value>0.5</preview_value>
+			</parameter>
+
+			<parameter>
+				<name>Angle</name>
+				<variable>_Angle</variable>
+				
+				<description>Specifies the rotation angle of the offset.</description>
+
+				<type>float</type>
+
+				<value>0.0</value>
+			</parameter>
+
+			<parameter>
+				<name>Threshold</name>
+				<variable>_Threshold</variable>
+				
+				<description>This variable specifies the threshold for using RGB colors in edge detection calculations.</description>
+
+				<type>float</type>
+
+				<value>0.0</value>
+				<preview_value>0.75</preview_value>
+			</parameter>
+
+			<parameter>
+				<name>Color</name>
+				<variable>_Color</variable>
+				
+				<description>This variable specifies the selected color for the monochrome output.</description>
+
+				<type>int_float4</type>
+				<property>color</property>
+
+				<value>8421376</value>
+			</parameter>
+
+			<parameter>
+				<name>Color Shadow / Light</name>
+				<variable>_ColorEx</variable>
+				
+				<description>This variable specifies the selected color for the monochrome output. Decides what color should appear for darker colors.</description>
+
+				<type>int_float4</type>
+				<property>color</property>
+
+				<value>14408632</value>
 			</parameter>
 
         <parameter>
@@ -46,7 +93,7 @@
 
 		<sampler>
 			<index>0</index>
-			<filter>point</filter>
+			<filter>linear</filter>
 			<addressU>border</addressU>
 			<addressV>border</addressV>
 			<bordercolor>0</bordercolor>
