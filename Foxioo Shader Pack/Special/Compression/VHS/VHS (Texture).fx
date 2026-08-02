@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.1 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -30,6 +31,8 @@ sampler2D S2D_Image : register(s0);
 
             _RingingMixing,
             _RainbowErrorNoise,
+
+            _NoiseBig, _NoiseSmall,
 
             fPixelWidth, fPixelHeight;
 
@@ -63,7 +66,7 @@ float3 Fun_RGB_YCbCr(float3 _Result)
 
 float3 Fun_Sharp(sampler2D _Sampler, float2 _In, float3 _Color, float _Sharpness_Size)
 {
-    float3 _Result_Sharpness = 5 * _Color - (
+    float3 _Result_Sharpness = 5.0 * _Color - (
                 tex2D(_Sampler, _In + (_Sharpness_Size * float2(fPixelWidth, fPixelHeight))) +
                 tex2D(_Sampler, _In - (_Sharpness_Size * float2(fPixelWidth, fPixelHeight))) +
                 tex2D(_Sampler, _In + (_Sharpness_Size * float2(fPixelWidth, fPixelHeight))) +
@@ -75,8 +78,8 @@ float3 Fun_Sharp(sampler2D _Sampler, float2 _In, float3 _Color, float _Sharpness
 
 float3 Fun_Ringing(sampler2D _Sampler, float2 _In, float3 _Color)
 {
-    const int _Max = 3;
-    const int _Offset = -12;
+    const int _Max = 36;
+    const int _Offset = -1;
     const float _SampleMul = 1.5 / float(_Max);
 
 
@@ -166,13 +169,13 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
 
                     float3 _Noise = float3(Fun_Noise(_Noise_In), Fun_Noise(_Noise_In + 1.0), Fun_Noise(_Noise_In + 2.0)); _Noise.r *= _Noise.b;
                         float _Lum = Fun_Luminance(_Noise);
-                        _Result.rgb += _Noise * _Lum * 0.05;
+                        _Result.rgb += _Noise * _Lum * 0.05 * _NoiseBig;
 
                 /* Small (Chrominance noise) */
                     _Noise_In = In * float2(1.6 / fPixelWidth, 1.6 / fPixelHeight);
 
                     _Noise = float3(Fun_Noise(_Noise_In), Fun_Noise(_Noise_In + 1.0), Fun_Noise(_Noise_In + 2.0));
-                        _Result.rgb += _Noise * _Lum * 0.22; 
+                        _Result.rgb += _Noise * _Lum * 0.22 * _NoiseSmall; 
 
             /* Rainbow effects */
                 float Y = Fun_Luminance(_Result.rgb);
@@ -210,4 +213,4 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_2_a Main(); } }
+technique tech_main { pass P0 { PixelShader = compile ps_3_0 Main(); } }

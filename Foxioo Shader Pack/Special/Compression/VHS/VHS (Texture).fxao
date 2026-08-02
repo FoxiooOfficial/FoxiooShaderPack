@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.1 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -194,11 +195,7 @@ vec3 HSVtoRGB(float _H, float _S, float _V)
 
 void main(void)
 {   
-    //vec2 In_Background = In;
-    //if (_Is_Pre_296_Build == true) In_Background = vec2(In.x, 1.0 - In.y);
-
     vec4 _Render_Texture = texture2D(imgTexture, In) * blendColor;
-    //vec4 _Render_Background = texture2D(bckgTexture, In_Background);
 
         vec4 _Result;
 

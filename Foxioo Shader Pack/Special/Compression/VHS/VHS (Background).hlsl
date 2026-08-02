@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.1 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -89,9 +90,21 @@ float3 Fun_RGB_YCbCr(float3 _Result)
     return float3(_Y, _Cb, _Cr);
 }
 
+float4 Demultiply(float4 _Render, bool _Premultiplied)
+{
+    if(_Premultiplied)
+    {
+	    if ( _Render.a != 0.0 ) {
+            _Render.rgb /= _Render.a;
+        }
+    }
+
+	return _Render;
+}
+
 float3 Fun_Sharp(Texture2D _Texture, SamplerState _SamplerState, float2 _In, float3 _Color, float _Sharpness_Size)
 {
-    float3 _Result_Sharpness = 5 * _Color - (
+    float3 _Result_Sharpness = 5.0 * _Color - (
                 _Texture.Sample(_SamplerState, _In + (_Sharpness_Size * float2(fPixelWidth, fPixelHeight))) +
                 _Texture.Sample(_SamplerState, _In - (_Sharpness_Size * float2(fPixelWidth, fPixelHeight))) +
                 _Texture.Sample(_SamplerState, _In + (_Sharpness_Size * float2(fPixelWidth, fPixelHeight))) +
@@ -178,11 +191,9 @@ float3 HSVtoRGB(float _H, float _S, float _V)
     return (_Render + _M);
 }
 
-PS_OUTPUT ps_main( in PS_INPUT In )
+float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
 {
-    PS_OUTPUT Out;
-
-    float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
 
         float4 _Result;
@@ -231,76 +242,23 @@ PS_OUTPUT ps_main( in PS_INPUT In )
                 _Result.rgb = lerp(_Render_Background.rgb, _Result.rgb, _Mixing);
 
     _Result.a = _Render_Texture.a;
-    Out.Color = _Result;
     
-    return Out;
+    return _Result;
 }
 
 /************************************************************/
-/* Premultiplied Alpha */
+/* Render */
 /************************************************************/
 
-float4 Demultiply(float4 _Color)
-{
-	if ( _Color.a != 0 )   _Color.rgb /= _Color.a;
-	return _Color;
+float4 ps_main(in PS_INPUT In) : SV_TARGET{
+    float4 _Render = Main(In, false);
+    return _Render;
 }
 
-PS_OUTPUT ps_main_pm( in PS_INPUT In ) 
+float4 ps_main_pm(in PS_INPUT In) : SV_TARGET
 {
-    PS_OUTPUT Out;
+    float4 _Render = Main(In, true);
+    _Render.rgb *= _Render.a;
 
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
-
-        float4 _Result;
-
-            _Result.rgb = Fun_Sharp(S2D_Background, S2D_BackgroundSampler, In.texCoord, _Render_Background.rgb, 1.5);
-
-                /* Noise */
-                    /* Big */
-                        float2 _Noise_In = In.texCoord * float2(10, 80);
-
-                        float3 _Noise = float3(Fun_Noise(_Noise_In), Fun_Noise(_Noise_In + 1.0), Fun_Noise(_Noise_In + 2.0)); _Noise.r *= _Noise.b;
-                            float _Lum = Fun_Luminance(_Noise);
-                            _Result.rgb += _Noise * _Lum * 0.05 * _NoiseBig;
-
-                    /* Small (Chrominance noise) */
-                        _Noise_In = In.texCoord * float2(1.6 / fPixelWidth, 1.6 / fPixelHeight);
-
-                        _Noise = float3(Fun_Noise(_Noise_In), Fun_Noise(_Noise_In + 1.0), Fun_Noise(_Noise_In + 2.0));
-                            _Result.rgb += _Noise * _Lum * 0.22 * _NoiseSmall; 
-
-                /* Rainbow effects */
-                    float Y = Fun_Luminance(_Result.rgb);
-                    float _Phase = (0.5 - abs(In.texCoord.x / Y - 0.5)) * _RainbowFreq * 6.2831;
-
-                        float3 _Rainbow = float3(   sin(_Phase + 0.0),  sin(_Phase + 2.094),    sin(_Phase + 4.188) );
-                        float3  _Rainbow_Pre = _RainbowStrength * _Rainbow;
-                    
-                    _Rainbow *= _RainbowStrength;
-                    _Result.rgb += _Rainbow * Y;
-
-                /* Ringing */
-                    float3 _Ringing = Fun_Ringing(S2D_Background, S2D_BackgroundSampler, In.texCoord + Fun_Luminance(_Rainbow_Pre) * 0.05, _Result.rgb * _Rainbow);
-                    float _Ringing_Lum = Fun_Luminance(_Ringing);
-
-                    _Result.rgb += (_Ringing / _Rainbow) * _RainbowErrorNoise;
-                    _Result.rgb += Fun_RGB_YCbCr(_Ringing + _Rainbow_Pre * 0.1) * _Ringing_Lum * _RingingMixing;
-
-                /* Saturation */
-                    float3 _HSV = RGBtoHSV(_Result.rgb);
-
-                    _HSV.y = (_HSV.y * (_Saturation / 50.0));
-                    _HSV.z = (_HSV.z + (_Value - 50.0) / 50.0);
-
-                    _Result.rgb = HSVtoRGB(_HSV.x, _HSV.y, _HSV.z);
-
-                _Result.rgb = lerp(_Render_Background.rgb, _Result.rgb, _Mixing);
-
-    _Result.a = _Render_Texture.a;
-    _Result.rgb *= _Result.a;
-
-    Out.Color = _Result;
-    return Out;
+    return _Render;
 }
