@@ -44,7 +44,7 @@ varying vec2 In;
 /***********************************************************/
 
 uniform sampler2D imgTexture;
-//uniform sampler2D bckgTexture;
+uniform sampler2D bckgTexture;
 
 uniform lowp vec4 blendColor;
 uniform float fPixelWidth;
@@ -199,15 +199,16 @@ void main(void)
     float _Rand = Fun_Rand(UV + Fun_Rand(UV));
 
     vec4 _Render_Texture = texture2D(imgTexture, UV) * blendColor;
+    vec4 _Render_Background = texture2D(bckgTexture, UV);
 
-        vec4 _Result = _Render_Texture;
+        vec4 _Result = _Render_Background;
 
         /* etap 1; gain */
             _Result.rgb = mix(_Result.rgb, _Result.rgb * (_Rand * 0.5 + 0.5), 0.3);
 
         /* etap 2; emboss! */
         vec2 _EOffset = -2.5 * -vec2(fPixelWidth, fPixelHeight);
-        vec3 _Render_Emboss = Fun_Sharp(imgTexture, UV, _EOffset);
+        vec3 _Render_Emboss = Fun_Sharp(bckgTexture, UV, _EOffset);
         
             _Result.rgb = mix(_Result.rgb, _Render_Emboss * _Result.rgb, 0.5);
 
@@ -224,7 +225,7 @@ void main(void)
                 vec2 _BOffset = vec2(float(i) / 32.0 * fPixelWidth, 0.0);
                 float _Weight = sin((float(i + 1) / 32.0) * M_PI);
 
-                    vec3 _Render_ColorB = texture2D(imgTexture, UV - _BOffset * _Size).rgb;
+                    vec3 _Render_ColorB = texture2D(bckgTexture, UV - _BOffset * _Size).rgb;
                     _Render_ColorB *= (Fun_Rand(In + Fun_Rand(In + float(i)) + float(i)) * 0.5 + 0.5);
 
                     _Result.rgb += _Render_ColorB * _Weight;
@@ -258,6 +259,7 @@ void main(void)
                 _Result.a *= _LCondition ? _Alpha : 1.0;
 
         _Result = mix(_Render_Texture, _Result, _Mixing);
+        _Result.a = _Render_Texture.a;
 
     gl_FragColor = _Result;
 }
