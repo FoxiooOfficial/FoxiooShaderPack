@@ -1,0 +1,265 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_vertex
+
+#ifdef GL_ES
+ precision mediump float;
+#endif
+uniform mat4 transformMatrix;
+uniform mat4 projectionMatrix;
+
+attribute vec4 position;
+attribute vec2 texCoord;
+varying vec2 In;
+
+void main(void)
+{
+	In = texCoord;
+	gl_Position = projectionMatrix * transformMatrix * position;
+}
+
+//@End
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+#ifdef GL_ES
+ precision mediump float;
+#endif
+
+varying vec2 In;
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+uniform sampler2D imgTexture;
+//uniform sampler2D bckgTexture;
+
+uniform lowp vec4 blendColor;
+uniform float fPixelWidth;
+uniform float fPixelHeight;
+
+/***********************************************************/
+/* Varibles */
+/***********************************************************/
+
+uniform float _Mixing;
+uniform float _Frame;
+uniform float _Alpha;
+uniform float _Time;
+uniform float _Size;
+uniform float _Seed;
+
+uniform float _Saturation;
+uniform float _Value;
+
+uniform bool _Interlacing;
+
+uniform int _Quality;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+float Fun_Trunc(float _Value)
+{
+    return sign(_Value) * floor(abs(_Value));
+}
+
+float Fun_FMod(float _Value, float _Denom)
+{
+    return _Value - _Denom * Fun_Trunc(_Value / _Denom);
+}
+
+float Fun_Luminance(vec3 _Result)
+{
+    const float _Kr = 0.299;
+    const float _Kg = 0.587;
+    const float _Kb = 0.114;
+
+    float _Y = _Kr * _Result.r + _Kg * _Result.g + _Kb * _Result.b;
+
+    return _Y;
+}
+
+vec3 Fun_Sharp(sampler2D _Sampler, vec2 In, vec2 _Off)
+{
+    vec2 _Emboss;
+
+    vec3 _NW = texture2D(_Sampler, In + vec2(-_Off.x,  -_Off.y)).rgb;
+    vec3 _N  = texture2D(_Sampler, In + vec2(0.0,      -_Off.y)).rgb;
+    vec3 _NE = texture2D(_Sampler, In + vec2( _Off.x,  -_Off.y)).rgb;
+    vec3 _W  = texture2D(_Sampler, In + vec2(-_Off.x,   0.0))   .rgb;
+    vec3 _C  = texture2D(_Sampler, In)                            .rgb;
+    vec3 _E  = texture2D(_Sampler, In + vec2( _Off.x,   0.0))   .rgb;
+    vec3 _SW = texture2D(_Sampler, In + vec2(-_Off.x,  _Off.y)) .rgb;
+    vec3 _S  = texture2D(_Sampler, In + vec2(0.0,      _Off.y)) .rgb;
+    vec3 _SE = texture2D(_Sampler, In + vec2( _Off.x,  _Off.y)) .rgb;
+
+        _Emboss.x = (Fun_Luminance(_NE) + 2.0 * Fun_Luminance(_E) + Fun_Luminance(_SE)) - (Fun_Luminance(_NW) + 2.0 * Fun_Luminance(_W) + Fun_Luminance(_SW));
+        _Emboss.y = (Fun_Luminance(_SW) + 2.0 * Fun_Luminance(_S) + Fun_Luminance(_SE)) - (Fun_Luminance(_NW) + 2.0 * Fun_Luminance(_N) + Fun_Luminance(_NE));
+        //_Emboss.y = -_Emboss.y;
+
+    float _Diff = (_Emboss.x + _Emboss.y) * 0.5;
+    vec3 _Render = vec3(clamp(0.5 + _Diff * _Mixing, 0.0, 1.0));
+
+    return _Render;
+}
+
+vec3 Fun_ClipColor(vec3 _Color)
+{
+    float _Y = Fun_Luminance(_Color);
+    float _ColorMin = min(_Color.r, min(_Color.g, _Color.b));
+    float _ColorMax = max(_Color.r, max(_Color.g, _Color.b));
+
+    float _Div = _ColorMax - _Y;
+    if(_Div == 0.0) _Div = 1e4;
+
+    if(_ColorMin < 0.0) { _Color = _Y + (((_Color - _Y) * _Y) / (_Y - _ColorMin)); }
+    if(_ColorMax > 1.0) { _Color = _Y + (((_Color - _Y) * (1.0 - _Y)) / _Div); }
+
+    return _Color;
+}
+
+vec3 Fun_SetLum(vec3 _Color, float _Y)
+{
+    float _GetLum = _Y - Fun_Luminance(_Color);
+    _Color += _GetLum;
+
+    return Fun_ClipColor(_Color);
+}
+
+vec3 RGBtoHSV(vec3 _Render)
+{
+    float _CMax = max(_Render.r, max(_Render.g, _Render.b));
+    float _CMin = min(_Render.r, min(_Render.g, _Render.b));
+    float _Delta = _CMax - _CMin;
+
+    float _H = 0.0;
+    float _S = 0.0;
+    float _V = _CMax;
+
+    if (_Delta > 0.0)
+    {
+        _S = (_V > 0.0) ? (_Delta / _V) : 0.0;
+
+        if (_CMax == _Render.r)
+            _H = 60.0 * Fun_FMod(((_Render.g - _Render.b) / _Delta), 6.0);
+        else if (_CMax == _Render.g)
+            _H = 60.0 * (((_Render.b - _Render.r) / _Delta) + 2.0);
+        else
+            _H = 60.0 * (((_Render.r - _Render.g) / _Delta) + 4.0);
+    }
+
+    if (_H < 0.0) { _H += 360.0; }
+    return vec3(_H, _S, _V);
+}
+
+
+vec3 HSVtoRGB(float _H, float _S, float _V)
+{
+    float _C = _V * _S;
+    float _X = _C * (1.0 - abs(Fun_FMod(_H / 60.0, 2.0) - 1.0));
+    float _M = _V - _C;
+
+    vec3 _Render =      (_H < 60.0)   ? vec3(_C, _X, 0) :
+                        (_H < 120.0)  ? vec3(_X, _C, 0) :
+                        (_H < 180.0)  ? vec3(0, _C, _X) :
+                        (_H < 240.0)  ? vec3(0, _X, _C) :
+                        (_H < 300.0)  ? vec3(_X, 0, _C) :
+                                        vec3(_C, 0, _X);
+
+    return (_Render + _M);
+}
+
+float Fun_Rand(vec2 In)
+{
+    return fract(cos(dot(In.xy + _Seed, vec2(67.4684,18.467)))* 3463456.95546);
+}
+
+#define M_PI 3.14159265358979323846
+
+void main(void)
+{  
+    float _UV_Y = cos(In.y * 4.0 / tan(In.y - _Time / 36.0) + _Time * 0.01 + sin(In.y * 3.0 - _Time * 0.0001) * 0.01 + sin(In.y / 5.0 - _Time * 0.32)) * fPixelHeight + fPixelHeight * 2.0 * sin(In.y / 7.12 + _Time * 0.001);
+    _UV_Y += Fun_Rand(In.xy + _UV_Y) * fPixelHeight;
+
+    vec2 UV = In + vec2(sin(In.y / fPixelWidth * 1.5 + _Time) * fPixelWidth * 0.5, _UV_Y * 0.5) * _Mixing;
+    float _Rand = Fun_Rand(UV + Fun_Rand(UV));
+
+    vec4 _Render_Texture = texture2D(imgTexture, UV) * blendColor;
+
+        vec4 _Result = _Render_Texture;
+
+        /* etap 1; gain */
+            _Result.rgb = mix(_Result.rgb, _Result.rgb * (_Rand * 0.5 + 0.5), 0.3);
+
+        /* etap 2; emboss! */
+        vec2 _EOffset = -2.5 * -vec2(fPixelWidth, fPixelHeight);
+        vec3 _Render_Emboss = Fun_Sharp(imgTexture, UV, _EOffset);
+        
+            _Result.rgb = mix(_Result.rgb, _Render_Emboss * _Result.rgb, 0.5);
+
+        /* etap 3; color bleeding */
+        float _UV_X = clamp((1.0 - sin(abs(0.5 - UV.x) * 0.8 * M_PI)) * 12.0, 0.0, 1.0);
+        float _Lum = Fun_Luminance(_Result.rgb * _UV_X);
+
+        int i;
+
+        float _W = 0.0;
+
+            for(i = 0; i < _Quality; i++)
+            {
+                vec2 _BOffset = vec2(float(i) / float(_Quality) * fPixelWidth, 0.0);
+                float _Weight = sin((float(i + 1) / float(_Quality)) * M_PI);
+
+                    vec3 _Render_ColorB = texture2D(imgTexture, UV - _BOffset * _Size).rgb;
+                    _Render_ColorB *= (Fun_Rand(In + Fun_Rand(In + float(i)) + float(i)) * 0.5 + 0.5);
+
+                    _Result.rgb += _Render_ColorB * _Weight;
+
+                _W += _Weight;
+            }
+            _Result.rgb /= _W;
+
+                _Result.rgb = Fun_SetLum(_Result.rgb, _Lum);
+
+        /* etap 4; HSV */
+        vec3 _HSV = RGBtoHSV(_Result.rgb);
+
+            _HSV.y = (_HSV.y * (_Saturation / 50.0));
+            _HSV.z = (_HSV.z + (_Value - 50.0) / 50.0);
+            
+            float _UV_XN = clamp((1.0 - _UV_X) * 0.5, 0.0, 1.0) - abs(_UV_Y * 10.0);
+                _Result.rgb = HSVtoRGB(_HSV.x + _UV_XN, _HSV.y + _UV_XN, _HSV.z + _UV_Y * 9.0);
+
+            _Result.rgb = mix(_Result.rgb, vec3(0.0), 0.3);
+            _Result.rgb *= 1.3;
+            _Result.rgb += abs(_UV_Y * 10.0);
+
+        /* etap 5; interlacing!
+        // drawing with arrival; direct3d only! (i don't think is gonna works on glsl...) */
+
+        int _LVertical = int((In.y + _Frame * fPixelHeight) / fPixelHeight);
+        bool _LCondition = mod(float(_LVertical), 2.0) == 0.0;
+
+            if(_Interlacing && _LCondition)
+                _Result.a *= _LCondition ? _Alpha : 1.0;
+
+        _Result = mix(_Render_Texture, _Result, _Mixing);
+
+    gl_FragColor = _Result;
+}
+
+//@End
