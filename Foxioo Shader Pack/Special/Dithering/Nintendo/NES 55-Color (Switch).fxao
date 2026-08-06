@@ -1,0 +1,219 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_vertex
+
+#ifdef GL_ES
+ precision mediump float;
+#endif
+uniform mat4 transformMatrix;
+uniform mat4 projectionMatrix;
+
+attribute vec4 position;
+attribute vec2 texCoord;
+varying vec2 In;
+
+void main(void)
+{
+	In = texCoord;
+	gl_Position = projectionMatrix * transformMatrix * position;
+}
+
+//@End
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+#ifdef GL_ES
+ precision mediump float;
+#endif
+
+varying vec2 In;
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+uniform sampler2D imgTexture;
+uniform sampler2D bckgTexture;
+
+uniform lowp vec4 blendColor;
+uniform float fPixelWidth;
+uniform float fPixelHeight;
+
+/***********************************************************/
+/* Varibles */
+/***********************************************************/
+
+uniform float _Mixing;
+uniform bool _Blending_Mode;
+uniform float _DitheringSize;
+uniform float _Add;
+uniform float _Mul;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+#define _Palette_Size 55
+
+vec3 _Palette[_Palette_Size];
+float _Dither[16];
+
+vec3 Fun_Color(int _Index)
+{  
+    _Palette[0]  = vec3(0.4, 0.4, 0.4);
+    _Palette[1]  = vec3(0.0, 0.164706, 0.533333);
+    _Palette[2]  = vec3(0.078431, 0.070588, 0.658824);
+    _Palette[3]  = vec3(0.231373, 0.0, 0.643137);
+    _Palette[4]  = vec3(0.360784, 0.0, 0.494118);
+    _Palette[5]  = vec3(0.431373, 0.0, 0.250980);
+    _Palette[6]  = vec3(0.423529, 0.027451, 0.0);
+    _Palette[7]  = vec3(0.341176, 0.113725, 0.0);
+    _Palette[8]  = vec3(0.203922, 0.207843, 0.0);
+    _Palette[9]  = vec3(0.047059, 0.286275, 0.0);
+    _Palette[10] = vec3(0.0, 0.321569, 0.0);
+    _Palette[11] = vec3(0.0, 0.309804, 0.031373);
+    _Palette[12] = vec3(0.0, 0.250980, 0.305882);
+    _Palette[13] = vec3(0.0, 0.0, 0.0);
+    _Palette[14] = vec3(0.682353, 0.682353, 0.682353);
+    _Palette[15] = vec3(0.082353, 0.372549, 0.854902);
+    _Palette[16] = vec3(0.258824, 0.250980, 0.996078);
+    _Palette[17] = vec3(0.462745, 0.152941, 1.0);
+    _Palette[18] = vec3(0.631373, 0.105882, 0.803922);
+    _Palette[19] = vec3(0.721569, 0.117647, 0.486275);
+    _Palette[20] = vec3(0.709804, 0.196078, 0.125490);
+    _Palette[21] = vec3(0.600000, 0.309804, 0.0);
+    _Palette[22] = vec3(0.423529, 0.431373, 0.0);
+    _Palette[23] = vec3(0.219608, 0.529412, 0.0);
+    _Palette[24] = vec3(0.050980, 0.580392, 0.0);
+    _Palette[25] = vec3(0.0, 0.564706, 0.196078);
+    _Palette[26] = vec3(0.0, 0.486275, 0.556863);
+    _Palette[27] = vec3(0.996078, 0.996078, 0.996078);
+    _Palette[28] = vec3(0.392157, 0.690196, 0.996078);
+    _Palette[29] = vec3(0.576471, 0.564706, 0.996078);
+    _Palette[30] = vec3(0.780392, 0.466667, 0.996078);
+    _Palette[31] = vec3(0.952941, 0.415686, 0.996078);
+    _Palette[32] = vec3(0.996078, 0.431373, 0.803922);
+    _Palette[33] = vec3(0.996078, 0.509804, 0.439216);
+    _Palette[34] = vec3(0.921569, 0.623529, 0.137255);
+    _Palette[35] = vec3(0.741176, 0.749020, 0.0);
+    _Palette[36] = vec3(0.537255, 0.850980, 0.0);
+    _Palette[37] = vec3(0.364706, 0.898039, 0.188235);
+    _Palette[38] = vec3(0.270588, 0.882353, 0.509804);
+    _Palette[39] = vec3(0.282353, 0.807843, 0.874510);
+    _Palette[40] = vec3(0.309804, 0.309804, 0.309804);
+    _Palette[41] = vec3(0.996078, 0.996078, 0.996078);
+    _Palette[42] = vec3(0.756863, 0.878431, 0.996078);
+    _Palette[43] = vec3(0.831373, 0.827451, 0.996078);
+    _Palette[44] = vec3(0.913725, 0.784314, 0.996078);
+    _Palette[45] = vec3(0.984314, 0.764706, 0.996078);
+    _Palette[46] = vec3(0.996078, 0.772549, 0.921569);
+    _Palette[47] = vec3(0.996078, 0.803922, 0.776471);
+    _Palette[48] = vec3(0.968627, 0.850980, 0.650980);
+    _Palette[49] = vec3(0.898039, 0.901961, 0.584314);
+    _Palette[50] = vec3(0.815686, 0.941176, 0.592157);
+    _Palette[51] = vec3(0.745098, 0.960784, 0.670588);
+    _Palette[52] = vec3(0.705882, 0.952941, 0.803922);
+    _Palette[53] = vec3(0.709804, 0.925490, 0.952941);
+    _Palette[54] = vec3(0.721569, 0.721569, 0.721569);
+
+    return _Palette[_Index];
+}
+
+float Fun_Dithering(int _Index)
+{
+    _Dither[0]  = 0.0 / 16.0;
+    _Dither[1]  = 8.0 / 16.0;
+    _Dither[2]  = 2.0 / 16.0;
+    _Dither[3]  = 10.0 / 16.0;
+    _Dither[4]  = 12.0 / 16.0;
+    _Dither[5]  = 4.0 / 16.0;
+    _Dither[6]  = 14.0 / 16.0;
+    _Dither[7]  = 6.0 / 16.0;
+    _Dither[8]  = 3.0 / 16.0;
+    _Dither[9]  = 11.0 / 16.0;
+    _Dither[10] = 1.0 / 16.0;
+    _Dither[11] = 9.0 / 16.0;
+    _Dither[12] = 15.0 / 16.0;
+    _Dither[13] = 7.0 / 16.0;
+    _Dither[14] = 13.0 / 16.0;
+    _Dither[15] = 5.0 / 16.0;
+
+    return _Dither[_Index];
+}
+
+vec3 Fun_Convert(vec3 _Color)
+{
+    vec3 _Low = _Color / 12.92;
+    vec3 _High = pow(abs((_Color + 0.055) / 1.055), vec3(2.4));
+    return mix(_High, _Low, step(_Color, vec3(0.04045)));
+}
+
+vec2 Fun_FMod(vec2 _Value, vec2 _Denom) {
+    return _Value - _Denom * floor(_Value / _Denom);
+}
+
+void main(void)
+{
+    vec4 _Render_Texture = texture2D(imgTexture, In) * blendColor;
+    vec4 _Render_Background = texture2D(bckgTexture, In);
+
+    _Render_Texture.rgb = _Render_Texture.rgb * _Mul + _Add;
+    _Render_Background.rgb = _Render_Background.rgb * _Mul + _Add;
+
+        vec4 _Result, _Render;
+
+        if(!_Blending_Mode)
+        {
+            _Result = _Render_Texture;
+            _Render = _Render_Texture;
+        }
+        else
+        {
+            _Result.rgb = _Render_Background.rgb;
+            _Result.a = _Render_Texture.a;
+            
+            _Render = _Render_Background;
+        }
+
+       vec2 _Dith = vec2(Fun_FMod(In / vec2(fPixelWidth, fPixelHeight), vec2(4.0)));
+
+        int _Index = int(_Dith.x) + int(_Dith.y) * 4;
+        float _DithValue = Fun_Dithering(_Index);
+
+            vec3 _Color = _Result.rgb + (_DithValue - 0.5) * _DitheringSize;
+
+            float _MinDist = 1e9;
+            int _IndexC = 0;
+
+                vec3 _PO = Fun_Convert(_Color);
+                for(int i = 0; i < _Palette_Size; i++)
+                {
+                    vec3 _PL = Fun_Convert(Fun_Color(i));
+                    vec3 _Diff = _PO - _PL;
+                    float _Dist = dot(_Diff, _Diff);
+
+                    if (_Dist < _MinDist)
+                    {
+                        _MinDist = _Dist;
+                        _IndexC = i;
+                    }
+                }
+
+        _Result.rgb = Fun_Color(_IndexC);
+        _Result.rgb = mix(_Render.rgb, _Result.rgb, _Mixing);
+
+    gl_FragColor = _Result;
+}
+
+//@End

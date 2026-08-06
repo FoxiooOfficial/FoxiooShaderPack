@@ -18,8 +18,8 @@ SamplerState S2D_ImageSampler : register(s0);
 Texture2D<float4> S2D_Background : register(t1);
 SamplerState S2D_BackgroundSampler : register(s1);
 
-Texture2D<float4> S2D_Dither : register(t2);
-SamplerState S2D_DitherSampler : register(s2);
+Texture2D<float4> _Texture_Dithering : register(t2);
+SamplerState _Texture_Dithering_Sampler : register(s2);
 
 /***********************************************************/
 /* Varibles */
@@ -30,13 +30,11 @@ cbuffer PS_VARIABLES : register(b0)
     bool _;
     bool _Blending_Mode;
     float _Mixing;
-    Texture2D _Texture_Dithering;
+    //Texture2D _Texture_Dithering;
     float4 _Color;
     float4 _ColorShadow;
     float _Threshold;
     bool __;
-	bool _Is_Pre_296_Build;
-	bool ___;
 };
 
 struct PS_INPUT
@@ -60,85 +58,69 @@ cbuffer PS_PIXELSIZE : register(b1)
 /* Main */
 /************************************************************/
 
-
-PS_OUTPUT ps_main( in PS_INPUT In )
+float4 Demultiply(float4 _Render, bool _Premultiplied)
 {
-    PS_OUTPUT Out;
+    if(_Premultiplied)
+    {
+	    if ( _Render.a != 0.0 ) {
+            _Render.rgb /= _Render.a;
+        }
+    }
 
-    float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
+	return _Render;
+}
+
+float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
+{
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
 
-        float4 _Result;
-        float4 _Render;
+        float4 _Result, _Render;
 
-        if(_Blending_Mode == 0) {   _Result = _Render_Texture;      _Render = _Render_Texture;  }
-        else                    {   _Result = _Render_Background;   _Render = _Render_Background; }
-
-            float _Lum = ((0.2126 * _Render.r + 0.7152 * _Render.g + 0.0722 * _Render.b) * 63.0);
+        if(!_Blending_Mode)
+        {
+            _Result = _Render_Texture;
+            _Render = _Render_Texture;
+        }
+        else
+        {
+            _Result.rgb = _Render_Background.rgb;
+            _Result.a = _Render_Texture.a;
+            
+            _Render = _Render_Background;
+        }
+            
+            float _Lum = dot(_Result.rgb, float3(0.2126, 0.7152, 0.0722)) * 63.0;
             _Lum = floor(_Lum);
-            //_Lum /= 15.0;
 
                 float2 _UV = frac(In.texCoord / float2(fPixelWidth, fPixelHeight) / 32.0); 
 
-                    _UV.x *= (32.0 / 2048.0);
-                    _UV.x += (_Lum * 32.0 / 2048.0);
+                    _UV.x *= 32.0 / 2048.0;
+                    _UV.x += _Lum * 32.0 / 2048.0;
                     
-                float3 _Dither = S2D_Dither.Sample(S2D_DitherSampler, _UV).rgb;
+                float3 _Dither = _Texture_Dithering.Sample(_Texture_Dithering_Sampler, _UV).rgb;
                 _Result.rgb = _Dither;
 
             _Result.rgb = (_Lum * _Dither.r / 63.0 >= _Threshold) ? _Color.rgb : _ColorShadow.rgb;
 
-            _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);  
+        _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
 
-    _Result.a = _Render_Texture.a;
-    Out.Color = _Result;
-    
-    return Out;
+    return _Result;
 }
 
 /************************************************************/
-/* Premultiplied Alpha */
+/* Render */
 /************************************************************/
 
-float4 Demultiply(float4 _Color)
-{
-	if ( _Color.a != 0 )   _Color.rgb /= _Color.a;
-	return _Color;
+float4 ps_main(in PS_INPUT In) : SV_TARGET { 
+    float4 _Render = Main(In, false);
+    return _Render;
 }
 
-PS_OUTPUT ps_main_pm( in PS_INPUT In ) 
+float4 ps_main_pm(in PS_INPUT In) : SV_TARGET
 {
-    PS_OUTPUT Out;
+    float4 _Render = Main(In, true);
+    _Render.rgb *= _Render.a;
 
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
-
-        float4 _Result;
-        float4 _Render;
-
-        if(_Blending_Mode == 0) {   _Result = _Render_Texture;      _Render = _Render_Texture;  }
-        else                    {   _Result = _Render_Background;   _Render = _Render_Background; }
-
-            float _Lum = ((0.2126 * _Render.r + 0.7152 * _Render.g + 0.0722 * _Render.b) * 63.0);
-            _Lum = floor(_Lum);
-            //_Lum /= 15.0;
-
-                float2 _UV = frac(In.texCoord / float2(fPixelWidth, fPixelHeight) / 32.0); 
-
-                    _UV.x *= (32.0 / 2048.0);
-                    _UV.x += (_Lum * 32.0 / 2048.0);
-                    
-                float3 _Dither = S2D_Dither.Sample(S2D_DitherSampler, _UV).rgb;
-                _Result.rgb = _Dither;
-
-            _Result.rgb = (_Lum * _Dither.r / 63.0 >= _Threshold) ? _Color.rgb : _ColorShadow.rgb;
-
-            _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing); 
-
-    _Result.a = _Render_Texture.a;
-    
-    _Result.rgb *= _Result.a;
-
-    Out.Color = _Result;
-    return Out;  
+    return _Render;
 }

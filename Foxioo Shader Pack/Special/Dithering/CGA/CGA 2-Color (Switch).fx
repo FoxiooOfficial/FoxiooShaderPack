@@ -74,31 +74,29 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
             _Render = _Render_Background;
         }
 
-        int2 _Dith = int2(  fmod(In.x / fPixelWidth,   4.0), 
-                            fmod(In.y / fPixelHeight,  4.0)
-                        );
+        int2 _Dith = int2(fmod(In / float2(fPixelWidth, fPixelHeight), 4.0));
 
         int _Index = _Dith.x + _Dith.y * 4;
         float _DithValue = _Dithering[_Index];
                 
-        float3 _Color = _Result.rgb + (_DithValue - 0.5) * _DitheringSize;
+            float3 _Color = _Result.rgb + (_DithValue - 0.5) * _DitheringSize;
                 
             float _MinDist = 1e9;
             int _IndexC = 0;
-                
-            for (int i = 0; i < _Palette_Size; i++)
-            {
+            
                 float3 _PO = Fun_Convert(_Color);
-                float3 _PL = Fun_Convert(_Palette[i]);
-                    
-                float _Dist = distance(_PO, _PL);
-                    
-                if (_Dist < _MinDist)
+                for (int i = 0; i < _Palette_Size; i++)
                 {
-                    _MinDist = _Dist;
-                    _IndexC = i;
+                    float3 _PL = Fun_Convert(_Palette[i]);
+                    float3 _Diff = _PO - _PL;
+                    float _Dist = dot(_Diff, _Diff);
+                        
+                    if (_Dist < _MinDist)
+                    {
+                        _MinDist = _Dist;
+                        _IndexC = i;
+                    }
                 }
-            }
 
         _Result.rgb = _Palette[_IndexC];
         _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing); 

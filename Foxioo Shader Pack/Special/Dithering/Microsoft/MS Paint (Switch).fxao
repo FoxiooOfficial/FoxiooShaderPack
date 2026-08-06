@@ -57,7 +57,7 @@ uniform float fPixelHeight;
 uniform float _Mixing;
 uniform bool _Blending_Mode;
 uniform float _DitheringSize;
-uniform bool _Is_Pre_296_Build;
+
 uniform float _Add;
 uniform float _Mul;
 
@@ -133,17 +133,14 @@ vec3 Fun_Convert(vec3 _Color)
     return mix(_High, _Low, step(_Color, vec3(0.04045)));
 }
 
-float Fun_FMod(float _Value, float _Denom) {
+vec2 Fun_FMod(vec2 _Value, vec2 _Denom) {
     return _Value - _Denom * floor(_Value / _Denom);
 }
 
 void main(void)
 {
-    vec2 In_Background = In;
-    if(_Is_Pre_296_Build) In_Background.y = 1.0 - In_Background.y;
-
     vec4 _Render_Texture = texture2D(imgTexture, In) * blendColor;
-    vec4 _Render_Background = texture2D(bckgTexture, In_Background);
+    vec4 _Render_Background = texture2D(bckgTexture, In);
 
     _Render_Texture.rgb = _Render_Texture.rgb * _Mul + _Add;
     _Render_Background.rgb = _Render_Background.rgb * _Mul + _Add;
@@ -163,27 +160,29 @@ void main(void)
             _Render = _Render_Background;
         }
 
-        vec2 _Dith = vec2(  Fun_FMod(In.x / fPixelWidth,    4.0), 
-                            Fun_FMod(In.y / fPixelHeight,   4.0)
-                        );
+       vec2 _Dith = vec2(Fun_FMod(In / vec2(fPixelWidth, fPixelHeight), vec2(4.0)));
 
         int _Index = int(_Dith.x) + int(_Dith.y) * 4;
         float _DithValue = Fun_Dithering(_Index);
 
-        vec3 _Color = _Result.rgb + (_DithValue - 0.5) * _DitheringSize;
+            vec3 _Color = _Result.rgb + (_DithValue - 0.5) * _DitheringSize;
 
             float _MinDist = 1e9;
             int _IndexC = 0;
 
-            for(int i = 0; i < _Palette_Size; i++)
-            {
                 vec3 _PO = Fun_Convert(_Color);
-                vec3 _PL = Fun_Convert(Fun_Color(i));
+                for(int i = 0; i < _Palette_Size; i++)
+                {
+                    vec3 _PL = Fun_Convert(Fun_Color(i));
+                    vec3 _Diff = _PO - _PL;
+                    float _Dist = dot(_Diff, _Diff);
 
-                float _Dist = distance(_PO, _PL);
-
-                if(_Dist < _MinDist)    {   _MinDist = _Dist;   _IndexC = i;    }
-            }
+                    if (_Dist < _MinDist)
+                    {
+                        _MinDist = _Dist;
+                        _IndexC = i;
+                    }
+                }
 
         _Result.rgb = Fun_Color(_IndexC);
         _Result.rgb = mix(_Render.rgb, _Result.rgb, _Mixing);

@@ -14,7 +14,7 @@
 
 sampler2D S2D_Image : register(s0);
 sampler2D S2D_Background : register(s1);
-sampler2D S2D_Dither : register(s2);
+sampler2D _Texture_Dithering : register(s2);
 
 /***********************************************************/
 /* Varibles */
@@ -36,28 +36,35 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In);
 
-        float4 _Result;
-        float4 _Render;
+        float4 _Result, _Render;
 
-        if(_Blending_Mode == 0) {   _Result = _Render_Texture;      _Render = _Render_Texture;  }
-        else                    {   _Result = _Render_Background;   _Render = _Render_Background; }
+        if(!_Blending_Mode)
+        {
+            _Result = _Render_Texture;
+            _Render = _Render_Texture;
+        }
+        else
+        {
+            _Result.rgb = _Render_Background.rgb;
+            _Result.a = _Render_Texture.a;
             
-            float _Lum = ((0.2126 * _Render.r + 0.7152 * _Render.g + 0.0722 * _Render.b) * 63.0);
+            _Render = _Render_Background;
+        }
+            
+            float _Lum = dot(_Result.rgb, float3(0.2126, 0.7152, 0.0722)) * 63.0;
             _Lum = floor(_Lum);
-            //_Lum /= 15.0;
 
                 float2 _UV = frac(In / float2(fPixelWidth, fPixelHeight) / 32.0); 
 
                     _UV.x *= (32.0 / 2048.0);
                     _UV.x += (_Lum * 32.0 / 2048.0);
                     
-                float3 _Dither = tex2D(S2D_Dither, _UV).rgb;
+                float3 _Dither = tex2D(_Texture_Dithering, _UV).rgb;
                 _Result.rgb = _Dither;
 
             _Result.rgb = (_Lum * _Dither.r / 63.0 >= _Threshold) ? _Color.rgb : _ColorShadow.rgb;
 
-        _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing); 
-        _Result.a = _Render_Texture.a;
+        _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
 
     return _Result;
 }
