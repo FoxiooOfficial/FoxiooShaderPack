@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.8 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -31,15 +32,13 @@ cbuffer PS_VARIABLES : register(b0)
     float _Saturation;
     float _Lightness;
     bool __;
-
-	bool _Is_Pre_296_Build;
-	bool ___;
 };
 
 struct PS_INPUT
 {
-  float4 Tint : COLOR0;
-  float2 texCoord : TEXCOORD0;
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float4 Position : SV_POSITION;
 };
 
 struct PS_OUTPUT
@@ -57,115 +56,88 @@ cbuffer PS_PIXELSIZE : register(b1)
 /* Main */
 /************************************************************/
 
-PS_OUTPUT ps_main( in PS_INPUT In )
+float4 Demultiply(float4 _Render, bool _Premultiplied)
 {
-    PS_OUTPUT Out;
-
-    float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord) * In.Tint;
-
-    float4 _Render = _Render_Texture;
-    float4 _Result, _RenderHelper;
-
-    if(_Blending_Mode != 0) { _Render = _Render_Background; }
-    _RenderHelper = _Render;
-
-    float _Temp_Hue = (_Hue / 120.0) % 3;
-    if (_Temp_Hue < 0) _Temp_Hue = 3 - abs(_Temp_Hue);
-
-        if (_Temp_Hue >= 0 && _Temp_Hue < 1)
-        {
-            _Result.r = _Render.r + (_Render.g - _Render.r) * _Temp_Hue;
-            _Result.g = _Render.g + (_Render.b - _Render.g) * _Temp_Hue;
-            _Result.b = _Render.b + (_Render.r - _Render.b) * _Temp_Hue;
+    if(_Premultiplied)
+    {
+	    if ( _Render.a != 0.0 ) {
+            _Render.rgb /= _Render.a;
         }
+    }
 
-        else if (_Temp_Hue >= 1 && _Temp_Hue < 2)
-        {
-            _Result.r = _Render.g + (_Render.b - _Render.g) * (_Temp_Hue - 1);
-            _Result.g = _Render.b + (_Render.r - _Render.b) * (_Temp_Hue - 1);
-            _Result.b = _Render.r + (_Render.g - _Render.r) * (_Temp_Hue - 1);
-        }
+	return _Render;
+}
 
-        else if (_Temp_Hue >= 2 && _Temp_Hue < 3)
-        {
-            _Result.r = _Render.b + (_Render.r - _Render.b) * (_Temp_Hue - 2);
-            _Result.g = _Render.r + (_Render.g - _Render.r) * (_Temp_Hue - 2);
-            _Result.b = _Render.g + (_Render.b - _Render.g) * (_Temp_Hue - 2);
-        }
+float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
+{
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
+    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
 
-    float _Color = (_Result.r + _Result.g + _Result.b) / 3.0;
-    
-    _Result.rgb = _Color * (1 - (_Saturation / 50.0)) + _Result.rgb * (_Saturation / 50.0);
+    // this code is bullshit.
+        float4 _Render;
+        float4 _Result;
 
-    _Result.rgb += (_Lightness - 50) / 50.0;
+            if(!_Blending_Mode)
+            {
+                _Render = _Render_Texture;
+                _Result = _Render_Texture;
+            }
+            else
+            {
+                _Render = _Render_Background;
+                _Result = _Render_Background;
+            }
 
-        _Result.rgb = lerp(_RenderHelper.rgb, _Result.rgb, _Mixing);
+        /* Hue */
+        float _Hue_Temp = fmod(_Hue / 120.0, 3.0);
+        if (_Hue_Temp < 0.0) _Hue_Temp = 3.0 - abs(_Hue_Temp);
 
-    _Result.a = _Render_Texture.a;
-    Out.Color = _Result;
-    
-    return Out;
+                if (_Hue_Temp >= 0.0 && _Hue_Temp < 1.0)
+                {
+                    _Render.r = _Result.r + (_Result.g - _Result.r) * _Hue_Temp;
+                    _Render.g = _Result.g + (_Result.b - _Result.g) * _Hue_Temp;
+                    _Render.b = _Result.b + (_Result.r - _Result.b) * _Hue_Temp;
+                }
+
+                else if (_Hue_Temp >= 1.0 && _Hue_Temp < 2.0)
+                {
+                    _Render.r = _Result.g + (_Result.b - _Result.g) * (_Hue_Temp - 1.0);
+                    _Render.g = _Result.b + (_Result.r - _Result.b) * (_Hue_Temp - 1.0);
+                    _Render.b = _Result.r + (_Result.g - _Result.r) * (_Hue_Temp - 1.0);
+                }
+
+                else if (_Hue_Temp >= 2.0 && _Hue_Temp < 3.0)
+                {
+                    _Render.r = _Result.b + (_Result.r - _Result.b) * (_Hue_Temp - 2.0);
+                    _Render.g = _Result.r + (_Result.g - _Result.r) * (_Hue_Temp - 2.0);
+                    _Render.b = _Result.g + (_Result.b - _Result.g) * (_Hue_Temp - 2.0);
+                }
+
+        float _Color = (_Render.r + _Render.g + _Render.b) / 3.0;
+
+            _Render.rgb = _Color * (1.0 - (_Saturation / 50.0)) + _Render.rgb * (_Saturation / 50.0);
+
+        _Render.rgb += (_Lightness - 50.0) / 50.0;
+
+    _Render.rgb = lerp(_Result.rgb, _Render.rgb, _Mixing);
+    _Render.a = _Render_Texture.a;
+
+    return _Render;
 }
 
 /************************************************************/
-/* Premultiplied Alpha */
+/* Render */
 /************************************************************/
 
-float4 Demultiply(float4 _Color)
-{
-	if ( _Color.a != 0 )   _Color.rgb /= _Color.a;
-	return _Color;
+float4 ps_main(in PS_INPUT In) : SV_TARGET{
+    float4 _Render = Main(In, false);
+    return _Render;
 }
 
-PS_OUTPUT ps_main_pm( in PS_INPUT In ) 
+float4 ps_main_pm(in PS_INPUT In) : SV_TARGET
 {
-    PS_OUTPUT Out;
+    float4 _Render = Main(In, true);
+    _Render.rgb *= _Render.a;
 
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord) * In.Tint;
-
-    float4 _Render = _Render_Texture;
-    float4 _Result, _RenderHelper;
-
-    if(_Blending_Mode != 0) { _Render = _Render_Background; }
-    _RenderHelper = _Render;
-
-    float _Temp_Hue = (_Hue / 120.0) % 3;
-    if (_Temp_Hue < 0) _Temp_Hue = 3 - abs(_Temp_Hue);
-
-        if (_Temp_Hue >= 0 && _Temp_Hue < 1)
-        {
-            _Result.r = _Render.r + (_Render.g - _Render.r) * _Temp_Hue;
-            _Result.g = _Render.g + (_Render.b - _Render.g) * _Temp_Hue;
-            _Result.b = _Render.b + (_Render.r - _Render.b) * _Temp_Hue;
-        }
-
-        else if (_Temp_Hue >= 1 && _Temp_Hue < 2)
-        {
-            _Result.r = _Render.g + (_Render.b - _Render.g) * (_Temp_Hue - 1);
-            _Result.g = _Render.b + (_Render.r - _Render.b) * (_Temp_Hue - 1);
-            _Result.b = _Render.r + (_Render.g - _Render.r) * (_Temp_Hue - 1);
-        }
-
-        else if (_Temp_Hue >= 2 && _Temp_Hue < 3)
-        {
-            _Result.r = _Render.b + (_Render.r - _Render.b) * (_Temp_Hue - 2);
-            _Result.g = _Render.r + (_Render.g - _Render.r) * (_Temp_Hue - 2);
-            _Result.b = _Render.g + (_Render.b - _Render.g) * (_Temp_Hue - 2);
-        }
-
-    float _Color = (_Result.r + _Result.g + _Result.b) / 3.0;
-    
-    _Result.rgb = _Color * (1 - (_Saturation / 50.0)) + _Result.rgb * (_Saturation / 50.0);
-
-    _Result.rgb += (_Lightness - 50) / 50.0;
-
-            _Result.rgb = lerp(_RenderHelper.rgb, _Result.rgb, _Mixing);
-
-    _Result.a = _Render_Texture.a;
-    _Result.rgb *= _Result.a;
-
-    Out.Color = _Result;
-    return Out;
+    return _Render;
 }
