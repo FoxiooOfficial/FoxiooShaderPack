@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.8 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -31,15 +32,13 @@ cbuffer PS_VARIABLES : register(b0)
     float _Saturation;
     float _Lightness;
     bool __;
-
-	bool _Is_Pre_296_Build;
-	bool ___;
 };
 
 struct PS_INPUT
 {
-  float4 Tint : COLOR0;
-  float2 texCoord : TEXCOORD0;
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float4 Position : SV_POSITION;
 };
 
 struct PS_OUTPUT
@@ -72,19 +71,16 @@ float3 RGBtoHSL(float3 _Render)
         _S = _Delta / (1.0 - abs(2.0 * _L - 1.0));
 
         if (_CMax == _Render.r)
-        {
             _H = 60.0 * ((_Render.g - _Render.b) / _Delta);
-        }
-        else if (_CMax == _Render.g)
-        {
-            _H = 60.0 * ((_Render.b - _Render.r) / _Delta + 2.0);
-        }
-        else
-        {
-            _H = 60.0 * ((_Render.r - _Render.g) / _Delta + 4.0);
-        }
 
-        if (_H < 0.0) _H += 360.0;
+        else if (_CMax == _Render.g)
+            _H = 60.0 * ((_Render.b - _Render.r) / _Delta + 2.0);
+
+        else
+            _H = 60.0 * ((_Render.r - _Render.g) / _Delta + 4.0);
+
+        if (_H < 0.0)
+            _H += 360.0;
     }
     
     return float3(_H, _S, _L);
@@ -96,91 +92,65 @@ float3 HSLtoRGB(float _H, float _S, float _L)
     float _X = _C * (1.0 - abs((fmod(_H / 60.0, 2.0)) - 1.0));
     float _M = _L - _C * 0.5;
     
-    float3 _Render =    (_H < 60.0) ? float3(_C, _X,  0) :
-                        (_H < 120.0) ? float3(_X, _C,  0) :
-                        (_H < 180.0) ? float3( 0, _C, _X) :
-                        (_H < 240.0) ? float3( 0, _X, _C) :
-                        (_H < 300.0) ? float3(_X,  0, _C) :
-                        float3(_C, 0, _X);
+    float3 _Render =    (_H < 60.0)   ? float3(_C, _X, 0.0) :
+                        (_H < 120.0)  ? float3(_X, _C, 0.0) :
+                        (_H < 180.0)  ? float3(0.0, _C, _X) :
+                        (_H < 240.0)  ? float3(0.0, _X, _C) :
+                        (_H < 300.0)  ? float3(_X, 0.0, _C) :
+                                        float3(_C, 0.0, _X);
     
     return (_Render + _M);
 }
 
-PS_OUTPUT ps_main( in PS_INPUT In )
+float4 Demultiply(float4 _Render, bool _Premultiplied)
 {
-    PS_OUTPUT Out;
+    if(_Premultiplied)
+    {
+	    if ( _Render.a != 0.0 ) {
+            _Render.rgb /= _Render.a;
+        }
+    }
 
-    float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord) * In.Tint;
+	return _Render;
+}
 
-        float4 _Render =    _Blending_Mode ? _Render_Background : _Render_Texture;
-        float4 _Result =    _Render;
+float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
+{
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
+    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
 
-    /* Hue Adjustment */
-        float3 _HSL = RGBtoHSL(_Render.rgb);
-            _HSL.x = fmod(_HSL.x + _Hue, 360.0);
+        float4 _Render = _Blending_Mode ? _Render_Background : _Render_Texture;
+        float4 _Result = _Render;
 
-            if (_HSL.x < 0.0) { _HSL.x += 360.0; }
+            float3 _HSL = RGBtoHSL(_Render.rgb);
 
-        _Render.rgb = HSLtoRGB(_HSL.x, _HSL.y, _HSL.z);
+                _HSL.x = fmod(_HSL.x + _Hue, 360.0);
+                    if (_HSL.x < 0.0) _HSL.x += 360.0;
+                    
+                _HSL.y = (_HSL.y * (_Saturation / 50.0));
+                _HSL.z = (_HSL.z + (_Lightness - 50.0) / 50.0);
 
-    /* Saturation Adjustment */
-        float _Color = (_Render.r + _Render.g + _Render.b) / 3.0;
-            _Render.rgb = lerp(_Color, _Render.rgb, _Saturation / 50.0);
+            _Result.rgb = HSLtoRGB(_HSL.x, _HSL.y, _HSL.z);
 
-    /* Lightness Adjustment */
-        _Render.rgb += (_Lightness - 50.0) / 50.0;
+        _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
+        _Result.a = _Render_Texture.a;
 
-    /* Mixing */
-        _Render.rgb = lerp(_Result.rgb, _Render.rgb, _Mixing);
-    
-    _Render.a = _Render_Texture.a;
-    Out.Color = _Render;
-    
-    return Out;
+    return _Result;
 }
 
 /************************************************************/
-/* Premultiplied Alpha */
+/* Render */
 /************************************************************/
 
-float4 Demultiply(float4 _Color)
-{
-	if ( _Color.a != 0 )   _Color.rgb /= _Color.a;
-	return _Color;
+float4 ps_main(in PS_INPUT In) : SV_TARGET{
+    float4 _Render = Main(In, false);
+    return _Render;
 }
 
-PS_OUTPUT ps_main_pm( in PS_INPUT In ) 
+float4 ps_main_pm(in PS_INPUT In) : SV_TARGET
 {
-    PS_OUTPUT Out;
-
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord) * In.Tint;
-
-        float4 _Render =    _Blending_Mode ? _Render_Background : _Render_Texture;
-        float4 _Result =    _Render;
-
-    /* Hue Adjustment */
-        float3 _HSL = RGBtoHSL(_Render.rgb);
-            _HSL.x = fmod(_HSL.x + _Hue, 360.0);
-
-            if (_HSL.x < 0.0) { _HSL.x += 360.0; }
-
-        _Render.rgb = HSLtoRGB(_HSL.x, _HSL.y, _HSL.z);
-
-    /* Saturation Adjustment */
-        float _Color = (_Render.r + _Render.g + _Render.b) / 3.0;
-            _Render.rgb = lerp(_Color, _Render.rgb, _Saturation / 50.0);
-
-    /* Lightness Adjustment */
-        _Render.rgb += (_Lightness - 50.0) / 50.0;
-
-    /* Mixing */
-        _Render.rgb = lerp(_Result.rgb, _Render.rgb, _Mixing);
-    
-    _Render.a = _Render_Texture.a;
+    float4 _Render = Main(In, true);
     _Render.rgb *= _Render.a;
 
-    Out.Color = _Render;
-    return Out;
+    return _Render;
 }

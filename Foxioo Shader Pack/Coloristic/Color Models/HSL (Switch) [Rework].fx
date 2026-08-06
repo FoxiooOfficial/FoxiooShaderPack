@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.8 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -42,19 +43,16 @@ float3 RGBtoHSL(float3 _Render)
         _S = _Delta / (1.0 - abs(2.0 * _L - 1.0));
 
         if (_CMax == _Render.r)
-        {
             _H = 60.0 * ((_Render.g - _Render.b) / _Delta);
-        }
-        else if (_CMax == _Render.g)
-        {
-            _H = 60.0 * ((_Render.b - _Render.r) / _Delta + 2.0);
-        }
-        else
-        {
-            _H = 60.0 * ((_Render.r - _Render.g) / _Delta + 4.0);
-        }
 
-        if (_H < 0.0) _H += 360.0;
+        else if (_CMax == _Render.g)
+            _H = 60.0 * ((_Render.b - _Render.r) / _Delta + 2.0);
+
+        else
+            _H = 60.0 * ((_Render.r - _Render.g) / _Delta + 4.0);
+
+        if (_H < 0.0)
+            _H += 360.0;
     }
     
     return float3(_H, _S, _L);
@@ -66,45 +64,38 @@ float3 HSLtoRGB(float _H, float _S, float _L)
     float _X = _C * (1.0 - abs((fmod(_H / 60.0, 2.0)) - 1.0));
     float _M = _L - _C * 0.5;
     
-    float3 _Render =    (_H < 60.0) ? float3(_C, _X,  0) :
-                        (_H < 120.0) ? float3(_X, _C,  0) :
-                        (_H < 180.0) ? float3( 0, _C, _X) :
-                        (_H < 240.0) ? float3( 0, _X, _C) :
-                        (_H < 300.0) ? float3(_X,  0, _C) :
-                        float3(_C, 0, _X);
+    float3 _Render =    (_H < 60.0)   ? float3(_C, _X, 0.0) :
+                        (_H < 120.0)  ? float3(_X, _C, 0.0) :
+                        (_H < 180.0)  ? float3(0.0, _C, _X) :
+                        (_H < 240.0)  ? float3(0.0, _X, _C) :
+                        (_H < 300.0)  ? float3(_X, 0.0, _C) :
+                                        float3(_C, 0.0, _X);
     
     return (_Render + _M);
 }
-
 
 float4 Main(in float2 In : TEXCOORD0) : COLOR0
 {
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In);
 
-        float4 _Render =    _Blending_Mode ? _Render_Background : _Render_Texture;
-        float4 _Result =    _Render;
+        float4 _Render = _Blending_Mode ? _Render_Background : _Render_Texture;
+        float4 _Result = _Render;
 
-    /* Hue Adjustment */
-        float3 _HSL = RGBtoHSL(_Render.rgb);
-            _HSL.x = fmod(_HSL.x + _Hue, 360.0);
+            float3 _HSL = RGBtoHSL(_Render.rgb);
 
-            if (_HSL.x < 0.0) { _HSL.x += 360.0; }
+                _HSL.x = fmod(_HSL.x + _Hue, 360.0);
+                    if (_HSL.x < 0.0) _HSL.x += 360.0;
+                    
+                _HSL.y = (_HSL.y * (_Saturation / 50.0));
+                _HSL.z = (_HSL.z + (_Lightness - 50.0) / 50.0);
 
-        _Render.rgb = HSLtoRGB(_HSL.x, _HSL.y, _HSL.z);
+            _Result.rgb = HSLtoRGB(_HSL.x, _HSL.y, _HSL.z);
 
-    /* Saturation Adjustment */
-        float _Color = (_Render.r + _Render.g + _Render.b) / 3.0;
-            _Render.rgb = lerp(_Color, _Render.rgb, _Saturation / 50.0);
+        _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
+        _Result.a = _Render_Texture.a;
 
-    /* Lightness Adjustment */
-        _Render.rgb += (_Lightness - 50.0) / 50.0;
-
-    /* Mixing */
-        _Render.rgb = lerp(_Result.rgb, _Render.rgb, _Mixing);
-    
-    _Render.a = _Render_Texture.a;
-    return _Render;
+    return _Result;
 }
 
 /************************************************************/
