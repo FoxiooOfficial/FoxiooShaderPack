@@ -1,5 +1,5 @@
 <effect>
-	<name>Magnavox Odyssey 2 16-Color (Switch)</name>
+	<name>Magnavox Odyssey 2 16-Color Palette (Switch)</name>
 		<description>This shader uses the 16-color palette from Magnavox Odyssey 2 and also adds dithering.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Magnavox Odyssey 2 16-Color (Switch) Shader | 2026.08.06 */</name>
+			<name>/* Foxioo Magnavox Odyssey 2 16-Color Palette (Switch) Shader | 2026.08.06a */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

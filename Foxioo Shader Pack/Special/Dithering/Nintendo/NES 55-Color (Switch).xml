@@ -1,5 +1,5 @@
 <effect>
-	<name>NES 55-Color (Switch)</name>
+	<name>NES 55-Color Palette (Switch)</name>
 		<description>This shader uses the 55-color palette from NES and also adds dithering.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo NES 55-Color (Switch) Shader | 2026.08.06 */</name>
+			<name>/* Foxioo NES 55-Color Palette (Switch) Shader | 2026.08.06a */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
