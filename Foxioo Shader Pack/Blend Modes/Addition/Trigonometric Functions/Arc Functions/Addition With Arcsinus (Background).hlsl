@@ -28,10 +28,8 @@ cbuffer PS_VARIABLES : register(b0)
     bool _;
     float _Mixing;
     float _Mul;
-    bool __;
-	bool _Is_Pre_296_Build;
     int _Render_Switch;
-	bool ___;
+	bool __;
 };
 
 struct PS_INPUT

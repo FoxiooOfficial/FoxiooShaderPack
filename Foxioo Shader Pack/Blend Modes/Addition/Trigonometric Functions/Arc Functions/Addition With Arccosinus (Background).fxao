@@ -57,7 +57,6 @@ uniform lowp vec4 blendColor;
 uniform float _Mixing;
 uniform float _Mul;
 uniform int _Render_Switch;
-uniform bool _Is_Pre_296_Build;
 
 /************************************************************/
 /* Main */
@@ -106,11 +105,9 @@ vec3 Fun_Acos(vec3 _Color, int _Case)
 }
 
 void main(void)
-{
-	vec2 In_Background = vec2(In.x, 1.0 - In.y);
-	
+{	
 	vec4 _Render_Texture = texture2D(imgTexture, In) * blendColor;
-	vec4 _Render_Background = _Is_Pre_296_Build ? texture2D(bckgTexture, In_Background) : texture2D(bckgTexture, In);
+	vec4 _Render_Background = texture2D(bckgTexture, In);
 
 		vec4 _Result = _Render_Texture + (_Render_Background * _Mul);
 

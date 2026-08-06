@@ -65,7 +65,6 @@ uniform lowp vec4 blendColor;
 
 uniform float _Mixing;
 uniform float _Mul;
-uniform bool _Is_Pre_296_Build;
 
 /************************************************************/
 /* Main */
@@ -78,11 +77,8 @@ vec4 Fun_Sinh(vec4 Color) {
 out vec4 fragColor;
 void main(void)
 {
-    vec2 In_Background = In;
-    if(_Is_Pre_296_Build) In_Background.y = 1.0 - In_Background.y;
-
     vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
-    vec4 _Render_Background = texture(bckgTexture, In_Background);
+    vec4 _Render_Background = texture(bckgTexture, In);
 
             vec4 _Result = Fun_Sinh(_Render_Texture + (_Render_Background * _Mul));
             _Result.rgb = mix(_Render_Texture.rgb, _Result.rgb, _Mixing);
