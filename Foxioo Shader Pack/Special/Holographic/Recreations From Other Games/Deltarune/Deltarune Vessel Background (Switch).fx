@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.1 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -23,39 +24,42 @@ sampler2D S2D_Background : register(s1);
             _Offset,
             _Time,
 
-            _PointX, _PointY,
-            fPixelWidth, fPixelHeight;
+            _PointX, _PointY;
         
     bool    _Blending_Mode;
+
+    int     _Quality;
 
 /************************************************************/
 /* Main */
 /************************************************************/
 
 static const float _Pi = 3.14159265359;
-static const int _Size = 6;
 
 float4 Fun_Vessel(sampler2D S2D, float2 UV)
 {
-    float4 _Result = float4(0, 0, 0, 1);
+    float4 _Result = (float4)0.0;
     float2 _Pos = float2(_PointX, _PointY);
 
-        for(float i = 1; i < _Size; i++)  
+        float _Weight = 0.0;
+        int i;
+        for(i = 0; i < _Quality; i++)  
         {
-            float _T = i / float(_Size);
+            float _T = float(i) / float(_Quality);
                 float2 _In = ((UV - _Pos) * frac(_Time + _T)) + _Pos;
                 float _Alpha = abs(sin((_Time + _T) * _Pi));
 
-                _Result += tex2D(S2D, frac(lerp(UV, _In, _Offset))) * _Alpha;
+                float4 _Render = tex2D(S2D, lerp(UV, _In, _Offset)) * _Alpha;
+                _Result += _Render;
+
+                _Weight += _Alpha;
         }
 
-    return _Result * 0.27;
+    return _Result / _Weight;
 }
 
 float4 Main(in float2 In : TEXCOORD0) : COLOR0
 {
-    In = frac(In);
-
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In);
 
@@ -65,7 +69,7 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
             _Result = lerp(_Render, _Result, _Mixing);
 
         if(_Blending_Mode)
-        _Result.a *= _Render_Texture.a;
+            _Result.a = _Render_Texture.a;
 
     return _Result;
 }
@@ -74,4 +78,4 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_2_0 Main(); } }
+technique tech_main { pass P0 { PixelShader = compile ps_3_0 Main(); } }

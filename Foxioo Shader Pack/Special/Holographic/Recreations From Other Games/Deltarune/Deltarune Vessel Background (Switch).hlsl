@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.1 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -25,17 +26,14 @@ SamplerState S2D_BackgroundSampler : register(s1);
 cbuffer PS_VARIABLES : register(b0)
 {
     bool _;
-    bool __;
-    float _PointX;
-    float _PointY;
-    bool ___;
     bool _Blending_Mode;
     float _Mixing;
+    float _PointX;
+    float _PointY;
     float _Offset;
     float _Time;
+    int _Quality;
     bool ____;
-	bool _Is_Pre_296_Build;
-	bool _____;
 };
 
 struct PS_INPUT
@@ -60,73 +58,72 @@ cbuffer PS_PIXELSIZE : register(b1)
 /************************************************************/
 
 static const float _Pi = 3.14159265359;
-static const int _Size = 6;
 
-float4 Fun_Vessel(Texture2D Texture, SamplerState Sampler, float2 UV, float4 _Mul)
+float4 Demultiply(float4 _Render, bool _Premultiplied)
 {
-    float4 _Result = float4(0, 0, 0, 1);
+    if(_Premultiplied)
+    {
+	    if ( _Render.a != 0.0 ) {
+            _Render.rgb /= _Render.a;
+        }
+    }
+
+	return _Render;
+}
+
+float4 Fun_Vessel(Texture2D Texture, SamplerState Sampler, float2 UV, float4 _Mul, bool _Premultiplied)
+{
+    float4 _Result = (float4)0.0;
     float2 _Pos = float2(_PointX, _PointY);
 
-        for(float i = 1; i < _Size; i++)  
+        float _Weight = 0.0;
+        int i;
+        for(i = 0; i < _Quality; i++)  
         {
-            float _T = i / float(_Size);
+            float _T = float(i) / float(_Quality);
                 float2 _In = ((UV - _Pos) * frac(_Time + _T)) + _Pos;
                 float _Alpha = abs(sin((_Time + _T) * _Pi));
 
-                _Result += Texture.Sample(Sampler, frac(lerp(UV, _In, _Offset))) * _Alpha * _Mul;
+                float4 _Render = Demultiply(Texture.Sample(Sampler, lerp(UV, _In, _Offset)) * _Mul, _Premultiplied);
+                _Result += _Render * _Alpha;
+
+                _Weight += _Alpha;
         }
 
-    return _Result * 0.27;
+    return _Result / _Weight;
 }
 
-
-PS_OUTPUT ps_main( in PS_INPUT In )
+float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
 {
-    PS_OUTPUT Out;
-
-    float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
 
         float4 _Render = _Blending_Mode ? _Render_Background : _Render_Texture;
-        float4 _Result = _Blending_Mode ? Fun_Vessel(S2D_Background, S2D_BackgroundSampler, In.texCoord, float4(1.0, 1.0, 1.0, 1.0)) : Fun_Vessel(S2D_Image, S2D_ImageSampler, In.texCoord, In.Tint);
+        float4 _Result = _Blending_Mode ? 
+                                        Fun_Vessel(S2D_Background, S2D_BackgroundSampler, In.texCoord, (float4)1.0, false) : 
+                                        Fun_Vessel(S2D_Image, S2D_ImageSampler, In.texCoord, In.Tint, _Premultiplied);
 
             _Result = lerp(_Render, _Result, _Mixing);
 
         if(_Blending_Mode)
-        _Result.a *= _Render_Texture.a;
+        _Result.a = _Render_Texture.a;
 
-    Out.Color = _Result;
-    
-    return Out;
+    return _Result;
 }
 
 /************************************************************/
-/* Premultiplied Alpha */
+/* Render */
 /************************************************************/
 
-float4 Demultiply(float4 _Color)
-{
-	if ( _Color.a != 0 )   _Color.rgb /= _Color.a;
-	return _Color;
+float4 ps_main(in PS_INPUT In) : SV_TARGET { 
+    float4 _Render = Main(In, false);
+    return _Render;
 }
 
-PS_OUTPUT ps_main_pm( in PS_INPUT In ) 
+float4 ps_main_pm(in PS_INPUT In) : SV_TARGET
 {
-    PS_OUTPUT Out;
+    float4 _Render = Main(In, true);
+    _Render.rgb *= _Render.a;
 
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
-
-        float4 _Render = _Blending_Mode ? _Render_Background : _Render_Texture;
-        float4 _Result = _Blending_Mode ? Fun_Vessel(S2D_Background, S2D_BackgroundSampler, In.texCoord, float4(1.0, 1.0, 1.0, 1.0)) : Fun_Vessel(S2D_Image, S2D_ImageSampler, In.texCoord, In.Tint);
-
-            _Result = lerp(_Render, Demultiply(_Result), _Mixing);
-
-        if(_Blending_Mode)
-        _Result.a *= _Render_Texture.a;
-
-    _Result.rgb *= _Result.a;
-
-    Out.Color = _Result;
-    return Out;
+    return _Render;
 }
