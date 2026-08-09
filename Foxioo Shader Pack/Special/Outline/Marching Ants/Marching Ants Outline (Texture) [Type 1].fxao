@@ -1,0 +1,109 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_vertex
+
+#ifdef GL_ES
+ precision mediump float;
+#endif
+uniform mat4 transformMatrix;
+uniform mat4 projectionMatrix;
+
+attribute vec4 position;
+attribute vec2 texCoord;
+varying vec2 In;
+
+void main(void)
+{
+	In = texCoord;
+	gl_Position = projectionMatrix * transformMatrix * position;
+}
+
+//@End
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+#ifdef GL_ES
+ precision mediump float;
+#endif
+
+varying vec2 In;
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+uniform sampler2D imgTexture;
+//uniform sampler2D bckgTexture;
+
+uniform lowp vec4 blendColor;
+uniform float fPixelWidth;
+uniform float fPixelHeight;
+
+/***********************************************************/
+/* Varibles */
+/***********************************************************/
+
+uniform float _Mixing;
+uniform float _Time;
+uniform float _Size;
+uniform float _Offset;
+
+uniform vec4 _Shadow;
+uniform vec4 _Light;
+/************************************************************/
+/* Main */
+/************************************************************/
+
+#define KERNEL 1
+
+void main(void)
+{
+    vec4 _Render_Texture = texture2D(imgTexture, In) * blendColor;
+    //vec4 _Render_Background = texture(bckgTexture, In);
+
+        vec4 _Result;
+        float _Alpha = 0.0, _Weight = 0.0;
+
+            vec2 _Pixel = vec2(fPixelWidth, fPixelHeight);
+
+                for(int y = -KERNEL; y <= KERNEL; y++)
+                {
+                    for(int x = -KERNEL; x <= KERNEL; x++)
+                    {
+                        vec2 _Off = vec2(x, y) * _Pixel * _Offset;
+                        _Alpha += texture2D(imgTexture, In + _Off).a;
+                        _Weight++;
+                    }
+                }
+
+            _Alpha /= _Weight;
+            
+        float _Outline = ceil(_Alpha - ceil(_Render_Texture.a) - 1.0 / 255.0);
+
+        vec2 UV = vec2(ivec2(ceil(In / _Pixel / _Size)));
+        UV *= 1.0 / _Pixel / 32.0;
+        UV /= _Size;
+
+            float _Pattern = sin((UV.x + UV.y) + _Time);
+            _Pattern = floor(_Pattern + 0.5);
+
+                _Result = vec4(mix(_Shadow.rgb, _Light.rgb, _Pattern).rgb, _Outline);
+                _Result = mix(vec4(_Render_Texture.rgb, ceil(_Render_Texture.a)), _Result, _Result.a); // it's overcomplicated...
+
+            _Result = mix(_Render_Texture, _Result, _Mixing);
+
+    gl_FragColor = _Result;
+}
+
+//@End
