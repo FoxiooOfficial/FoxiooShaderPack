@@ -1,0 +1,88 @@
+<effect>
+	<name>Luna XP Blue (Switch)</name>
+		<description>A recreation of the Windows XP "Luna" skin in blue.</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+			
+		    <sampler>
+				<index>0</index>
+				<filter>antialiasing</filter>
+				<addressU>border</addressU>
+				<addressV>border</addressV>
+				<borderColor>16711680</borderColor>
+			</sampler>
+
+		<parameter>
+			<name>/* Foxioo Luna XP Blue (Switch) Shader | 2026.08.09 */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>A recreation of the Windows XP "Luna" skin in blue.</description>
+		</parameter>
+
+			<parameter>
+				<name>Blending Mode</name>
+				<variable>_Blending_Mode</variable>
+
+				<description>This variable determines what the base should be. Setting it to 0 sets the base as the texture of the object on which the effect is applied, and setting it to 1 sets this as the background.</description>
+
+				<type>int</type>
+				<property>checkbox</property>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>1.0</value>
+			</parameter>
+
+			<parameter>
+				<name>Emboss Size</name>
+				<variable>_Size</variable>
+				
+				<description>This variable determines the distance of the emboss size.</description>
+
+				<type>float</type>
+
+				<value>2.0</value>
+				<preview_value>1.0</preview_value>
+			</parameter>
+
+
+        <parameter>
+            <name>/* */</name>
+            <property>checkbox</property>
+            <variable>__</variable>
+        </parameter>
+
+    <sampler>
+        <index>1</index>
+        <filter>point</filter>
+        <addressU>wrap</addressU>
+        <addressV>wrap</addressV>
+    </sampler>
+
+    <sampler>
+        <index>2</index>
+        <filter>point</filter>
+        <addressU>wrap</addressU>
+        <addressV>wrap</addressV>
+    </sampler>
+
+    <sampler>
+        <index>3</index>
+        <filter>point</filter>
+        <addressU>wrap</addressU>
+        <addressV>wrap</addressV>
+    </sampler>
+</effect>

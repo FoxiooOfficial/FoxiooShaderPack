@@ -1,0 +1,173 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_vertex
+//version_####
+
+uniform mat3 transformMatrix;
+uniform mat3 projectionMatrix;
+uniform mat3 objectMatrix;
+uniform mat3 textureMatrix;
+
+in vec2 position;
+out vec2 In;
+void main()
+{
+    vec3 pos = vec3(position, 1.0);
+    In = (textureMatrix * pos).xy;
+    gl_Position = vec4(projectionMatrix * transformMatrix * objectMatrix * pos, 1.0);
+}
+//@End
+
+/* ####################################################### */
+
+//@Begin_fragment
+//version_####
+
+#ifdef GL_ES
+    #if defined(GL_FRAGMENT_PRECISION_HIGH)
+        #define HIGH_PRECISION_SUPPORTED
+    #endif
+#else
+    #define HIGH_PRECISION_SUPPORTED    
+#endif
+
+#ifdef HIGH_PRECISION_SUPPORTED
+    precision highp float;
+#else
+    precision mediump float;
+#endif
+
+in vec2 In;
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+uniform sampler2D imgTexture;
+uniform sampler2D bckgTexture;
+
+uniform lowp vec4 blendColor;
+uniform float fPixelWidth;
+uniform float fPixelHeight;
+
+/***********************************************************/
+/* Varibles */
+/***********************************************************/
+
+uniform bool _Blending_Mode;
+uniform float _Size;
+uniform float _Mixing;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+vec4 _OverlayTop    = vec4(0.0, 0.28, 0.84, 1.0);
+vec4 _OverlayBottom = vec4(0.0, 0.08, 0.57, 1.0);
+
+vec3 _InnerLight     = vec3(0.25, 0.59, 1.0);
+vec3 _InnerShadow    = vec3(0.0, 0.14, 0.63);
+
+float Fun_Luminance(vec4 _Result)
+{
+    const float _Kr = 0.299;
+    const float _Kg = 0.587;
+    const float _Kb = 0.114;
+
+    float _Y = _Kr * _Result.r + _Kg * _Result.g + _Kb * _Result.b;
+
+    return _Y * _Result.a;
+}
+
+vec4 Fun_Border(sampler2D _Sampler, vec2 In, vec2 _Off, vec4 _Render, vec4 _Tint)
+{
+    float _Up      = Fun_Luminance(_Tint * texture(_Sampler, In + vec2(0.0,  _Off.y))) * 1.75;
+    float _Down    = Fun_Luminance(_Tint * texture(_Sampler, In + vec2(0.0, -_Off.y))) * 1.75;
+    float _Left    = Fun_Luminance(_Tint * texture(_Sampler, In + vec2( _Off.x, 0.0))) * 1.75;
+    float _Right   = Fun_Luminance(_Tint * texture(_Sampler, In + vec2(-_Off.x, 0.0))) * 1.75;
+
+        float _Glow = _Render.a - _Up;
+        float _Shadow = (_Render.a * 3.0) - (_Down + _Left + _Right);
+
+    vec4 _Result = vec4(0.0);
+    _Result = mix(_Result, _OverlayTop, _Glow);
+    _Result = mix(_Result, _OverlayBottom, _Shadow);
+
+    return _Result;
+}
+
+vec3 Fun_Sharp(sampler2D _Sampler, vec2 In, vec2 _Off, vec4 _Tint)
+{
+    vec2 _Emboss;
+
+    vec4 _NW = _Tint * texture(_Sampler, In + vec2(-_Off.x, -_Off.y));
+    vec4 _N  = _Tint * texture(_Sampler, In + vec2(0.0, -_Off.y));
+    vec4 _NE = _Tint * texture(_Sampler, In + vec2( _Off.x, -_Off.y));
+    vec4 _W  = _Tint * texture(_Sampler, In + vec2(-_Off.x, 0.0));
+    //vec4 _C  = _Tint * texture(_Sampler, In);
+    vec4 _E  = _Tint * texture(_Sampler, In + vec2( _Off.x, 0.0));
+    vec4 _SW = _Tint * texture(_Sampler, In + vec2(-_Off.x, _Off.y));
+    vec4 _S  = _Tint * texture(_Sampler, In + vec2(0.0,_Off.y));
+    vec4 _SE = _Tint * texture(_Sampler, In + vec2( _Off.x, _Off.y));
+
+        _Emboss.x = (Fun_Luminance(_NE) + 2.0 * Fun_Luminance(_E) + Fun_Luminance(_SE)) - (Fun_Luminance(_NW) + 2.0 * Fun_Luminance(_W) + Fun_Luminance(_SW));
+        _Emboss.y = (Fun_Luminance(_SW) + 2.0 * Fun_Luminance(_S) + Fun_Luminance(_SE)) - (Fun_Luminance(_NW) + 2.0 * Fun_Luminance(_N) + Fun_Luminance(_NE));
+        _Emboss.y = -_Emboss.y;
+
+    vec3 _Render = normalize(vec3(_Emboss.x, _Emboss.y, 0.15));
+    _Render = _Render * 0.5 + 0.5;
+
+    return _Render;
+}
+
+out vec4 fragColor;
+void main(void)
+{
+    vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
+    vec4 _Render_Background = texture(bckgTexture, In);
+
+        vec4 _Result, _Render;
+        float _Alpha;
+        vec2 _Offset = _Size * -vec2(fPixelWidth, fPixelHeight);
+
+            if(!_Blending_Mode)
+            {
+                _Result = _Render_Texture;
+                _Render = Fun_Border(imgTexture, In, _Offset, _Render_Texture, blendColor);
+
+                vec3 _Sharp = vec3(Fun_Sharp(imgTexture, In, _Offset, blendColor));
+                _Alpha = Fun_Luminance(vec4(_Sharp.r, _Sharp.g, _Sharp.b, _Render_Texture.a));
+            }
+            else
+            {
+                _Result.rgb = _Render_Background.rgb;
+                _Result.a = _Render_Texture.a;
+
+                _Render = Fun_Border(bckgTexture, In, _Offset, _Render_Background, vec4(1.0));
+
+                vec3 _Sharp = vec3(Fun_Sharp(bckgTexture, In, _Offset, vec4(1.0)));
+                _Alpha = Fun_Luminance(vec4(_Sharp.r, _Sharp.g, _Sharp.b, _Render_Texture.a));
+            }
+            
+                float _InnerMask = clamp((_Alpha * _Alpha) * 2.0, 0.0, 1.0) * 0.85;
+                vec3 _InnerColor = mix(_InnerShadow, _InnerLight, _InnerMask);
+
+                _InnerColor += (_InnerColor * (abs(In.y * 1.3 - 0.75) * _InnerLight)) * 0.25;
+                _InnerColor -= pow(abs(In.x * 2.0 - 1.0), 3.0) * 0.5 * _InnerShadow;
+
+            _Render.rgb = mix(_InnerColor, _Render.rgb, _Render.a / 18.0);
+
+        _Result.rgb = mix(_Result.rgb, _Render.rgb, _Mixing);
+
+    fragColor = _Result;
+}
+//@End
