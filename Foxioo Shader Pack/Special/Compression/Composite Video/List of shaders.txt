@@ -1,0 +1,12 @@
+Here is the list of all shaders from the August 10, 2026 (UTC+0200) release.
+
+1: | Composite Video (Background) [Type 2]
+2: | Composite Video (Background) [Type 3]
+3: | Composite Video (Background) [Type 4]
+4: | Composite Video (Background) [Type 5]
+5: | Composite Video (Texture) [Type 2]
+6: | Composite Video (Texture) [Type 3]
+7: | Composite Video (Texture) [Type 4]
+8: | Composite Video (Texture) [Type 5]
+9: | Composite Video Compression (Background)
+10: | Composite Video Compression (Texture)
