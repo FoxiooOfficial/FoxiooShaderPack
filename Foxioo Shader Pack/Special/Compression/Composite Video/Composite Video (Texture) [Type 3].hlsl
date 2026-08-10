@@ -62,41 +62,45 @@ static const float3 _L = float3(0.299, 0.587, 0.114);
 
 #define M_PI        3.14159265358979323846
 
-#define MHZ_CROMA   4.43361875
+#define MHZ_CROMA   3.579545
 #define MHZ_LUM     13.5
-#define MHZ_LIFT    283.75
+#define MHZ_LIFT    227.5
 
-#define FPS         25
+#define FPS         29.97
 #define SAMPLES     720
-#define LINES       576
+#define LINES       486
 
-float3 Fun_RGB2YUV(float3 _Render)
+float3 Fun_RGB2YIQ(float3 _Render)
 {
-    float Y = dot(_L, _Render);
-    float U = 0.492 * (_Render.b - Y);
-    float V = 0.877 * (_Render.r - Y);
-
-    return float3(Y, U, V);
+    float Y = dot(_Render, float3(0.299, 0.587, 0.114));
+    float I = dot(_Render, float3(0.596, -0.274, -0.322));
+    float Q = dot(_Render, float3(0.211, -0.523, 0.312));
+    return float3(Y, I, Q);
 }
 
-float3 Fun_YUV2RGB(float3 _YUV)
+float3 Fun_YIQ2RGB(float3 _YIQ)
 {
-    float Y = _YUV.r;
-    float U = _YUV.g;
-    float V = _YUV.b;
+    float Y = _YIQ.r;
+    float I = _YIQ.g;
+    float Q = _YIQ.b;
 
-    float R = Y + 1.13983 * V;
-    float G = Y - 0.39465 * U - 0.58060 * V;
-    float B = Y + 2.03211 * U;
-
+    float R = Y + 0.956 * I + 0.621 * Q;
+    float G = Y - 0.272 * I - 0.647 * Q;
+    float B = Y - 1.106 * I + 1.703 * Q;
     return float3(R, G, B);
 }
 
 float3 Fun_Blur(Texture2D _Texture, SamplerState _Sampler, float2 In, float _Offset)
 {
+    float3 _Render = _Texture.Sample(_Sampler, In).rgb;
+
     float3 _Result = 0.0;
     int x, y;
     float _W = 0.0;
+
+        float _DistG = max(0.0, _Render.g - max(_Render.r, _Render.b));
+        float _DistP = max(0.0, min(_Render.r, _Render.b) - _Render.g);
+        float _Mask = (_DistG + _DistP) * 0.5;
 
     for(y = 0; y < _Quality; y++)
     {
@@ -104,7 +108,8 @@ float3 Fun_Blur(Texture2D _Texture, SamplerState _Sampler, float2 In, float _Off
         {
             float2 _Off = float2(x, y);
             _Off -= floor(_Quality / 2.0);
-            _Result += _Texture.Sample(_Sampler, In + (float2(fPixelWidth, fPixelHeight) * _Off * _Offset * _Size) / _Quality).rgb;
+            _Off *= 1.0 + _Mask;
+            _Result += _Texture.Sample(_Sampler, In + (float2(fPixelWidth, fPixelHeight * 0.5) * _Off * _Offset * _Size) / _Quality).rgb;
             _W += 1.0;
         }
     }
@@ -141,16 +146,16 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
         
             // Luma
             float4 _Result = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord + _UV) * In.Tint, _Premultiplied);
-            float _Luma = Fun_RGB2YUV(_Result.rgb).x;
+            float _Luma = Fun_RGB2YIQ(_Result.rgb).x;
 
                 _Result.rgb = Fun_Blur(S2D_Image, S2D_ImageSampler, In.texCoord + _UV, 0.85) * In.Tint.rgb;
-                float3 _Render = Fun_RGB2YUV(_Result.rgb);
+                float3 _Render = Fun_RGB2YIQ(_Result.rgb);
                 float Y = _Render.x;
 
             // Chroma
             _Result.rgb = Fun_Blur(S2D_Image, S2D_ImageSampler, In.texCoord + float2(0.0, 2.0 * (_Vert / LINES)) * Y + _UV, 4.0) * In.Tint.rgb;
 
-                _Render = Fun_RGB2YUV(_Result.rgb);
+                _Render = Fun_RGB2YIQ(_Result.rgb);
                 float U = _Render.y;
                 float V = _Render.z;
 
@@ -168,7 +173,7 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
                 Y += (_Chroma * _CrossLuma);
 
             // Out
-            _Result.rgb = Fun_YUV2RGB(float3(Y, U, V));
+            _Result.rgb = Fun_YIQ2RGB(float3(Y, U, V));
             _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
 
         _Result.a = _Render_Texture.a;

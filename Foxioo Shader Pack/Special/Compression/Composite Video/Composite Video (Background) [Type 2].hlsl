@@ -66,7 +66,7 @@ static const float3 _L = float3(0.299, 0.587, 0.114);
 #define MHZ_LUM     13.5
 #define MHZ_LIFT    283.75
 
-#define FPS         50
+#define FPS         25
 #define SAMPLES     720
 #define LINES       576
 
@@ -129,7 +129,7 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
     float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
 
-    float2 _Pos = float2(floor(In.texCoord.x * SAMPLES), floor(In.texCoord.y * LINES + (_Time * FPS)));
+    float2 _Pos = float2(floor(In.texCoord.x * SAMPLES), floor(In.texCoord.y * LINES + (_Time * FPS * 2.0)));
 
         float _Vert = fmod(_Pos.y, 2.0) < 1.0 ? 1.0 : -1.0;
         float2 _Cycle = float2(MHZ_CROMA / MHZ_LUM, MHZ_LIFT);
