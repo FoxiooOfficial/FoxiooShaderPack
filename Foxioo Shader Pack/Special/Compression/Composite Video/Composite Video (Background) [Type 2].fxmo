@@ -1,0 +1,187 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_vertex
+//version_####
+
+uniform mat3 transformMatrix;
+uniform mat3 projectionMatrix;
+uniform mat3 objectMatrix;
+uniform mat3 textureMatrix;
+
+in vec2 position;
+out vec2 In;
+void main()
+{
+    vec3 pos = vec3(position, 1.0);
+    In = (textureMatrix * pos).xy;
+    gl_Position = vec4(projectionMatrix * transformMatrix * objectMatrix * pos, 1.0);
+}
+//@End
+
+/* ####################################################### */
+
+//@Begin_fragment
+//version_####
+
+#ifdef GL_ES
+    #if defined(GL_FRAGMENT_PRECISION_HIGH)
+        #define HIGH_PRECISION_SUPPORTED
+    #endif
+#else
+    #define HIGH_PRECISION_SUPPORTED    
+#endif
+
+#ifdef HIGH_PRECISION_SUPPORTED
+    precision highp float;
+#else
+    precision mediump float;
+#endif
+
+in vec2 In;
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+uniform sampler2D imgTexture;
+uniform sampler2D bckgTexture;
+
+uniform lowp vec4 blendColor;
+uniform float fPixelWidth;
+uniform float fPixelHeight;
+
+/***********************************************************/
+/* Varibles */
+/***********************************************************/
+
+uniform float _Mixing;
+uniform float _Time;
+uniform float _CrossLuma;
+uniform float _CrossColor;
+uniform float _Distortion;
+uniform float _Size;
+uniform int _Quality;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+const vec3 _L = vec3(0.299, 0.587, 0.114);
+
+#define M_PI        3.14159265358979323846
+
+#define MHZ_CROMA   4.43361875
+#define MHZ_LUM     13.5
+#define MHZ_LIFT    283.75
+
+#define FPS         50.0
+#define SAMPLES     720.0
+#define LINES       576.0
+
+vec3 Fun_RGB2YUV(vec3 _Render)
+{
+    float Y = dot(_L, _Render);
+    float U = 0.492 * (_Render.b - Y);
+    float V = 0.877 * (_Render.r - Y);
+
+    return vec3(Y, U, V);
+}
+
+vec3 Fun_YUV2RGB(vec3 _YUV)
+{
+    float Y = _YUV.r;
+    float U = _YUV.g;
+    float V = _YUV.b;
+
+    float R = Y + 1.13983 * V;
+    float G = Y - 0.39465 * U - 0.58060 * V;
+    float B = Y + 2.03211 * U;
+
+    return vec3(R, G, B);
+}
+
+float Fun_FMod(float x, float y) {
+    return x - y * (sign(x / y) * floor(abs(x / y)));
+}
+
+vec3 Fun_Blur(sampler2D _Sampler, vec2 In, float _Offset)
+{
+    vec3 _Result = vec3(0.0);
+    int x, y;
+    float _W = 0.0;
+
+    for(y = 0; y < _Quality; y++)
+    {
+        for(x = 0; x < _Quality; x++)
+        {
+            vec2 _Off = vec2(x, y);
+            _Off -= floor(float(_Quality) / 2.0);
+            _Result += texture(_Sampler, In + (vec2(fPixelWidth, fPixelHeight) * _Off * _Offset * _Size) / float(_Quality)).rgb;
+            _W += 1.0;
+        }
+    }
+
+    return _Result / _W;
+}
+
+out vec4 fragColor;
+void main(void)
+{  
+    vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
+    vec4 _Render_Background = texture(bckgTexture, In);
+
+    vec2 _Pos = vec2(floor(In.x * SAMPLES), floor(In.y * LINES + (_Time * FPS)));
+
+        float _Vert = Fun_FMod(_Pos.y, 2.0) < 1.0 ? 1.0 : -1.0;
+        vec2 _Cycle = vec2(MHZ_CROMA / MHZ_LUM, MHZ_LIFT);
+        float _Noise = _Distortion * sin(_Pos.y * 6.0 * _Distortion - _Time + 1.0 / cos(_Time * 15.0));
+        float _Phase = 2.0 * M_PI * ((_Pos.x * _Cycle.x) + (_Pos.y * _Cycle.y)) + _Noise;
+
+        vec2 _UV = 0.5 * mix(vec2(sin(_Phase + _Noise) * _Distortion * (1.0 / SAMPLES), 0.0), 5.0 * (In.yy / (_Noise / _Phase) * _Vert * _Distortion), _Distortion);
+        if(_Distortion == 0.0) _UV = vec2(0.0);
+
+            // Luma
+            vec4 _Result = texture(bckgTexture, In + _UV);
+            float _Luma = Fun_RGB2YUV(_Result.rgb).x;
+
+                _Result.rgb = Fun_Blur(bckgTexture, In + _UV, 0.85);
+                vec3 _Render = Fun_RGB2YUV(_Result.rgb);
+                float Y = _Render.x;
+
+            // Chroma
+            _Result.rgb = Fun_Blur(bckgTexture, In + vec2(0.0, 2.0 * (_Vert / LINES)) * Y + _UV, 4.0);
+
+                _Render = Fun_RGB2YUV(_Result.rgb);
+                float U = _Render.y;
+                float V = _Render.z;
+
+            // Rainbowing
+            float _Sin = sin(_Phase), _Cos = cos(_Phase);
+
+                _Luma = (Y - _Luma) * _CrossColor;
+                U += _Luma * _Cos;
+                V += _Luma * _Sin * _Vert;
+
+                float _Chroma = (U * _Cos) + (V * _Vert * _Sin);
+
+                // Cross-luma
+                Y += (_Chroma * _CrossLuma);
+
+            // Out
+            _Result.rgb = Fun_YUV2RGB(vec3(Y, U, V));
+            _Result.rgb = mix(_Render_Background.rgb, _Result.rgb, _Mixing);
+
+        _Result.a = _Render_Texture.a;
+
+    fragColor = _Result;
+}
+//@End

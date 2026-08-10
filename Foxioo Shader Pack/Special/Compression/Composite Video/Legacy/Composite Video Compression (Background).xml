@@ -1,5 +1,5 @@
 <effect>
-	<name>Composite Video Compression (Background)</name>
+	<name>Composite Video (Background) [Type 1; Legacy]</name>
 		<description>The shader simulates analog video compression similar to how a composite cable worked.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Composite Video Compression (Background) Shader | 1.0 (22.12.2025) */</name>
+			<name>/* Foxioo Composite Video (Background) [Type 1] Shader | 1.0 (22.12.2025) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

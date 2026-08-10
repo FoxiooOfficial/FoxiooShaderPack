@@ -1,0 +1,114 @@
+<effect>
+	<name>Composite Video (Texture) [Type 2; PAL]</name>
+		<description>The shader creates realistic Composite Video (PAL) effect.</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+
+		<sampler>
+		    <index>0</index>
+		    <filter>linear</filter>
+		    <addressU>border</addressU>
+		    <addressV>border</addressV>
+		</sampler>
+
+
+		<parameter>
+			<name>/* Foxioo Composite Video (Texture) [Type 2; PAL] Shader | 2026.08.10 */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>The shader creates realistic Composite Video (PAL) effect.</description>
+		</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Time</name>
+				<variable>_Time</variable>
+				
+				<description>This variable specifies the noise animation timer.</description>
+
+				<type>float</type>
+
+				<value>1.0</value>
+			</parameter>
+
+			<parameter>
+				<name>Cross Luma</name>
+				<variable>_CrossLuma</variable>
+				
+				<description>The variable responsible for the visibility of luminance artifacts.</description>
+
+				<type>float</type>
+
+				<value>0.2</value>
+			</parameter>
+
+			<parameter>
+				<name>Cross Color / Rainbowing</name>
+				<variable>_CrossColor</variable>
+				
+				<description>The variable that controls the visibility of color artifacts.</description>
+
+				<type>float</type>
+
+				<value>1.0</value>
+				<preview_value>2.0</preview_value>
+			</parameter>
+
+			<parameter>
+				<name>Distortion</name>
+				<variable>_Distortion</variable>
+				
+				<description>(EPILEPSY WARNING) This variable serves as a scale for distorting the final result; setting it to 0 disables the effect, while values slightly above zero (1e8, 1e7, 1e6) make the effect visible.</description>
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Size</name>
+				<variable>_Size</variable>
+				
+				<description>This variable specifies the &quot;blur&quot; size in pixels</description>
+
+				<type>float</type>
+
+				<value>3.0</value>
+			</parameter>
+
+			<parameter>
+				<name>Quality</name>
+				<variable>_Quality</variable>
+				
+				<description>This variable determines the quality; the higher the value, the more work the GPU does.</description>
+
+				<type>int</type>
+
+				<value>6</value>
+				<preview_value>4</preview_value>
+			</parameter>
+			
+        <parameter>
+            <name>/* */</name>
+            <property>checkbox</property>
+            <variable>__</variable>
+        </parameter>
+
+</effect>
+
+<!-- Please ignore this; the script that automatically compresses files into a ZIP archive needs to be aware of the additional files :3 -->
+<!-- INCLUDE CV2.mfa -->
