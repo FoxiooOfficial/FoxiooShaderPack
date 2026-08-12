@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.0 (22.12.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -19,16 +20,21 @@ sampler2D S2D_Background : register(s1);
 /* Varibles */
 /***********************************************************/
 
-    float _Mixing, _FraqMul, _Seed, _Time, _Hertz, _OffsetX_Pb, _OffsetY_Pb, _OffsetX_Pr, _OffsetY_Pr, _Phase,
+    float   _Mixing,
+            _FraqMul, 
+            _Seed, _Time, 
+            _Hertz,
+            _OffsetX_Pb, _OffsetY_Pb,
+            _OffsetX_Pr, _OffsetY_Pr,
+            _Phase,
     
-    fPixelWidth, fPixelHeight;
+            fPixelWidth, fPixelHeight;
 
 /************************************************************/
 /* Main */
 /************************************************************/
 
-float4 Fun_GetColor(float2 In, sampler2D _Texture)
-{
+float4 Fun_GetColor(float2 In, sampler2D _Texture) {
     return tex2D(_Texture, In);
 }
 
@@ -55,7 +61,7 @@ float4 Fun_Interpolation(float2 In, float _Segm, sampler2D _Texture, float _Smoo
 
 float3 Fun_Sharp_Ex(sampler2D _Sampler, float2 _In, float3 _Color, float _Sharpness_Size)
 {
-    float3 _Result_Sharpness = 5 * _Color - (
+    float3 _Result_Sharpness = 5.0 * _Color - (
                 tex2D(_Sampler, _In + (_Sharpness_Size * float2(fPixelWidth, fPixelHeight))) +
                 tex2D(_Sampler, _In - (_Sharpness_Size * float2(fPixelWidth, fPixelHeight))) +
                 tex2D(_Sampler, _In + (_Sharpness_Size * float2(fPixelWidth, fPixelHeight))) +
@@ -67,7 +73,7 @@ float3 Fun_Sharp_Ex(sampler2D _Sampler, float2 _In, float3 _Color, float _Sharpn
 
 float Fun_Sharp(sampler2D _Sampler, float2 _In, float3 _Color, float _Sharpness_Size)
 {
-    float3 _Result_Sharpness = 5 * _Color - (
+    float3 _Result_Sharpness = 5.0 * _Color - (
                 tex2D(_Sampler, _In + (_Sharpness_Size * float2(fPixelWidth, fPixelHeight))) +
                 tex2D(_Sampler, _In - (_Sharpness_Size * float2(fPixelWidth, fPixelHeight))) +
                 tex2D(_Sampler, _In + (_Sharpness_Size * float2(fPixelWidth, fPixelHeight))) +
@@ -137,6 +143,7 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
                 _Render.b += abs(cos(_Rand * 7568234.0 + _Time) * _Edge * _Y) * pow(_Y, 5.0);
 
                 _Result.rgb = lerp(_Result.rgb, _Render, _Mixing);
+                
         _Result.a = _Render_Texture.a;
 
     return _Result;
