@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.8 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -27,10 +28,7 @@ cbuffer PS_VARIABLES : register(b0)
     bool _;
     bool _Blending_Mode;
     float _Mixing;
-    bool __;
-
-	bool _Is_Pre_296_Build;
-	bool ___;
+	bool __;
 };
 
 struct PS_INPUT
@@ -48,87 +46,73 @@ struct PS_OUTPUT
 /* Main */
 /************************************************************/
 
-float3 Fun_Lum(float3 _Render)
+static const float3 _L = float3(0.299, 0.587, 0.114);
+
+float3 Fun_LumInvert(float3 _Render)
 {
-    float Y = 0.299     * _Render.r + 0.587      *_Render.g + 0.114     * _Render.b;
-    float U = -0.14713  * _Render.r - 0.28886   * _Render.g + 0.436     * _Render.b;
-    float V =  0.615    * _Render.r - 0.51499   * _Render.g - 0.10001   * _Render.b;
+    float Y = dot(_L, _Render);
+    float U = 0.492 * (_Render.b - Y);
+    float V = 0.877 * (_Render.r - Y);
+
     Y = 1.0 - Y;
 
-    float3 _Result;
-        _Result.r = Y + 1.13983 * V;
-        _Result.g = Y - 0.39465 * U - 0.58060 * V;
-        _Result.b = Y + 2.03211 * U;
+    float R = Y + 1.13983 * V;
+    float G = Y - 0.39465 * U - 0.58060 * V;
+    float B = Y + 2.03211 * U;
 
-    return saturate(_Result);
+    return float3(R, G, B);
 }
 
-PS_OUTPUT ps_main( in PS_INPUT In )
+float4 Demultiply(float4 _Render, bool _Premultiplied)
 {
-    PS_OUTPUT Out;
+    if(_Premultiplied)
+    {
+	    if ( _Render.a != 0.0 ) {
+            _Render.rgb /= _Render.a;
+        }
+    }
 
-    float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord) * In.Tint;
-    
-    float4 _Result = 0;
-    float4 _Render = 0;
+	return _Render;
+}
+
+float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
+{
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
+    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
+
+        float4 _Result, _Render;
         
-        if(_Blending_Mode == 0)
-        {
-            _Result.rgb = Fun_Lum(_Render_Texture.rgb);
-            _Render = _Render_Texture;
-        }
-        else
-        {
-            _Result.rgb = Fun_Lum(_Render_Background.rgb);
-            _Render = _Render_Background;
-        }
+            if(!_Blending_Mode)
+            {
+                _Result.rgb = Fun_LumInvert(_Render_Texture.rgb);
+                _Render = _Render_Texture;
+            }
+            else
+            {
+                _Result.rgb = Fun_LumInvert(_Render_Background.rgb);
 
+                _Render.rgb = _Render_Background.rgb;
+                _Result.a = _Render_Texture.a;
+            }
 
-    _Result.a = _Render_Texture.a;
-    _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
-
-    Out.Color = _Result;
-
-    return Out;
+        _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
+    
+    return _Result;
 }
 
 /************************************************************/
-/* Premultiplied Alpha */
+/* Render */
 /************************************************************/
 
-float4 Demultiply(float4 _Color)
-{
-	if ( _Color.a != 0 )   _Color.rgb /= _Color.a;
-	return _Color;
+float4 ps_main(in PS_INPUT In) : SV_TARGET{
+    float4 _Render = Main(In, false);
+    return _Render;
 }
 
-PS_OUTPUT ps_main_pm( in PS_INPUT In ) 
+float4 ps_main_pm(in PS_INPUT In) : SV_TARGET
 {
-    PS_OUTPUT Out;
+    float4 _Render = Main(In, true);
+    _Render.rgb *= _Render.a;
 
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord) * In.Tint;
-    
-    float4 _Result = 0;
-    float4 _Render = 0;
-        
-        if(_Blending_Mode == 0)
-        {
-            _Result.rgb = Fun_Lum(_Render_Texture.rgb);
-            _Render = _Render_Texture;
-        }
-        else
-        {
-            _Result.rgb = Fun_Lum(_Render_Background.rgb);
-            _Render = _Render_Background;
-        }
-
-    _Result.a = _Render_Texture.a;
-    _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
-
-    _Result.rgb *= _Result.a;
-
-    Out.Color = _Result;
-    return Out;
+    return _Render;
 }

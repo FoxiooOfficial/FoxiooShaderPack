@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.8 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -20,50 +21,52 @@ sampler2D S2D_Background : register(s1);
 /***********************************************************/
 
     float _Mixing;
+
     bool _Blending_Mode;
 
 /************************************************************/
 /* Main */
 /************************************************************/
 
-float3 Fun_Lum(float3 _Render)
+static const float3 _L = float3(0.299, 0.587, 0.114);
+
+float3 Fun_LumInvert(float3 _Render)
 {
-    float Y = 0.299     * _Render.r + 0.587      *_Render.g + 0.114     * _Render.b;
-    float U = -0.14713  * _Render.r - 0.28886   * _Render.g + 0.436     * _Render.b;
-    float V =  0.615    * _Render.r - 0.51499   * _Render.g - 0.10001   * _Render.b;
+    float Y = dot(_L, _Render);
+    float U = 0.492 * (_Render.b - Y);
+    float V = 0.877 * (_Render.r - Y);
+
     Y = 1.0 - Y;
 
-    float3 _Result;
-        _Result.r = Y + 1.13983 * V;
-        _Result.g = Y - 0.39465 * U - 0.58060 * V;
-        _Result.b = Y + 2.03211 * U;
+    float R = Y + 1.13983 * V;
+    float G = Y - 0.39465 * U - 0.58060 * V;
+    float B = Y + 2.03211 * U;
 
-    return saturate(_Result);
+    return float3(R, G, B);
 }
-
 
 float4 Main(in float2 In : TEXCOORD0) : COLOR0
 {
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In);
 
-    float4 _Result = 0;
-    float4 _Render = 0;
+        float4 _Result, _Render;
         
-        if(_Blending_Mode == 0)
-        {
-            _Result.rgb = Fun_Lum(_Render_Texture.rgb);
-            _Render = _Render_Texture;
-        }
-        else
-        {
-            _Result.rgb = Fun_Lum(_Render_Background.rgb);
-            _Render = _Render_Background;
-        }
+            if(!_Blending_Mode)
+            {
+                _Result.rgb = Fun_LumInvert(_Render_Texture.rgb);
+                _Render = _Render_Texture;
+            }
+            else
+            {
+                _Result.rgb = Fun_LumInvert(_Render_Background.rgb);
 
-    _Result.a = _Render_Texture.a;
-    _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
+                _Render.rgb = _Render_Background.rgb;
+                _Result.a = _Render_Texture.a;
+            }
 
+        _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
+        
     return _Result;
 }
 
@@ -71,4 +74,4 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_2_0 Main(); } }
+technique tech_main { pass P0 { PixelShader = compile ps_1_4 Main(); } }
