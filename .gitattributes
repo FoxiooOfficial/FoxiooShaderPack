@@ -1,6 +1,6 @@
 *.fxao linguist-language=GLSL
 *.fxmo linguist-language=GLSL
-*.fxwg linguist-language=GLSL
+*.fxwg linguist-language=WGSL
 *.fx linguist-language=HLSL
 *.fxc linguist-language=HLSL
 *.hlsl linguist-language=HLSL
