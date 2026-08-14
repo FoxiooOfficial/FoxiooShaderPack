@@ -3,11 +3,9 @@
 		<description>Base and blend colors are added.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
-			<website>https://github.com/FoxiooOfficial</website>
-				<BackgroundTexture>1</BackgroundTexture>
-
-		<parameter>
-			<name>/* Foxioo Addition (Background) Shader | 2026.08.06 */</name>
+			<website>https://github.com/FoxiooOfficial</website>			<BackgroundTexture>1</BackgroundTexture>
+<parameter>
+			<name>/* Foxioo Addition (Background) Shader | 2026.08.14 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
