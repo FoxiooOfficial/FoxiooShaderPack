@@ -6,4 +6,4 @@
 *.hlsl linguist-language=HLSL
 *.fxasm linguist-language=Assembly
 *.fxme linguist-language=Metal 
-*.xml linguist-detectable
+#*.xml linguist-detectable
