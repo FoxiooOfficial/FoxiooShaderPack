@@ -6,6 +6,17 @@
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 				
+
+			<sampler>
+				<index>0</index>
+				<filter>antialiasing</filter>
+			</sampler>
+			
+			<sampler>
+				<index>1</index>
+				<filter>antialiasing</filter>
+			</sampler>
+
 		<parameter>
 			<name>/* Foxioo Maximum Filter (Switch) Shader | 2026.07.30 */</name>
 			<property>checkbox</property>
@@ -42,7 +53,7 @@
 				<name>Size</name>
 				<variable>_Size</variable>
 				
-				<description>This variable specifies the filter size in pixels</description>
+				<description>This variable specifies the filter size in pixels.</description>
 
 				<type>float</type>
 

@@ -13,8 +13,17 @@
 /* Samplers */
 /***********************************************************/
 
-sampler2D S2D_Image : register(s0);
-sampler2D S2D_Background : register(s1);
+sampler2D S2D_Image : register(s0) = sampler_state
+{
+    MinFilter = Linear;
+    MagFilter = Linear;
+};
+
+sampler2D S2D_Background : register(s1) = sampler_state
+{
+    MinFilter = Linear;
+    MagFilter = Linear;
+};
 
 /***********************************************************/
 /* Varibles */
