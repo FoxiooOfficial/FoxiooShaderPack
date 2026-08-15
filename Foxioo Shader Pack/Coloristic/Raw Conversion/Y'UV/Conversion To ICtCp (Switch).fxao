@@ -1,0 +1,121 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_vertex
+
+#ifdef GL_ES
+ precision mediump float;
+#endif
+uniform mat4 transformMatrix;
+uniform mat4 projectionMatrix;
+
+attribute vec4 position;
+attribute vec2 texCoord;
+varying vec2 In;
+
+void main(void)
+{
+	In = texCoord;
+	gl_Position = projectionMatrix * transformMatrix * position;
+}
+
+//@End
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+#ifdef GL_ES
+ precision mediump float;
+#endif
+
+varying vec2 In;
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+uniform sampler2D imgTexture;
+uniform sampler2D bckgTexture;
+
+uniform lowp vec4 blendColor;
+//uniform float fPixelWidth;
+//uniform float fPixelHeight;
+
+/***********************************************************/
+/* Varibles */
+/***********************************************************/
+
+uniform float _Mixing;
+uniform bool _Blending_Mode;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+mat3 Fun_Rw(vec3 _R0, vec3 _R1, vec3 _R2) {
+    return mat3(
+        _R0.x, _R1.x, _R2.x,
+        _R0.y, _R1.y, _R2.y,
+        _R0.z, _R1.z, _R2.z 
+    );
+}
+
+const float M1 = 2610.0 / 16384.0;
+const float M2 = 2523.0 / 32.0;
+const float C1 = 3424.0 / 4096.0;
+const float C2 = 2413.0 / 128.0;
+const float C3 = 2392.0 / 128.0;
+
+void main(void)
+{
+    mat3 LMS = Fun_Rw(
+        vec3(0.412109, 0.523927, 0.063964),
+        vec3(0.166742, 0.720446, 0.112812),
+        vec3(0.024182, 0.075426, 0.900392)
+    );
+
+    mat3 ICTCP = Fun_Rw(
+        vec3(0.5,        0.5,        0.0),
+        vec3(1.613769,  -3.323486,   1.709717),
+        vec3(4.378174,  -4.245605,  -0.132568)
+    );
+
+    vec4 _Render_Texture = texture2D(imgTexture, In) * blendColor;
+    vec4 _Render_Background = texture2D(bckgTexture, In);
+
+        vec4 _Result, _Render;
+
+        if(!_Blending_Mode) {
+            _Result = _Render_Texture;
+        }
+        else {
+            _Result = _Render_Background;
+        }
+
+        _Render = _Result;
+        _Result.rgb = _Result.rgb * LMS;
+
+            vec3 _M1 = pow(abs(_Result.rgb), vec3(M1));
+            vec3 _NM = C1 + C2 * _M1;
+            vec3 _DN = 1.0 + C3 * _M1;
+            _Result.rgb = pow(abs(_NM / _DN), vec3(M2));
+
+            _Result.rgb = _Result.rgb * ICTCP;
+
+        _Result.rgb = mix(_Render.rgb, _Result.rgb / 10.0, _Mixing);
+        _Result.a = _Render_Texture.a;
+
+
+    gl_FragColor = _Result;
+}
+
+//@End

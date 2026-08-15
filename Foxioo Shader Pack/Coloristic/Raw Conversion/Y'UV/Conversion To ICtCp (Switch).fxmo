@@ -1,0 +1,119 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_vertex
+//version_####
+
+uniform mat3 transformMatrix;
+uniform mat3 projectionMatrix;
+uniform mat3 objectMatrix;
+uniform mat3 textureMatrix;
+
+in vec2 position;
+out vec2 In;
+void main()
+{
+    vec3 pos = vec3(position, 1.0);
+    In = (textureMatrix * pos).xy;
+    gl_Position = vec4(projectionMatrix * transformMatrix * objectMatrix * pos, 1.0);
+}
+//@End
+
+/* ####################################################### */
+
+//@Begin_fragment
+//version_####
+
+#ifdef GL_ES
+    #if defined(GL_FRAGMENT_PRECISION_HIGH)
+        #define HIGH_PRECISION_SUPPORTED
+    #endif
+#else
+    #define HIGH_PRECISION_SUPPORTED    
+#endif
+
+#ifdef HIGH_PRECISION_SUPPORTED
+    precision highp float;
+#else
+    precision mediump float;
+#endif
+
+in vec2 In;
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+uniform sampler2D imgTexture;
+uniform sampler2D bckgTexture;
+
+uniform lowp vec4 blendColor;
+
+/***********************************************************/
+/* Varibles */
+/***********************************************************/
+
+uniform float _Mixing;
+uniform bool _Blending_Mode;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+const mat3 LMS = transpose(mat3(
+    0.412109,   0.523927,   0.063964,
+    0.166742,   0.720446,   0.112812,
+    0.024182,   0.075426,   0.900392
+));
+
+const mat3 ICTCP = transpose(mat3(
+    0.5,        0.5,        0.0,
+    1.613769,   -3.323486,  1.709717,
+    4.378174,   -4.245605, -0.132568
+));
+
+const float M1 = 2610.0 / 16384.0;
+const float M2 = 2523.0 / 32.0;
+const float C1 = 3424.0 / 4096.0;
+const float C2 = 2413.0 / 128.0;
+const float C3 = 2392.0 / 128.0;
+
+out vec4 fragColor;
+void main(void)
+{
+    vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
+    vec4 _Render_Background = texture(bckgTexture, In);
+
+        vec4 _Result, _Render;
+
+        if(!_Blending_Mode) {
+            _Result = _Render_Texture;
+        }
+        else {
+            _Result = _Render_Background;
+        }
+
+        _Render = _Result;
+        _Result.rgb = _Result.rgb * LMS;
+
+            vec3 _M1 = pow(abs(_Result.rgb), vec3(M1));
+            vec3 _NM = C1 + C2 * _M1;
+            vec3 _DN = 1.0 + C3 * _M1;
+            _Result.rgb = pow(abs(_NM / _DN), vec3(M2));
+
+            _Result.rgb = _Result.rgb * ICTCP;
+
+        _Result.rgb = mix(_Render.rgb, _Result.rgb / 10.0, _Mixing);
+        _Result.a = _Render_Texture.a;
+
+    fragColor = _Result;
+}
+//@End
