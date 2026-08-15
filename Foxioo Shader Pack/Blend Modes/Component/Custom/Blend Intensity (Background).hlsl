@@ -28,8 +28,6 @@ cbuffer PS_VARIABLES : register(b0)
     bool _;
     float _Mixing;
     bool __;
-	bool _Is_Pre_296_Build;
-	bool ___;
 };
 
 struct PS_INPUT
@@ -57,8 +55,7 @@ cbuffer PS_PIXELSIZE : register(b1)
 /*  *NOT* All color calculations are taken from: 
     https://printtechnologies.org/standards/files/pdf-reference-1.6-addendum-blend-modes.pdf */
 
-float Fun_Value(float3 _Result)
-{
+float Fun_Value(float3 _Result) {
     return max(_Result.r, max(_Result.g, _Result.b));
 }
 
@@ -77,8 +74,7 @@ float3 Fun_ClipColor(float3 _Color)
     return _Color;
 }
 
-float Fun_Intensity(float3 _Result)
-{
+float Fun_Intensity(float3 _Result) {
     return (_Result.r + _Result.g + _Result.b) / 3.0;
 }
 

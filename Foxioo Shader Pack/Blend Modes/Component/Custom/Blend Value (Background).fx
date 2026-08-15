@@ -29,8 +29,7 @@ sampler2D S2D_Background : register(s1);
 /*  *NOT* All color calculations are taken from: 
     https://printtechnologies.org/standards/files/pdf-reference-1.6-addendum-blend-modes.pdf */
 
-float Fun_Value(float3 _Result)
-{
+float Fun_Value(float3 _Result) {
     return max(_Result.r, max(_Result.g, _Result.b));
 }
 
@@ -59,7 +58,7 @@ float3 Fun_SetValue(float3 _Color, float _V)
 
 /***********************************************************/
 
-float4 Main(in float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
 {
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In);
@@ -77,4 +76,4 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_2_0 Main(); } }
+technique tech_main { pass P0 { PixelShader = compile ps_2_0 ps_main(); } }
