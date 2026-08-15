@@ -28,8 +28,6 @@ cbuffer PS_VARIABLES : register(b0)
     bool _;
     float _Mixing;
     bool __;
-	bool _Is_Pre_296_Build;
-	bool ___;
 };
 
 struct PS_INPUT
@@ -71,9 +69,10 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
     float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
 
-        float4 _Result = 0.5 - 0.25 * cos(3.14159265 * _Render_Background) - 0.25 * cos(3.14159265 * _Render_Texture);
-
-            _Result = lerp(_Render_Texture, _Result, _Mixing);
+        float4 _Result;
+        
+            _Result.rgb = 0.5 - 0.25 * cos(3.14159265 * _Render_Background.rgb) - 0.25 * cos(3.14159265 * _Render_Texture.rgb);
+            _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
 
         _Result.a = _Render_Texture.a;
 
