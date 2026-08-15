@@ -14,8 +14,8 @@
 /* Samplers */
 /***********************************************************/
 
-texture T_Image;
-texture T_Background;
+sampler2D S2D_Image : register(s0);
+sampler2D S2D_Background : register(s1);
 
 /***********************************************************/
 /* Varibles */
@@ -27,45 +27,23 @@ texture T_Background;
 /* Main */
 /************************************************************/
 
+float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
+{
+    float4 _Render_Texture = tex2D(S2D_Image, In);
+    float4 _Render_Background = tex2D(S2D_Background, In);
 
+        float4 _Result;
+
+            _Result.rgb = _Render_Texture.rgb + _Render_Background.rgb - 0.5;
+            _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
+
+        _Result.a = _Render_Texture.a;
+
+    return _Result;
+}
 
 /************************************************************/
 /* Tech Main */
 /************************************************************/
 
-technique tech_main
-{
-    pass P0
-    {
-        Texture[0] = <T_Image>;
-        MinFilter[0] = LINEAR;
-        MagFilter[0] = LINEAR;
-        MipFilter[0] = LINEAR;
-        AddressU[0] = WRAP;
-        AddressV[0] = WRAP;
-
-        Texture[2] = <T_Background>;
-        MinFilter[2] = LINEAR;
-        MagFilter[2] = LINEAR;
-        MipFilter[2] = LINEAR;
-        AddressU[2] = WRAP;
-        AddressV[2] = WRAP;
-
-        PixelShaderConstant[0] = <_Mixing>;
-
-        PixelShader = asm
-        {
-            ps.1.4
-            def c1, 0, 0, 0, -1
-            def c2, 0, 0, 0, 1
-            texld r0, t0
-            texld r1, t0
-            mul r2.w, c0.x, c1.w
-            + add r1.xyz, r1, r0
-            add r2.w, r2.w, c2.w
-            mul r2.xyz, r0, r2.w
-            + mov r0.w, r0.w
-            mad r0.xyz, r1_bias, c0.x, r2
-        };
-    }
-}
+technique tech_main { pass P0 { PixelShader = compile ps_1_4 ps_main(); } }
