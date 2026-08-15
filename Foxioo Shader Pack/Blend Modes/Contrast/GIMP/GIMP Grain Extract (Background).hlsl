@@ -28,8 +28,6 @@ cbuffer PS_VARIABLES : register(b0)
     bool _;
     float _Mixing;
     bool __;
-	bool _Is_Pre_296_Build;
-	bool ___;
 };
 
 struct PS_INPUT
@@ -73,7 +71,8 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
 
         float4 _Result;
 
-            _Result.rgb = lerp(_Render_Texture.rgb, _Render_Texture.rgb - _Render_Background.rgb + 0.5, _Mixing);
+            _Result.rgb = _Render_Texture.rgb - _Render_Background.rgb + 0.5;
+            _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
 
         _Result.a = _Render_Texture.a;
 
