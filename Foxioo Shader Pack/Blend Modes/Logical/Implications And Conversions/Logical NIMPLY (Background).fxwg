@@ -1,0 +1,129 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(0) var background: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+//uniform float fPixelWidth;
+//uniform float fPixelHeight;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32, // _
+    _Mixing: f32,
+    parameter2_value: i32, // __
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+fn Fun_ByteArray(_Result: ptr<function, array<bool, 8>>, _Color: f32) {
+    var _Color_Temp: i32 = i32(_Color * 255.0);
+
+        var _Power: array<i32, 8>;
+        _Power[i32(0)] = 1;
+        _Power[i32(1)] = 2;
+        _Power[i32(2)] = 4;
+        _Power[i32(3)] = 8;
+        _Power[i32(4)] = 16;
+        _Power[i32(5)] = 32;
+        _Power[i32(6)] = 64;
+        _Power[i32(7)] = 128;
+
+        for (var i: i32 = 0; i < 8; i += 1)
+        {
+            (*_Result)[i] = ((f32(_Color_Temp / _Power[i32(i)])) - (2.0) * floor((f32(_Color_Temp / _Power[i32(i)])) / (2.0))) == 1.0;
+        }
+}
+
+fn Fun_Bitwise(_Result: ptr<function, array<bool, 8>>, _Base: array<bool, 8>, _Blend: array<bool, 8>) {
+    for (var i: i32 = 0; i < 8; i += 1)
+        {
+            (*_Result)[i] = !(!_Base[i] || _Blend[i]);
+        }
+}
+
+fn Fun_ByteColor(_Blend: array<bool, 8>) -> f32 {
+    var _Result: f32 = 0.0;
+
+        var _Power: array<i32, 8>;
+        _Power[i32(0)] = 1;
+        _Power[i32(1)] = 2;
+        _Power[i32(2)] = 4;
+        _Power[i32(3)] = 8;
+        _Power[i32(4)] = 16;
+        _Power[i32(5)] = 32;
+        _Power[i32(6)] = 64;
+        _Power[i32(7)] = 128;
+
+        for (var i: i32 = 0; i < 8; i += 1)
+        {
+            if(_Blend[i]) { _Result += f32(_Power[i32(i)]); }
+        }
+
+        return _Result / 255.0;
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        var _Render_Background: vec4f = texture2D(background, input.texCoord);
+
+            var _Byte_Texture_Red: array<bool, 8>;          Fun_ByteArray(&_Byte_Texture_Red, f32(_Render_Texture.r));
+            var _Byte_Texture_Green: array<bool, 8>;        Fun_ByteArray(&_Byte_Texture_Green, f32(_Render_Texture.g));
+            var _Byte_Texture_Blue: array<bool, 8>;         Fun_ByteArray(&_Byte_Texture_Blue, f32(_Render_Texture.b));
+
+            var _Byte_Background_Red: array<bool, 8>;       Fun_ByteArray(&_Byte_Background_Red, f32(_Render_Background.r));
+            var _Byte_Background_Green: array<bool, 8>;     Fun_ByteArray(&_Byte_Background_Green, f32(_Render_Background.g));
+            var _Byte_Background_Blue: array<bool, 8>;      Fun_ByteArray(&_Byte_Background_Blue, f32(_Render_Background.b));
+
+                Fun_Bitwise(&_Byte_Texture_Red, _Byte_Texture_Red, _Byte_Background_Red);
+                Fun_Bitwise(&_Byte_Texture_Green, _Byte_Texture_Green, _Byte_Background_Green);
+                Fun_Bitwise(&_Byte_Texture_Blue, _Byte_Texture_Blue, _Byte_Background_Blue);
+
+        var _Result: vec4f;
+
+            _Result.r = Fun_ByteColor(_Byte_Texture_Red);
+            _Result.g = Fun_ByteColor(_Byte_Texture_Green);
+            _Result.b = Fun_ByteColor(_Byte_Texture_Blue);
+
+                {
+                    let _fusionSwizzle0 = mix(_Render_Texture.rgb, _Result.rgb, params._Mixing);
+                    _Result.x = _fusionSwizzle0.x;
+                    _Result.y = _fusionSwizzle0.y;
+                    _Result.z = _fusionSwizzle0.z;
+                }
+
+            _Result.a = _Render_Texture.a;
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End
