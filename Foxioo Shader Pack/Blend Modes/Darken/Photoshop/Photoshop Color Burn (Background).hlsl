@@ -29,8 +29,6 @@ cbuffer PS_VARIABLES : register(b0)
     bool _Blending_Mode;
     float _Mixing;
     bool __;
-	bool _Is_Pre_296_Build;
-	bool ___;
 };
 
 struct PS_INPUT
@@ -73,13 +71,10 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
 
         float4 _Result;
-
-            if(!_Blending_Mode)
-                _Result.rgb = lerp(_Render_Texture.rgb, (1.0 - (1.0 - _Render_Texture.rgb) / _Render_Background.rgb), _Mixing);
-            else
-                _Result.rgb = lerp(_Render_Background.rgb, (1.0 - (1.0 - _Render_Background.rgb) / _Render_Texture.rgb), _Mixing);
-
         _Result.a = _Render_Texture.a;
+
+            if(!_Blending_Mode) _Result.rgb = lerp(_Render_Texture.rgb,    (1.0 - (1.0 - _Render_Texture.rgb) / _Render_Background.rgb), _Mixing);
+            else                _Result.rgb = lerp(_Render_Background.rgb, (1.0 - (1.0 - _Render_Background.rgb) / _Render_Texture.rgb), _Mixing);
 
     return _Result;
 }

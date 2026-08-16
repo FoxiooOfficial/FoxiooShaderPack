@@ -64,7 +64,6 @@ uniform lowp vec4 blendColor;
 /***********************************************************/
 
 uniform float _Mixing;
-uniform bool _Is_Pre_296_Build;
 
 /************************************************************/
 /* Main */
@@ -73,20 +72,17 @@ uniform bool _Is_Pre_296_Build;
 out vec4 fragColor;
 void main(void)
 {
-    vec2 In_Background = In;
-    if(_Is_Pre_296_Build) In_Background.y = 1.0 - In_Background.y;
-
     vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
-    vec4 _Render_Background = texture(bckgTexture, In_Background);
+    vec4 _Render_Background = texture(bckgTexture, In);
 
         vec4 _Result = _Render_Texture;
-
         const vec3 _Lum = vec3(0.2126, 0.7152, 0.0722);
 
-        float _Average_Texture = dot(_Render_Texture.rgb, _Lum);
-        float _Average_Background = dot(_Render_Background.rgb, _Lum);
+            float _Average_Texture = dot(_Render_Texture.rgb, _Lum) * _Mixing;
+            float _Average_Background = dot(_Render_Background.rgb, _Lum);
 
-            if (_Average_Background < _Average_Texture * _Mixing) { _Result.rgb = _Render_Background.rgb; }
+                if (_Average_Background < _Average_Texture)
+                    _Result.rgb = _Render_Background.rgb;
 
     fragColor = _Result;
 }

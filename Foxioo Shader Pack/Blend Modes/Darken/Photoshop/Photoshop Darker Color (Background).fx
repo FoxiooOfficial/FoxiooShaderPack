@@ -26,19 +26,19 @@ sampler2D S2D_Background : register (s1);
 /* Main */
 /************************************************************/
 
-float4 Main( in float2 In : TEXCOORD0) : COLOR0
+float4 ps_main( in float2 In : TEXCOORD0) : COLOR0
 {       
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In);
 
         float4 _Result = _Render_Texture;
-
         const float3 _Lum = float3(0.2126, 0.7152, 0.0722);
 
-        float _Average_Texture = dot(_Render_Texture.rgb, _Lum);
-        float _Average_Background = dot(_Render_Background.rgb, _Lum);
+            float _Average_Texture = dot(_Render_Texture.rgb, _Lum) * _Mixing;
+            float _Average_Background = dot(_Render_Background.rgb, _Lum);
 
-            if (_Average_Background < _Average_Texture * _Mixing) { _Result.rgb = _Render_Background.rgb; }
+                if (_Average_Background < _Average_Texture)
+                    _Result.rgb = _Render_Background.rgb;
 
     return _Result;
 }
@@ -47,4 +47,4 @@ float4 Main( in float2 In : TEXCOORD0) : COLOR0
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_2_0 Main(); } }
+technique tech_main { pass P0 { PixelShader = compile ps_1_4 ps_main(); } }
