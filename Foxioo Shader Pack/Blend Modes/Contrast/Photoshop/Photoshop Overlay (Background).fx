@@ -26,20 +26,22 @@ sampler2D S2D_Background : register(s1);
 /* Main */
 /************************************************************/
 
-float4 Main(in float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
 {
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In);
 
         float4 _Result;
-
-            if (all(_Render_Background.rgb < 0.5))
-                _Result.rgb = lerp(_Render_Texture.rgb, 2.0 * _Render_Background.rgb * _Render_Texture.rgb, _Mixing);
-
-            else
-                _Result.rgb = lerp(_Render_Texture.rgb, 1.0 - 2.0 * (1.0 - _Render_Background.rgb) * (1.0 - _Render_Texture.rgb), _Mixing);
-
         _Result.a = _Render_Texture.a;
+
+            float3 _Mul = _Render_Background.rgb * _Render_Texture.rgb;
+            _Mul += _Mul;
+
+            float3 _MulTwo = (1.0 - _Render_Background.rgb) * (1.0 - _Render_Texture.rgb);
+            _MulTwo += _MulTwo;
+
+            _Result.rgb = lerp(_Mul, 1.0 - _MulTwo, step(0.5, _Render_Background.rgb));
+            _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
 
     return _Result;
 }
@@ -48,4 +50,4 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_2_0 Main(); } }
+technique tech_main { pass P0 { PixelShader = compile ps_1_4 ps_main(); } }

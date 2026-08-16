@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Krita Interpolation (Background) Shader | 2026.07.04 */</name>
+			<name>/* Foxioo Krita Interpolation (Background) Shader | 2026.07.16 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
@@ -32,17 +32,4 @@
             <variable>__</variable>
         </parameter>
 
-    <sampler>
-        <index>0</index>
-        <filter>antialiasing</filter>
-        <addressU>clamp</addressU>
-        <addressV>clamp</addressV>
-    </sampler>
-
-    <sampler>
-        <index>1</index>
-        <filter>point</filter>
-        <addressU>wrap</addressU>
-        <addressV>wrap</addressV>
-    </sampler>
 </effect>
