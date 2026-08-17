@@ -18,7 +18,7 @@ technique tech_main
         Texture[0] = <T_Image>;
         PixelShader = asm
         {
-            ps.1.3                          // <- Pixel Shader Version (ps.1.0, ps.1.1, ps.1.2, ps.1.3 or ps.1.4)
+            ps.1.1                          // <- Pixel Shader Version (ps.1.0, ps.1.1, ps.1.2, ps.1.3 or ps.1.4)
             def c0, 1.0, 1.0, 1.0, 0.0      // <- Constant value declaration (Red: 1.0, Green: 1.0, Blue: 1.0, Alpha: 0.0)
 
             tex t0;                         // <- Load the T_Image texture

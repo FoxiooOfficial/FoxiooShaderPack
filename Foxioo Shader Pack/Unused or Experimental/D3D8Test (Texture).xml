@@ -6,7 +6,7 @@
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>0</BackgroundTexture>
 				<dx8>yes</dx8>
-				<PSVersion>1.3</PSVersion>
+				<PSVersion>1.1</PSVersion>
 
 		<parameter>
 			<name>/* Foxioo Direct3D8 Test Shader (Texture) | 2026.08.17 */</name>
