@@ -29,10 +29,8 @@ cbuffer PS_VARIABLES : register(b0)
     bool _Blending_Mode;
     float _Mixing;
     float _Mul;
-    bool __;
-	bool _Is_Pre_296_Build;
     int _Render_Switch;
-	bool ___;
+	bool __;
 };
 
 struct PS_INPUT
@@ -60,9 +58,18 @@ cbuffer PS_PIXELSIZE : register(b1)
 #define M_PI 3.14159265359
 #define M_PI_2 1.57079632679
 
+float3 Fun_Real(float3 _Color, float3 _Render)
+{   
+    float NaN = _Mixing < 0.0f ? 0x7FC00000 : 0.0f;
+
+    float3 _Result = abs(_Color) > 1.0f ? NaN : _Render;
+    return _Result;
+}
+
 float3 Fun_Acos(float3 _Color, int _Case)
 {   
     float3 _Render = acos(_Color);
+    float3 _Real = Fun_Real(_Color, _Render);
 
     if(_Case == 0)
         return _Render;
@@ -71,32 +78,21 @@ float3 Fun_Acos(float3 _Color, int _Case)
     { 
         float a = -1.0 / M_PI * 1.07596f;
         float p = -M_PI;
+        float3 _Out;
 
-        if(any(_Color < -1.0))
-            return M_PI_2 - (a * pow((_Color - p), 2.0f));
+        if(any(_Color < -1.0))      _Out =  M_PI_2 - (a * pow((_Color - p), 2.0f));
+        else if(any(_Color > 1.0))  _Out =  M_PI_2 - (-a * pow((-_Color - p), 2.0f));
+        else                        _Out =  _Render;
 
-        else if(any(_Color > 1.0))
-            return M_PI_2 - (-a * pow((-_Color - p), 2.0f));
-
-        else
-            return _Render;
+          return saturate(_Out) + saturate(_Real);
     }
 
     else if(_Case == 2) // D3D11, OGL simulated
     {
-        float NaN = _Mixing < 0.0f ? 0x7FC00000 : 0.0;
-
-        float3 _Result;
-
-			_Result.r = abs(_Color.r) > 1.0f ? NaN : _Render.r;
-			_Result.g = abs(_Color.g) > 1.0f ? NaN : _Render.g;
-			_Result.b = abs(_Color.b) > 1.0f ? NaN : _Render.b;
-			// _Result.a = abs(_Color.a) > 1.0f ? NaN : _Render.a;
-
-        return _Result;
+        return _Real;
     }
 
-    else return float3(0.0f, 0.0f, 0.0f);
+    else return (float3)0.0f;
 }
 
 float4 Demultiply(float4 _Render, bool _Premultiplied)

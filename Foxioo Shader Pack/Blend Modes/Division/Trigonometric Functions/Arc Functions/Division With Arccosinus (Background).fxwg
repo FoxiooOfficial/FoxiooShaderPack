@@ -1,0 +1,147 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(0) var background: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+//uniform float fPixelWidth;
+//uniform float fPixelHeight;
+
+/***********************************************************/
+/* Varibles */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Blending_Mode: i32,
+    _Mixing: f32,
+    _Mul: f32,
+    _Render_Switch: i32,
+    parameter5_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+fn Fun_Real(_Color: vec3f, _Render: vec3f) -> vec3f {
+    var NaN: f32 = select(0.0, 0x7FC00000, params._Mixing < 0.0);
+
+        var _Result: vec3f;
+
+    		_Result.r = select(_Render.r, NaN, abs(_Color.r) > 1.0);
+    		_Result.g = select(_Render.g, NaN, abs(_Color.g) > 1.0);
+    		_Result.b = select(_Render.b, NaN, abs(_Color.b) > 1.0);
+
+        return _Result;
+}
+
+fn Fun_Acos(_Color: vec3f, _Case: i32) -> vec3f {
+    var _Render: vec3f = acos(_Color);
+        var _Real: vec3f = Fun_Real(_Color, _Render);
+
+        if(_Case == 0) {
+            return _Render;
+        }
+
+        else if(_Case == 1) // D3D9 simulated
+        {
+            var a: f32 = -1.0f / (3.14159265359) * 1.07596f;
+            var p: f32 = -(3.14159265359);
+            var _Out: vec3f;
+
+            if(_Color.r < -1.0f || _Color.g < -1.0f || _Color.b < -1.0f) {
+                _Out =  (1.57079632679) - (a * pow((_Color - p), vec3f(2.0)));
+            }
+
+            else if(_Color.r > 1.0f || _Color.g > 1.0f || _Color.b > 1.0f) {
+                _Out =  (1.57079632679) - (-a * pow((-_Color - p), vec3f(2.0)));
+            }
+
+            else {
+                _Out =  _Render;
+            }
+
+              return clamp(_Out, vec3f(0.0f), vec3f(1.0f)) + clamp(_Real, vec3f(0.0f), vec3f(1.0f));
+        }
+
+        else if(_Case == 2) // D3D11, OGL simulated
+        {
+            return _Real;
+        }
+
+        else { return vec3f(0.0f); }
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        var _Render_Background: vec4f = texture2D(background, input.texCoord);
+
+            var _Result: vec4f;
+            var _Render: vec4f;
+
+                if(!(params._Blending_Mode != 0))
+                {
+                    {
+                        let _fusionSwizzle0 = Fun_Acos(vec3f(_Render_Texture.rgb / (_Render_Background.rgb * params._Mul)), i32(params._Render_Switch));
+                        _Result.x = _fusionSwizzle0.x;
+                        _Result.y = _fusionSwizzle0.y;
+                        _Result.z = _fusionSwizzle0.z;
+                    }
+                    _Render = _Render_Texture;
+                }
+                else
+                {
+                    {
+                        let _fusionSwizzle1 = Fun_Acos(vec3f((_Render_Background.rgb * params._Mul) / _Render_Texture.rgb), i32(params._Render_Switch));
+                        _Result.x = _fusionSwizzle1.x;
+                        _Result.y = _fusionSwizzle1.y;
+                        _Result.z = _fusionSwizzle1.z;
+                    }
+                     _Render = _Render_Background;
+                }
+
+                {
+                    let _fusionSwizzle2 = mix(_Render.rgb, _Result.rgb, params._Mixing);
+                    _Result.x = _fusionSwizzle2.x;
+                    _Result.y = _fusionSwizzle2.y;
+                    _Result.z = _fusionSwizzle2.z;
+                }
+                    if(params._Mixing == 0.0) { {
+         let _fusionSwizzle3 = _Render.rgb;
+         _Result.x = _fusionSwizzle3.x;
+         _Result.y = _fusionSwizzle3.y;
+         _Result.z = _fusionSwizzle3.z;
+     } }
+
+            _Result.a = _Render_Texture.a;
+
+    	_fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End
