@@ -1,13 +1,13 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.0 (22.01.2026) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
 /* ####################################################### */
-
 
 texture T_Image;    // <- Main Texture
 
