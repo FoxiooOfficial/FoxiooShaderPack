@@ -30,7 +30,7 @@ sampler2D S2D_Background : register(s1);
 
 #define M_PI 3.14159265359
 #define M_PI_2 1.57079632679
-#define M_NAN sqrt(-1.0)
+#define M_NAN 0x7FC00000
 
 float3 Fun_Real(float3 _Color, float3 _Render)
 {   
