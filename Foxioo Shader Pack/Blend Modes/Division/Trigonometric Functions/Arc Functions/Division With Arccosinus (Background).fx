@@ -32,13 +32,12 @@ sampler2D S2D_Background : register(s1);
 
 #define M_PI 3.14159265359
 #define M_PI_2 1.57079632679
+#define M_NAN sqrt(-1.0)
 
 float3 Fun_Real(float3 _Color, float3 _Render)
 {   
-    float NaN = _Mixing < 0.0f ? 0x7FC00000 : 0.0f;
-
-    float3 _Result = abs(_Color) > 1.0f ? NaN : _Render;
-    return _Result;
+    float NaN = _Mixing < 0.0 ? M_NAN : 0.0;
+    return lerp(_Render, (float3)NaN, abs(_Color) > (float3)1.0);
 }
 
 float3 Fun_Acos(float3 _Color, int _Case)
@@ -52,14 +51,15 @@ float3 Fun_Acos(float3 _Color, int _Case)
     else if(_Case == 1) // D3D9 simulated
     { 
         float a = -1.0 / M_PI * 1.07596f;
-        float p = -M_PI;
-        float3 _Out;
+        float3 _Out = 0.0;
 
-        if(any(_Color < -1.0))      _Out =  M_PI_2 - (a * pow((_Color - p), 2.0f));
-        else if(any(_Color > 1.0))  _Out =  M_PI_2 - (-a * pow((-_Color - p), 2.0f));
-        else                        _Out =  _Render;
+        float3 _Neg = M_PI_2 - (a * pow(_Color + M_PI, (float3)2.0));
+        float3 _Pos = M_PI_2 - (-a * pow(-_Color + M_PI, (float3)2.0));
 
-          return saturate(_Out) + saturate(_Real);
+        _Out = lerp(_Out, _Neg, _Color < (float3)-1.0);
+        _Out = lerp(_Out, _Pos, _Color > (float3)1.0);
+
+          return saturate(_Out * 1.3 + 0.1) + saturate(_Real);
     }
 
     else if(_Case == 2) // D3D11, OGL simulated

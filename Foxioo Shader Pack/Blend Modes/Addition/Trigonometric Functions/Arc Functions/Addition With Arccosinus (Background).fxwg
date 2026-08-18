@@ -31,11 +31,11 @@ fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
 /***********************************************************/
 
 struct Params {
-    parameter0_value: i32, // _
+    parameter0_value: i32,
     _Mixing: f32,
     _Mul: f32,
     _Render_Switch: i32,
-    parameter4_value: i32, // __
+    parameter4_value: i32,
 };
 
 @group(2) @binding(1) var<uniform> params: Params;
@@ -44,48 +44,43 @@ struct Params {
 /* Main */
 /************************************************************/
 
-fn Fun_Acos(_Color: vec3f, _Case: i32) -> vec3f {
-    var _Render: vec3f = acos(_Color);
-
-        if(_Case == 0) {
-            return _Render;
-        }
-
-        else if(_Case == 1) // D3D9 simulated
-        {
-            var a: f32 = -1.0 / (3.14159265359) * 1.07596;
-            var p: f32 = -(3.14159265359);
-
-            if(_Color.r < -1.0 || _Color.g < -1.0 || _Color.b < -1.0) {
-                return (1.57079632679) - (a * pow(abs(_Color - p), vec3f(2.0)));
-            }
-
-            else if(_Color.r > 1.0 || _Color.g > 1.0 || _Color.b > 1.0) {
-                return (1.57079632679) - (-a * pow((-_Color - p), vec3f(2.0)));
-            }
-
-            else {
-                return _Render;
-            }
-        }
-
-        else if(_Case == 2) // D3D11, OGL simulated
-        {
-            var NaN: f32 = select(0.0, f32(0x7FC00000u), params._Mixing < 0.0);
-
-            var _Result: vec3f;
-
-    			_Result.r = select(_Render.r, NaN, abs(_Color.r) > 1.0);
-    			_Result.g = select(_Render.g, NaN, abs(_Color.g) > 1.0);
-    			_Result.b = select(_Render.b, NaN, abs(_Color.b) > 1.0);
-    			// _Result.a = abs(_Color.a) > 1.0f ? NaN : _Render.a;
-
-            return _Result;
-        }
-
-        else { return vec3f(0.0, 0.0, 0.0); }
+fn Fun_Real(_Color: vec3f, _Render: vec3f) -> vec3f
+{
+    var NaN: f32 = select(0.0, f32(0x7fc00000u), params._Mixing < 0.0);
+    return select(_Render, vec3f(NaN), abs(_Color) > vec3f(1.0));
 }
 
+fn Fun_Acos(_Color: vec3f, _Case: i32) -> vec3f {
+    var _Render: vec3f = acos(_Color);
+    var _Real: vec3f = Fun_Real(_Color, _Render);
+
+    if (_Case == 0) {
+        return _Render;
+    } 
+    else if (_Case == 1) // D3D9 simulated
+    {
+        var a: f32 = -1.0 / (3.14159265359) * 1.07596;
+        var _Out: vec3f = vec3f(0.0);
+
+        var _Neg: vec3f = _Color + (3.14159265359);
+        _Neg = (1.57079632679) - (a * (_Neg * _Neg));
+
+        var _Pos: vec3f = -_Color + (3.14159265359);
+        _Pos = (1.57079632679) - (-a * (_Pos * _Pos));
+
+        _Out = select(_Out, _Neg, _Color < vec3f(-1.0));
+        _Out = select(_Out, _Pos, _Color > vec3f(1.0));
+
+        return clamp(_Out * 1.3 + 0.1, vec3f(0.0), vec3f(1.0)) + clamp(_Real, vec3f(0.0), vec3f(1.0));
+    } 
+    else if (_Case == 2) // D3D11, OGL simulated
+    {
+        return _Real;
+    } 
+    else { 
+        return vec3f(0.0); 
+    }
+}
 struct FragmentInput {
     @location(0) texCoord: vec2f,
     @location(1) color: vec4f,
@@ -97,22 +92,18 @@ struct FragmentInput {
 
     		var _Result: vec4f = _Render_Texture + (_Render_Background * params._Mul);
 
-       	    var _Switch: i32 = params._Render_Switch;
-                if(_Switch < 0) { _Switch = i32(0); }
-                if(_Switch > 2) { _Switch = i32(2); }
-
-            {
-                let _fusionSwizzle0 = Fun_Acos(vec3f(_Result.rgb), i32(_Switch));
-                _Result.x = _fusionSwizzle0.x;
-                _Result.y = _fusionSwizzle0.y;
-                _Result.z = _fusionSwizzle0.z;
-            }
-    		{
-    		    let _fusionSwizzle1 = mix(_Render_Texture.rgb, _Result.rgb, params._Mixing);
-    		    _Result.x = _fusionSwizzle1.x;
-    		    _Result.y = _fusionSwizzle1.y;
-    		    _Result.z = _fusionSwizzle1.z;
-    		}
+                {
+                    let _fusionSwizzle0 = Fun_Acos(vec3f(_Result.rgb), i32(params._Render_Switch));
+                    _Result.x = _fusionSwizzle0.x;
+                    _Result.y = _fusionSwizzle0.y;
+                    _Result.z = _fusionSwizzle0.z;
+                }
+                {
+                    let _fusionSwizzle1 = mix(_Render_Texture.rgb, _Result.rgb, params._Mixing);
+                    _Result.x = _fusionSwizzle1.x;
+                    _Result.y = _fusionSwizzle1.y;
+                    _Result.z = _fusionSwizzle1.z;
+                }
 
             _Result.a = _Render_Texture.a;
 

@@ -74,18 +74,12 @@ uniform bool _Blending_Mode;
 
 #define M_PI 3.14159265359
 #define M_PI_2 1.57079632679
+#define M_NAN sqrt(-1.0)
 
 vec3 Fun_Real(vec3 _Color, vec3 _Render)
 {   
-    float NaN = _Mixing < 0.0 ? sqrt(-1.0) : 0.0;
-
-    vec3 _Result;
-
-		_Result.r = abs(_Color.r) > 1.0 ? NaN : _Render.r;
-		_Result.g = abs(_Color.g) > 1.0 ? NaN : _Render.g;
-		_Result.b = abs(_Color.b) > 1.0 ? NaN : _Render.b;
-
-    return _Result;
+    float NaN = _Mixing < 0.0 ? M_NAN : 0.0;
+    return mix(_Render, vec3(NaN), vec3(greaterThan(abs(_Color), vec3(1.0))));
 }
 
 vec3 Fun_Acos(vec3 _Color, int _Case)
@@ -98,20 +92,16 @@ vec3 Fun_Acos(vec3 _Color, int _Case)
 
     else if(_Case == 1) // D3D9 simulated
     { 
-        float a = -1.0f / M_PI * 1.07596f;
-        float p = -M_PI;
-        vec3 _Out;
+        float a = -1.0 / M_PI * 1.07596;
+        vec3 _Out = vec3(0.0);
 
-        if(_Color.r < -1.0f || _Color.g < -1.0f || _Color.b < -1.0f)
-            _Out =  M_PI_2 - (a * pow((_Color - p), vec3(2.0)));
-            
-        else if(_Color.r > 1.0f || _Color.g > 1.0f || _Color.b > 1.0f)
-            _Out =  M_PI_2 - (-a * pow((-_Color - p), vec3(2.0)));
+        vec3 _Neg = M_PI_2 - (a * pow(_Color + M_PI, vec3(2.0)));
+        vec3 _Pos = M_PI_2 - (-a * pow(-_Color + M_PI, vec3(2.0)));
 
-        else
-            _Out =  _Render;
+        _Out = mix(_Out, _Neg, vec3(lessThan(_Color, vec3(-1.0))));
+        _Out = mix(_Out, _Pos, vec3(greaterThan(_Color, vec3(1.0))));
 
-          return clamp(_Out, 0.0f, 1.0f) + clamp(_Real, 0.0f, 1.0f);
+        return clamp(_Out * 1.3 + 0.1, 0.0, 1.0) + clamp(_Real, 0.0, 1.0);
     }
 
     else if(_Case == 2) // D3D11, OGL simulated
@@ -119,7 +109,7 @@ vec3 Fun_Acos(vec3 _Color, int _Case)
         return _Real;
     }
 
-    else return vec3(0.0f);
+    else return vec3(0.0);
 }
 
 out vec4 fragColor;

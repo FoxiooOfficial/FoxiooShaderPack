@@ -50,12 +50,50 @@ cbuffer PS_PIXELSIZE : register(b1)
 	float fPixelHeight;
 };
 
-#define M_PI 3.14159265359
-#define M_PI_2 1.57079632679
-
 /************************************************************/
 /* Main */
 /************************************************************/
+
+// fusion-fx-preview: allow-fxc-warnings
+#define M_PI 3.14159265359
+#define M_PI_2 1.57079632679
+#define M_NAN sqrt(-1.0)
+
+float3 Fun_Real(float3 _Color, float3 _Render)
+{   
+    float NaN = _Mixing < 0.0 ? M_NAN : 0.0;
+    return lerp(_Render, (float3)NaN, abs(_Color) > (float3)1.0);
+}
+
+float3 Fun_Acos(float3 _Color, int _Case)
+{   
+    float3 _Render = acos(_Color);
+    float3 _Real = Fun_Real(_Color, _Render);
+
+    if(_Case == 0)
+        return _Render;
+
+    else if(_Case == 1) // D3D9 simulated
+    { 
+        float a = -1.0 / M_PI * 1.07596f;
+        float3 _Out = 0.0;
+
+        float3 _Neg = M_PI_2 - (a * pow(_Color + M_PI, (float3)2.0));
+        float3 _Pos = M_PI_2 - (-a * pow(-_Color + M_PI, (float3)2.0));
+
+        _Out = lerp(_Out, _Neg, _Color < (float3)-1.0);
+        _Out = lerp(_Out, _Pos, _Color > (float3)1.0);
+
+          return saturate(_Out * 1.3 + 0.1) + saturate(_Real);
+    }
+
+    else if(_Case == 2) // D3D11, OGL simulated
+    {
+        return _Real;
+    }
+
+    else return (float3)0.0f;
+}
 
 float4 Demultiply(float4 _Render, bool _Premultiplied)
 {
@@ -69,45 +107,6 @@ float4 Demultiply(float4 _Render, bool _Premultiplied)
 	return _Render;
 }
 
-float3 Fun_Acos(float3 _Color, int _Case)
-{   
-    float3 _Render = acos(_Color);
-
-    if(_Case == 0)
-        return _Render;
-
-    else if(_Case == 1) // D3D9 simulated
-    { 
-        float a = -1.0 / M_PI * 1.07596f;
-        float p = -M_PI;
-
-        if(any(_Color < -1.0))
-            return M_PI_2 - (a * pow((_Color - p), 2.0f));
-
-        else if(any(_Color > 1.0))
-            return M_PI_2 - (-a * pow((-_Color - p), 2.0f));
-
-        else
-            return _Render;
-    }
-
-    else if(_Case == 2) // D3D11, OGL simulated
-    {
-        float NaN = _Mixing < 0.0f ? 0x7FC00000 : 0.0f;
-
-        float3 _Result;
-
-			_Result.r = abs(_Color.r) > 1.0f ? NaN : _Render.r;
-			_Result.g = abs(_Color.g) > 1.0f ? NaN : _Render.g;
-			_Result.b = abs(_Color.b) > 1.0f ? NaN : _Render.b;
-			// _Result.a = abs(_Color.a) > 1.0f ? NaN : _Render.a;
-
-        return _Result;
-    }
-
-    else return float3(0.0f, 0.0f, 0.0f);
-}
-
 float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
 {
     float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
@@ -115,7 +114,7 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
 
 		float4 _Result = _Render_Texture + (_Render_Background * _Mul);
 
-            _Result.rgb = Fun_Acos(_Result.rgb, clamp(_Render_Switch, 0, 2));
+            _Result.rgb = Fun_Acos(_Result.rgb, _Render_Switch);
             _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
 
         _Result.a = _Render_Texture.a;
