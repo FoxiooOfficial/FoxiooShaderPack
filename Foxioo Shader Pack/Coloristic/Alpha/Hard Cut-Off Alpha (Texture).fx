@@ -31,7 +31,7 @@ float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
     float4 _Result;
 
         _Result.rgb = _Render_Texture.rgb;
-        _Result.a = _Render_Texture.a > 0.5;
+        _Result.a = step(0.5, _Render_Texture.a);
 
         _Result = lerp(_Render_Texture, _Result, _Mixing);
 
@@ -42,4 +42,4 @@ float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_1_4 ps_main(); } }
+technique tech_main { pass P0 { PixelShader = compile ps_1_1 ps_main(); } }

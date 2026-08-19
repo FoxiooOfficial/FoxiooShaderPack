@@ -1,20 +1,20 @@
 <effect>
 	<name>Hard Cut-Off Alpha (Texture)</name>
-		<description>The shader checks the alpha value; if it is greater than 0.5, it sets it to 1; otherwise, it sets it to 0.</description> 
+		<description>The shader checks the alpha value; if it is greater or eqaul than 0.5, it sets it to 1; otherwise, it sets it to 0.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>0</BackgroundTexture>
 				<dx8>0</dx8>
-				<PSVersion>1.4</PSVersion>
+				<PSVersion>1.1</PSVersion>
 				
 		<parameter>
-			<name>/* Foxioo Hard Cut-Off Alpha Test (Texture) Shader | 2026.08.19 */</name>
+			<name>/* Foxioo Hard Cut-Off Alpha Test (Texture) Shader | 2026.08.19a */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
 
-			<description>The shader checks the alpha value; if it is greater than 0.5, it sets it to 1; otherwise, it sets it to 0.</description>
+			<description>The shader checks the alpha value; if it is greater or eqaul than 0.5, it sets it to 1; otherwise, it sets it to 0.</description>
 		</parameter>
 
 			<parameter>

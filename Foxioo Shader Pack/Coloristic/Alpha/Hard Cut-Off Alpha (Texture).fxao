@@ -66,7 +66,7 @@ void main(void)
     vec4 _Result;
 
         _Result.rgb = _Render_Texture.rgb;
-        _Result.a = float(_Render_Texture.a > 0.5);
+        _Result.a = step(0.5, _Render_Texture.a);
 
         _Result = mix(_Render_Texture, _Result, _Mixing);
 

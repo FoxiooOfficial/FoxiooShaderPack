@@ -43,27 +43,27 @@ technique tech_main
             ps.1.1
 
             /** Consts ************************************************/
-            def c1, 0, 0, 0, 0.5
-            def c2, 0, 0, 0, 0
-            def c3, 0, 0, 0, 1
-            def c4, 0, 0, 0, -1
+            def c1, 1, 0, 0, -1
+            def c2, 0, 0, 0, 0.5
+            def c3, 0, 0, 0, 0
+            def c4, 0, 0, 0, 1
 
             /** Samplers ************************************************/
             /*
-                t0 -> float4 _Render_Texture = tex2D(S2D_Image, In);
-
-                t0 -> In : TEXCOORD0;
+                t0 -> float4 _Render_Texture = tex2D(S2D_Image, TEXCOORD0);
             */
-            texld r0, t0
+            tex t0
 
             
-            add r1.w, -r0.w, c1.w
-            cmp r1.w, r1.w, c2.w, c3.w
-            mul r2.w, c0.x, c4.w
-            + mov r1.xyz, r0
-            add r2.w, r2.w, c3.w
-            mul r0, r0, r2.w
-            mad r0, r1, c0.x, r0
+            mad r0.w, t0_bias.w, c1.w, c2.w
+            cnd r1.w, r0.w, c3.w, c4.w
+            dp3 t1, c1, c0
+            mul t1.w, t1.w, c1.w
+        + mov r1.xyz, t0
+            add t1.w, t1.w, c4.w
+            mul t0, t0, t1.w
+            dp3 t1, c1, c0
+            mad r0, r1, t1, t0
         };
     }
 }
