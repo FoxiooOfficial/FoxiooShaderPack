@@ -1,0 +1,45 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+sampler2D S2D_Image : register(s0);
+
+/***********************************************************/
+/* Varibles */
+/***********************************************************/
+
+    float _Mixing;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
+{
+    float4 _Render_Texture = tex2D(S2D_Image, In);
+    float4 _Result;
+
+        _Result.rgb = _Render_Texture.rgb;
+        _Result.a = _Render_Texture.a > 0.5;
+
+        _Result = lerp(_Render_Texture, _Result, _Mixing);
+
+    return _Result;
+}
+
+/************************************************************/
+/* Tech Main */
+/************************************************************/
+
+technique tech_main { pass P0 { PixelShader = compile ps_1_4 ps_main(); } }
