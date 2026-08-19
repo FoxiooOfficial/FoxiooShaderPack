@@ -9,38 +9,68 @@
 
 /* ####################################################### */
 
+//@Begin_vertex
+
+#ifdef GL_ES
+ precision mediump float;
+#endif
+uniform mat4 transformMatrix;
+uniform mat4 projectionMatrix;
+
+attribute vec4 position;
+attribute vec2 texCoord;
+varying vec2 In;
+
+void main(void)
+{
+	In = texCoord;
+	gl_Position = projectionMatrix * transformMatrix * position;
+}
+
+//@End
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+#ifdef GL_ES
+ precision mediump float;
+#endif
+
+varying vec2 In;
+
 /***********************************************************/
 /* Samplers */
 /***********************************************************/
 
-sampler2D S2D_Image : register(s0);
-//sampler2D S2D_Background : register(s1);
+uniform sampler2D imgTexture;
+//uniform sampler2D bckgTexture;
+
+uniform lowp vec4 blendColor;
+//uniform float fPixelWidth;
+//uniform float fPixelHeight;
 
 /***********************************************************/
 /* Varibles */
 /***********************************************************/
 
-    float _Mixing;
+uniform float _Mixing;
 
 /************************************************************/
 /* Main */
 /************************************************************/
 
-float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
+void main(void)
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Result = _Render_Texture;
-        
-        if ( _Result.a != 0.0 )
-            _Result.rgb = _Render_Texture.rgb / _Render_Texture.a;
+    vec4 _Render_Texture = texture2D(imgTexture, In) * blendColor;
+    vec4 _Result;
 
-        _Result = lerp(_Render_Texture, _Result, _Mixing);
+        _Result.rgb = _Render_Texture.rgb;
+        _Result.a = float(_Render_Texture.a > 0.0);
 
-    return _Result;
+        _Result = mix(_Render_Texture, _Result, _Mixing);
+
+    gl_FragColor = _Result;
 }
 
-/************************************************************/
-/* Tech Main */
-/************************************************************/
-
-technique tech_main { pass P0 { PixelShader = compile ps_2_0 ps_main(); } }
+//@End

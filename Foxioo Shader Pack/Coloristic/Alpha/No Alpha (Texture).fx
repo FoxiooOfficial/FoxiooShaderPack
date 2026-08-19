@@ -14,7 +14,6 @@
 /***********************************************************/
 
 sampler2D S2D_Image : register(s0);
-//sampler2D S2D_Background : register(s1);
 
 /***********************************************************/
 /* Varibles */
@@ -29,12 +28,10 @@ sampler2D S2D_Image : register(s0);
 float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
 {
     float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Result = _Render_Texture;
-        
-        if ( _Result.a != 0.0 )
-            _Result.rgb = _Render_Texture.rgb / _Render_Texture.a;
+    float4 _Result;
 
-        _Result = lerp(_Render_Texture, _Result, _Mixing);
+        _Result.rgb = _Render_Texture.rgb;
+        _Result.a = lerp(_Render_Texture.a, 1.0, _Mixing);
 
     return _Result;
 }
@@ -43,4 +40,4 @@ float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_2_0 ps_main(); } }
+technique tech_main { pass P0 { PixelShader = compile ps_1_1 ps_main(); } }

@@ -1,20 +1,20 @@
 <effect>
-	<name>Cut-Off Alpha Test (Texture)</name>
-		<description>The shader checks the alpha value; if it is greater than 0, it sets it to 1; otherwise, it sets it to 0. Additionally, it multiplies the RGB colors by the original alpha value.</description> 
+	<name>No Alpha (Texture)</name>
+		<description>The shader sets the alpha color to 1.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>0</BackgroundTexture>
 				<dx8>0</dx8>
 				<PSVersion>1.1</PSVersion>
-				
+
 		<parameter>
 			<name>/* Foxioo Cut-Off Alpha Test (Texture) Shader | 2026.08.19 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
 
-			<description>The shader checks the alpha value; if it is greater than 0, it sets it to 1; otherwise, it sets it to 0. Additionally, it multiplies the RGB colors by the original alpha value.</description>
+			<description>The shader sets the alpha color to 1.</description>
 		</parameter>
 
 			<parameter>

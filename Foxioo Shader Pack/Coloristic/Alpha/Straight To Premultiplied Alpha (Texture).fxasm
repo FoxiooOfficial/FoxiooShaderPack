@@ -1,0 +1,66 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+texture T_Image;
+
+/***********************************************************/
+/* Varibles */
+/***********************************************************/
+
+    float _Mixing;
+
+/************************************************************/
+/* Tech Main */
+/************************************************************/
+
+technique tech_main
+{
+    pass P0
+    {
+        Texture[0] = <T_Image>;
+        MinFilter[0] = LINEAR;
+        MagFilter[0] = LINEAR;
+        MipFilter[0] = LINEAR;
+        AddressU[0] = WRAP;
+        AddressV[0] = WRAP;
+
+        PixelShaderConstant[0] = <_Mixing>;
+
+        PixelShader = asm
+        {
+            ps.1.1
+
+            /** Consts ************************************************/
+            def c1, 1, 0, 0, -1
+            def c2, 0, 0, 0, 1
+
+            /** Samplers ************************************************/
+            /*
+                t0 -> float4 _Render_Texture = tex2D(S2D_Image, TEXCOORD0);
+            */
+            tex t0
+
+            
+            mov r0.w, t0.w
+            dp3 r1, c1, c0
+            mul r1.w, r1.w, c1.w
+        + mul r0.xyz, t0.w, t0
+            add r1.w, r1.w, c2.w
+            mul r1, t0, r1.w
+            dp3 t0, c1, c0
+            mad r0, r0, t0, r1
+        };
+    }
+}

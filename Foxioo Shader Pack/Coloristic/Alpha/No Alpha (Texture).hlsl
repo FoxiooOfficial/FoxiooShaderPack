@@ -66,10 +66,8 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
     float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
     float4 _Result;
 
-        _Result.rgb = _Render_Texture.rgb * _Render_Texture.a;
-        _Result.a = _Render_Texture.a > 0.0;
-
-        _Result = lerp(_Render_Texture, _Result, _Mixing);
+        _Result.rgb = _Render_Texture.rgb;
+        _Result.a = lerp(_Render_Texture.a, 1.0, _Mixing);
 
     return _Result;
 }

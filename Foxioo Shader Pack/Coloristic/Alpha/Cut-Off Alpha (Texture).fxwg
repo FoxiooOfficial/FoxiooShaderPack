@@ -1,0 +1,67 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+//uniform sampler2D bckgTexture;
+
+//uniform float fPixelWidth;
+//uniform float fPixelHeight;
+
+/***********************************************************/
+/* Varibles */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Mixing: f32,
+    parameter2_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        var _Result: vec4f;
+
+            {
+                let _fusionSwizzle0 = _Render_Texture.rgb;
+                _Result.x = _fusionSwizzle0.x;
+                _Result.y = _fusionSwizzle0.y;
+                _Result.z = _fusionSwizzle0.z;
+            }
+            _Result.a = f32(_Render_Texture.a > 0.0);
+
+            _Result = mix(_Render_Texture, _Result, params._Mixing);
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End

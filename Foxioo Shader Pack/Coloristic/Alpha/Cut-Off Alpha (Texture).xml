@@ -1,6 +1,6 @@
 <effect>
-	<name>Cut-Off Alpha Test (Texture)</name>
-		<description>The shader checks the alpha value; if it is greater than 0, it sets it to 1; otherwise, it sets it to 0. Additionally, it multiplies the RGB colors by the original alpha value.</description> 
+	<name>Cut-Off Alpha (Texture)</name>
+		<description>The shader checks the alpha value; if it is greater than 0, it sets it to 1; otherwise, it sets it to 0.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
@@ -14,7 +14,7 @@
 
 			<variable>_</variable>
 
-			<description>The shader checks the alpha value; if it is greater than 0, it sets it to 1; otherwise, it sets it to 0. Additionally, it multiplies the RGB colors by the original alpha value.</description>
+			<description>The shader checks the alpha value; if it is greater than 0, it sets it to 1; otherwise, it sets it to 0.</description>
 		</parameter>
 
 			<parameter>
