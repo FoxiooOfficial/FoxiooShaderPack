@@ -9,7 +9,7 @@
 				<PSVersion>1.1</PSVersion>
 
 		<parameter>
-			<name>/* Foxioo Straight To Premultiplied Alpha (Texture) Shader | 2026.08.19 */</name>
+			<name>/* Foxioo Straight To Premultiplied Alpha (Texture) Shader | 2026.08.19a */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
