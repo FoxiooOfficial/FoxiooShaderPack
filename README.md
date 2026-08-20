@@ -37,7 +37,7 @@ Shaders are amazing; thanks to them, I created another project called [Tails7](h
 
 ## Technical Specifications
 
-- Description was last updated on **August 6, 2026**
+- Description was last updated on **August 21, 2026**
 - I'm count the number of effects in the latest release; there are currently **420**
    - The last release was on **[April 13, 2026](https://github.com/FoxiooOfficial/FoxiooShaderPack/releases/)**
    - FSP release requirements:
@@ -112,7 +112,7 @@ Shaders are amazing; thanks to them, I created another project called [Tails7](h
 
 ## Installation
 
-1. Click on the **"Code"** button then **"Download ZIP"**.<br><br>
+1. <s>Click on the **"Code"** button then **"Download ZIP"**.</s> Download from [Releases](https://github.com/FoxiooOfficial/FoxiooShaderPack/releases/); for more information, read the details [Here](#technical-specifications)<br><br>
 ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Installaton/1.png?raw=true)<br>
 2. Open Clickteam Fusion, go to the **"Tools"** tab and click **"Windows Explorer"**. **This will show you a window where Clickteam Fusion is installed.**<br><br>
 ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Installaton/2.png?raw=true)<br>
