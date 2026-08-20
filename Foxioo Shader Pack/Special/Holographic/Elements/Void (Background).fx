@@ -74,7 +74,7 @@ float Fun_Random(float2 In)
     return frac(sin(dot(In, float2(12.9898, 78.233))) * 43758.5453);
 }
 
-float4 Main(in float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
 {
     In = frac(In);
 
@@ -113,4 +113,4 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_2_a Main(); } }
+technique tech_main { pass P0 { PixelShader = compile ps_2_a ps_main(); } }

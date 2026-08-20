@@ -34,8 +34,9 @@ cbuffer PS_VARIABLES : register(b0)
 
 struct PS_INPUT
 {
-  float4 Tint : COLOR0;
-  float2 texCoord : TEXCOORD0;
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float4 Position : SV_POSITION;
 };
 
 struct PS_OUTPUT
@@ -115,7 +116,7 @@ PS_OUTPUT ps_main_pm( in PS_INPUT In )
             _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord + float2(fPixelWidth, fPixelHeight));
             float4 _RenderOff2 = _Blending_Mode ? _Render_Background : _Render_Texture;
 
-            _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;            
+            _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint);            
             _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
             float4 _Render = _Blending_Mode ? _Render_Background : _Render_Texture;
 

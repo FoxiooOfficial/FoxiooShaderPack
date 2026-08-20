@@ -83,7 +83,7 @@ float4x4 Fun_OrthoMatrix_Center(float2 _Pos, float2 _Res, float2 _Z)
     );
 }
 
-VS_OUTPUT vs_Main(const VS_INPUT In)
+VS_OUTPUT vs_main(const VS_INPUT In)
 {
     VS_OUTPUT Out;
 
@@ -185,7 +185,7 @@ VS_OUTPUT vs_Main(const VS_INPUT In)
 /* Main */
 /************************************************************/
 
-float4 Main(in float2 In : TEXCOORD0, in float3 Polygon : TEXCOORD1, in float  WReflected : TEXCOORD2) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0, in float3 Polygon : TEXCOORD1, in float  WReflected : TEXCOORD2) : COLOR0
 {
     /* polygon checks */
     if (isnan(Polygon.z) || isnan(WReflected))                      clip(-1);
@@ -214,7 +214,7 @@ technique tech_main
 {
     pass P0
     {
-        PixelShader = compile ps_2_0 Main();
-        VertexShader = compile vs_1_1 vs_Main();
+        PixelShader = compile ps_2_0 ps_main();
+        VertexShader = compile vs_1_1 vs_main();
     }
 }

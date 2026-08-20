@@ -54,7 +54,7 @@ float2 Fun_UV(float _UVRot, float2 _UVPos, float _UVScaler, float2 UV)
     return frac(UV * _UVScaler);
 }
 
-float4 Main(float2 In: TEXCOORD) : COLOR
+float4 ps_main(float2 In: TEXCOORD) : COLOR
 {   
     float4 _Render_Texture = tex2D(S2D_Image, In);
 
@@ -81,4 +81,4 @@ float4 Main(float2 In: TEXCOORD) : COLOR
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_2_a Main(); } }
+technique tech_main { pass P0 { PixelShader = compile ps_2_a ps_main(); } }

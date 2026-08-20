@@ -7,7 +7,7 @@
 				<BackgroundTexture>0</BackgroundTexture>
 
 		<parameter>
-			<name>/* Foxioo Bubble Mask (Texture) Shader | 1.0 (27.02.2026) */</name>
+			<name>/* Foxioo Bubble Mask (Texture) Shader | 2026.06.26 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

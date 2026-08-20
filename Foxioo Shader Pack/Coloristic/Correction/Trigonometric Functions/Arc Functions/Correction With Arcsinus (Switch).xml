@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Correction With Arcsinus (Switch) Shader | 1.4 (18.10.2025) */</name>
+			<name>/* Foxioo Correction With Arcsinus (Switch) Shader | 2026.06.26 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
@@ -39,10 +39,10 @@
 			</parameter>
 
 			<parameter>
-				<name>Background Multiplication</name>
+				<name>Color Multiplication</name>
 				<variable>_Mul</variable>
 				
-				<description>This variable defines the background multiplication factor. In previous versions of FSP shaders, it was _Mixing, but this has now been fixed.</description>
+				<description>This variable defines the color multiplication factor.</description>
 
 				<type>float</type>
 

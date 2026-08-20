@@ -177,7 +177,7 @@ PS_OUTPUT ps_main_pm( in PS_INPUT In )
 
     float4 _Result = pow(abs(_Result_Blur), _Power) * _Mixing;
 
-    Out.Color = _Result * _Alpha * Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
+    Out.Color = _Result * _Alpha * Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint);
 
     Out.Color.rgb *= Out.Color.a;
     return Out;

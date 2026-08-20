@@ -103,7 +103,7 @@ float2 Fun_Rotation(float2 In, float2 _Pivot, float _Mul, float _Off, float _Rot
 /* Main */
 /************************************************************/
 
-PS_OUTPUT Main(float2 In: TEXCOORD)
+PS_OUTPUT ps_main(float2 In: TEXCOORD)
 {   
     PS_OUTPUT Out;
 
@@ -193,4 +193,4 @@ PS_OUTPUT Main(float2 In: TEXCOORD)
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_2_0 Main(); } }
+technique tech_main { pass P0 { PixelShader = compile ps_2_0 ps_main(); } }

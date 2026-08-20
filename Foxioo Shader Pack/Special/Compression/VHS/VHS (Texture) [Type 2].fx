@@ -145,7 +145,7 @@ float Fun_Rand(float2 In)
 
 #define M_PI 3.14159265358979323846
 
-float4 Main(in float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
 {       
     float _UV_Y = cos(In.y * 4.0 / tan(In.y - _Time / 36.0) + _Time * 0.01 + sin(In.y * 3.0 - _Time * 0.0001) * 0.01 + sin(In.y / 5.0 - _Time * 0.32)) * fPixelHeight + fPixelHeight * 2.0 * sin(In.y / 7.12 + _Time * 0.001);
     _UV_Y += Fun_Rand(In.xy + _UV_Y) * fPixelHeight;
@@ -223,4 +223,4 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_3_0 Main(); } }
+technique tech_main { pass P0 { PixelShader = compile ps_3_0 ps_main(); } }

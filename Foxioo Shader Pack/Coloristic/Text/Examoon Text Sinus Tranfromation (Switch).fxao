@@ -1,0 +1,106 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_vertex
+
+#ifdef GL_ES
+ precision mediump float;
+#endif
+uniform mat4 transformMatrix;
+uniform mat4 projectionMatrix;
+
+attribute vec4 position;
+attribute vec2 texCoord;
+varying vec2 In;
+
+void main(void)
+{
+	In = texCoord;
+	gl_Position = projectionMatrix * transformMatrix * position;
+}
+
+//@End
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+#ifdef GL_ES
+ precision mediump float;
+#endif
+
+varying vec2 In;
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+uniform sampler2D imgTexture;
+uniform sampler2D bckgTexture;
+
+uniform lowp vec4 blendColor;
+uniform float fPixelWidth;
+uniform float fPixelHeight;
+
+/***********************************************************/
+/* Varibles */
+/***********************************************************/
+
+uniform float _Mixing;
+uniform float _PT;
+uniform float _DPI;
+uniform float _Height;
+
+uniform float _OffsetY;
+uniform float _ScaleY;
+
+uniform vec4 _Light;
+uniform vec4 _Dark;
+
+uniform float _PosX;
+uniform float _PosY;
+uniform vec4 _Shadow;
+uniform float _Alpha;
+
+#define M_PI 3.14159265358979323846
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+void main(void)
+{
+    vec4 _Render_Texture = texture2D(imgTexture, In) * blendColor;
+    vec4 _Result;
+        
+        _Result.a = _Render_Texture.a;
+
+        vec2 _Res = vec2(fPixelWidth, fPixelHeight);
+        float _FontSize = _DPI / 72.0 * _PT * _Res.y;
+
+            float _Gradient = cos(((In.y - _OffsetY * _FontSize) * _ScaleY * 2.0) * M_PI / _FontSize * (2.0 / _Height));
+
+                _Result.rgb = mix(_Dark.rgb, _Light.rgb, _Gradient);
+
+            vec2 _ShadowOffset = vec2(_PosX, _PosY) * _Res;
+
+                vec4 _Render_Shadow = texture2D(imgTexture, In - _ShadowOffset) * blendColor;
+                    _Render_Shadow.rgb = _Shadow.rgb;
+                    _Render_Shadow.a *= _Alpha;
+
+            _Result = mix(_Render_Shadow, _Result, _Result.a);
+
+        _Result = mix(_Render_Texture, _Result, _Mixing);
+
+    gl_FragColor = _Result;
+}
+
+//@End

@@ -69,7 +69,7 @@ float2 Fun_RotationX(float2 In)
 
 }
 
-float4 Main(in float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
 {
     float2  _Pos = float2(_PosX, _PosY),
         _UV = Fun_RotationX((In + _Pos));
@@ -107,4 +107,4 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_2_a Main(); } }
+technique tech_main { pass P0 { PixelShader = compile ps_2_a ps_main(); } }

@@ -64,7 +64,7 @@ float2 Fun_RotationX(float2 In)
     return _UV;
 }
 
-float4 Main(float2 In: TEXCOORD) : COLOR
+float4 ps_main(float2 In: TEXCOORD) : COLOR
 {   
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In);
@@ -105,4 +105,4 @@ float4 Main(float2 In: TEXCOORD) : COLOR
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_2_a Main(); } }
+technique tech_main { pass P0 { PixelShader = compile ps_2_a ps_main(); } }

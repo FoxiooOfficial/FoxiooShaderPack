@@ -53,7 +53,7 @@ float2 Fun_ChannelUV(float2 In, float _PosX, float _PosY, float _PointX, float _
     return UV;
 }
 
-float4 Main(float2 In: TEXCOORD) : COLOR
+float4 ps_main(float2 In: TEXCOORD) : COLOR
 {   
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render;
@@ -107,4 +107,4 @@ float4 Main(float2 In: TEXCOORD) : COLOR
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_2_a Main(); } }
+technique tech_main { pass P0 { PixelShader = compile ps_2_a ps_main(); } }

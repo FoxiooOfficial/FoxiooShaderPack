@@ -1,15 +1,15 @@
 <effect>
-	<name>Mode 7 (Switch)</name>
-		<description>Shader giving Mode 7 style perspective effect. (Mainly intended for Tails7 R1.0.3+)</description> 
+	<name>Tails7 Rendering Ground Base (Switch) [R1.0.x]</name>
+		<description>A &quot;base&quot; for the Tails7 engine to work with the perspective system, creating a &quot;Mode 7&quot; effect; primarily intended for legacy versions of Tails7 (R1.0.1, R1.0.2, and R1.0.3)</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 
 		<parameter>
-			<name>/* Foxioo Mode 7 (Switch) Shader | 2.0 (21.03.2026) Tails7 R1.0.3 */</name>
+			<name>/* Foxioo Tails7 Rendering Ground Base (Switch) [R1.0.x] Shader | 2026.06.26 */</name>
 			<property>checkbox</property>
-			<description>Shader giving Mode 7 style perspective effect. (Mainly intended for Tails7 R1.0.3+)</description>
+			<description>A &quot;base&quot; for the Tails7 engine to work with the perspective system, creating a &quot;Mode 7&quot; effect; primarily intended for legacy versions of Tails7 (R1.0.1, R1.0.2, and R1.0.3)</description>
 			<variable>_</variable>
 		</parameter>
 

@@ -37,8 +37,9 @@ cbuffer PS_VARIABLES : register(b0)
 
 struct PS_INPUT
 {
-  float4 Tint : COLOR0;
-  float2 texCoord : TEXCOORD0;
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float4 Position : SV_POSITION;
 };
 
 struct PS_OUTPUT
@@ -56,10 +57,34 @@ cbuffer PS_PIXELSIZE : register(b1)
 /* Main */
 /************************************************************/
 
-float4 Fun_Asin(float4 _Color, int _Mod)
-{  
-    float4 _2Color = _Color * (_Color * _Mod);
-    return  (_Color + (_2Color * _Color) / 6 + (3 * _2Color * _2Color * _Color) / 40 + (5 * _2Color * _2Color * _2Color * _Color) / 112);
+#define M_PI 3.14159265359
+
+float3 Fun_Asin(float3 _Color, int _Case)
+{   
+    float3 _Render = asin(_Color);
+
+    if(_Case == 0) // Native
+        return _Render;
+
+    else if(_Case == 1) // D3D9
+    { 
+        float a = -1.0 / M_PI * 1.07596;
+        float p = -M_PI;
+
+        if(any(_Color < -1.0))
+            return a * pow((_Color - p), 2.0);
+
+        else if(any(_Color > 1.0))
+            return -a * pow((-_Color - p), 2.0);
+
+        else
+            return _Render;
+    }
+
+    else if(_Case == 2) // D3D11, OGL
+        return (any(abs(_Render > 1.0))) ? _Color <= 1.0f : _Render;
+
+    else return float3(0.0f, 0.0f, 0.0f);
 }
 
 PS_OUTPUT ps_main( in PS_INPUT In )
@@ -69,43 +94,17 @@ PS_OUTPUT ps_main( in PS_INPUT In )
     float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
 
-        float4 _Result = float4(0,0,0,0);
+        float4 _Result = 0;
         float4 _Render;
 
         if(_Blending_Mode == 0)
         {
-            switch (_Render_Switch)
-            {
-                case 0: // Asin mode from Direct3D11
-                        _Result = asin(_Render_Texture * _Mul);
-                    break;
-
-                case 1: // Asin mode SYMULATED from Direct3D9
-                        _Result = abs(Fun_Asin(_Render_Texture * _Mul, -1));
-                    break;
-
-                case 2: // Asin mode SYMULATED from Direct3D11
-                        _Result = Fun_Asin(_Render_Texture * _Mul, 1);
-                    break;
-            };
+            _Result.rgb = Fun_Asin(_Render_Texture.rgb * _Mul, _Render_Switch);
             _Render = _Render_Texture;
         }
         else
         {
-            switch (_Render_Switch)
-            {
-                case 0: // Asin mode from Direct3D11
-                        _Result = asin(_Render_Background * _Mul);
-                    break;
-
-                case 1: // Asin mode SYMULATED from Direct3D9
-                        _Result = abs(Fun_Asin(_Render_Background * _Mul, -1));
-                    break;
-
-                case 2: // Asin mode SYMULATED from Direct3D11
-                        _Result = Fun_Asin(_Render_Background * _Mul, 1);
-                    break;
-            };
+            _Result.rgb = Fun_Asin(_Render_Background.rgb * _Mul, _Render_Switch);
             _Render = _Render_Background;
         }
 
@@ -130,46 +129,20 @@ PS_OUTPUT ps_main_pm( in PS_INPUT In )
 {
     PS_OUTPUT Out;
 
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint);
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
 
-        float4 _Result = float4(0,0,0,0);
+        float4 _Result = 0;
         float4 _Render;
 
         if(_Blending_Mode == 0)
         {
-            switch (_Render_Switch)
-            {
-                case 0: // Asin mode from Direct3D11
-                        _Result = asin(_Render_Texture * _Mul);
-                    break;
-
-                case 1: // Asin mode SYMULATED from Direct3D9
-                        _Result = abs(Fun_Asin(_Render_Texture * _Mul, -1));
-                    break;
-
-                case 2: // Asin mode SYMULATED from Direct3D11
-                        _Result = Fun_Asin(_Render_Texture * _Mul, 1);
-                    break;
-            };
+            _Result.rgb = Fun_Asin(_Render_Texture.rgb * _Mul, _Render_Switch);
             _Render = _Render_Texture;
         }
         else
         {
-            switch (_Render_Switch)
-            {
-                case 0: // Asin mode from Direct3D11
-                        _Result = acos(_Render_Background * _Mul);
-                    break;
-
-                case 1: // Asin mode SYMULATED from Direct3D9
-                        _Result = abs(Fun_Asin(_Render_Background * _Mul, -1));
-                    break;
-
-                case 2: // Asin mode SYMULATED from Direct3D11
-                        _Result = Fun_Asin(_Render_Background * _Mul, 1);
-                    break;
-            };
+            _Result.rgb = Fun_Asin(_Render_Background.rgb * _Mul, _Render_Switch);
             _Render = _Render_Background;
         }
 

@@ -84,7 +84,7 @@ float2 Fun_Quad(float2 UV)
 }
 
 
-float4 Main(in float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
 {  
     float2 _In = Fun_Quad(In);
 
@@ -99,4 +99,4 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_2_a Main(); } };
+technique tech_main { pass P0 { PixelShader = compile ps_2_a ps_main(); } };

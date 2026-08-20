@@ -58,6 +58,7 @@
 				<type>float</type>
 
 				<value>0</value>
+				<preview_value>0.15</preview_value>
 			</parameter>
 
 			<parameter>

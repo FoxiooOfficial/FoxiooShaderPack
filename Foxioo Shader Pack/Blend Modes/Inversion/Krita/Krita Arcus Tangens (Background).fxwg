@@ -43,8 +43,6 @@ struct Params {
 /* Main */
 /************************************************************/
 
-// Expanded source constant: M_PI
-
 struct FragmentInput {
     @location(0) texCoord: vec2f,
     @location(1) color: vec4f,

@@ -246,7 +246,7 @@ PS_OUTPUT ps_main_pm(in PS_INPUT In)
     float2 _In = Fun_Quad(In.texCoord);
     float _Border = all(_In >= 0.0) && all(_In <= 1.0);
 
-        float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
+        float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint);
 
         _Render_Texture.a *=  1.0 - _Border;
         _Render_Texture.rgb *= _Render_Texture.a;

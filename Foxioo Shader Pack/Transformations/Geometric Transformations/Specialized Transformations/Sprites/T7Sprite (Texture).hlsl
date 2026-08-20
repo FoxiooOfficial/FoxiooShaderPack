@@ -81,7 +81,7 @@ PS_OUTPUT ps_main_pm( in PS_INPUT In )
     PS_OUTPUT Out;
     Out.Depth = saturate(_Depth - (1.0 - In.texCoord.y));
 
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint);
     float _Render_Depth = Out.Depth;
 
     float4 _Result = _Render_Texture;

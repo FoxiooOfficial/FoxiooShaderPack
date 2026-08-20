@@ -129,7 +129,7 @@
 				<name>Time</name>
 				<variable>_Time</variable>
 				
-				<description>This variable specifies the noise animation timer</description>
+				<description>This variable specifies the noise animation timer.</description>
 
 				<type>float</type>
 

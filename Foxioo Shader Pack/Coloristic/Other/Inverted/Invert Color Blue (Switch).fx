@@ -45,4 +45,4 @@ float4 main(in float2 In : TEXCOORD0) : COLOR0
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_2_0 main(); } }
+technique tech_main { pass P0 { PixelShader = compile ps_1_4 main(); } }

@@ -37,15 +37,15 @@ cbuffer PS_VARIABLES : register(b0)
     float xD;
     float yD;
     bool __;
-
 	bool _Is_Pre_296_Build;
 	bool ___;
 };
 
 struct PS_INPUT
 {
-  float4 Tint : COLOR0;
-  float2 texCoord : TEXCOORD0;
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float4 Position : SV_POSITION;
 };
 
 struct PS_OUTPUT
