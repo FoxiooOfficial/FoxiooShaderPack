@@ -28,8 +28,6 @@ cbuffer PS_VARIABLES : register(b0)
     bool _;
     float _Mixing;
     bool __;
-	bool _Is_Pre_296_Build;
-	bool ___;
 };
 
 struct PS_INPUT
@@ -74,14 +72,14 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
 
         float4 _Result = _Render_Texture;
 
-        const float3 _Lum = float3(0.2126, 0.7152, 0.0722);
+            const float3 _Lum = float3(0.2126, 0.7152, 0.0722);
+            float _Average_Texture = dot(_Render_Texture.rgb, _Lum);
+            float _Average_Background = dot(_Render_Background.rgb, _Lum);
+                
+                float _Threshold = (_Mixing * 2.0) - 1.0; 
 
-        float _Average_Texture = dot(_Render_Texture.rgb, _Lum);
-        float _Average_Background = dot(_Render_Background.rgb, _Lum);
-
-            if (_Average_Background >= _Average_Texture * _Mixing) { _Result.rgb = _Render_Background.rgb; }
-
-        //_Result.a = _Render_Texture.a;
+        if ((_Average_Texture - _Average_Background) <= _Threshold)
+            _Result.rgb = _Render_Background.rgb;
 
     return _Result;
 }

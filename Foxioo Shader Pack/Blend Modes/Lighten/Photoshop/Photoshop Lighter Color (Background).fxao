@@ -68,14 +68,14 @@ void main(void)
 
         vec4 _Result = _Render_Texture;
 
-        const vec3 _Lum = vec3(0.2126, 0.7152, 0.0722);
+            const vec3 _Lum = vec3(0.2126, 0.7152, 0.0722);
+            float _Average_Texture = dot(_Render_Texture.rgb, _Lum);
+            float _Average_Background = dot(_Render_Background.rgb, _Lum);
+                
+                float _Threshold = (_Mixing * 2.0) - 1.0; 
 
-        float _Average_Texture = dot(_Render_Texture.rgb, _Lum);
-        float _Average_Background = dot(_Render_Background.rgb, _Lum);
-
-            if (_Average_Background >= _Average_Texture * _Mixing) { _Result.rgb = _Render_Background.rgb; }
-
-        //_Result.a = _Render_Texture.a;
+        if ((_Average_Texture - _Average_Background) <= _Threshold)
+            _Result.rgb = _Render_Background.rgb;
         
     gl_FragColor = _Result;
 }
