@@ -57,12 +57,10 @@ technique tech_main
             /** Samplers ************************************************/
             /*
                 r0 -> float4 _Render_Texture = tex2D(S2D_Image, In);
-                r1 -> float4 _Render_Background = tex2D(S2D_Background, In);
-
-                t0 -> float2 In : TEXCOORD0;
+                r1 -> float4 _Render_Background = tex2D(S2D_Background, In_Background);
             */
             texld r0, t0;
-            texld r1, t0;
+            texld r1, t1;
             
 
             add r1.xyz, r1, -r0;

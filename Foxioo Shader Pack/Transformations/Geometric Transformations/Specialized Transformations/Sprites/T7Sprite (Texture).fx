@@ -30,7 +30,7 @@ sampler2D S2D_Image : register(s0);
 /* Main */
 /************************************************************/
 
-PS_OUTPUT main(in float2 In : TEXCOORD0)
+PS_OUTPUT ps_main(in float2 In : TEXCOORD0)
 {
     PS_OUTPUT Out;
     /* Test only! */
@@ -53,5 +53,5 @@ PS_OUTPUT main(in float2 In : TEXCOORD0)
 
 technique tech_main
 {
-    pass P0 { PixelShader = compile ps_2_0 main(); }
+    pass P0 { PixelShader = compile ps_2_0 ps_main(); }
 }

@@ -58,8 +58,6 @@ technique tech_main
             /*
                 r0 -> float4 _Render_Texture = tex2D(S2D_Image, In);
                 r1 -> float4 _Render_Background = tex2D(S2D_Background, In_Background);
-
-                t0 -> float2 In : TEXCOORD0;
             */
             tex t0;
             tex t1;
