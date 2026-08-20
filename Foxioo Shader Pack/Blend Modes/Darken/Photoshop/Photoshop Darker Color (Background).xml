@@ -6,10 +6,10 @@
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 
-				<dx8>0</dx8>
+				<dx8>yes</dx8>
 				<PSVersion>1.4</PSVersion>
 		<parameter>
-			<name>/* Foxioo Photoshop Darker Color (Background) Shader | 2026.08.20 */</name>
+			<name>/* Foxioo Photoshop Darker Color (Background) Shader | 2026.08.21 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
@@ -25,7 +25,7 @@
 
 				<type>float</type>
 
-				<value>1</value>
+				<value>0.5</value>
 			</parameter>
 
         <parameter>

@@ -70,14 +70,18 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
     float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
 
-        float4 _Result = _Render_Texture;
-        const float3 _Lum = float3(0.2126, 0.7152, 0.0722);
+        float4 _Result;
+        _Result.rgb = _Render_Background.rgb;
+        _Result.a = _Render_Texture.a;
 
-            float _Average_Texture = dot(_Render_Texture.rgb, _Lum) * _Mixing;
+            const float3 _Lum = float3(0.2126, 0.7152, 0.0722);
+            float _Average_Texture = dot(_Render_Texture.rgb, _Lum);
             float _Average_Background = dot(_Render_Background.rgb, _Lum);
+                
+                float _Threshold = (_Mixing * 2.0) - 1.0; 
 
-                if (_Average_Background < _Average_Texture)
-                    _Result.rgb = _Render_Background.rgb;
+        if ((_Average_Background - _Average_Texture) > _Threshold)
+            _Result.rgb = _Render_Texture.rgb;
 
     return _Result;
 }
