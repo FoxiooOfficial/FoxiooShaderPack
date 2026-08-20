@@ -16,7 +16,7 @@ sampler2D S2D_Image : register(s0);
 sampler2D S2D_Background : register(s1);
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
     float _Mixing, _Mul;

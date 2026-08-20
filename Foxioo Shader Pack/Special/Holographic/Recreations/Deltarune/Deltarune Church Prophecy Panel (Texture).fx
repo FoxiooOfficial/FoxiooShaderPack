@@ -18,7 +18,7 @@ sampler2D S2D_Image : register(s0);
 sampler2D _Texture : register(s1);
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
 float4x4 transformMatrix;

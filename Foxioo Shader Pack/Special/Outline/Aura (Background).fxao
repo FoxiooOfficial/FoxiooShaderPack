@@ -50,7 +50,7 @@ uniform float fPixelWidth;
 uniform float fPixelHeight;
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
 uniform float _Mixing;
@@ -64,7 +64,7 @@ uniform float _Fraq;
 uniform float _Amp;
 uniform float _FraqEx;
 
-uniform bool _Is_Pre_296_Build;
+
 
 /************************************************************/
 /* Main */

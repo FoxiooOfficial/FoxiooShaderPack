@@ -37,7 +37,7 @@ sampler2D S2D_Background : register(s1) = sampler_state
 };
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
     float   _Mixing,

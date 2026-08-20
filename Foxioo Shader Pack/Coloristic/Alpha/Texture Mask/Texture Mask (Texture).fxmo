@@ -60,7 +60,7 @@ uniform float fPixelWidth;
 uniform float fPixelHeight;
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
 uniform float _PosX;
@@ -97,7 +97,7 @@ uniform sampler2D _Texture_Alpha;
 uniform float _Threshold_Alpha;
 uniform float _Lower_Alpha;
 uniform float _Upper_Alpha;
-//uniform bool _Is_Pre_296_Build;
+//
 
 /************************************************************/
 /* Main */

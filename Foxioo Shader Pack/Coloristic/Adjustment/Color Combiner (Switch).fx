@@ -21,7 +21,7 @@ sampler2D _Texture_C : register(s3);
 sampler2D _Texture_D : register(s4);
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
     float   _Mixing,

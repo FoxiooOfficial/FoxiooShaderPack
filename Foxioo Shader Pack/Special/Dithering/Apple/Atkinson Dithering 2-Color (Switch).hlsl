@@ -22,7 +22,7 @@ Texture2D<float4> _Texture_Dithering : register(t2);
 SamplerState _Texture_Dithering_Sampler : register(s2);
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
 cbuffer PS_VARIABLES : register(b0)
@@ -41,6 +41,7 @@ struct PS_INPUT
 {
   float4 Tint : COLOR0;
   float2 texCoord : TEXCOORD0;
+  float2 bgCoord : TEXCOORD1;
 };
 
 struct PS_OUTPUT

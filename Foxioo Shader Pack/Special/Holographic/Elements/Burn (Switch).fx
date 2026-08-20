@@ -18,7 +18,7 @@ sampler2D _Texture_Fire : register(s2);
 sampler2D _Texture_Mask : register(s3);
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
     float   _Mixing, _Offset,

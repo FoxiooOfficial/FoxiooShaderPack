@@ -17,7 +17,7 @@ sampler2D S2D_Image : register(s0);
 sampler2D S2D_Background : register(s1);
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
     float   _Mixing,
@@ -153,7 +153,7 @@ float3 HSVtoRGB(float _H, float _S, float _V)
     return (_Render + _M);
 }
 
-float4 Main(in float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
 {
     float4 _Render_Texture = (tex2D(S2D_Image, In));
     float4 _Render_Background = tex2D(S2D_Background, In_Background);
@@ -212,4 +212,4 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_3_0 Main(); } }
+technique tech_main { pass P0 { PixelShader = compile ps_3_0 ps_main(); } }

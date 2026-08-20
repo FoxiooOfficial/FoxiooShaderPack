@@ -72,7 +72,7 @@ uniform int _Looping_Mode;
 uniform float _ShearX;
 uniform float _ShearY;
 
-uniform bool _Is_Pre_296_Build;
+
 
 /************************************************************/
 /* Main */

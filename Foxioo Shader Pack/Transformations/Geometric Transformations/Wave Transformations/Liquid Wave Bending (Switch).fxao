@@ -50,7 +50,7 @@ uniform float fPixelWidth;
 uniform float fPixelHeight;
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
 uniform float _Mixing;
@@ -66,7 +66,7 @@ uniform int _Looping_Mode;
 uniform bool _Blending_Mode;
 uniform float _OffsetX;
 uniform float _OffsetY;
-uniform bool _Is_Pre_296_Build;
+
 
 /************************************************************/
 /* Main */

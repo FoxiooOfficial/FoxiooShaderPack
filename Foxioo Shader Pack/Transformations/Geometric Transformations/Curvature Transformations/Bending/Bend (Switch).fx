@@ -16,7 +16,7 @@ sampler2D S2D_Image : register(s0);
 sampler2D S2D_Background : register(s1);
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
     float   _PosX, _PosY,
@@ -64,7 +64,7 @@ float2 Fun_Bend(float2 In)
         return mul(_Rot, _Center) + _Point;
 }
 
-float4 ps_main(float2 In: TEXCOORD) : COLOR
+float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
 {   
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In_Background);

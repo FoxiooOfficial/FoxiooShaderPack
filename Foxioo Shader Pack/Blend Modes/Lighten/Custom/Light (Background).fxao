@@ -51,7 +51,7 @@ uniform float fPixelWidth;
 uniform float fPixelHeight;
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
 uniform float _Mixing;
@@ -59,7 +59,7 @@ uniform float _Alpha;
 uniform float _Brightness;
 uniform float _Mixing_Brightness;
 uniform float _Threshold;
-uniform bool _Is_Pre_296_Build;
+
 
 /************************************************************/
 /* Main */

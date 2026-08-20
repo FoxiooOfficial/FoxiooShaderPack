@@ -59,7 +59,7 @@ uniform float fPixelWidth;
 uniform float fPixelHeight;
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
 uniform float _Mixing;
@@ -67,7 +67,7 @@ uniform vec4 _Color;
 uniform float _Fade;
 uniform float _PosXFreeze;
 uniform float _PosYFreeze;
-//uniform bool _Is_Pre_296_Build;
+//
 
 /************************************************************/
 /* Main */

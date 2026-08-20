@@ -20,7 +20,7 @@ sampler2D S2D_Background : register(s1);
 sampler2D S2D_RimMap : register(s2);
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
     float   _Mixing,

@@ -18,7 +18,7 @@ sampler2D _Texture_NormalMap : register(s2);
 sampler2D _Texture_Overlay : register(s3);
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
     float   _Mixing,

@@ -50,7 +50,7 @@ uniform float fPixelWidth;
 uniform float fPixelHeight;
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
 uniform float _Mixing;
@@ -60,7 +60,7 @@ uniform int _Quality;
 uniform float _Power;
 uniform float _Alpha;
 uniform int _Alpha_Mode;
-uniform bool _Is_Pre_296_Build;
+
 
 /************************************************************/
 /* Main */

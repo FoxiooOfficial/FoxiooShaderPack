@@ -81,7 +81,7 @@ uniform float _DistortionYOffset;
 uniform float _DistortionYOffsetFactor;
 uniform float _DistortionYPow;
 
-uniform bool _Is_Pre_296_Build;
+
 
 /************************************************************/
 /* Main */

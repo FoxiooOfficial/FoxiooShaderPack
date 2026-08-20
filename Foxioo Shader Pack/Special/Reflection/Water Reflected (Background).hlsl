@@ -25,7 +25,7 @@ Texture2D<float4> S2D_Overlay : register(t3);
 SamplerState S2D_OverlaySampler : register(s3);
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
 cbuffer PS_VARIABLES : register(b0)
@@ -75,7 +75,9 @@ struct PS_INPUT
 {
   float4 Tint : COLOR0;
   float2 texCoord : TEXCOORD0;
+  float2 bgCoord : TEXCOORD1;
 };
+
 
 struct PS_OUTPUT
 {

@@ -60,7 +60,7 @@ uniform float fPixelWidth;
 uniform float fPixelHeight;
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
 uniform float _Mixing;
@@ -74,7 +74,7 @@ uniform float _OutlineOffset;
 
 uniform bool _OutlineCorner;
 
-uniform bool _Is_Pre_296_Build;
+
 
 #define _SIZE 1
 

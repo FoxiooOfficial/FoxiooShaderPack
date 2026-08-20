@@ -51,13 +51,13 @@ uniform lowp vec4 blendColor;
 //uniform float fPixelHeight;
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
 uniform float _Mixing;
 uniform float _Mul;
 uniform float _Denom;
-uniform bool _Is_Pre_296_Build;
+
 
 /************************************************************/
 /* Main */
@@ -75,11 +75,8 @@ vec4 Fun_FMod(vec4 _Value, float _Denom)
 
 void main(void)
 {
-    vec2 In_Background = In;
-    if(_Is_Pre_296_Build) In_Background.y = 1.0 - In_Background.y;
-
     vec4 _Render_Texture = texture2D(imgTexture, In) * blendColor;
-    vec4 _Render_Background = texture2D(bckgTexture, In_Background);
+    vec4 _Render_Background = texture2D(bckgTexture, In);
 
             vec4 _Result = Fun_FMod(_Render_Texture * (_Render_Background * _Mul), _Denom);
             _Result.rgb = mix(_Render_Texture.rgb, _Result.rgb, _Mixing);

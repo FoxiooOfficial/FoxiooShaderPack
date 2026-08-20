@@ -60,7 +60,7 @@ uniform float fPixelWidth;
 uniform float fPixelHeight;
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
 uniform int _Blending_Mode;
@@ -68,7 +68,7 @@ uniform float _Mixing;
 uniform float _Hue;
 uniform float _Saturation;
 uniform float _Intensity;
-uniform bool _Is_Pre_296_Build;
+
 
 /************************************************************/
 /* Main */

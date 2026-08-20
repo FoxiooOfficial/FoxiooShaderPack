@@ -83,7 +83,7 @@ uniform float _Start;
 uniform float _TuneHead;
 uniform float _TuneTail;
 
-uniform bool _Is_Pre_296_Build;
+
 
 /************************************************************/
 /* Main */

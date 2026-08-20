@@ -60,11 +60,11 @@ uniform lowp vec4 blendColor;
 //uniform float fPixelHeight;
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
 uniform float _Mixing;
-uniform bool _Is_Pre_296_Build;
+
 
 /************************************************************/
 /* Main */
@@ -73,11 +73,8 @@ uniform bool _Is_Pre_296_Build;
 out vec4 fragColor;
 void main(void)
 {
-    vec2 In_Background = In;
-    if(_Is_Pre_296_Build) In_Background.y = 1.0 - In_Background.y;
-
     vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
-    vec4 _Render_Background = texture(bckgTexture, In_Background);
+    vec4 _Render_Background = texture(bckgTexture, In);
     
         vec4 _Result;
 

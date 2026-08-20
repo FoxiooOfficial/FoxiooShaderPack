@@ -20,7 +20,7 @@ Texture2D<float4> S2D_Background : register(t1);
 SamplerState S2D_BackgroundSampler : register(s1);
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
 cbuffer PS_VARIABLES : register(b0)

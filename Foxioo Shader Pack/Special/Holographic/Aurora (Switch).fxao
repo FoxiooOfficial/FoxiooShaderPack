@@ -51,13 +51,13 @@ uniform lowp vec4 blendColor;
 //uniform float fPixelHeight;
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
 uniform float _Mixing;
 uniform float _Time;
 uniform bool _Blending_Mode;
-uniform bool _Is_Pre_296_Build;
+
 uniform sampler2D _Texture;
 
 /************************************************************/
@@ -83,11 +83,8 @@ const float _Max = 25.0;
 
 void main(void)
 {  
-    vec2 In_Background = In;
-    if(_Is_Pre_296_Build) In_Background.y = 1.0 - In_Background.y;
-
     vec4 _Render_Texture = texture2D(imgTexture, In) * blendColor;
-    vec4 _Render_Background = texture2D(bckgTexture, In_Background);
+    vec4 _Render_Background = texture2D(bckgTexture, In);
 
         vec4 _Result = _Blending_Mode ? _Render_Background : _Render_Texture;
         vec4 _Render = _Result;

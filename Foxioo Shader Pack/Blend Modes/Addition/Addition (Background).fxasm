@@ -23,45 +23,58 @@ texture T_Background;
 float _Mul;
 float _Mixing;
 
+/***********************************************************/
+/* Tech Main */
+/***********************************************************/
+
 technique tech_main
 {
     pass P0
     {
         Texture[0] = <T_Image>;                     // sampler2D S2D_Image      : register(s0);
+        MinFilter[0] = LINEAR;
+        MagFilter[0] = LINEAR;
+        MipFilter[0] = LINEAR;
+        AddressU[0] = WRAP;
+        AddressV[0] = WRAP;
+
         Texture[2] = <T_Background>;                // sampler2D S2D_Background : register(s1);
+        MinFilter[2] = LINEAR;
+        MagFilter[2] = LINEAR;
+        MipFilter[2] = LINEAR;
+        AddressU[2] = WRAP;
+        AddressV[2] = WRAP;
 
         PixelShaderConstant[0] = <_Mixing>;         // c0
         PixelShaderConstant[1] = <_Mul>;            // c1
         
         PixelShader = asm
         {
-            ps.1.4;
+            ps.1.1;
             
-            /** Consts ************************************************/
-            // None
+            /** Consts **************************************************/
+            def c2, 1, 0, 0, -1;
+            def c3, 0, 0, 0, 1;
 
             /** Samplers ************************************************/
             /*
-                r0 -> float4 _Render_Texture = tex2D(S2D_Image, In);
-                r1 -> float4 _Render_Background = tex2D(S2D_Background, In_Background);
-
-                t0 -> float2 In : TEXCOORD0;
+                t0 -> float4 _Render_Texture = tex2D(S2D_Image, In);
+                t1 -> float4 _Render_Background = tex2D(S2D_Background, In_Background);
             */
-            texld r0, t0;
-            texld r1, t0;
+            tex t0;
+            tex t1;
             
-            /** (r2)_Result = ((r1)_Render_Background * (c1)_Mul) + (r0)_Render_Texture;
-            /*
-                (r2)_Result.rgb = lerp((r2)_Render_Texture.rgb, (r0)_Result.rgb, (c0)_Mixing);
+            /** Assembly ************************************************/
 
-                return float4((r2)_Result.rgb, (r0)_Render_Texture.a);
-            */
-
-            mad r2.rgb, r1, c1.x, r0;
-
-            lrp r2.rgb, c0.x, r2, r0;
-
-            mov r0.rgb, r2;
+                dp3 r0, c2, c1;
+                mul r0.w, r0.w, c2.w;
+            + dp3 r1.xyz, c2, c0;
+                mad r1.xyz, t1, r1, t0;
+            + add r0.w, r0.w, c3.w;
+                mul r0.xyz, t0, r0.w;
+            + mov r0.w, t0.w;
+                dp3 t1.xyz, c2, c1;
+                mad r0.xyz, r1, t1, r0;
         };
     }
 }

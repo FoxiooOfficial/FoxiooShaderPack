@@ -22,7 +22,7 @@ Texture2D<float4> S2D_RimMap : register(t2);
 SamplerState S2D_RimMapSampler : register(s2);
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
 cbuffer PS_VARIABLES : register(b0)

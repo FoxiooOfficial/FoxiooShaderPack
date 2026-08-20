@@ -50,14 +50,14 @@ uniform lowp vec4 blendColor;
 //uniform float fPixelHeight;
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
 uniform float _Mixing;
 uniform float _Mul;
 uniform int _Render_Switch;
 uniform bool _Blending_Mode;
-uniform bool _Is_Pre_296_Build;
+
 
 /************************************************************/
 /* Main */

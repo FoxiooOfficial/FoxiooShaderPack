@@ -50,7 +50,7 @@ uniform float fPixelWidth;
 uniform float fPixelHeight;
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
 uniform float _Mixing;
@@ -65,7 +65,7 @@ uniform float _Scale;
 uniform float _Intensity;
 uniform bool _Blending_Mode;
 
-uniform bool _Is_Pre_296_Build;
+
 
 /************************************************************/
 /* Main */

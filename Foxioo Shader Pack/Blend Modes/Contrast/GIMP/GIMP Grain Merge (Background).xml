@@ -6,10 +6,10 @@
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 				<dx8>0</dx8>
-				<PSVersion>1.4</PSVersion>
+				<PSVersion>1.1</PSVersion>
 				
 		<parameter>
-			<name>/* Foxioo GIMP Grain Merge (Background) Shader | 2026.08.20 */</name>
+			<name>/* Foxioo GIMP Grain Merge (Background) Shader | 2026.08.20a */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

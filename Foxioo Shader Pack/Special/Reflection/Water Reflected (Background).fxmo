@@ -59,7 +59,7 @@ uniform float fPixelWidth;
 uniform float fPixelHeight;
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
 uniform float _Mixing;
@@ -93,7 +93,7 @@ uniform float _PointY;
 uniform float _RotX;
 uniform bool _X;
 uniform bool _Y;
-uniform bool _Is_Pre_296_Build;
+
 
 /************************************************************/
 /* Main */

@@ -20,7 +20,7 @@ sampler2D _Texture_Blue : register(s3);
 sampler2D _Texture_Alpha : register(s4);
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
     float   _Mixing,

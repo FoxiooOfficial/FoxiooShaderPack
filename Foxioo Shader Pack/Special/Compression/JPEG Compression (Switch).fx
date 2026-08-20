@@ -78,7 +78,7 @@ float Quantize(float _V, float _Levels, float _Mixing)
     return lerp(_V, _Quantize, _Mixing);
 }
 
-float4 ps_main(float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
 {
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In_Background);
@@ -86,7 +86,7 @@ float4 ps_main(float2 In : TEXCOORD0) : COLOR0
     float _Div = (_Segments * _Mixing * fPixelWidth) == 0 ? 0.00001 : (_Segments * _Mixing * fPixelWidth);
     float __Segments = 1.0 / _Div;
 
-        float4 _Result = _Blending_Mode ? Fun_Interpolation(In, __Segments, S2D_Background, _BlurScale) : Fun_Interpolation(In, __Segments, S2D_Image, _BlurScale);
+        float4 _Result = _Blending_Mode ? Fun_Interpolation(In, __Segments, S2D_Background, _BlurScale) : Fun_Interpolation(In_Background, __Segments, S2D_Image, _BlurScale);
         float4 _Render = _Blending_Mode ? _Render_Background : _Render_Texture;
     float Y  = Fun_Y(_Result.r, _Result.g, _Result.b);
     float Cb = Fun_Cb(_Result.b, Y);

@@ -59,7 +59,7 @@ uniform float fPixelWidth;
 uniform float fPixelHeight;
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
 uniform float _Mixing;
@@ -75,7 +75,7 @@ uniform vec4 _ColorShadow;
 uniform vec4 _Color;
 uniform float _Alpha;
 uniform vec4 _ColorLight;
-uniform bool _Is_Pre_296_Build;
+
 
 /************************************************************/
 /* Main */

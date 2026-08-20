@@ -58,7 +58,7 @@ uniform sampler2D bckgTexture;
 uniform lowp vec4 blendColor;
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
 uniform float _Mixing;

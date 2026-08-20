@@ -16,7 +16,7 @@ Texture2D<float4> S2D_Image : register(t0);
 SamplerState S2D_ImageSampler : register(s0);
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
 cbuffer PS_VARIABLES : register(b0)
@@ -34,7 +34,9 @@ struct PS_INPUT
 {
   float4 Tint : COLOR0;
   float2 texCoord : TEXCOORD0;
+  float2 bgCoord : TEXCOORD1;
 };
+
 
 struct PS_OUTPUT
 {

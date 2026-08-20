@@ -23,7 +23,7 @@ SamplerState _TextureSampler : register(s1);
 // SamplerState S2D_BackgroundSampler : register(s1);
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
 cbuffer PS_VARIABLES : register(b0)

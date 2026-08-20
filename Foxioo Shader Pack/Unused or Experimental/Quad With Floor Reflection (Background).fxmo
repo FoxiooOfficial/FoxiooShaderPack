@@ -73,7 +73,7 @@ uniform float yC;
 uniform float xD;
 uniform float yD;
 
-uniform bool _Is_Pre_296_Build;
+
 
 /***********************************************************/
 /* Main */

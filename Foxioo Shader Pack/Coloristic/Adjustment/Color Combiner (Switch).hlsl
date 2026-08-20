@@ -29,7 +29,7 @@ Texture2D<float4> _Texture_D : register(t4);
 SamplerState _Texture_DSampler : register(s4);
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
 cbuffer PS_VARIABLES : register(b0)

@@ -20,7 +20,7 @@ SamplerState S2D_ImageSampler : register(s0);
 // SamplerState S2D_BackgroundSampler : register(s1);
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
 cbuffer PS_VARIABLES : register(b0)

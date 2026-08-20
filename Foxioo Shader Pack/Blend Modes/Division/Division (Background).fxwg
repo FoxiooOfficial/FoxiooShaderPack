@@ -27,7 +27,7 @@ fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
 //uniform float fPixelHeight;
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
 struct Params {

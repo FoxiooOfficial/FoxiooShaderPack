@@ -28,7 +28,18 @@ technique tech_main
     pass P0
     {
         Texture[0] = <T_Image>;                     // sampler2D S2D_Image      : register(s0);
+        MinFilter[0] = LINEAR;
+        MagFilter[0] = LINEAR;
+        MipFilter[0] = LINEAR;
+        AddressU[0] = WRAP;
+        AddressV[0] = WRAP;
+
         Texture[2] = <T_Background>;                // sampler2D S2D_Background : register(s1);
+        MinFilter[2] = LINEAR;
+        MagFilter[2] = LINEAR;
+        MipFilter[2] = LINEAR;
+        AddressU[2] = WRAP;
+        AddressV[2] = WRAP;
 
         PixelShaderConstant[0] = <_Mixing>;         // c0
         PixelShaderConstant[1] = <_Blending_Mode>;  // c1

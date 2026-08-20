@@ -18,7 +18,7 @@ sampler2D S2D_Background : register(s1);
 sampler2D _Texture : register(s2);
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
     float _Time, _Mixing;

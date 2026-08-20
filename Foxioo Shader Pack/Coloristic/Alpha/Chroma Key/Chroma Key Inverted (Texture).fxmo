@@ -60,12 +60,12 @@ uniform float fPixelWidth;
 uniform float fPixelHeight;
 
 /***********************************************************/
-/* Varibles */
+/* Variables */
 /***********************************************************/
 
 uniform float _Mixing;
 uniform vec4 _ColorKey;
-//uniform bool _Is_Pre_296_Build;
+//
 
 /************************************************************/
 /* Main */
