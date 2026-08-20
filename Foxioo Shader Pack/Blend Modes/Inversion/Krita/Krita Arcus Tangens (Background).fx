@@ -30,7 +30,7 @@ sampler2D S2D_Background : register(s1);
 
 #define M_PI 3.14159265358979323846
 
-float4 Main(in float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
 {
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In);
@@ -39,16 +39,18 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
 
             if(!_Blending_Mode)
             { 
-                _Result.rgb = atan((_Render_Background.rgb / _Render_Texture.rgb) / M_PI) * 2.0;
+                _Result.rgb = (_Render_Background.rgb / _Render_Texture.rgb);
                 _Render = _Render_Background;
             }
             else 
             { 
-                _Result.rgb = atan((_Render_Texture.rgb / _Render_Background.rgb) / M_PI) * 2.0; 
+                _Result.rgb = (_Render_Texture.rgb / _Render_Background.rgb); 
                 _Render = _Render_Texture;
             }
-            _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
 
+            _Result.rgb = atan(_Result.rgb / M_PI) * 2.0;
+            _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
+            
         _Result.a = _Render_Texture.a;
 
     return _Result;
@@ -58,4 +60,4 @@ float4 Main(in float2 In : TEXCOORD0) : COLOR0
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_2_a Main(); } }
+technique tech_main { pass P0 { PixelShader = compile ps_2_a ps_main(); } }

@@ -56,7 +56,6 @@ uniform lowp vec4 blendColor;
 
 uniform float _Mixing;
 uniform bool _Blending_Mode;
-uniform bool _Is_Pre_296_Build;
 
 /************************************************************/
 /* Main */
@@ -66,26 +65,25 @@ uniform bool _Is_Pre_296_Build;
 
 void main(void)
 {
-    vec2 In_Background = In;
-    if(_Is_Pre_296_Build) In_Background.y = 1.0 - In_Background.y;
-
     vec4 _Render_Texture = texture2D(imgTexture, In) * blendColor;
-    vec4 _Render_Background = texture2D(bckgTexture, In_Background);
+    vec4 _Render_Background = texture2D(bckgTexture, In);
 
         vec4 _Result, _Render;
 
             if(!_Blending_Mode)
             { 
-                _Result.rgb = atan((_Render_Background.rgb / _Render_Texture.rgb) / M_PI) * 2.0;
+                _Result.rgb = (_Render_Background.rgb / _Render_Texture.rgb);
                 _Render = _Render_Background;
             }
             else 
             { 
-                _Result.rgb = atan((_Render_Texture.rgb / _Render_Background.rgb) / M_PI) * 2.0; 
+                _Result.rgb = (_Render_Texture.rgb / _Render_Background.rgb); 
                 _Render = _Render_Texture;
             }
-            _Result.rgb = mix(_Render.rgb, _Result.rgb, _Mixing);
 
+            _Result.rgb = atan(_Result.rgb / M_PI) * 2.0;
+            _Result.rgb = mix(_Render.rgb, _Result.rgb, _Mixing);
+            
         _Result.a = _Render_Texture.a;
 
     gl_FragColor = _Result;

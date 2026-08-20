@@ -29,8 +29,6 @@ cbuffer PS_VARIABLES : register(b0)
     bool _Blending_Mode;
     float _Mixing;
     bool __;
-	bool _Is_Pre_296_Build;
-	bool ___;
 };
 
 struct PS_INPUT
@@ -78,15 +76,16 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
 
             if(!_Blending_Mode)
             { 
-                _Result.rgb = atan((_Render_Background.rgb / _Render_Texture.rgb) / M_PI) * 2.0;
+                _Result.rgb = (_Render_Background.rgb / _Render_Texture.rgb);
                 _Render = _Render_Background;
             }
             else 
             { 
-                _Result.rgb = atan((_Render_Texture.rgb / _Render_Background.rgb) / M_PI) * 2.0; 
+                _Result.rgb = (_Render_Texture.rgb / _Render_Background.rgb); 
                 _Render = _Render_Texture;
             }
 
+            _Result.rgb = atan(_Result.rgb / M_PI) * 2.0;
             _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
             
         _Result.a = _Render_Texture.a;
