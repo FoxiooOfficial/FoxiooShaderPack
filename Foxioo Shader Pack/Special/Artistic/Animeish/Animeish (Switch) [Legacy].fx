@@ -45,10 +45,10 @@ float4 Fun_ColorRamp(float4 _Color, float _Steps)
     return _Color;
 }
 
-float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
 {
     float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In);
+    float4 _Render_Background = tex2D(S2D_Background, In_Background);
 
     float4 _Result, _GradientX, _GradientY;
 

@@ -33,10 +33,10 @@ float4 Fun_Acos(float4 _Color)
     return 3.14159265359 / 2 - (_Color + (_2Color * _Color) / 6 + (3 * _2Color * _2Color * _Color) / 40 + (5 * _2Color * _2Color * _2Color * _Color) / 112);
 }
 
-float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
 {
     float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In);
+    float4 _Render_Background = tex2D(S2D_Background, In_Background);
 
         float4 _Result;
         float4 _Render;

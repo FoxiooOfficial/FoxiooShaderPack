@@ -164,7 +164,7 @@ PS_OUTPUT ps_main(in PS_INPUT In)
 
         /* pixel shader */
         float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, frac(_UV * _Scale * float2(_ScaleX, _ScaleY) + float2(_PosX, _PosY))) * In.Tint;
-        float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
+        float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
 
             float4 _Render = _Render_Texture;
             _Render.rgb = lerp(_Render.rgb, _Render_Background.rgb * _Mul * _Render.rgb, _Mixing); 

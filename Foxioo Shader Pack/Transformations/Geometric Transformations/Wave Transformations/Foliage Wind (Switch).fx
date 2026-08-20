@@ -63,7 +63,7 @@ float2 Fun_Offset(float2 _Pos)
 float4 ps_main(float2 In: TEXCOORD) : COLOR
 {   
     float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In);
+    float4 _Render_Background = tex2D(S2D_Background, In_Background);
 
     float2 UV = lerp(In, In + Fun_PerlinNoise(In * float2(_ScaleX, _ScaleY) * _Scale + float2(_PosX, _PosY)), _Mixing);
 

@@ -96,10 +96,10 @@ float4 Fun_Kuwahara(float2 UV, sampler2D _Sampler)
     return _Mean[_Best];
 }
 
-float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
 {
     float4 _Render_Texture = tex2D(S2D_Image, In);
-    //float4 _Render_Background = tex2D(S2D_Background, In);
+    //float4 _Render_Background = tex2D(S2D_Background, In_Background);
 
         float4 _Result = Fun_Kuwahara(In, S2D_Image);
 

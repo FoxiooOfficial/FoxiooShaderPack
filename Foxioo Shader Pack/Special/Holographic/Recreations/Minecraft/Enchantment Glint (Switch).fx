@@ -59,10 +59,10 @@ float Fun_CalculateGlint(float2 In, float _OffsetX, float _OffsetY, float _Scale
     return pow(1 - frac((sin((In.x - _OffsetX) * _Scale) / 2.0 + 0.5) * (cos((In.y + _OffsetY) * _Scale) / 2.0 + 0.5)), _Intensity);
 }
 
-float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
 {
     float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In);
+    float4 _Render_Background = tex2D(S2D_Background, In_Background);
 
     In = Fun_RotationX(In);
     float2 _UV = float2((In.x + _PosX) * _ScaleX, (In.y + _PosY) * _ScaleY) * _Scale;

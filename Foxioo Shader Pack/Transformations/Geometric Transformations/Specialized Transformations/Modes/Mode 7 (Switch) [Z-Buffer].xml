@@ -9,7 +9,7 @@
 
 
 		<parameter>
-			<name>/* Foxioo Mode 7 (Texture) [Z-Buffer] Shader | 2.0 (21.03.2026) Tails7 R1.0.3 Experiment! */</name>
+			<name>/* Foxioo Mode 7 (Texture) [Z-Buffer] Shader | 2026.08.20 */</name>
 			<property>checkbox</property>
 			<description>Shader giving Mode 7 style perspective effect, it also uses Z-Buffer but it's Direct3D 9 only! (Mainly intended for Tails7 R1.0.3+)</description>
 			<variable>_</variable>

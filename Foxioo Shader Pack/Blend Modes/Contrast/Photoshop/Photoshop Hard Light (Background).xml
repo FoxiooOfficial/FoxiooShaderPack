@@ -9,7 +9,7 @@
 				<PSVersion>1.4</PSVersion>
 
 		<parameter>
-			<name>/* Foxioo Photoshop Hard Light (Background) Shader | 2026.08.16 */</name>
+			<name>/* Foxioo Photoshop Hard Light (Background) Shader | 2026.08.20 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

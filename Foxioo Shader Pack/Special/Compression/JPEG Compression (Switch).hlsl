@@ -40,6 +40,7 @@ struct PS_INPUT
 {
     float4 Tint : COLOR0;
     float2 texCoord : TEXCOORD0;
+	float2 bgCoord : TEXCOORD1;
     float4 Position : SV_POSITION;
 };
 
@@ -108,7 +109,7 @@ PS_OUTPUT ps_main( in PS_INPUT In )
     PS_OUTPUT Out;
 
     float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
+    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
 
     float _Div = (_Segments * _Mixing * fPixelWidth) == 0 ? 0.00001 : (_Segments * _Mixing * fPixelWidth);
     float __Segments = 1.0 / _Div;
@@ -145,7 +146,7 @@ PS_OUTPUT ps_main_pm( in PS_INPUT In )
     PS_OUTPUT Out;
 
     float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint);
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
+    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
 
     float _Div = (_Segments * _Mixing * fPixelWidth) == 0 ? 0.00001 : (_Segments * _Mixing * fPixelWidth);
     float __Segments = 1.0 / _Div;

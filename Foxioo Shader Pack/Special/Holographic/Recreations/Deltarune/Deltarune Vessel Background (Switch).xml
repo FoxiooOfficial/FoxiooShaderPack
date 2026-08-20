@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Deltarune Vessel Background (Switch) Shader | 2026.08.08 */</name>
+			<name>/* Foxioo Deltarune Vessel Background (Switch) Shader | 2026.08.20 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

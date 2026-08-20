@@ -31,7 +31,7 @@ sampler2D S2D_Background : register(s1);
 float4 main(in float2 In : TEXCOORD0) : COLOR0
 {
     float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In);
+    float4 _Render_Background = tex2D(S2D_Background, In_Background);
 
         float4 _Render = _Blending_Mode ? _Render_Background : _Render_Texture;
         _Render.a = _Render_Texture.a;

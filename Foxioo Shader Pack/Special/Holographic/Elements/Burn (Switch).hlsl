@@ -78,7 +78,7 @@ PS_OUTPUT ps_main( in PS_INPUT In )
     PS_OUTPUT Out;
 
     float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
+    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
     float4 _Render_Ice = S2D_Fire.Sample(S2D_FireSampler, In.texCoord);
     float4 _Render_Mask = S2D_Mask.Sample(S2D_MaskSampler, In.texCoord);
 
@@ -129,7 +129,7 @@ PS_OUTPUT ps_main_pm( in PS_INPUT In )
     PS_OUTPUT Out;
 
     float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
+    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
     float4 _Render_Ice = S2D_Fire.Sample(S2D_FireSampler, In.texCoord);
     float4 _Render_Mask = S2D_Mask.Sample(S2D_MaskSampler, In.texCoord);
 

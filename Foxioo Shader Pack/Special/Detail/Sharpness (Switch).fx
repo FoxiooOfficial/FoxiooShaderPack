@@ -47,10 +47,10 @@ float3 Fun_Sharp(sampler2D _Sampler, float2 In, float3 _Render, float2 _Off)
     return _Render;
 }
 
-float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
 {
     float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In);
+    float4 _Render_Background = tex2D(S2D_Background, In_Background);
 
         float4 _Result, _Render;
         float2 _Offset = _Size * float2(fPixelWidth, fPixelHeight);

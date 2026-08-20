@@ -157,7 +157,7 @@ float3 HSVtoRGB(float _H, float _S, float _V)
 float4 Main(in float2 In : TEXCOORD0) : COLOR0
 {
     float4 _Render_Texture = (tex2D(S2D_Image, In));
-    //float4 _Render_Background = tex2D(S2D_Background, In);
+    //float4 _Render_Background = tex2D(S2D_Background, In_Background);
 
         float4 _Result;
 

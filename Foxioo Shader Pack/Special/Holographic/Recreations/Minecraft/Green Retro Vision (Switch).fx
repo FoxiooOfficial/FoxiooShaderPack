@@ -31,7 +31,7 @@ sampler2D S2D_Background : register(s1);
 /* Main */
 /************************************************************/
 
-float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
 {
     const float _Steps = 32.0;
     const float _Res = 4.0;
@@ -40,7 +40,7 @@ float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
     float _ResSize = _Res * _Mixing;
 
         float4 _Render_Texture = tex2D(S2D_Image, In);
-        float4 _Render_Background = tex2D(S2D_Background, In);
+        float4 _Render_Background = tex2D(S2D_Background, In_Background);
 
         float4 _Result, _Render;
 

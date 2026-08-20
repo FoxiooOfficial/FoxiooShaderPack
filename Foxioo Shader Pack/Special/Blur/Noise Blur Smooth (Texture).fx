@@ -33,7 +33,7 @@ float2 Fun_Hash21(float2 _Pos)
     return _Noise;
 }
 
-float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
 {
     const int _Size = 10;
     float4 _Render = 0.0;

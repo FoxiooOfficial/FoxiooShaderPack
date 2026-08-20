@@ -128,7 +128,7 @@ float Fun_Rand(float2 _UV)
 float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
 {
     float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
-    //float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
+    //float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
 
     In.texCoord.x -= fmod(In.texCoord.y + _Time, fPixelHeight * 1125.0 / (_Hertz * -10.0 + 1125.0)) * fPixelWidth * _Phase * _Mixing;
     //return float4(In, 0, 1);

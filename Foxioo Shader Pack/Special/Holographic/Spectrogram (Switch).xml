@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Spectrogram (Switch) Shader | 1.0 (20.10.2026) */</name>
+			<name>/* Foxioo Spectrogram (Switch) Shader | 2026.08.20 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

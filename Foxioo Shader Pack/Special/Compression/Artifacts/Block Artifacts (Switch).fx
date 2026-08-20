@@ -37,10 +37,10 @@ float2 Fun_Rand(float2 In)
     return _Rand;
 }
 
-float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
 {
     float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In);
+    float4 _Render_Background = tex2D(S2D_Background, In_Background);
 
         float2 _Pixel = float2(fPixelWidth, fPixelHeight);
         float2 _Block = float2(4.0, 8.0);

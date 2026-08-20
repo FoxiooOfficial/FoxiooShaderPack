@@ -86,10 +86,10 @@ float3 Fun_NoiseSat(float3 _Color, float _Sat)
     return lerp(float3(_Lum, _Lum, _Lum), _Color, _Sat);
 }
 
-float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
 {
     float4 _Render_Texture = (tex2D(S2D_Image, In));
-    float4 _Render_Background = tex2D(S2D_Background, In);
+    float4 _Render_Background = tex2D(S2D_Background, In_Background);
 
         float2 _UV = (In + float2(_PosX, _PosY)) * float2(_ScaleX, _ScaleY) * _Scale; 
         float4 _Result = _Color;

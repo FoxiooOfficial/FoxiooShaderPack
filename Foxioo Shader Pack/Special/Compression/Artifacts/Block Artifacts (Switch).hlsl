@@ -37,6 +37,7 @@ struct PS_INPUT
 {
     float4 Tint : COLOR0;
     float2 texCoord : TEXCOORD0;
+	float2 bgCoord : TEXCOORD1;
     float4 Position : SV_POSITION;
 };
 
@@ -78,7 +79,7 @@ float2 Fun_Rand(float2 In)
 float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
 {
     float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
+    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
 
         float2 _Pixel = float2(fPixelWidth, fPixelHeight);
         float2 _Block = float2(4.0, 8.0);

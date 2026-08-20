@@ -96,10 +96,10 @@ float3 Fun_SecondShadow(float _Mix, float3 _Color)
 
 /************************************************************/
 
-float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
 {
     float4 _Render_Texture    = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In);
+    float4 _Render_Background = tex2D(S2D_Background, In_Background);
     float3 _Render_RimMap     = tex2D(S2D_RimMap, In);
     
     float4 _Result = _Blending_Mode ? _Render_Background : _Render_Texture;

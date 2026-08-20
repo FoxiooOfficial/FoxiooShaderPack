@@ -89,7 +89,7 @@ float2 Fun_Quad(float2 UV)
     else return -1;
 }
 
-float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
 {  
     float2 _In = Fun_Quad(In);
 

@@ -88,7 +88,7 @@ float Fun_Rand(float2 _UV)
     return frac(sin(dot(_UV, float2(12.9898, 78.233))) * 43758.5453);
 }
 
-float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
 {
     float4 _Render_Texture = (tex2D(S2D_Image, In));
     In.x -= fmod(In.y + _Time, fPixelHeight * 1125.0 / (_Hertz * -10.0 + 1125.0)) * fPixelWidth * _Phase * _Mixing;

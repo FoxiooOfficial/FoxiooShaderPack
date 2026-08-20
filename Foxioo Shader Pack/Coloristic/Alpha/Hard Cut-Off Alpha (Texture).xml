@@ -9,7 +9,7 @@
 				<PSVersion>1.1</PSVersion>
 				
 		<parameter>
-			<name>/* Foxioo Hard Cut-Off Alpha Test (Texture) Shader | 2026.08.19a */</name>
+			<name>/* Foxioo Hard Cut-Off Alpha Test (Texture) Shader | 2026.08.20 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

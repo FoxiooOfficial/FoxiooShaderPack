@@ -72,7 +72,7 @@ static const float2 _Blur[_BlurSize] =
 /* Main */
 /************************************************************/
 
-float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
 {
     float4 _Result_Blur = tex2D(S2D_Background, In);
     

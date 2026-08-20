@@ -26,7 +26,7 @@ sampler2D S2D_Image : register(s0);
 /* Main */
 /***********************************************************/
 
-float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
 {
     float4 _Render_Texture = tex2D(S2D_Image, In);
 

@@ -46,10 +46,10 @@ static const float C1 = 3424.0 / 4096.0;
 static const float C2 = 2413.0 / 128.0;
 static const float C3 = 2392.0 / 128.0;
 
-float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
 {
     float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In);
+    float4 _Render_Background = tex2D(S2D_Background, In_Background);
 
         float4 _Result, _Render;
 

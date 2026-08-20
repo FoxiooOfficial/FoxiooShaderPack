@@ -69,7 +69,7 @@ PS_OUTPUT ps_main( in PS_INPUT In )
     PS_OUTPUT Out;
 
     float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
+    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
 
         float3 _Color = lerp(float3(197.0, 43.0, 12.0) / 255.0, float3(253.0, 167.0, 41.0) / 255.0, pow(Fun_Luminance(_Render_Background.rgb), 2.0));
         float4 _Result;
@@ -99,7 +99,7 @@ PS_OUTPUT ps_main_pm( in PS_INPUT In )
     PS_OUTPUT Out;
 
     float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
+    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
 
         float3 _Color = lerp(float3(197.0, 43.0, 12.0) / 255.0, float3(253.0, 167.0, 41.0) / 255.0, pow(Fun_Luminance(_Render_Background.rgb), 2.0));
         float4 _Result;

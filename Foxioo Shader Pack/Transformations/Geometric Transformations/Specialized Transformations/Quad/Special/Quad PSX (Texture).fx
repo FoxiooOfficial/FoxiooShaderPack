@@ -95,7 +95,7 @@ float2 Fun_Quad(float2 UV)
 
 float2 Fun_PSXFloat(float2 UV) { return floor(UV * 256.0) / 256.0; }
 
-float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
 {
     float2 _In = Fun_PSXFloat(Fun_Quad(Fun_PSXFloat(In)));
 

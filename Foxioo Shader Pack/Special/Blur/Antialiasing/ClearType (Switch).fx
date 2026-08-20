@@ -106,10 +106,10 @@ float4 Fun_AA(sampler2D _Sampler, float2 In, float4 _Render, float _Alpha)
     return lerp(_Render, _ClearType, _Mixing) * _Alpha;
 }
 
-float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
 {
     float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In);
+    float4 _Render_Background = tex2D(S2D_Background, In_Background);
 
     float4 _Render = _Blending_Mode ? Fun_AA(S2D_Background, In, _Render_Background, _Render_Texture.a) : Fun_AA(S2D_Image, In, _Render_Texture, 1.0);
     return _Render;

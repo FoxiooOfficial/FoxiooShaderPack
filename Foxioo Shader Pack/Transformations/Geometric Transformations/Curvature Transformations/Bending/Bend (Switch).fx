@@ -67,7 +67,7 @@ float2 Fun_Bend(float2 In)
 float4 ps_main(float2 In: TEXCOORD) : COLOR
 {   
     float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In);
+    float4 _Render_Background = tex2D(S2D_Background, In_Background);
     float4 _Render;
 
     float2  _Pos = float2(_PosX, _PosY),

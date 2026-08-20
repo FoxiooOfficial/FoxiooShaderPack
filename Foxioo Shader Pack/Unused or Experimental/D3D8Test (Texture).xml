@@ -1,6 +1,6 @@
 <effect>
 	<name>Direct3D8 Test Shader (Texture)</name>
-		<description>A test shader that works under Direct3D8 and Direct3D9.</description> 
+		<description>A test shader that works under Direct3D 8 and Direct3D 9.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
@@ -9,12 +9,12 @@
 				<PSVersion>1.1</PSVersion>
 
 		<parameter>
-			<name>/* Foxioo Direct3D8 Test Shader (Texture) | 2026.08.17 */</name>
+			<name>/* Foxioo Direct3D8 Test Shader (Texture) | 2026.08.20 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
 
-			<description>A test shader that works under Direct3D8 and Direct3D9.</description>
+			<description>A test shader that works under Direct3D 8 and Direct3D 9.</description>
 		</parameter>
 
         <parameter>

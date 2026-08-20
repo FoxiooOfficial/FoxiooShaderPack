@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Recolor Monochrome (Switch) Shader | 2026.07.09 */</name>
+			<name>/* Foxioo Recolor Monochrome (Switch) Shader | 2026.08.20 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

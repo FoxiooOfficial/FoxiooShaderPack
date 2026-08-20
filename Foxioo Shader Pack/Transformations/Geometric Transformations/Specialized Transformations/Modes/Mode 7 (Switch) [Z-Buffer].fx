@@ -124,7 +124,7 @@ PS_OUTPUT ps_main(float2 In: TEXCOORD)
                         _3), _2), _1);
 
         float4 _Render_Texture = tex2D(S2D_Image, _UV);
-        //float4 _Render_Background = tex2D(S2D_Background, In);
+        //float4 _Render_Background = tex2D(S2D_Background, In_Background);
 
  float4 _Render = _Render_Texture;
  //float4 _Render = _Render_Texture + _Render_Background / 128.0;

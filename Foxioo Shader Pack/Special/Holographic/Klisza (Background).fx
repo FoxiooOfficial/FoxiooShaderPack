@@ -36,10 +36,10 @@ float Fun_Luminance(float3 _Result)
     return _Y;
 }
 
-float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
 {
     float4 _Render_Texture = (tex2D(S2D_Image, In));
-    float4 _Render_Background = tex2D(S2D_Background, In);
+    float4 _Render_Background = tex2D(S2D_Background, In_Background);
 
         float3 _Color = lerp(float3(197.0, 43.0, 12.0) / 255.0, float3(253.0, 167.0, 41.0) / 255.0, pow(Fun_Luminance(_Render_Background.rgb), 2.0));
         float4 _Result;

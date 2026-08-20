@@ -93,7 +93,7 @@ float Fun_PatternDot(float2 UV, float _Size, float _Lum, float _Offset)
     return (1.0 - _Result * _DotsTranparent) * _PatternMask;
 }
 
-float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
 {
     float4 _Render_Texture = tex2D(S2D_Image, Fun_FishEye(In));
     float4 _Render_Background = tex2D(S2D_Background, Fun_FishEye(In));

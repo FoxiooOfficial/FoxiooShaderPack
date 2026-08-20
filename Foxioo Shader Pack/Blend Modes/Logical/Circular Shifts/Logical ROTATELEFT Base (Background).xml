@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Logical ROTATELEFT Base (Background) Shader | 2026.08.16 */</name>
+			<name>/* Foxioo Logical ROTATELEFT Base (Background) Shader | 2026.08.20 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
