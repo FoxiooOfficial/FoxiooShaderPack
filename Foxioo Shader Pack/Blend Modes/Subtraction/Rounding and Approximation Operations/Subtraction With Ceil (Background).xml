@@ -1,5 +1,5 @@
 <effect>
-	<name>Subtraction With Ceil (Background)</name>
+	<name>Subtraction With Ceiling (Background)</name>
 		<description>Base and blend colors are subtracted after which the colors are reduced by the ceil function.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Subtraction With Ceil (Background) Shader | 2026.08.20 */</name>
+			<name>/* Foxioo Subtraction With Ceiling (Background) Shader | 2026.08.20 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

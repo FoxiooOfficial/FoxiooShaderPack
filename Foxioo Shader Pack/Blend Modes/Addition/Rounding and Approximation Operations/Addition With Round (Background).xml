@@ -1,5 +1,5 @@
 <effect>
-	<name>Addition With Round (Background)</name>
+	<name>Addition With Rounding (Background)</name>
 		<description>Base and blend colors are added after which the colors are reduced by the round function.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Addition With Round (Background) Shader | 2026.08.20 */</name>
+			<name>/* Foxioo Addition With Rounding (Background) Shader | 2026.08.20 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

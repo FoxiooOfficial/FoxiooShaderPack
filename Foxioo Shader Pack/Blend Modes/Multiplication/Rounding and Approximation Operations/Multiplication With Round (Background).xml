@@ -1,5 +1,5 @@
 <effect>
-	<name>Multiplication With Round (Background)</name>
+	<name>Multiplication With Rounding (Background)</name>
 		<description>Base and blend colors are multiplied after which the colors are reduced by the round function.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Multiplication With Round (Background) Shader | 2026.08.21 */</name>
+			<name>/* Foxioo Multiplication With Rounding (Background) Shader | 2026.08.21 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
