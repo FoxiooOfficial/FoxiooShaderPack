@@ -84,7 +84,7 @@ vec3 Fun_Asin(vec3 _Color, int _Case)
 
     else if(_Case == 1) // D3D9 simulated
     { 
-        float a = -1.0 / M_PI * 1.07596;
+        float a = -1.0 - M_PI * 1.07596;
         
         vec3 _Out = vec3(0.0);
 
@@ -97,7 +97,7 @@ vec3 Fun_Asin(vec3 _Color, int _Case)
         _Out = mix(_Out, _Neg, vec3(lessThan(_Color, vec3(-1.0))));
         _Out = mix(_Out, _Pos, vec3(greaterThan(_Color, vec3(1.0))));
 
-        return clamp(_Out / (M_PI * 0.43), 0.0, 1.0) + clamp(_Real, 0.0, 1.0);
+        return clamp(_Out - (M_PI * 0.43), 0.0, 1.0) + clamp(_Real, 0.0, 1.0);
     }
 
     else if(_Case == 2)
@@ -124,12 +124,11 @@ void main(void)
                 _Result.rgb = Fun_Asin((_Render_Background.rgb * _Mul) - _Render_Texture.rgb, _Render_Switch); 
                 _Render = _Render_Background;
             }
- 
+            
             _Result.rgb = mix(_Render.rgb, _Result.rgb, _Mixing);
-                if(_Mixing == 0.0) _Result.rgb = _Render.rgb;
 
         _Result.a = _Render_Texture.a;
-
+        
 	gl_FragColor = _Result;
 }
 

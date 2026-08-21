@@ -50,7 +50,7 @@ float3 Fun_Acos(float3 _Color, int _Case)
 
     else if(_Case == 1) // D3D9 simulated
     { 
-        float a = -1.0 / M_PI * 1.07596f;
+        float a = -1.0 - M_PI * 1.07596f;
         float3 _Out = 0.0;
 
         float3 _Neg = M_PI_2 - (a * pow(_Color + M_PI, (float3)2.0));
@@ -77,17 +77,17 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
 
         float4 _Result, _Render;
 
-                if(!_Blending_Mode)
-                { 
-                    _Result.rgb = Fun_Acos(_Render_Texture.rgb - (_Render_Background.rgb * _Mul), _Render_Switch);
-                    _Render = _Render_Texture;
-                }
-                else
-                { 
-                    _Result.rgb = Fun_Acos((_Render_Background.rgb * _Mul) - _Render_Texture.rgb, _Render_Switch);
-                    _Render = _Render_Background;
-                } 
-    
+            if(!_Blending_Mode)
+            {
+                _Result.rgb = Fun_Acos(_Render_Texture.rgb - (_Render_Background.rgb * _Mul), _Render_Switch); 
+                _Render = _Render_Texture;
+            }
+            else
+            {
+                _Result.rgb = Fun_Acos((_Render_Background.rgb * _Mul) - _Render_Texture.rgb, _Render_Switch); 
+                _Render = _Render_Background;
+            }
+
             _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
 
         _Result.a = _Render_Texture.a;

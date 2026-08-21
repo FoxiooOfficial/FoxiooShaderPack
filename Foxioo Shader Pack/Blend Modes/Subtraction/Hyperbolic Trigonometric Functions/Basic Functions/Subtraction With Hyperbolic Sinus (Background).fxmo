@@ -72,11 +72,6 @@ uniform bool _Blending_Mode;
 /* Main */
 /************************************************************/
 
-vec3 Fun_Sinh(vec3 Color) 
-{
-    return (exp(Color) - exp(-Color)) * 0.5;
-}
-
 out vec4 fragColor;
 void main(void)
 {
@@ -84,15 +79,23 @@ void main(void)
     vec4 _Render_Background = texture(bckgTexture, In);
 
         vec4 _Result, _Render;
+        
+            if(!_Blending_Mode)
+            { 
+                _Result.rgb = _Render_Texture.rgb - (_Render_Background.rgb * _Mul);
+                _Render = _Render_Texture;
+            }
+            else 
+            { 
+                _Result.rgb = (_Render_Background.rgb * _Mul) - _Render_Texture.rgb; 
+                _Render = _Render_Background;
+            }
 
-            if(!_Blending_Mode) { _Result.rgb = Fun_Sinh(_Render_Texture.rgb - (_Render_Background.rgb * _Mul)); _Render = _Render_Texture; }
-            else                { _Result.rgb = Fun_Sinh((_Render_Background.rgb * _Mul) - _Render_Texture.rgb); _Render = _Render_Background; }
-
+            _Result.rgb = sinh(_Result.rgb);
             _Result.rgb = mix(_Render.rgb, _Result.rgb, _Mixing);
-
+ 
         _Result.a = _Render_Texture.a;
 
-        _Result.a = _Render_Texture.a;
     fragColor = _Result;
 }
 //@End

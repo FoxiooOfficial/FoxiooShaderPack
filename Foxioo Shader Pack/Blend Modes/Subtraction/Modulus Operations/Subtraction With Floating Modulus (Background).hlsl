@@ -76,12 +76,21 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
 
         float4 _Result, _Render;
+        
+            if(!_Blending_Mode)
+            { 
+                _Result.rgb = _Render_Texture.rgb - (_Render_Background.rgb * _Mul);
+                _Render = _Render_Texture;
+            }
+            else 
+            { 
+                _Result.rgb = (_Render_Background.rgb * _Mul) - _Render_Texture.rgb; 
+                _Render = _Render_Background;
+            }
 
-            if(!_Blending_Mode) { _Result.rgb = fmod(_Render_Texture.rgb - (_Render_Background.rgb * _Mul), _Denom); _Render = _Render_Texture; }
-            else                { _Result.rgb = fmod((_Render_Background.rgb * _Mul) - _Render_Texture.rgb, _Denom); _Render = _Render_Background; }
-
+            _Result.rgb = fmod(_Result.rgb, _Denom);
             _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
-
+ 
         _Result.a = _Render_Texture.a;
 
     return _Result;

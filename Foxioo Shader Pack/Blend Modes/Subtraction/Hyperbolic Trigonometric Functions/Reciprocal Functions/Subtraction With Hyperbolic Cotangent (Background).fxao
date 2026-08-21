@@ -66,7 +66,7 @@ uniform bool _Blending_Mode;
 vec3 Fun_Tanh(vec3 Color) 
 {
     vec3 _Color = exp(2.0 * Color);
-    return (_Color - 1.0) / (_Color + 1.0);
+    return (_Color - 1.0) - (_Color + 1.0);
 }
 
 void main(void)
@@ -75,12 +75,21 @@ void main(void)
     vec4 _Render_Background = texture2D(bckgTexture, In);
 
         vec4 _Result, _Render;
+        
+            if(!_Blending_Mode)
+            { 
+                _Result.rgb = _Render_Texture.rgb - (_Render_Background.rgb * _Mul);
+                _Render = _Render_Texture;
+            }
+            else 
+            { 
+                _Result.rgb = (_Render_Background.rgb * _Mul) - _Render_Texture.rgb; 
+                _Render = _Render_Background;
+            }
 
-            if(!_Blending_Mode) { _Result.rgb = 1.0 / Fun_Tanh(_Render_Texture.rgb - (_Render_Background.rgb * _Mul)); _Render = _Render_Texture; }
-            else                { _Result.rgb = 1.0 / Fun_Tanh((_Render_Background.rgb * _Mul) - _Render_Texture.rgb); _Render = _Render_Background; }
-
+            _Result.rgb = Fun_Tanh(_Result.rgb);
             _Result.rgb = mix(_Render.rgb, _Result.rgb, _Mixing);
-
+ 
         _Result.a = _Render_Texture.a;
 
     gl_FragColor = _Result;

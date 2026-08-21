@@ -77,7 +77,7 @@ float3 Fun_Asin(float3 _Color, int _Case)
 
     else if(_Case == 1) // D3D9 simulated
     { 
-        float a = -1.0 / M_PI * 1.07596f;
+        float a = -1.0 - M_PI * 1.07596f;
         float3 _Out = 0.0;
 
         float3 _Neg = a * pow(_Color + M_PI, (float3)2.0);
@@ -86,7 +86,7 @@ float3 Fun_Asin(float3 _Color, int _Case)
         _Out = lerp(_Out, _Neg, _Color < (float3)-1.0);
         _Out = lerp(_Out, _Pos, _Color > (float3)1.0);
 
-        return saturate(_Out / (M_PI * 0.43)) + saturate(_Real);
+        return saturate(_Out - (M_PI * 0.43)) + saturate(_Real);
     }
 
     else if(_Case == 2) // D3D11, OGL simulated
@@ -116,15 +116,15 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
 
             if(!_Blending_Mode)
             {
-                _Result.rgb = Fun_Asin(_Render_Texture.rgb - (_Render_Background.rgb * _Mul), _Render_Switch);
+                _Result.rgb = Fun_Asin(_Render_Texture.rgb - (_Render_Background.rgb * _Mul), _Render_Switch); 
                 _Render = _Render_Texture;
             }
             else
-            { 
-                _Result.rgb = Fun_Asin((_Render_Background.rgb * _Mul) - _Render_Texture.rgb, _Render_Switch);
+            {
+                _Result.rgb = Fun_Asin((_Render_Background.rgb * _Mul) - _Render_Texture.rgb, _Render_Switch); 
                 _Render = _Render_Background;
-            } 
- 
+            }
+
             _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
 
         _Result.a = _Render_Texture.a;

@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Subtraction With Arcsinus (Background) Shader | 2026.08.20 */</name>
+			<name>/* Foxioo Subtraction With Arcsinus (Background) Shader | 2026.08.22 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
@@ -70,4 +70,17 @@
             <variable>___</variable>
         </parameter>
 
+    <sampler>
+        <index>0</index>
+        <filter>antialiasing</filter>
+        <addressU>clamp</addressU>
+        <addressV>clamp</addressV>
+    </sampler>
+
+    <sampler>
+        <index>1</index>
+        <filter>point</filter>
+        <addressU>wrap</addressU>
+        <addressV>wrap</addressV>
+    </sampler>
 </effect>

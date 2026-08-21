@@ -34,13 +34,21 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
     float4 _Render_Background = tex2D(S2D_Background, In_Background);
 
         float4 _Result, _Render;
+        
+            if(!_Blending_Mode)
+            { 
+                _Result.rgb = _Render_Texture.rgb - (_Render_Background.rgb * _Mul);
+                _Render = _Render_Texture;
+            }
+            else 
+            { 
+                _Result.rgb = (_Render_Background.rgb * _Mul) - _Render_Texture.rgb; 
+                _Render = _Render_Background;
+            }
 
-            if(!_Blending_Mode) { _Result.rgb = 1.0 / tan(_Render_Texture.rgb - (_Render_Background.rgb * _Mul)); _Render = _Render_Texture; }
-            else                { _Result.rgb = 1.0 / tan((_Render_Background.rgb * _Mul) - _Render_Texture.rgb); _Render = _Render_Background; }
-
+            _Result.rgb = 1.0 - tan(_Result.rgb);
             _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
-            if(_Mixing == 0.0) _Result.rgb = _Render.rgb;
-
+ 
         _Result.a = _Render_Texture.a;
         
     return _Result;

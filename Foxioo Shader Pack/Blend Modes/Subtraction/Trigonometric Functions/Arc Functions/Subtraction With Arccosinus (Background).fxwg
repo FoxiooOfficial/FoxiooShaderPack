@@ -94,26 +94,26 @@ struct FragmentInput {
             var _Result: vec4f;
             var _Render: vec4f;
 
-                    if(!(params._Blending_Mode != 0))
+                if(!(params._Blending_Mode != 0))
+                {
                     {
-                        {
-                            let _fusionSwizzle0 = Fun_Acos(vec3f(_Render_Texture.rgb - (_Render_Background.rgb * params._Mul)), i32(params._Render_Switch));
-                            _Result.x = _fusionSwizzle0.x;
-                            _Result.y = _fusionSwizzle0.y;
-                            _Result.z = _fusionSwizzle0.z;
-                        }
-                        _Render = _Render_Texture;
+                        let _fusionSwizzle0 = Fun_Acos(vec3f(_Render_Texture.rgb - (_Render_Background.rgb * params._Mul)), i32(params._Render_Switch));
+                        _Result.x = _fusionSwizzle0.x;
+                        _Result.y = _fusionSwizzle0.y;
+                        _Result.z = _fusionSwizzle0.z;
                     }
-                    else
+                    _Render = _Render_Texture;
+                }
+                else
+                {
                     {
-                        {
-                            let _fusionSwizzle1 = Fun_Acos(vec3f((_Render_Background.rgb * params._Mul) - _Render_Texture.rgb), i32(params._Render_Switch));
-                            _Result.x = _fusionSwizzle1.x;
-                            _Result.y = _fusionSwizzle1.y;
-                            _Result.z = _fusionSwizzle1.z;
-                        }
-                        _Render = _Render_Background;
+                        let _fusionSwizzle1 = Fun_Acos(vec3f((_Render_Background.rgb * params._Mul) - _Render_Texture.rgb), i32(params._Render_Switch));
+                        _Result.x = _fusionSwizzle1.x;
+                        _Result.y = _fusionSwizzle1.y;
+                        _Result.z = _fusionSwizzle1.z;
                     }
+                    _Render = _Render_Background;
+                }
 
                 {
                     let _fusionSwizzle2 = mix(_Render.rgb, _Result.rgb, params._Mixing);
