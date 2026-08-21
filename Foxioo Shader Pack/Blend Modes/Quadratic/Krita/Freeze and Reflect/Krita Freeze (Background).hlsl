@@ -28,9 +28,7 @@ cbuffer PS_VARIABLES : register(b0)
     bool _;
     float _Mixing;
     bool __;
-	bool _Is_Pre_296_Build;
-	bool ___;
-};
+}
 
 struct PS_INPUT
 {
