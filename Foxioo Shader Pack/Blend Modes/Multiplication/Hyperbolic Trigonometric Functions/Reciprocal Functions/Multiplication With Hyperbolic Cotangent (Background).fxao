@@ -62,9 +62,9 @@ uniform float _Mul;
 /* Main */
 /************************************************************/
 
-vec4 Fun_Tanh(vec4 Color) 
+vec3 Fun_Tanh(vec3 Color) 
 {
-    vec4 _Color = exp(2.0 * Color);
+    vec3 _Color = exp(2.0 * Color);
     return (_Color - 1.0) / (_Color + 1.0);
 }
 
@@ -73,9 +73,10 @@ void main(void)
     vec4 _Render_Texture = texture2D(imgTexture, In) * blendColor;
     vec4 _Render_Background = texture2D(bckgTexture, In);
 
-            vec4 _Result = mix(_Render_Texture, 1.0 / Fun_Tanh(_Render_Texture * (_Render_Background * _Mul)), _Mul);
+            vec4 _Result;
+            _Result.rgb = 1.0 / Fun_Tanh(_Render_Texture.rgb * (_Render_Background.rgb * _Mul));
             _Result.rgb = mix(_Render_Texture.rgb, _Result.rgb, _Mixing);
-            
+
         _Result.a = _Render_Texture.a;
 
     gl_FragColor = _Result;

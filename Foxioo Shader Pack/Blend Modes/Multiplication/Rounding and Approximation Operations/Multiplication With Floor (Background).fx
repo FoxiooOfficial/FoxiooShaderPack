@@ -31,9 +31,10 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In_Background);
 
-            float4 _Result = floor(_Render_Texture * (_Render_Background * _Mul));
+            float4 _Result;
+            _Result.rgb = floor(_Render_Texture.rgb * (_Render_Background.rgb * _Mul));
             _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
-            
+
         _Result.a = _Render_Texture.a;
 
     return _Result;

@@ -71,20 +71,16 @@ uniform float _Mul;
 /* Main */
 /************************************************************/
 
-vec4 Fun_Sinh(vec4 Color) 
-{
-    return (exp(Color) - exp(-Color)) * 0.5;
-}
-
 out vec4 fragColor;
 void main(void)
 {
     vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
     vec4 _Render_Background = texture(bckgTexture, In);
 
-            vec4 _Result = mix(_Render_Texture, 1.0 / Fun_Sinh(_Render_Texture * (_Render_Background * _Mul)), _Mul);
+            vec4 _Result;
+            _Result.rgb = 1.0 / sinh(_Render_Texture.rgb * (_Render_Background.rgb * _Mul));
             _Result.rgb = mix(_Render_Texture.rgb, _Result.rgb, _Mixing);
-
+            
         _Result.a = _Render_Texture.a;
 
     fragColor = _Result;

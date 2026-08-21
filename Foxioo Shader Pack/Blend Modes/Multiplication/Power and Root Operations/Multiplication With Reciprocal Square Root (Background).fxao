@@ -67,9 +67,10 @@ void main(void)
     vec4 _Render_Texture = texture2D(imgTexture, In) * blendColor;
     vec4 _Render_Background = texture2D(bckgTexture, In);
 
-            vec4 _Result = inversesqrt(abs(_Render_Texture * (_Render_Background * _Mul)));
+        vec4 _Result; 
+            _Result.rgb = inversesqrt(_Render_Texture.rgb * (_Render_Background.rgb * _Mul));
             _Result.rgb = mix(_Render_Texture.rgb, _Result.rgb, _Mixing);
-            
+
         _Result.a = _Render_Texture.a;
 
     gl_FragColor = _Result;

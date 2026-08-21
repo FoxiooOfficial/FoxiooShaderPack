@@ -26,7 +26,7 @@ sampler2D S2D_Background : register(s1);
 /* Main */
 /************************************************************/
 
-float4 Fun_Trunc(float4 _Value) {
+float3 Fun_Trunc(float3 _Value) {
     return sign(_Value) * floor(abs(_Value));
 }
 
@@ -35,9 +35,10 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In_Background);
 
-            float4 _Result = Fun_Trunc(_Render_Texture * (_Render_Background * _Mul));
+        float4 _Result; 
+            _Result.rgb = Fun_Trunc(_Render_Texture.rgb * (_Render_Background.rgb * _Mul));
             _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
-            
+
         _Result.a = _Render_Texture.a;
 
     return _Result;
