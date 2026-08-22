@@ -1,0 +1,161 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(0) var background: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Blending_Mode: i32,
+    _Mixing: f32,
+    _DitheringSize: f32,
+    _Add: f32,
+    _Mul: f32,
+    parameter6_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+// Expanded source constant: _Palette_Size
+
+var<private> _Palette: array<vec3f, (4)> = array<vec3f, (4)>(
+    vec3f(0.09, 0.09, 0.09),
+    vec3f(0.29, 0.32, 0.22),
+    vec3f(0.55, 0.57, 0.43),
+    vec3f(0.78, 0.79, 0.65)
+);
+
+const _Dither: array<f32, 16> = array<f32, 16>(
+    0.0 / 16.0,  8.0 / 16.0,  2.0 / 16.0, 10.0 / 16.0,
+   12.0 / 16.0,  4.0 / 16.0, 14.0 / 16.0,  6.0 / 16.0,
+    3.0 / 16.0, 11.0 / 16.0,  1.0 / 16.0,  9.0 / 16.0,
+   15.0 / 16.0,  7.0 / 16.0, 13.0 / 16.0,  5.0 / 16.0
+);
+fn Fun_Color(_Index: i32) -> vec3f {
+    return _Palette[_Index];
+}
+
+fn Fun_Dithering(_Index: i32) -> f32 {
+    return _Dither[_Index];
+}
+
+fn Fun_Convert(_Color: vec3f) -> vec3f {
+    var _Low: vec3f = _Color / 12.92;
+        var _High: vec3f = pow(abs((_Color + 0.055) / 1.055), vec3f(2.4));
+        return mix(_High, _Low, step(_Color, vec3f(0.04045)));
+}
+
+fn Fun_FMod(_Value: vec2f, _Denom: vec2f) -> vec2f {
+    return _Value - _Denom * floor(_Value / _Denom);
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        var _Render_Background: vec4f = texture2D(background, input.texCoord);
+
+        {
+            let _fusionSwizzle0 = _Render_Texture.rgb * params._Mul + params._Add;
+            _Render_Texture.x = _fusionSwizzle0.x;
+            _Render_Texture.y = _fusionSwizzle0.y;
+            _Render_Texture.z = _fusionSwizzle0.z;
+        }
+        {
+            let _fusionSwizzle1 = _Render_Background.rgb * params._Mul + params._Add;
+            _Render_Background.x = _fusionSwizzle1.x;
+            _Render_Background.y = _fusionSwizzle1.y;
+            _Render_Background.z = _fusionSwizzle1.z;
+        }
+
+            var _Result: vec4f;
+            var _Render: vec4f;
+
+            if(!(params._Blending_Mode != 0))
+            {
+                _Result = _Render_Texture;
+                _Render = _Render_Texture;
+            }
+            else
+            {
+                {
+                    let _fusionSwizzle2 = _Render_Background.rgb;
+                    _Result.x = _fusionSwizzle2.x;
+                    _Result.y = _fusionSwizzle2.y;
+                    _Result.z = _fusionSwizzle2.z;
+                }
+                _Result.a = _Render_Texture.a;
+
+                _Render = _Render_Background;
+            }
+
+           var _Dith: vec2f = vec2f(Fun_FMod(vec2f(input.texCoord / vec2f(fusion.fPixelWidth, fusion.fPixelHeight)), vec2f(4.0)));
+
+            var _Index: i32 = i32(_Dith.x) + i32(_Dith.y) * 4;
+            var _DithValue: f32 = Fun_Dithering(i32(_Index));
+
+                var _Color: vec3f = _Result.rgb + (_DithValue - 0.5) * params._DitheringSize;
+
+                var _MinDist: f32 = 1e9;
+                var _IndexC: i32 = 0;
+
+                    var _PO: vec3f = Fun_Convert(_Color);
+                    for (var i: i32 = 0; i < (4); i += 1)
+                    {
+                        var _PL: vec3f = Fun_Convert(vec3f(Fun_Color(i32(i))));
+                        var _Diff: vec3f = _PO - _PL;
+                        var _Dist: f32 = dot(_Diff, _Diff);
+
+                        if (_Dist < _MinDist)
+                        {
+                            _MinDist = _Dist;
+                            _IndexC = i32(i);
+                        }
+                    }
+
+            {
+                let _fusionSwizzle3 = Fun_Color(i32(_IndexC));
+                _Result.x = _fusionSwizzle3.x;
+                _Result.y = _fusionSwizzle3.y;
+                _Result.z = _fusionSwizzle3.z;
+            }
+            {
+                let _fusionSwizzle4 = mix(_Render.rgb, _Result.rgb, params._Mixing);
+                _Result.x = _fusionSwizzle4.x;
+                _Result.y = _fusionSwizzle4.y;
+                _Result.z = _fusionSwizzle4.z;
+            }
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End

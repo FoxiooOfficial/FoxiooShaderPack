@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Apple Macintosh II 256-Color Palette (Switch) Shader | 2026.08.20 */</name>
+			<name>/* Foxioo Apple Macintosh II 256-Color Palette (Switch) Shader | 2026.08.22 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
