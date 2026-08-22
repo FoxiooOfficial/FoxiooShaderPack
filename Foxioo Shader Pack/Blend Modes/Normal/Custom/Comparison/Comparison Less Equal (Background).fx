@@ -31,12 +31,9 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In_Background);
 
-        float4 _Result = (float4)0.0;
+        float4 _Result;
 
-            if(_Render_Texture.r <= _Render_Background.r)   _Result.r = _Render_Texture.r;
-            if(_Render_Texture.g <= _Render_Background.g)   _Result.g = _Render_Texture.g;
-            if(_Render_Texture.b <= _Render_Background.b)   _Result.b = _Render_Texture.b;
-
+            _Result.rgb = lerp(0.0, _Render_Texture.rgb, _Render_Texture.rgb <= _Render_Background.rgb);
             _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
 
         _Result.a = _Render_Texture.a;

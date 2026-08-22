@@ -66,12 +66,9 @@ void main(void)
     vec4 _Render_Texture = texture2D(imgTexture, In) * blendColor;
     vec4 _Render_Background = texture2D(bckgTexture, In);
 
-        vec4 _Result = vec4(0.0);
+        vec4 _Result;
 
-            if(_Render_Texture.r <= _Render_Background.r)   _Result.r = _Render_Texture.r;
-            if(_Render_Texture.g <= _Render_Background.g)   _Result.g = _Render_Texture.g;
-            if(_Render_Texture.b <= _Render_Background.b)   _Result.b = _Render_Texture.b;
-
+            _Result.rgb = mix(vec3(0.0), _Render_Texture.rgb, vec3(lessThanEqual(_Render_Texture.rgb, _Render_Background.rgb)));
             _Result.rgb = mix(_Render_Texture.rgb, _Result.rgb, _Mixing);
 
         _Result.a = _Render_Texture.a;

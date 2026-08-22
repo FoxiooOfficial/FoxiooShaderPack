@@ -68,8 +68,10 @@ void main(void)
 
         vec4 _Result;
 
-            _Result.rgb = mix(_Render_Texture.rgb, vec3(_Render_Background.r, _Render_Texture.g, _Render_Texture.b), _Mixing);    
-            _Result.a = _Render_Texture.a;
+            vec3 _Lerp = vec3(_Mixing, 0.0, 0.0);
+            _Result.rgb = mix(_Render_Texture.rgb, _Render_Background.rgb, _Lerp);
+
+        _Result.a = _Render_Texture.a;
 
     gl_FragColor = _Result;
 }

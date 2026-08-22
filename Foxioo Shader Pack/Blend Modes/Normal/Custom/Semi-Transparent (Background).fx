@@ -41,8 +41,6 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
             _Result = lerp(_Render_Texture, _Result, _Mixing);
 
     return _Result;
-
-    return _Result;
 }
 
 /************************************************************/

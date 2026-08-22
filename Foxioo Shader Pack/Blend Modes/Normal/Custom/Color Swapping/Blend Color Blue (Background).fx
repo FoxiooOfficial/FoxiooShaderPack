@@ -34,8 +34,10 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
 
         float4 _Result;
 
-            _Result.rgb = lerp(_Render_Texture.rgb, float3(_Render_Texture.r, _Render_Texture.g, _Render_Background.b), _Mixing);    
-            _Result.a = _Render_Texture.a;
+            float3 _Lerp = float3(0.0, 0.0, _Mixing);
+            _Result.rgb = lerp(_Render_Texture.rgb, _Render_Background.rgb, _Lerp);
+
+        _Result.a = _Render_Texture.a;
 
     return _Result;
 }
@@ -44,4 +46,4 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_1_4 ps_main(); } }
+technique tech_main { pass P0 { PixelShader = compile ps_1_1 ps_main(); } }
