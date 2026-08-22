@@ -52,9 +52,9 @@ technique tech_main
             
             /** Consts **************************************************/
             def c1, 1, 0, 0, 0;
-            def c2, 0, 1, 0, 0;
+            def c2, 0, 0, 1, 0;
             def c3, 0, 0, 0, 0;
-            def c4, 0, -1, 0, 0;
+            def c4, -1, -1, 0, 0;
             def c5, 1, 1, 1, 0;
 
             /** Samplers ************************************************/
@@ -68,10 +68,10 @@ technique tech_main
             /** Assembly ************************************************/
 
                 dp3 r0.xyz, c1, c0;
-                lrp r0.xyz, c2, r0, c3;
+                lrp r0.xyz, c2, c3, r0;
                 dp3 r1.xyz, c1, c0;
                 mul r1.xyz, r1, c4;
-                lrp r1.xyz, c2, r1, c3;
+                lrp r1.xyz, c2, c3, r1;
                 add r1.xyz, r1, c5;
                 mul r1.xyz, t0, r1;
             + mov r0.w, t0.w;

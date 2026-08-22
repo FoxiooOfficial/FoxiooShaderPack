@@ -67,15 +67,15 @@ technique tech_main
             
             /** Assembly ************************************************/
 
-                dp3 r0.xyz, c1, c0
-                lrp r0.xyz, c2, r0, c3
-                dp3 r1.xyz, c1, c0
-                mul r1.xyz, r1, c4
-                lrp r1.xyz, c2, r1, c3
-                add r1.xyz, r1, c5
-                mul r1.xyz, t0, r1
-            + mov r0.w, t0.w
-                mad r0.xyz, t1, r0, r1
+                dp3 r0.xyz, c1, c0;
+                lrp r0.xyz, c2, r0, c3;
+                dp3 r1.xyz, c1, c0;
+                mul r1.xyz, r1, c4;
+                lrp r1.xyz, c2, r1, c3;
+                add r1.xyz, r1, c5;
+                mul r1.xyz, t0, r1;
+            + mov r0.w, t0.w;
+                mad r0.xyz, t1, r0, r1;
         };
     }
 }
