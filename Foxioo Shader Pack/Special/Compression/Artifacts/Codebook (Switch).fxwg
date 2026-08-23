@@ -1,0 +1,122 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(0) var background: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+//uniform float fPixelHeight;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Blending_Mode: i32,
+    _Mixing: f32,
+    _Seed: f32,
+    parameter4_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+fn Fun_Hash21(_Color: vec3f) -> vec3f {
+    var _Noise: vec3f;
+        _Noise.x = fract(params._Seed + sin((_Color.x - params._Seed) * 12.9898 + 78.233) * 43758.5453);
+        _Noise.y = fract(params._Seed + sin((_Color.y - params._Seed) * 63.7264 + 10.873) * 73156.8473);
+        _Noise.z = fract(params._Seed + sin((_Color.z - params._Seed) * 43.5276 + 37.735) * 12931.5923);
+
+        return _Noise;
+}
+
+fn Fun_Mod(_X: f32, _Y: f32) -> f32 {
+    return _X - _Y * floor(_X / _Y);
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        var _Render_Background: vec4f = texture2D(background, input.texCoord);
+
+            var _Render: vec4f = select(_Render_Texture, _Render_Background, (params._Blending_Mode != 0));
+            var _Result: vec4f = _Render;
+
+                {
+                    let _fusionSwizzle0 = Fun_Hash21(vec3f(_Result.rgb));
+                    _Result.x = _fusionSwizzle0.x;
+                    _Result.y = _fusionSwizzle0.y;
+                    _Result.z = _fusionSwizzle0.z;
+                }
+                {
+                    let _fusionSwizzle1 = Fun_Hash21(vec3f(1.0 - _Result.rgb));
+                    _Result.x = _fusionSwizzle1.x;
+                    _Result.y = _fusionSwizzle1.y;
+                    _Result.z = _fusionSwizzle1.z;
+                }
+
+                        var _Pixel: i32 = i32(input.texCoord.x / fusion.fPixelWidth);
+
+                        if(Fun_Mod(f32(_Pixel), f32(2.0)) == 0.0) { {
+         let _fusionSwizzle2 = _Result.gbr;
+         _Result.x = _fusionSwizzle2.x;
+         _Result.y = _fusionSwizzle2.y;
+         _Result.z = _fusionSwizzle2.z;
+     } }
+                        if(Fun_Mod(f32(_Pixel), f32(3.0)) == 0.0) { {
+         let _fusionSwizzle3 = _Result.brg;
+         _Result.x = _fusionSwizzle3.x;
+         _Result.y = _fusionSwizzle3.y;
+         _Result.z = _fusionSwizzle3.z;
+     } }
+
+                        {
+                            let _fusionSwizzle4 = Fun_Hash21(vec3f(1.0 - _Result.rgb));
+                            _Result.x = _fusionSwizzle4.x;
+                            _Result.y = _fusionSwizzle4.y;
+                            _Result.z = _fusionSwizzle4.z;
+                        }
+
+                        {
+                            let _fusionSwizzle5 = 1.0 - _Result.gbr;
+                            _Result.x = _fusionSwizzle5.x;
+                            _Result.y = _fusionSwizzle5.y;
+                            _Result.z = _fusionSwizzle5.z;
+                        }
+
+                {
+                    let _fusionSwizzle6 = mix(_Render.rgb, _Result.rgb, params._Mixing);
+                    _Result.x = _fusionSwizzle6.x;
+                    _Result.y = _fusionSwizzle6.y;
+                    _Result.z = _fusionSwizzle6.z;
+                }
+                _Result.a = _Render_Texture.a;
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End
