@@ -1,0 +1,97 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(0) var background: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Blending_Mode: i32,
+    _Mixing: f32,
+    _Distortion: f32,
+    _Seed: f32,
+    parameter5_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+fn Fun_Rand(In: vec2f) -> vec2f {
+    var _Rand: vec2f = vec2f(fract(sin(dot(In.xy + params._Seed, vec2f(12.9898, 78.233)))* 43758.5453123), fract(cos(dot(In.xy + params._Seed, vec2f(67.4684, 18.467)))* 3463456.95546));
+        return _Rand;
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        var _Render_Background: vec4f = texture2D(background, input.texCoord);
+
+            var _Pixel: vec2f = vec2f(fusion.fPixelWidth, fusion.fPixelHeight);
+            var _Block: vec2f = vec2f(4.0, 8.0);
+            var _Result: vec4f = vec4f(0.0);
+            var _Render: vec4f = vec4f(0.0);
+
+                var _Art: vec2f = floor(input.texCoord / _Pixel / _Block) * _Pixel * _Block;
+                if((abs(Fun_Rand(_Art).x) > params._Distortion) || (abs(Fun_Rand(_Art).y) > params._Distortion)) {
+                    _Art = input.texCoord;
+                }
+                else {
+                    _Art = input.texCoord + Fun_Rand(_Art) * 0.5 - 0.25;
+                }
+
+                    if((params._Blending_Mode != 0))
+                    {
+                        _Result = texture2D(background, _Art);
+                        {
+                            let _fusionSwizzle0 = _Render_Background.rgb;
+                            _Render.x = _fusionSwizzle0.x;
+                            _Render.y = _fusionSwizzle0.y;
+                            _Render.z = _fusionSwizzle0.z;
+                        }
+                        _Result.a = _Render_Texture.a;
+                    }
+                    else
+                    {
+                        _Result = texture2D(img, _Art) * (input.color * fusion.blendColor);
+                        _Render = _Render_Texture;
+
+                    }
+
+            {
+                let _fusionSwizzle1 = mix(_Render.rgb, _Result.rgb, params._Mixing);
+                _Result.x = _fusionSwizzle1.x;
+                _Result.y = _fusionSwizzle1.y;
+                _Result.z = _fusionSwizzle1.z;
+            }
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End
