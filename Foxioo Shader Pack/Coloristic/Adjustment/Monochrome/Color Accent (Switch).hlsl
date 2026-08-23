@@ -31,8 +31,6 @@ cbuffer PS_VARIABLES : register(b0)
     float4 _Color;
     bool _Invert;
     bool __;
-    bool _Is_Pre_296_Build;
-    bool ___;
 };
 
 struct PS_INPUT
@@ -58,17 +56,6 @@ cbuffer PS_PIXELSIZE : register(b1)
 /* Main */
 /************************************************************/
 
-float Fun_Luminance(float3 _Result)
-{
-    const float _Kr = 0.299;
-    const float _Kg = 0.587;
-    const float _Kb = 0.114;
-
-    float _Y = _Kr * _Result.r + _Kg * _Result.g + _Kb * _Result.b;
-
-    return _Y;
-}
-
 float4 Demultiply(float4 _Render, bool _Premultiplied)
 {
     if(_Premultiplied)
@@ -86,16 +73,17 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
     float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
 
-        float4 _Result = _Blending_Mode ? _Render_Background : _Render_Texture;
-        float _Lum = Fun_Luminance(_Result.rgb);
-
-            float3 _Difference = abs(_Result.rgb - _Color.rgb);
-            float _DifferenceMax = max(_Difference.r, max(_Difference.g, _Difference.b)) * _Mixing;
-
-                float _Mask = abs(_Invert - saturate(1.0 + (_DifferenceMax - 1.0)));
-                _Result.rgb = lerp(_Result.rgb, _Lum, _Mask);
-
+        float4 _Result;
+        _Result.rgb = lerp(_Render_Texture.rgb, _Render_Background.rgb, _Blending_Mode);
         _Result.a = _Render_Texture.a;
+    
+            float _Lum = dot(_Result.rgb, float3(0.299, 0.587, 0.114));
+
+            float3 _Diff = _Result.rgb - _Color.rgb;
+            float _DiffMax = saturate(dot(_Diff, _Diff) * _Mixing);
+
+                float _Mask = abs(_Invert - _DiffMax);
+                _Result.rgb = lerp(_Result.rgb, _Lum, _Mask);
         
     return _Result;
 }
