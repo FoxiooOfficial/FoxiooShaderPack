@@ -82,7 +82,7 @@ float2 Fun_Hash21(float2 _Pos)
     _Noise.y = frac(sin(dot(_Pos, float2(63.7264, 10.873))) * 73156.8473) - 0.5;
     return _Noise;
 }
-float4 ps_main(float2 In : TEXCOORD0, float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
 {
     float4 _Render_Texture = tex2D(S2D_Image, In);
     //float4 _OutlineInter = tex2D(S2D_Background, Fun_Liquid(In, 1).rg);

@@ -30,8 +30,6 @@ cbuffer PS_VARIABLES : register(b0)
     float _Intensity;
     float _Distortion;
     bool __;
-	bool _Is_Pre_296_Build;
-	bool ___;
 };
 
 struct PS_INPUT
@@ -95,10 +93,10 @@ float3 Fun_Outline(float2 In, float3 _Color, float _Mul)
     float aD2 = S2D_Image.Sample(S2D_ImageSampler, In + float2(0.0, _PX.y * 2.0))  .a * _Mul;
 
     /* no outline. */
-    float aL3 = S2D_Image.Sample(S2D_ImageSampler, In + float2(-_PX.x, 0.0)) .a * _Mul;
-    float aR3 = S2D_Image.Sample(S2D_ImageSampler, In + float2(_PX.x, 0.0))  .a * _Mul;
-    float aU3 = S2D_Image.Sample(S2D_ImageSampler, In + float2(0.0, -_PX.y)) .a * _Mul;
-    float aD3 = S2D_Image.Sample(S2D_ImageSampler, In + float2(0.0, _PX.y))  .a * _Mul;
+    //float aL3 = S2D_Image.Sample(S2D_ImageSampler, In + float2(-_PX.x, 0.0)) .a * _Mul;
+    //float aR3 = S2D_Image.Sample(S2D_ImageSampler, In + float2(_PX.x, 0.0))  .a * _Mul;
+    //float aU3 = S2D_Image.Sample(S2D_ImageSampler, In + float2(0.0, -_PX.y)) .a * _Mul;
+    //float aD3 = S2D_Image.Sample(S2D_ImageSampler, In + float2(0.0, _PX.y))  .a * _Mul;
 
         float _EdgeDark  = step(0.01, abs(aL1 - _Alpha) + abs(aR1 - _Alpha) + abs(aU1 - _Alpha) + abs(aD1 - _Alpha));
         float _EdgeLight = step(0.01, abs(aL2 - _Alpha) + abs(aR2 - _Alpha) + abs(aU2 - _Alpha) + abs(aD2 - _Alpha));
@@ -120,11 +118,11 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
 {
     float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
 
-        float2 _Mask = float2(  Fun_Liquid(In.texCoord.xx * _Render_Texture.a, _Intensity * fPixelWidth),
-                                Fun_Liquid(In.texCoord.yy * _Render_Texture.a, _Intensity * fPixelHeight));
+        float2 _Mask = float2(  Fun_Liquid(In.bgCoord.xx * _Render_Texture.a, _Intensity * fPixelWidth),
+                                Fun_Liquid(In.bgCoord.yy * _Render_Texture.a, _Intensity * fPixelHeight));
 
 
-    float2 _UVB = frac(In.texCoord * 0.5) * 2.0;
+    float2 _UVB = frac(In.bgCoord * 0.5) * 2.0;
     float2 _UVM = abs(_UVB - 1.0);
 
     float2 _UV = lerp(_UVB, _UVM, _Mask * _Mask * _Distortion);

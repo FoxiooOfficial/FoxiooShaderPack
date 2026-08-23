@@ -17,7 +17,7 @@ sampler2D S2D_Image : register(s0) = sampler_state
 {
     AddressU = BORDER;
     AddressV = BORDER;
-    BorderColor = float4(0, 0, 0, 0);
+    BorderColor = float4(0.0, 0.0, 0.0, 0.0);
 };
 
 sampler2D S2D_Background : register(s1);
@@ -62,10 +62,10 @@ float3 Fun_Outline(float2 In, float3 _Color)
     float aD2 = tex2D(S2D_Image, In + float2(0, _PX.y * 2))  .a;
 
     /* no outline. */
-    float aL3 = tex2D(S2D_Image, In + float2(-_PX.x * 1, 0)) .a;
-    float aR3 = tex2D(S2D_Image, In + float2(_PX.x * 1, 0))  .a;
-    float aU3 = tex2D(S2D_Image, In + float2(0, -_PX.y * 1)) .a;
-    float aD3 = tex2D(S2D_Image, In + float2(0, _PX.y * 1))  .a;
+    //float aL3 = tex2D(S2D_Image, In + float2(-_PX.x * 1, 0)) .a;
+    //float aR3 = tex2D(S2D_Image, In + float2(_PX.x * 1, 0))  .a;
+    //float aU3 = tex2D(S2D_Image, In + float2(0, -_PX.y * 1)) .a;
+    //float aD3 = tex2D(S2D_Image, In + float2(0, _PX.y * 1))  .a;
 
         float _EdgeDark  = step(0.01, abs(aL1 - _Alpha) + abs(aR1 - _Alpha) + abs(aU1 - _Alpha) + abs(aD1 - _Alpha));
         float _EdgeLight = step(0.01, abs(aL2 - _Alpha) + abs(aR2 - _Alpha) + abs(aU2 - _Alpha) + abs(aD2 - _Alpha));
@@ -90,16 +90,16 @@ float2 Fun_Noise(float2 _Pos)
     return _Noise;
 }
 
-float4 ps_main(float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
 {
     float4 _Render_Texture = tex2D(S2D_Image, In);
     //float4 _OutlineInter = tex2D(S2D_Background, Fun_Liquid(In, 1).rg);
 
-        float2 _Mask = float2(  Fun_Liquid(In.xx * _Render_Texture.a, _Intensity * fPixelWidth),
-                                Fun_Liquid(In.yy * _Render_Texture.a, _Intensity * fPixelHeight));
+        float2 _Mask = float2(  Fun_Liquid(In_Background.xx * _Render_Texture.a, _Intensity * fPixelWidth),
+                                Fun_Liquid(In_Background.yy * _Render_Texture.a, _Intensity * fPixelHeight));
 
 
-    float2 _UVB = frac(In * 0.5) * 2.0;
+    float2 _UVB = frac(In_Background * 0.5) * 2.0;
     float2 _UVM = abs(_UVB - 1.0);
 
     float2 _UV = lerp(_UVB, _UVM, _Mask * _Mask * _Distortion);
@@ -108,7 +108,7 @@ float4 ps_main(float2 In : TEXCOORD0) : COLOR0
         float4 _Render_Background = float4(0.0, 0.0, 0.0, 0.0);
         for(int i = 0; i < 72; i++) {
             float _Mul = fmod(float(i), 2.0) ? 2.0 : -2.0;
-            _Render_Background += tex2D(S2D_Background, _UV + Fun_Hash21(In + i * 0.5) * (10.0 + float(i)) * _Mul * float2(fPixelWidth, fPixelHeight));
+            _Render_Background += tex2D(S2D_Background, _UV + Fun_Hash21(In_Background + i * 0.5) * (10.0 + float(i)) * _Mul * float2(fPixelWidth, fPixelHeight));
         }
         _Render_Background /= 72.0;
 
