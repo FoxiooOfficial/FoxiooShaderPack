@@ -27,22 +27,22 @@ sampler2D S2D_Image : register(s0);
 /* Main */
 /************************************************************/
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in float2 In : TEXCOORD0) : COLOR0
 {
     float4 _Render_Texture = tex2D(S2D_Image, In);
 
-        float4 _Result = _Render_Texture;
+        float3 _Diff = _Render_Texture.rgb - _ColorKey.rgb;
+        float _Alpha = dot(_Diff, _Diff);
 
-        float3 _Difference = abs(_Result.rgb - _ColorKey.rgb);
-        float _KeyAlpha = 1.0 - max(_Difference.r, max(_Difference.g, _Difference.b));
+            float _Key = _Mixing * 2.0;
+    
+        _Render_Texture.a *= saturate((1.0 - _Alpha) * _Key);
 
-        _Result.a = _Render_Texture.a * (1 + (_KeyAlpha - 1.0) * _Mixing);
-
-    return _Result;
+    return _Render_Texture;
 }
 
 /************************************************************/
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_1_4 ps_main(); } }
+technique tech_main { pass P0 { PixelShader = compile ps_1_1 ps_main(); } }
