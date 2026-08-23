@@ -5,9 +5,11 @@
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
-			
+				<dx8>1</dx8>
+				<PSVersion>1.4</PSVersion>
+
 		<parameter>
-			<name>/* Foxioo Simulation Of Protanomaly (Switch) Shader | 2026.08.20 */</name>
+			<name>/* Foxioo Simulation Of Protanomaly (Switch) Shader | 2026.08.23 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
