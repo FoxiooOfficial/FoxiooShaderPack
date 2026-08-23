@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.1 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -27,18 +28,15 @@ cbuffer PS_VARIABLES : register(b0)
     bool _;
     float _Mixing;
     bool __;
-
-	bool _Is_Pre_296_Build;
-	bool ___;
 };
 
 struct PS_INPUT
 {
-  float4 Tint : COLOR0;
-  float2 texCoord : TEXCOORD0;
-  float2 bgCoord : TEXCOORD1;
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+	float2 bgCoord : TEXCOORD1;
+    float4 Position : SV_POSITION;
 };
-
 
 struct PS_OUTPUT
 {
@@ -55,64 +53,56 @@ cbuffer PS_PIXELSIZE : register(b1)
 /* Main */
 /************************************************************/
 
-float Fun_Luminance(float3 _Result)
-{
-    const float _Kr = 0.299;
-    const float _Kg = 0.587;
-    const float _Kb = 0.114;
-
-    float _Y = _Kr * _Result.r + _Kg * _Result.g + _Kb * _Result.b;
-
-    return _Y;
+float Fun_Luminance(float3 _Result) {
+    return 0.299 * _Result.r + 0.587 * _Result.g + 0.114 * _Result.b;
 }
 
-PS_OUTPUT ps_main( in PS_INPUT In )
+float4 Demultiply(float4 _Render, bool _Premultiplied)
 {
-    PS_OUTPUT Out;
+    if(_Premultiplied)
+    {
+	    if ( _Render.a != 0.0 ) {
+            _Render.rgb /= _Render.a;
+        }
+    }
 
-    float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
+	return _Render;
+}
+
+float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
+{
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
 
-        float3 _Color = lerp(float3(197.0, 43.0, 12.0) / 255.0, float3(253.0, 167.0, 41.0) / 255.0, pow(Fun_Luminance(_Render_Background.rgb), 2.0));
-        float4 _Result;
+        const float3 _Min = float3(0.772549, 0.168627, 0.047058);
+        const float3 _Max = float3(0.992156, 0.654901, 0.160784);
+        float _Lum = Fun_Luminance(_Render_Background.rgb);
+        _Lum *= _Lum;
 
-            _Result.rgb = (1.0 - _Render_Texture.rgb) * _Color * _Render_Background.rgb;
+        float3 _Klisza = lerp(_Min, _Max, _Lum);
 
+            float4 _Result;
+            _Result.a = _Render_Texture.a;
+
+            _Result.rgb = (1.0 - _Render_Texture.rgb) * _Klisza * _Render_Background.rgb;
             _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
 
-    _Result.a = _Render_Texture.a;
-    Out.Color = _Result;
-    
-    return Out;
+    return _Result;
 }
 
 /************************************************************/
-/* Premultiplied Alpha */
+/* Render */
 /************************************************************/
 
-float4 Demultiply(float4 _Color)
-{
-	if ( _Color.a != 0 )   _Color.rgb /= _Color.a;
-	return _Color;
+float4 ps_main(in PS_INPUT In) : SV_TARGET{
+    float4 _Render = Main(In, false);
+    return _Render;
 }
 
-PS_OUTPUT ps_main_pm( in PS_INPUT In ) 
+float4 ps_main_pm(in PS_INPUT In) : SV_TARGET
 {
-    PS_OUTPUT Out;
+    float4 _Render = Main(In, true);
+    _Render.rgb *= _Render.a;
 
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
-
-        float3 _Color = lerp(float3(197.0, 43.0, 12.0) / 255.0, float3(253.0, 167.0, 41.0) / 255.0, pow(Fun_Luminance(_Render_Background.rgb), 2.0));
-        float4 _Result;
-
-            _Result.rgb = (1.0 - _Render_Texture.rgb) * _Color * _Render_Background.rgb;
-
-            _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
-
-    _Result.a = _Render_Texture.a;
-    _Result.rgb *= _Result.a;
-
-    Out.Color = _Result;
-    return Out;
+    return _Render;
 }

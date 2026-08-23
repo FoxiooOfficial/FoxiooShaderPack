@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.1 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -25,30 +26,27 @@ sampler2D S2D_Background : register(s1);
 /* Main */
 /************************************************************/
 
-float Fun_Luminance(float3 _Result)
-{
-    const float _Kr = 0.299;
-    const float _Kg = 0.587;
-    const float _Kb = 0.114;
-
-    float _Y = _Kr * _Result.r + _Kg * _Result.g + _Kb * _Result.b;
-
-    return _Y;
+float Fun_Luminance(float3 _Result) {
+    return 0.299 * _Result.r + 0.587 * _Result.g + 0.114 * _Result.b;
 }
 
 float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
 {
-    float4 _Render_Texture = (tex2D(S2D_Image, In));
+    float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In_Background);
 
-        float3 _Color = lerp(float3(197.0, 43.0, 12.0) / 255.0, float3(253.0, 167.0, 41.0) / 255.0, pow(Fun_Luminance(_Render_Background.rgb), 2.0));
-        float4 _Result;
+        const float3 _Min = float3(0.772549, 0.168627, 0.047058);
+        const float3 _Max = float3(0.992156, 0.654901, 0.160784);
+        float _Lum = Fun_Luminance(_Render_Background.rgb);
+        _Lum *= _Lum;
 
-            _Result.rgb = (1.0 - _Render_Texture.rgb) * _Color * _Render_Background.rgb;
+        float3 _Klisza = lerp(_Min, _Max, _Lum);
 
+            float4 _Result;
+            _Result.a = _Render_Texture.a;
+
+            _Result.rgb = (1.0 - _Render_Texture.rgb) * _Klisza * _Render_Background.rgb;
             _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
-
-        _Result.a = _Render_Texture.a;
 
     return _Result;
 }
