@@ -1,0 +1,123 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(0) var background: texture_2d<f32>;
+@group(3) @binding(1) var _Texture: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+//uniform float fPixelWidth;
+//uniform float fPixelHeight;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Blending_Mode: i32,
+    _Mixing: f32,
+    _Time: f32,
+    parameter5_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+const _Max: f32 = 25.0;
+fn Fun_Aurora(_Noise: f32) -> vec3f {
+    const _Light_Hight: vec3f = vec3f(0.3882, 0.8039, 0.9059);
+        const _Light_Medium: vec3f = vec3f(0.06, 0.7, 0.62);
+        const _Light_Low: vec3f = vec3f(0.0392, 0.4863, 0.3882);
+        const _Light_Null: vec3f = vec3f(0.0, 0.0, 0.0);
+
+        var _Aurora: vec3f = mix(_Light_Null, _Light_Low, smoothstep(0.0, 0.33, _Noise));
+        _Aurora = mix(_Aurora, _Light_Medium, smoothstep(0.33, 1.0, _Noise));
+        _Aurora = mix(_Aurora, _Light_Hight,  smoothstep(1.0, 2.0, _Noise));
+
+        return _Aurora;
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        var _Render_Background: vec4f = texture2D(background, input.texCoord);
+
+            var _Result: vec4f = select(_Render_Texture, _Render_Background, (params._Blending_Mode != 0));
+            var _Render: vec4f = _Result;
+
+            _Result.a = _Render_Texture.a;
+
+            {
+                let _fusionSwizzle0 = vec3f(dot(pow(abs(_Result.rgb), vec3f(6.0)),vec3f(0.2126, 0.7152, 0.0722)));
+                _Result.x = _fusionSwizzle0.x;
+                _Result.y = _fusionSwizzle0.y;
+                _Result.z = _fusionSwizzle0.z;
+            }
+            var Wave: f32 = sin(params._Mixing * 10.0);
+
+            for (var i: i32 = 1; i < i32(_Max); i += 1)
+            {
+                var w: f32 = input.texCoord.x;
+
+                w += sin((1.0 - input.texCoord.y) * 2.0 + params._Time) / 60.0;
+                w = abs(sin(-w * 10.0 * f32(i) / _Max * 2.0 + params._Time / f32(i)) / 20. + sin(40.0 * f32(i) / _Max + params._Time) / 18.0) * 35.0;
+
+                    w += ((1.0 - input.texCoord.y) * 2.4 - 1.6);
+                    w = smoothstep(0.4, 0.7, w / 5.0) / 20.0;
+
+                var _Color: f32 = 1.0 - (abs(input.texCoord.y - 0.5)) * 3.0;
+                _Color += (input.texCoord.x + 4.0 + Wave * 0.5 + 0.5) * 0.3;
+
+                    var _Perlin: vec3f = texture2D(_Texture, fract(input.texCoord * 0.3 + vec2f(params._Time * f32(i) / 100.0, 0.0))).rgb;
+                    var _Lum: f32 = (_Perlin.r + _Perlin.g + _Perlin.b) / 32.0;
+
+                {
+                    let _fusionSwizzle1 = (5.0 / _Max) * (Fun_Aurora(f32(0.7 * (_Color + input.texCoord.x + params._Time))) * w * 5.0 + Fun_Aurora(f32(_Lum)));
+                    _Result.x += _fusionSwizzle1.x;
+                    _Result.y += _fusionSwizzle1.y;
+                    _Result.z += _fusionSwizzle1.z;
+                }
+            }
+
+            {
+                let _fusionSwizzle2 = Fun_Aurora(f32(1.0 - abs(input.texCoord.y * input.texCoord.y * 2.0 - 0.8))) * input.texCoord.y;
+                _Result.x += _fusionSwizzle2.x;
+                _Result.y += _fusionSwizzle2.y;
+                _Result.z += _fusionSwizzle2.z;
+            }
+            {
+                let _fusionSwizzle3 = mix(_Render.rgb, pow(abs(_Result.rgb), vec3f(2.0)) * 1.8, params._Mixing);
+                _Result.x = _fusionSwizzle3.x;
+                _Result.y = _fusionSwizzle3.y;
+                _Result.z = _fusionSwizzle3.z;
+            }
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End
