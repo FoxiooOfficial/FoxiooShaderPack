@@ -57,7 +57,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
         float _Lum = Fun_Lum(_Result);
 
         if(!_Blending_Mode) _Result = tex2D(S2D_Image, In + float2(_Lum * sin(_Lum + In.x * _Lum * 200.0 * _Mixing + _Time) * 0.01 * _Mixing, _Lum * cos(_Lum + In.y * 400.0 * _Mixing + sin(In.x * 10.0 + _Time * _Lum) + _Time) * 0.01 * _Mixing));
-        else                _Result = tex2D(S2D_Background, In + float2(_Lum * sin(_Lum + In.x * _Lum * 200.0 * _Mixing + _Time) * 0.01 * _Mixing, _Lum * cos(_Lum + In.y * 400.0 * _Mixing + sin(In.x * 10.0 + _Time * _Lum) + _Time) * 0.01 * _Mixing));
+        else                _Result = tex2D(S2D_Background, In_Background + float2(_Lum * sin(_Lum + In.x * _Lum * 200.0 * _Mixing + _Time) * 0.01 * _Mixing, _Lum * cos(_Lum + In.y * 400.0 * _Mixing + sin(In.x * 10.0 + _Time * _Lum) + _Time) * 0.01 * _Mixing));
         
         _Lum = Fun_Lum(_Result);
         if (_Lum < 0.2)         _Result.rgb = lerp(_Color5, _Color4, _Lum / 0.2);

@@ -58,7 +58,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
     }
     else
     {
-        _Result = tex2D(S2D_Background, In) * _Mixing;
+        _Result = tex2D(S2D_Background, In_Background) * _Mixing;
     }
 
     float _Average = (_Result.r + _Result.g + _Result.b) / 3.0;
@@ -78,8 +78,8 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
     }
     else
     {
-        _GradientX = tex2D(S2D_Background, In + float2(fPixelWidth, 0)) - tex2D(S2D_Background, In - float2(fPixelWidth, 0));
-        _GradientY = tex2D(S2D_Background, In + float2(0, fPixelHeight)) - tex2D(S2D_Background, In - float2(0, fPixelHeight));       
+        _GradientX = tex2D(S2D_Background, In_Background + float2(fPixelWidth, 0)) - tex2D(S2D_Background, In_Background - float2(fPixelWidth, 0));
+        _GradientY = tex2D(S2D_Background, In_Background + float2(0, fPixelHeight)) - tex2D(S2D_Background, In_Background - float2(0, fPixelHeight));       
     }
 
     float _EdgeDetection = (length(_GradientX.rgb) + length(_GradientY.rgb)) * _OutlineScale;

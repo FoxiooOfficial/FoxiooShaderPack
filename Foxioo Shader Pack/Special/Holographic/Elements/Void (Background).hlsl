@@ -110,12 +110,12 @@ PS_OUTPUT ps_main( in PS_INPUT In )
             float _Lum_Background = Fun_Lum(_Render_Background);
 
             float3 _Space = lerp(float3(0.0, 0.0, 0.0), float3(0.15, 0.05, 0.25), _Lum);
-            _Space += (_Space * (S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord + tan(_Lum) * _Lum * 0.25 - tan(_Lum_Background) * 0.25 - _Rand).rgb) * 1.5);
+            _Space += (_Space * (S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord + tan(_Lum) * _Lum * 0.25 - tan(_Lum_Background) * 0.25 - _Rand).rgb) * 1.5);
             _Space *= 0.5;
 
-                float _Render_Background_Void_R = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord + (_Render_Background.r * (1.0 - _Render_Texture.r) + _Rand) * 0.1).r;
-                float _Render_Background_Void_G = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord + (_Render_Background.g * (1.0 - _Render_Texture.g) + _Rand) * 0.1).b;
-                float _Render_Background_Void_B = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord + (_Render_Background.b * (1.0 - _Render_Texture.b) + _Rand) * 0.1).b;
+                float _Render_Background_Void_R = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord + (_Render_Background.r * (1.0 - _Render_Texture.r) + _Rand) * 0.1).r;
+                float _Render_Background_Void_G = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord + (_Render_Background.g * (1.0 - _Render_Texture.g) + _Rand) * 0.1).b;
+                float _Render_Background_Void_B = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord + (_Render_Background.b * (1.0 - _Render_Texture.b) + _Rand) * 0.1).b;
 
                 _Space = lerp(_Space, _Space + float3(_Render_Background_Void_R, _Render_Background_Void_G, _Render_Background_Void_B) * float3(0.15, 0.05, 0.25), 1.0 - _Lum);
 
@@ -157,12 +157,12 @@ PS_OUTPUT ps_main_pm( in PS_INPUT In )
             float _Lum_Background = Fun_Lum(_Render_Background);
 
             float3 _Space = lerp(float3(0.0, 0.0, 0.0), float3(0.15, 0.05, 0.25), _Lum);
-            _Space += (_Space * (S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord + tan(_Lum) * _Lum * 0.25 - tan(_Lum_Background) * 0.25 - _Rand).rgb) * 1.5);
+            _Space += (_Space * (S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord + tan(_Lum) * _Lum * 0.25 - tan(_Lum_Background) * 0.25 - _Rand).rgb) * 1.5);
             _Space *= 0.5;
 
-                float _Render_Background_Void_R = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord + (_Render_Background.r * (1.0 - _Render_Texture.r) + _Rand) * 0.1).r;
-                float _Render_Background_Void_G = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord + (_Render_Background.g * (1.0 - _Render_Texture.g) + _Rand) * 0.1).b;
-                float _Render_Background_Void_B = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord + (_Render_Background.b * (1.0 - _Render_Texture.b) + _Rand) * 0.1).b;
+                float _Render_Background_Void_R = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord + (_Render_Background.r * (1.0 - _Render_Texture.r) + _Rand) * 0.1).r;
+                float _Render_Background_Void_G = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord + (_Render_Background.g * (1.0 - _Render_Texture.g) + _Rand) * 0.1).b;
+                float _Render_Background_Void_B = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord + (_Render_Background.b * (1.0 - _Render_Texture.b) + _Rand) * 0.1).b;
 
                 _Space = lerp(_Space, _Space + float3(_Render_Background_Void_R, _Render_Background_Void_G, _Render_Background_Void_B) * float3(0.15, 0.05, 0.25), 1.0 - _Lum);
 

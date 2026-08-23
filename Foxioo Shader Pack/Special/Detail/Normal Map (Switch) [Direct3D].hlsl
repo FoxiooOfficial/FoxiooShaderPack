@@ -127,7 +127,7 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
             else
             {
                 _Result.rgb = _Render_Background.rgb;
-                _Render.rgb = Fun_Sharp(S2D_Background, S2D_BackgroundSampler, In.texCoord, _Offset);
+                _Render.rgb = Fun_Sharp(S2D_Background, S2D_BackgroundSampler, In.bgCoord, _Offset);
 
             }
 

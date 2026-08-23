@@ -121,7 +121,7 @@ PS_OUTPUT ps_main( in PS_INPUT In )
 
     float4 _Render_Overlay = S2D_Overlay.Sample(S2D_OverlaySampler, frac(In.texCoord + float2(_OverlayX, _OverlayY) + _Offset) * float2(_OverlayScaleX, _OverlayScaleY));
 
-        float4 _Result = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
+        float4 _Result = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
 
                 float4 _Reflect = S2D_Background.Sample(S2D_BackgroundSampler, frac(float2(abs(_X - In.texCoord.x) + _Offset.x, abs(_Y - In.texCoord.y) + _Offset.y)));
                 //_Reflect.rgb = _Reflect.rgb * _ColorMul.rgb + _ColorAdd.rgb;
@@ -171,7 +171,7 @@ PS_OUTPUT ps_main_pm( in PS_INPUT In )
 
     float4 _Render_Overlay = S2D_Overlay.Sample(S2D_OverlaySampler, frac(In.texCoord + float2(_OverlayX, _OverlayY) + _Offset) * float2(_OverlayScaleX, _OverlayScaleY));
 
-        float4 _Result = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
+        float4 _Result = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
 
                 float4 _Reflect = S2D_Background.Sample(S2D_BackgroundSampler, frac(float2(abs(_X - In.texCoord.x) + _Offset.x, abs(_Y - In.texCoord.y) + _Offset.y)));
                 //_Reflect.rgb = _Reflect.rgb * _ColorMul.rgb + _ColorAdd.rgb;

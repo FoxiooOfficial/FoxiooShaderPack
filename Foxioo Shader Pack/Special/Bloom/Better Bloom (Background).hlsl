@@ -99,7 +99,7 @@ PS_OUTPUT ps_main(PS_INPUT In)
 {
     PS_OUTPUT Out;
 
-    float4 _Result_Blur = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
+    float4 _Result_Blur = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
 
     for (int j = 0; j < _Quality; j++)
     {
@@ -148,7 +148,7 @@ PS_OUTPUT ps_main_pm( in PS_INPUT In )
 {
     PS_OUTPUT Out;
 
-    float4 _Result_Blur = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
+    float4 _Result_Blur = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
 
     for (int j = 0; j < _Quality; j++)
     {

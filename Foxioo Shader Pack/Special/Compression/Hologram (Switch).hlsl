@@ -67,11 +67,11 @@ PS_OUTPUT ps_main( in PS_INPUT In )
         float4 _Result = 0.0;
     
             _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord + float2(fPixelWidth, fPixelHeight)) * In.Tint;
-            _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord + float2(fPixelWidth, fPixelHeight));
+            _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord + float2(fPixelWidth, fPixelHeight));
             float4 _RenderOff2 = _Blending_Mode ? _Render_Background : _Render_Texture;
 
             _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
-            _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
+            _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
             float4 _Render = _Blending_Mode ? _Render_Background : _Render_Texture;
 
             /* x-axis */
@@ -114,11 +114,11 @@ PS_OUTPUT ps_main_pm( in PS_INPUT In )
         float4 _Result = 0.0;
     
             _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord + float2(fPixelWidth, fPixelHeight))) * In.Tint;
-            _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord + float2(fPixelWidth, fPixelHeight));
+            _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord + float2(fPixelWidth, fPixelHeight));
             float4 _RenderOff2 = _Blending_Mode ? _Render_Background : _Render_Texture;
 
             _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint);            
-            _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
+            _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
             float4 _Render = _Blending_Mode ? _Render_Background : _Render_Texture;
 
             /* x-axis */

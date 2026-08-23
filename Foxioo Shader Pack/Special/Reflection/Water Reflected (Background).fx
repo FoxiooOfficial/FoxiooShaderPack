@@ -66,7 +66,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
 
     float4 _Render_Overlay = tex2D(_Texture_Overlay, frac(In + float2(_OverlayX, _OverlayY) + _Offset) * float2(_OverlayScaleX, _OverlayScaleY));
 
-        float4 _Result =  tex2D(S2D_Background, In);;
+        float4 _Result =  tex2D(S2D_Background, In_Background);;
 
             float4 _Reflect = tex2D(S2D_Background, frac(float2(abs(_X - In.x) + _Offset.x, abs(_Y - In.y) + _Offset.y)));
             _Reflect.rgb = _Reflect.rgb * _ColorMul.rgb + _ColorAdd.rgb;

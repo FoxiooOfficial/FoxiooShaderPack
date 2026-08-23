@@ -102,7 +102,7 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
 
         float4 _Render = _Blending_Mode ? _Render_Background : _Render_Texture;
         float4 _Result = _Blending_Mode ? 
-                                        Fun_Vessel(S2D_Background, S2D_BackgroundSampler, In.texCoord, (float4)1.0, false) : 
+                                        Fun_Vessel(S2D_Background, S2D_BackgroundSampler, In.bgCoord, (float4)1.0, false) : 
                                         Fun_Vessel(S2D_Image, S2D_ImageSampler, In.texCoord, In.Tint, _Premultiplied);
 
             _Result = lerp(_Render, _Result, _Mixing);

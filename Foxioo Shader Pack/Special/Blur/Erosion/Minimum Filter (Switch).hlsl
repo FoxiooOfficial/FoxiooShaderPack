@@ -98,7 +98,7 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
 
         float4 _Result = _Blending_Mode ? _Render_Background : _Render_Texture;
-        float3 _Filter = _Blending_Mode ? Fun_Filter(S2D_Background, S2D_BackgroundSampler, In.texCoord, _Render_Background.rgb, (float4)1.0)
+        float3 _Filter = _Blending_Mode ? Fun_Filter(S2D_Background, S2D_BackgroundSampler, In.bgCoord, _Render_Background.rgb, (float4)1.0)
                                         : Fun_Filter(S2D_Image, S2D_ImageSampler, In.texCoord, _Render_Texture.rgb, In.Tint);
 
         _Result.rgb = lerp(_Result.rgb, _Filter, _Mixing);

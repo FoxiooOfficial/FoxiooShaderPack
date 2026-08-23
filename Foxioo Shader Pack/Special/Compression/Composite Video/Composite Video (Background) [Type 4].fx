@@ -95,15 +95,15 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
         if(_Distortion == 0.0) _UV = 0.0;
 
             // Luma
-            float4 _Result = tex2D(S2D_Background, In + _UV);
+            float4 _Result = tex2D(S2D_Background, In_Background + _UV);
             float _Luma = Fun_RGB2YUV(_Result.rgb).x;
 
-                _Result.rgb = Fun_Blur(S2D_Background, In + _UV, 0.85);
+                _Result.rgb = Fun_Blur(S2D_Background, In_Background + _UV, 0.85);
                 float3 _Render = Fun_RGB2YUV(_Result.rgb);
                 float Y = _Render.x;
 
             // Chroma
-            _Result.rgb = Fun_Blur(S2D_Background, In + float2(0.0, 2.0 * (_Vert / LINES)) * Y + _UV, 4.0);
+            _Result.rgb = Fun_Blur(S2D_Background, In_Background + float2(0.0, 2.0 * (_Vert / LINES)) * Y + _UV, 4.0);
 
                 _Render = Fun_RGB2YUV(_Result.rgb);
                 float U = _Render.y;

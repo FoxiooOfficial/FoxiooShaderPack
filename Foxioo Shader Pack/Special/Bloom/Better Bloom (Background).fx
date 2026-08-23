@@ -74,7 +74,7 @@ static const float2 _Blur[_BlurSize] =
 
 float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
 {
-    float4 _Result_Blur = tex2D(S2D_Background, In);
+    float4 _Result_Blur = tex2D(S2D_Background, In_Background);
     
     /* BYPASS LIMIT PIXEL SHADER!!! */ float _Bypass = 1; if(_Distance_Color == 1) {_Bypass = ((_Result_Blur.r + _Result_Blur.g + _Result_Blur.b) / 3.0); }
     

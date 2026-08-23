@@ -57,7 +57,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
             sin(_Frag * CD.x + CD.y + 4.0) * 0.5 + 0.5, 
             1);
 
-            float4 _Result = tex2D(S2D_Background, In + CD * 0.1);
+            float4 _Result = tex2D(S2D_Background, In_Background + CD * 0.1);
             _Result.rgb = lerp(float3(0.541, 0.611, 0.784) * _Result.rgb * 0.15, float3(0.529, 0.541, 0.568) + _Result.rgb * 0.5, Fun_Luminance(_Result.rgb));
             _Result.rgb = lerp(_Result.rgb, float3(0.541, 0.611, 0.784) * 0.5 + _Render_Texture.rgb * _Render_Texture_Lum * 0.1, 0.95 + _Lum * 0.05);
 

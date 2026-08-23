@@ -91,7 +91,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
             else
             {
                 _Result.rgb = _Render_Background.rgb;
-                _Render.rgb = Fun_Sharp(S2D_Background, In, _Offset);
+                _Render.rgb = Fun_Sharp(S2D_Background, In_Background, _Offset);
 
             }
 

@@ -92,7 +92,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
                     _Result.rgb = (Fun_Outline(In, _Result.rgb));
 
                 float _Lum_Aero = Fun_Lum(float4(_Result.rgb, 1.0));
-                float4 _Render_Background_Ex = (tex2D(S2D_Background, In - (_Lum_Aero * 0.25) + 0.125));
+                float4 _Render_Background_Ex = (tex2D(S2D_Background, In_Background - (_Lum_Aero * 0.25) + 0.125));
 
             _Result.rgb += _Render_Background_Ex.rgb * _Lum * _Lum;
             _Result.rgb = lerp(_Result.rgb, _Result.rgb * _Result.rgb * lerp(1.0, _Result.rgb * _Lum, 0.5), 0.85);

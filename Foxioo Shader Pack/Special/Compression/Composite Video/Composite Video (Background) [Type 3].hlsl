@@ -146,15 +146,15 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
         if(_Distortion == 0.0) _UV = 0.0;
         
             // Luma
-            float4 _Result = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord + _UV);
+            float4 _Result = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord + _UV);
             float _Luma = Fun_RGB2YIQ(_Result.rgb).x;
 
-                _Result.rgb = Fun_Blur(S2D_Background, S2D_BackgroundSampler, In.texCoord + _UV, 0.85);
+                _Result.rgb = Fun_Blur(S2D_Background, S2D_BackgroundSampler, In.bgCoord + _UV, 0.85);
                 float3 _Render = Fun_RGB2YIQ(_Result.rgb);
                 float Y = _Render.x;
 
             // Chroma
-            _Result.rgb = Fun_Blur(S2D_Background, S2D_BackgroundSampler, In.texCoord + float2(0.0, 2.0 * (_Vert / LINES)) * Y + _UV, 4.0);
+            _Result.rgb = Fun_Blur(S2D_Background, S2D_BackgroundSampler, In.bgCoord + float2(0.0, 2.0 * (_Vert / LINES)) * Y + _UV, 4.0);
 
                 _Render = Fun_RGB2YIQ(_Result.rgb);
                 float U = _Render.y;

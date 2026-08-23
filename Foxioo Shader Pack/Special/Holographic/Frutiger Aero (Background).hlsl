@@ -119,7 +119,7 @@ PS_OUTPUT ps_main( in PS_INPUT In )
                     _Result.rgb = (Fun_Outline(In.texCoord, _Result.rgb, In.Tint.a));
 
                 float _Lum_Aero = Fun_Lum(float4(_Result.rgb, 1.0));
-                float4 _Render_Background_Ex = (S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord - (_Lum_Aero * 0.25) + 0.125));
+                float4 _Render_Background_Ex = (S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord - (_Lum_Aero * 0.25) + 0.125));
 
             _Result.rgb += _Render_Background_Ex.rgb * _Lum * _Lum;
             _Result.rgb = lerp(_Result.rgb, _Result.rgb * _Result.rgb * lerp(1.0, _Result.rgb * _Lum, 0.5), 0.85);
@@ -179,7 +179,7 @@ PS_OUTPUT ps_main_pm( in PS_INPUT In )
                     _Result.rgb = Fun_Outline(In.texCoord, _Result.rgb, In.Tint.a);
 
                 float _Lum_Aero = Fun_Lum(float4(_Result.rgb, 1.0));
-                float4 _Render_Background_Ex = (S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord - (_Lum_Aero * 0.25) + 0.125));
+                float4 _Render_Background_Ex = (S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord - (_Lum_Aero * 0.25) + 0.125));
 
             _Result.rgb += _Render_Background_Ex.rgb * _Lum * _Lum;
             _Result.rgb = lerp(_Result.rgb, _Result.rgb * _Result.rgb * lerp(1.0, _Result.rgb * _Lum, 0.5), 0.85);

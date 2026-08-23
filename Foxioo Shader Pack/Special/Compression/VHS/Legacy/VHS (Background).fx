@@ -160,7 +160,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
 
         float4 _Result;
 
-        _Result.rgb = Fun_Sharp(S2D_Background, In, _Render_Background.rgb, 1.5);
+        _Result.rgb = Fun_Sharp(S2D_Background, In_Background, _Render_Background.rgb, 1.5);
 
             /* Noise */
                 /* Big */
@@ -187,7 +187,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
                 _Result.rgb += _Rainbow * Y;
 
             /* Ringing */
-                float3 _Ringing = Fun_Ringing(S2D_Background, In + _Rainbow_Pre.r * 0.05, _Result.rgb * _Rainbow);
+                float3 _Ringing = Fun_Ringing(S2D_Background, In_Background + _Rainbow_Pre.r * 0.05, _Result.rgb * _Rainbow);
                 float _Ringing_Lum = Fun_Luminance(_Ringing);
 
                 _Result.rgb += (_Ringing / _Rainbow) * _RainbowErrorNoise;

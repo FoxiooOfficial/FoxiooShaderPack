@@ -1,0 +1,191 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+//uniform sampler2D bckgTexture;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Mixing: f32,
+    _Size: f32,
+    _Angle: f32,
+    _Threshold: f32,
+    _Color: vec4f,
+    _ColorEx: vec4f,
+    parameter7_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+fn saturate(_Val: f32) -> f32 {
+    return clamp(_Val, 0.0, 1.0);
+}
+
+fn Fun_Luminance(_Result: vec4f) -> f32 {
+    const _Kr: f32 = 0.299;
+        const _Kg: f32 = 0.587;
+        const _Kb: f32 = 0.114;
+
+        var _Y: f32 = saturate(f32(0.1 + (_Kr * _Result.r + _Kg * _Result.g + _Kb * _Result.b)));
+
+        return saturate(f32(step(_Y * _Result.a, params._Threshold)));
+}
+
+fn Fun_Sharp(_Sampler: texture_2d<f32>, In: vec2f, _Size: vec2f, _Alpha: f32) -> vec2f {
+    var _Result: vec2f;
+
+        _Result.x = (
+            Fun_Luminance(vec4f(texture2D(_Sampler, In + _Size))) * 2.0 +
+            Fun_Luminance(vec4f(texture2D(_Sampler, In - _Size))) * 2.0
+        ) - _Alpha * 2.0;
+
+        _Result.y = (
+            Fun_Luminance(vec4f(texture2D(_Sampler, In + _Size))) * 2.0 +
+            Fun_Luminance(vec4f(texture2D(_Sampler, In - _Size))) / 2.0
+        ) - _Alpha;
+
+        return _Result;
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+
+            var _Result: vec4f;
+            var _Render: vec2f;
+            var _Offset: vec2f = params._Size * -vec2f(fusion.fPixelWidth, fusion.fPixelHeight);
+
+            var _Sin: f32 = sin(radians(params._Angle));
+            var _Cos: f32 = cos(radians(params._Angle));
+            _Offset = vec2f(_Offset.x * _Cos - _Offset.y * _Sin, _Offset.x * _Sin + _Offset.y * _Cos);
+
+                {
+                    let _fusionSwizzle0 = params._Color.rgb;
+                    _Result.x = _fusionSwizzle0.x;
+                    _Result.y = _fusionSwizzle0.y;
+                    _Result.z = _fusionSwizzle0.z;
+                }
+                // float3(184.0, 219.0, 219.0)
+
+                /* ############################# */
+
+                _Render = Fun_Sharp(img, vec2f(input.texCoord), vec2f(5.0 * _Offset), f32(_Render_Texture.a));
+                {
+                    let _fusionSwizzle1 = mix(_Result.rgb, params._ColorEx.rgb * (_Render.y + 0.1), saturate(f32((0.25 - saturate(f32(abs(_Render.x * 6.0)))) * 0.2)));
+                    _Result.x = _fusionSwizzle1.x;
+                    _Result.y = _fusionSwizzle1.y;
+                    _Result.z = _fusionSwizzle1.z;
+                }
+
+                _Render = Fun_Sharp(img, vec2f(input.texCoord), vec2f(-5.0, 5.0) * _Offset, f32(_Render_Texture.a));
+                {
+                    let _fusionSwizzle2 = mix(_Result.rgb, params._ColorEx.rgb * _Render.y, saturate(f32((0.25 - saturate(f32(abs(_Render.x * 6.0)))) * 0.2)));
+                    _Result.x = _fusionSwizzle2.x;
+                    _Result.y = _fusionSwizzle2.y;
+                    _Result.z = _fusionSwizzle2.z;
+                }
+
+                /* ############################# */
+
+                /* ############################# */
+
+                _Render = Fun_Sharp(img, vec2f(input.texCoord), vec2f(4.95 * _Offset), f32(_Render_Texture.a));
+                {
+                    let _fusionSwizzle3 = mix(_Result.rgb, params._ColorEx.rgb * (_Render.y + 0.1), saturate(f32((0.25 - saturate(f32(abs(_Render.x * 6.0)))) * 1.5)));
+                    _Result.x = _fusionSwizzle3.x;
+                    _Result.y = _fusionSwizzle3.y;
+                    _Result.z = _fusionSwizzle3.z;
+                }
+
+                var _Result_Side_L: vec2f = _Render;
+                _Render = Fun_Sharp(img, vec2f(input.texCoord), vec2f(-4.95, 4.95) * _Offset, f32(_Render_Texture.a));
+                {
+                    let _fusionSwizzle4 = mix(_Result.rgb, params._ColorEx.rgb * _Render.y, saturate(f32((0.25 - saturate(f32(abs(_Render.x * 6.0)))) * 0.5)));
+                    _Result.x = _fusionSwizzle4.x;
+                    _Result.y = _fusionSwizzle4.y;
+                    _Result.z = _fusionSwizzle4.z;
+                }
+
+                /* ############################# */
+
+                /* ############################# */
+
+                _Render = Fun_Sharp(img, vec2f(input.texCoord), vec2f(2.0 * _Offset), f32(_Render_Texture.a)) * 0.3;
+                {
+                    let _fusionSwizzle5 = mix(_Result.rgb, params._ColorEx.rgb + min(_Render.y - 0.09, 0.0), saturate(f32(0.5 - saturate(f32(abs(_Render.x * 6.0))))));
+                    _Result.x = _fusionSwizzle5.x;
+                    _Result.y = _fusionSwizzle5.y;
+                    _Result.z = _fusionSwizzle5.z;
+                }
+
+                _Render = Fun_Sharp(img, vec2f(input.texCoord), vec2f(-2.0, 2.0) * _Offset, f32(_Render_Texture.a)) * 0.3;
+                {
+                    let _fusionSwizzle6 = mix(_Result.rgb, params._ColorEx.rgb + min(_Render.y - 0.09, 0.0),  saturate(f32(0.5 - saturate(f32(abs(_Render.x * 6.0))))));
+                    _Result.x = _fusionSwizzle6.x;
+                    _Result.y = _fusionSwizzle6.y;
+                    _Result.z = _fusionSwizzle6.z;
+                }
+
+                /* ############################# */
+
+                /* ############################# */
+
+                _Render = Fun_Sharp(img, vec2f(input.texCoord), vec2f(1.85 * _Offset), f32(_Render_Texture.a)) * 0.3;
+                {
+                    let _fusionSwizzle7 = mix(_Result.rgb, params._ColorEx.rgb + min(_Render.y - 0.09, 0.0) + _Result_Side_L.y * 0.1, saturate(f32((1.0 - saturate(f32(abs(_Render.x * 6.0)))) - (_Result_Side_L.y * 0.4))));
+                    _Result.x = _fusionSwizzle7.x;
+                    _Result.y = _fusionSwizzle7.y;
+                    _Result.z = _fusionSwizzle7.z;
+                }
+
+                _Render = Fun_Sharp(img, vec2f(input.texCoord), vec2f(-1.85, 1.85) * _Offset, f32(_Render_Texture.a)) * 0.3;
+                {
+                    let _fusionSwizzle8 = mix(_Result.rgb, params._ColorEx.rgb + min(_Render.y - 0.09, 0.0), 1.0 - saturate(f32(abs(_Render.x * 6.0))));
+                    _Result.x = _fusionSwizzle8.x;
+                    _Result.y = _fusionSwizzle8.y;
+                    _Result.z = _fusionSwizzle8.z;
+                }
+
+                /* ############################# */
+
+            {
+                let _fusionSwizzle9 = mix(_Render_Texture.rgb, _Result.rgb, params._Mixing);
+                _Result.x = _fusionSwizzle9.x;
+                _Result.y = _fusionSwizzle9.y;
+                _Result.z = _fusionSwizzle9.z;
+            }
+            _Result.a = _Render_Texture.a;
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End

@@ -127,7 +127,7 @@ PS_OUTPUT ps_main( in PS_INPUT In )
     PS_OUTPUT Out;
 
     float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord) * _Render_Texture;
+    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord) * _Render_Texture;
 
         float2 _UV = Fun_RotationX(float2((In.texCoord.x + _PosX) * _ScaleX, (In.texCoord.y + _PosY) * _ScaleY) * _Scale);
 

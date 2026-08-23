@@ -38,11 +38,11 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
             float4 _Result = 0.0;   
 
                 _Render_Texture = tex2D(S2D_Image, In + float2(fPixelWidth, fPixelHeight));
-                _Render_Background = tex2D(S2D_Background, In + (fPixelWidth, fPixelHeight));
+                _Render_Background = tex2D(S2D_Background, In_Background + (fPixelWidth, fPixelHeight));
                 float4 _RenderOff2 = _Blending_Mode ? _Render_Background : _Render_Texture;
                 
                 _Render_Texture = tex2D(S2D_Image, In);
-                _Render_Background = tex2D(S2D_Background, In);
+                _Render_Background = tex2D(S2D_Background, In_Background);
                 float4 _Render = _Blending_Mode ? _Render_Background : _Render_Texture;
 
             /* x-axis */

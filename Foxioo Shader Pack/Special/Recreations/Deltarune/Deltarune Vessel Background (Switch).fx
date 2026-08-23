@@ -64,7 +64,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
     float4 _Render_Background = tex2D(S2D_Background, In_Background);
 
         float4 _Render = _Blending_Mode ? _Render_Background : _Render_Texture;
-        float4 _Result = _Blending_Mode ? Fun_Vessel(S2D_Background, In) : Fun_Vessel(S2D_Image, In);
+        float4 _Result = _Blending_Mode ? Fun_Vessel(S2D_Background, In_Background) : Fun_Vessel(S2D_Image, In);
 
             _Result = lerp(_Render, _Result, _Mixing);
 

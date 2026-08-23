@@ -90,7 +90,7 @@ PS_OUTPUT ps_main( in PS_INPUT In )
             sin(_Frag * CD.x + CD.y + 4.0) * 0.5 + 0.5, 
             1);
 
-            float4 _Result = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord + CD * 0.1);
+            float4 _Result = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord + CD * 0.1);
             _Result.rgb = lerp(float3(0.529, 0.541, 0.568) * _Result.rgb * 0.15, float3(0.529, 0.541, 0.568) + _Result.rgb * 0.5, Fun_Luminance(_Result.rgb));
             _Result.rgb = lerp(_Result.rgb, _Render_Texture_Lum * 0.5, 0.95 + _Lum * 0.05);
 
@@ -161,7 +161,7 @@ PS_OUTPUT ps_main_pm( in PS_INPUT In )
             sin(_Frag * CD.x + CD.y + 4.0) * 0.5 + 0.5, 
             1);
 
-            float4 _Result = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord + CD * 0.1);
+            float4 _Result = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord + CD * 0.1);
             _Result.rgb = lerp(float3(0.529, 0.541, 0.568) * _Result.rgb * 0.15, float3(0.529, 0.541, 0.568) + _Result.rgb * 0.5, Fun_Luminance(_Result.rgb));
             _Result.rgb = lerp(_Result.rgb, _Render_Texture_Lum * 0.5, 0.95 + _Lum * 0.05);
 

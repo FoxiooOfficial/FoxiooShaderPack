@@ -140,7 +140,7 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
         static const float _Div = 576.0;
         float4 _Result_Pb = Fun_Interpolation(In.texCoord + float2(_OffsetX_Pb * fPixelWidth, _OffsetY_Pb * fPixelHeight), _Div, S2D_Background, S2D_BackgroundSampler, 1.25);
         float4 _Result_Pr = Fun_Interpolation(In.texCoord + float2(_OffsetX_Pr * fPixelWidth, _OffsetY_Pr * fPixelHeight), _Div, S2D_Background, S2D_BackgroundSampler, 1.25);
-        float4 _Result = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord);
+        float4 _Result = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
 
             /* RGB -> Y'UV (Y'PbPr) */
             const float _Kr = 0.299;
@@ -165,7 +165,7 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
                 float _PbFix = (( _Chroma_2 * cos((_Omega * _FraqMul) - 2.0)) + ( _Chroma_1 * cos((_Omega * _FraqMul))) + ( _Chroma_3 * cos((_Omega * _FraqMul) + 2.0))) / 3.0;
                 float _PrFix = (( _Chroma_2 * sin((_Omega * _FraqMul) - 2.0)) + ( _Chroma_1 * sin((_Omega * _FraqMul))) + ( _Chroma_3 * sin((_Omega * _FraqMul) + 2.0))) / 3.0;
 
-                float _Edge = Fun_Sharp(S2D_Background, S2D_BackgroundSampler, In.texCoord, _Result.rgb, 1.0);
+                float _Edge = Fun_Sharp(S2D_Background, S2D_BackgroundSampler, In.bgCoord, _Result.rgb, 1.0);
                 _Y +=     (sin((In.texCoord.x - In.texCoord.y) * 10000.0 * _Edge   + _Time) * _Edge)   * 0.04;
                 _PbFix += (sin((In.texCoord.x + In.texCoord.y) * 1000000.0 * _Edge + _Time) * _Edge) * 0.04;
                 _PrFix += (cos((In.texCoord.x + In.texCoord.y) * 1000000.0 * _Edge + _Time) * _Edge) * 0.04;
@@ -175,7 +175,7 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
             float _G = _Y - 0.344136 * _PbFix - 0.714136 * _PrFix;
             float _B = _Y + 1.772 * _PbFix;
 
-            float3 _Render = Fun_Sharp_Ex(S2D_Background, S2D_BackgroundSampler, In.texCoord, float3(_R, _G, _B), 1.0 - _Y);
+            float3 _Render = Fun_Sharp_Ex(S2D_Background, S2D_BackgroundSampler, In.bgCoord, float3(_R, _G, _B), 1.0 - _Y);
             //_Render = lerp(_Render, _Render.r * _Render.g * _Render.b, 0.35); 
 
             float _Rand = Fun_Rand(In.texCoord.x + In.texCoord.y + _Seed) * _Edge;

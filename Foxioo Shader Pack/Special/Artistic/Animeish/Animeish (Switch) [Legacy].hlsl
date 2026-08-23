@@ -77,7 +77,7 @@ PS_OUTPUT ps_main( in PS_INPUT In )
     PS_OUTPUT Out;
 
     float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord) * In.Tint;
+    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord) * In.Tint;
 
     float4 _Result, _GradientX, _GradientY = 0;
 
@@ -107,8 +107,8 @@ PS_OUTPUT ps_main( in PS_INPUT In )
     }
     else
     {
-        _GradientX = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord + float2(fPixelWidth, 0)) * In.Tint - S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord - float2(fPixelWidth, 0)) * In.Tint;
-        _GradientY = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord + float2(0, fPixelHeight)) * In.Tint - S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord - float2(0, fPixelHeight)) * In.Tint;       
+        _GradientX = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord + float2(fPixelWidth, 0)) * In.Tint - S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord - float2(fPixelWidth, 0)) * In.Tint;
+        _GradientY = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord + float2(0, fPixelHeight)) * In.Tint - S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord - float2(0, fPixelHeight)) * In.Tint;       
     }
 
     float _EdgeDetection = (length(_GradientX.rgb) + length(_GradientY.rgb)) * _OutlineScale;
@@ -144,7 +144,7 @@ PS_OUTPUT ps_main_pm( in PS_INPUT In )
         PS_OUTPUT Out;
 
     float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint);
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord) * In.Tint;
+    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord) * In.Tint;
 
     float4 _Result, _GradientX, _GradientY = 0;
 
@@ -174,8 +174,8 @@ PS_OUTPUT ps_main_pm( in PS_INPUT In )
     }
     else
     {
-        _GradientX = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord + float2(fPixelWidth, 0)) * In.Tint - S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord - float2(fPixelWidth, 0)) * In.Tint;
-        _GradientY = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord + float2(0, fPixelHeight)) * In.Tint - S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord - float2(0, fPixelHeight)) * In.Tint;       
+        _GradientX = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord + float2(fPixelWidth, 0)) * In.Tint - S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord - float2(fPixelWidth, 0)) * In.Tint;
+        _GradientY = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord + float2(0, fPixelHeight)) * In.Tint - S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord - float2(0, fPixelHeight)) * In.Tint;       
     }
 
     float _EdgeDetection = (length(_GradientX.rgb) + length(_GradientY.rgb)) * _OutlineScale;

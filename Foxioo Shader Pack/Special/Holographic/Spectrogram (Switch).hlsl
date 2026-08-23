@@ -90,7 +90,7 @@ PS_OUTPUT ps_main( in PS_INPUT In )
             float _Lum = Fun_Lum(_Result);
 
             if(!_Blending_Mode) _Result = S2D_Image.Sample(S2D_ImageSampler, In.texCoord + float2(_Lum * sin(_Lum + In.texCoord.x * _Lum * 200.0 * _Mixing + _Time) * 0.01 * _Mixing, _Lum * cos(_Lum + In.texCoord.y * 400.0 * _Mixing + sin(In.texCoord.x * 10.0 + _Time * _Lum) + _Time) * 0.01 * _Mixing)) * In.Tint;
-            else                _Result = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord + float2(_Lum * sin(_Lum + In.texCoord.x * _Lum * 200.0 * _Mixing + _Time) * 0.01 * _Mixing, _Lum * cos(_Lum + In.texCoord.y * 400.0 * _Mixing + sin(In.texCoord.x * 10.0 + _Time * _Lum) + _Time) * 0.01 * _Mixing));
+            else                _Result = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord + float2(_Lum * sin(_Lum + In.texCoord.x * _Lum * 200.0 * _Mixing + _Time) * 0.01 * _Mixing, _Lum * cos(_Lum + In.texCoord.y * 400.0 * _Mixing + sin(In.texCoord.x * 10.0 + _Time * _Lum) + _Time) * 0.01 * _Mixing));
             
                 _Lum = Fun_Lum(_Result);
                 if (_Lum < 0.2)         _Result.rgb = lerp(_Color5, _Color4, _Lum / 0.2);
@@ -146,7 +146,7 @@ PS_OUTPUT ps_main_pm( in PS_INPUT In )
             float _Lum = Fun_Lum(_Result);
 
             if(!_Blending_Mode) _Result = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord + float2(_Lum * sin(_Lum + In.texCoord.x * _Lum * 200.0 * _Mixing + _Time) * 0.01 * _Mixing, _Lum * cos(_Lum + In.texCoord.y * 400.0 * _Mixing + sin(In.texCoord.x * 10.0 + _Time * _Lum) + _Time) * 0.01 * _Mixing))) * In.Tint;
-            else                _Result = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord + float2(_Lum * sin(_Lum + In.texCoord.x * _Lum * 200.0 * _Mixing + _Time) * 0.01 * _Mixing, _Lum * cos(_Lum + In.texCoord.y * 400.0 * _Mixing + sin(In.texCoord.x * 10.0 + _Time * _Lum) + _Time) * 0.01 * _Mixing));
+            else                _Result = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord + float2(_Lum * sin(_Lum + In.texCoord.x * _Lum * 200.0 * _Mixing + _Time) * 0.01 * _Mixing, _Lum * cos(_Lum + In.texCoord.y * 400.0 * _Mixing + sin(In.texCoord.x * 10.0 + _Time * _Lum) + _Time) * 0.01 * _Mixing));
             
                 _Lum = Fun_Lum(_Result);
                 if (_Lum < 0.2)         _Result.rgb = lerp(_Color5, _Color4, _Lum / 0.2);

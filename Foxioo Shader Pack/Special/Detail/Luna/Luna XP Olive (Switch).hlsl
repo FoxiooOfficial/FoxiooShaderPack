@@ -147,9 +147,9 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
                 _Result.rgb = _Render_Background.rgb;
                 _Result.a = _Render_Texture.a;
 
-                _Render = Fun_Border(S2D_Background, S2D_BackgroundSampler, In.texCoord, _Offset, _Render_Background, (float4)1.0);
+                _Render = Fun_Border(S2D_Background, S2D_BackgroundSampler, In.bgCoord, _Offset, _Render_Background, (float4)1.0);
 
-                float3 _Sharp = float3(Fun_Sharp(S2D_Background, S2D_BackgroundSampler, In.texCoord, _Offset, (float4)1.0));
+                float3 _Sharp = float3(Fun_Sharp(S2D_Background, S2D_BackgroundSampler, In.bgCoord, _Offset, (float4)1.0));
                 _Alpha = Fun_Luminance(float4(_Sharp.r, _Sharp.g, _Sharp.b, _Render_Texture.a));
             }
 

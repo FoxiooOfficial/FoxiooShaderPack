@@ -200,7 +200,7 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
 
         float4 _Result;
 
-            _Result.rgb = Fun_Sharp(S2D_Background, S2D_BackgroundSampler, In.texCoord, _Render_Background.rgb, 1.5);
+            _Result.rgb = Fun_Sharp(S2D_Background, S2D_BackgroundSampler, In.bgCoord, _Render_Background.rgb, 1.5);
 
                 /* Noise */
                     /* Big */
@@ -227,7 +227,7 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
                     _Result.rgb += _Rainbow * Y;
 
                 /* Ringing */
-                    float3 _Ringing = Fun_Ringing(S2D_Background, S2D_BackgroundSampler, In.texCoord + Fun_Luminance(_Rainbow_Pre) * 0.05, _Result.rgb * _Rainbow);
+                    float3 _Ringing = Fun_Ringing(S2D_Background, S2D_BackgroundSampler, In.bgCoord + Fun_Luminance(_Rainbow_Pre) * 0.05, _Result.rgb * _Rainbow);
                     float _Ringing_Lum = Fun_Luminance(_Ringing);
 
                     _Result.rgb += (_Ringing / _Rainbow) * _RainbowErrorNoise;
