@@ -1,0 +1,88 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(0) var background: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+//uniform float fPixelWidth;
+//uniform float fPixelHeight;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Blending_Mode: i32,
+    _Mixing: f32,
+    parameter3_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        var _Render_Background: vec4f = texture2D(background, input.texCoord);
+
+            var _Result: vec4f = select(_Render_Texture, _Render_Background, (params._Blending_Mode != 0));
+            var _Render: vec4f = _Result;
+
+                {
+                    let _fusionSwizzle0 = vec3f(0.02, 0.01, 0.5);
+                    _Result.x *= _fusionSwizzle0.x;
+                    _Result.y *= _fusionSwizzle0.y;
+                    _Result.z *= _fusionSwizzle0.z;
+                }
+                _Result.r = mix(0.0, 1.0, _Result.b / 2.0);
+
+                    var _ColorRed: vec3f = vec3f(1.0, 0.2, 0.5);
+                        _Result.r += mix(0.0, _ColorRed.r, (_Render.r - 0.75) / (1.0 - 0.75));
+
+                    var _ColorGreen: vec3f = vec3f(0.6, 1.0, 0.1);
+                        _Result.g += mix(0.0, _ColorGreen.g, (_Render.g - 0.75) / (1.0 - 0.75));
+
+                    var _ColorBlue: vec3f = vec3f(0.2, 1.0, 0.8);
+                        _Result.b += mix(0.0, _ColorBlue.b, (_Render.b - 0.75) / (1.0 - 0.75));
+
+                    {
+                        let _fusionSwizzle1 = pow(abs(_Result.rgb), 1.0 / vec3f(2.2));
+                        _Result.x = _fusionSwizzle1.x;
+                        _Result.y = _fusionSwizzle1.y;
+                        _Result.z = _fusionSwizzle1.z;
+                    }
+
+                _Result = mix(_Render, _Result, params._Mixing);
+                _Result.a = _Render_Texture.a;
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End
