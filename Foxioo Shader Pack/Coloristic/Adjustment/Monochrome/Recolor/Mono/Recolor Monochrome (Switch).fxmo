@@ -67,21 +67,9 @@ uniform float _Mixing;
 uniform vec4 _Color;
 uniform bool _Blending_Mode;
 
-
 /************************************************************/
 /* Main */
 /************************************************************/
-
-float Fun_Luminance(vec3 _Result)
-{
-    const float _Kr = 0.299;
-    const float _Kg = 0.587;
-    const float _Kb = 0.114;
-
-    float _Y = _Kr * _Result.r + _Kg * _Result.g + _Kb * _Result.b;
-
-    return _Y;
-}
 
 out vec4 fragColor;
 void main(void)
@@ -89,14 +77,14 @@ void main(void)
     vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
     vec4 _Render_Background = texture(bckgTexture, In);
 
-        vec4 _Result = _Blending_Mode ? _Render_Background : _Render_Texture;
-        float _Lum = Fun_Luminance(_Result.rgb);
+        vec4 _Result;
+        _Result.rgb = mix(_Render_Texture.rgb, _Render_Background.rgb, vec3(_Blending_Mode));
+        _Result.a = _Render_Texture.a;
 
+            float _Lum = dot(_Result.rgb, vec3(0.299, 0.587, 0.114));
             vec3 _Render = _Color.rgb * _Lum;
 
-            _Result.rgb = mix(_Result.rgb, _Render, _Mixing);
-
-        _Result.a = _Render_Texture.a;
+        _Result.rgb = mix(_Result.rgb, _Render, _Mixing);
 
     fragColor = _Result;
 }
