@@ -1,0 +1,77 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+/***********************************************************/
+/* Textures */
+/***********************************************************/
+
+texture T_Image;
+texture T_Background;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+float _Mixing;
+
+/***********************************************************/
+/* Tech Main */
+/***********************************************************/
+
+technique tech_main
+{
+    pass P0
+    {
+        Texture[0] = <T_Image>;                     // sampler2D S2D_Image      : register(s0);
+        MinFilter[0] = LINEAR;
+        MagFilter[0] = LINEAR;
+        MipFilter[0] = LINEAR;
+        AddressU[0] = WRAP;
+        AddressV[0] = WRAP;
+
+        Texture[2] = <T_Background>;                // sampler2D S2D_Background : register(s1);
+        MinFilter[2] = LINEAR;
+        MagFilter[2] = LINEAR;
+        MipFilter[2] = LINEAR;
+        AddressU[2] = WRAP;
+        AddressV[2] = WRAP;
+
+        PixelShaderConstant[0] = <_Mixing>;         // c0
+
+        PixelShader = asm
+        {
+            ps.1.4;
+            
+            /** Consts **************************************************/
+            def c2, 0.298999995, 0.566999972, 0.114, -1;
+            def c3, 0, 0, 0, 1;
+
+            /** Samplers ************************************************/
+            /*
+                t0 -> float4 _Render_Texture = tex2D(S2D_Image, In);
+                t1 -> float4 _Render_Background = tex2D(S2D_Background, In_Background);
+            */
+            texld r0, t0;
+            texld r1, t1;
+            
+            /** Assembly ************************************************/
+
+                mul r2.w, c0.x, c2.w;
+                mul r3.w, c1.x, c2.w;
+                add r2.w, r2.w, c3.w;
+            + cmp r1.xyz, r3.w, r0, r1;
+                dp3 r3.w, c2, r1;
+                mul r3.w, r3.w, c0.x;
+                mov r0.w, r0.w;
+            + mad r0.xyz, r2.w, r1, r3.w;
+        };
+    }
+}
