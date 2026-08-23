@@ -46,6 +46,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
 
     return _Result;
 }
+
 /************************************************************/
 /* Tech Main */
 /************************************************************/
