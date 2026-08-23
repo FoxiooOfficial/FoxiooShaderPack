@@ -47,7 +47,7 @@ struct Params {
 
 fn Fun_Real(_Color: vec3f, _Render: vec3f) -> vec3f
 {
-    var NaN: f32 = select(0.0, f32(0x7fc00000u), params._Mixing < 0.0);
+    var NaN: f32 = select(0.0, bitcast<f32>(0x7fc00000u + select(0u, 1u, params._Mixing < 0.0)), params._Mixing < 0.0);
     return select(_Render, vec3f(NaN), abs(_Color) > vec3f(1.0));
 }
 
