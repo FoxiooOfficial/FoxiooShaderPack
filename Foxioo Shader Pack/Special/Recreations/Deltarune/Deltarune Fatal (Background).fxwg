@@ -1,0 +1,139 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_vertex
+struct Projection {
+    size: vec2f,
+    scale: vec2f,
+};
+
+@group(0) @binding(0) var<uniform> projection: Projection;
+
+struct VertexInput {
+    @location(0) position: vec2f,
+    @location(1) texCoord: vec2f,
+    @location(2) color: vec4f,
+    @location(3) ink: f32,
+};
+
+struct VertexOutput {
+    @builtin(position) position: vec4f,
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+    @location(2) ink: f32,
+};
+
+struct Params {
+    parameter0_value: i32,
+    _Mixing: f32,
+    _Mul: f32,
+    parameter3_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+@vertex fn vs_main(input: VertexInput) -> VertexOutput {
+    var output: VertexOutput;
+    var Pos: vec3f = vec3f(input.position, 1.0);
+        output.texCoord = (fusion.textureMatrix * Pos).xy;
+
+        var _PixelSize: vec2f = vec2f(fusion.fPixelWidth, fusion.fPixelHeight);
+        var _DirCorner: vec2f = sign(output.texCoord - 0.5);
+        var _Pos: vec4f = vec4f(input.position / _PixelSize, 0.0, 1.0);
+
+            var _PixelPadding: vec2f = abs(params._Mixing * params._Mul) * _PixelSize;
+            var _PosExpanded: vec4f = _Pos;
+
+                {
+                    let _fusionSwizzle0 = _DirCorner * _PixelPadding / _PixelSize;
+                    _PosExpanded.x += _fusionSwizzle0.x;
+                    _PosExpanded.y += _fusionSwizzle0.y;
+                }
+
+        output.position = vec4f(fusion.projectionMatrix * fusion.transformMatrix * fusion.objectMatrix * vec3f(_PosExpanded.xy * _PixelSize, 1.0), 1.0);
+
+        output.texCoord = output.texCoord + _DirCorner * _PixelPadding;
+    output.color = input.color;
+    output.ink = input.ink;
+    return output;
+}
+//@End
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+//uniform sampler2D bckgTexture;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Mixing: f32,
+    _Mul: f32,
+    parameter3_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+fn Fun_PixelInside(In: vec2f) -> f32 {
+    return f32((In.x >= 0.0 && In.x <= 1.0) && (In.y >= 0.0 && In.y <= 1.0));
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var UV: vec2f = input.texCoord;
+        UV.y = floor((1.0 - UV.y - 0.5) * 8.0) / 8.0;
+        UV.y += 0.1 + params._Mixing * fusion.fPixelHeight;
+        UV.y *= mix(1.0, UV.y, 0.5);
+
+        var _In: vec2f = input.texCoord;
+        _In.x += max(UV.y * 1.5, 0.0) * -params._Mixing * fusion.fPixelWidth * params._Mul;
+
+    	var _Inside: f32 = Fun_PixelInside(_In);
+
+        var _Render_Border: vec4f = vec4f(0.0);
+        var _Render_Texture: vec4f = texture2D(img, clamp(_In, vec2f(0.0), vec2f(1.0))) * (input.color * fusion.blendColor);
+
+            var _Result: vec4f = _Render_Texture;
+
+            var _MixingAbs: f32 = abs(params._Mixing) * fusion.fPixelWidth * 220.0;
+            var _Grad: f32 = 1.0 - clamp(input.texCoord.y + 1.0 - _MixingAbs / 60.0, 0.0, 1.0);
+
+            {
+                let _fusionSwizzle0 = mix(vec3f(1.0), vec3f(1.0, 0.0, 0.0), _Grad * 3.0);
+                _Result.x *= _fusionSwizzle0.x;
+                _Result.y *= _fusionSwizzle0.y;
+                _Result.z *= _fusionSwizzle0.z;
+            }
+            _Result.a *= mix(1.0, 0.0, _Grad);
+
+        _fusionOutput = mix(_Render_Border, _Result, _Inside);
+    return _fusionOutput;
+}
+//@End

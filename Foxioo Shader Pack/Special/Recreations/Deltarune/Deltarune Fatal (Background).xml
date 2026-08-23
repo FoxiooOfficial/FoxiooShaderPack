@@ -1,0 +1,47 @@
+<effect>
+	<name>Deltarune Fatal (Texture)</name>
+		<description>This shader recreates the death "fatal"/"snowgrave" effect from the game DELTARUNE, created by Toby Fox</description> 
+			<author>Foxioo (Recreation of an effect from a DELTARUNE created by Toby Fox)</author>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+			
+		<parameter>
+			<name>/* Foxioo Deltarune Fatal (Texture) Shader | 2026.08.23 */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>This shader recreates the death "fatal"/"snowgrave" effect from the game DELTARUNE, created by Toby Fox</description>
+		</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>5.0</value>
+				<preview_value>10.0</preview_value>
+		</parameter>
+
+			<parameter>
+				<name>Offset Multiplication</name>
+				<variable>_Mul</variable>
+				
+				<description>This variable specifies the multiplication of the original offset</description>
+
+				<type>float</type>
+
+				<value>1.0</value>
+				<preview_value>2.0</preview_value>
+		</parameter>
+
+        <parameter>
+            <name>/* */</name>
+            <property>checkbox</property>
+            <variable>__</variable>
+        </parameter>
+
+</effect>
