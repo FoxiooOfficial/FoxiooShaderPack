@@ -44,12 +44,8 @@ struct Params {
 /************************************************************/
 /* Main */
 /************************************************************/
-fn Fun_Trunc(_Value: vec3f) -> vec3f {
-    return sign(_Value) * floor(abs(_Value));
-}
-
-fn Fun_FMod(_Value: vec3f, _Denom: f32) -> vec3f {
-    return _Value - _Denom * Fun_Trunc(vec3f(_Value - _Denom));
+fn Fun_FMod(x: vec3f, y: f32) -> vec3f {
+    return x - y * trunc(x / y);
 }
 struct FragmentInput {
     @location(0) texCoord: vec2f,
@@ -95,15 +91,6 @@ struct FragmentInput {
                     _Result.x = _fusionSwizzle3.x;
                     _Result.y = _fusionSwizzle3.y;
                     _Result.z = _fusionSwizzle3.z;
-                }
-
-                if(params._Mixing == 0.0) {
-                    {
-                        let _fusionSwizzle4 = _Render.rgb;
-                        _Result.x = _fusionSwizzle4.x;
-                        _Result.y = _fusionSwizzle4.y;
-                        _Result.z = _fusionSwizzle4.z;
-                    }
                 }
 
             _Result.a = _Render_Texture.a;

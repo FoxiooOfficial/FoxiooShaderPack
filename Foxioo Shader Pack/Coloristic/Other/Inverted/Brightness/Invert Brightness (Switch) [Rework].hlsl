@@ -35,6 +35,7 @@ struct PS_INPUT
 {
     float4 Tint : COLOR0;
     float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
 };
 
 struct PS_OUTPUT
@@ -45,23 +46,6 @@ struct PS_OUTPUT
 /************************************************************/
 /* Main */
 /************************************************************/
-
-static const float3 _L = float3(0.299, 0.587, 0.114);
-
-float3 Fun_LumInvert(float3 _Render)
-{
-    float Y = dot(_L, _Render);
-    float U = 0.492 * (_Render.b - Y);
-    float V = 0.877 * (_Render.r - Y);
-
-    Y = 1.0 - Y;
-
-    float R = Y + 1.13983 * V;
-    float G = Y - 0.39465 * U - 0.58060 * V;
-    float B = Y + 2.03211 * U;
-
-    return float3(R, G, B);
-}
 
 float4 Demultiply(float4 _Render, bool _Premultiplied)
 {
@@ -80,22 +64,14 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
     float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
 
-        float4 _Result, _Render;
-        
-            if(!_Blending_Mode)
-            {
-                _Result.rgb = Fun_LumInvert(_Render_Texture.rgb);
-                _Render = _Render_Texture;
-            }
-            else
-            {
-                _Result.rgb = Fun_LumInvert(_Render_Background.rgb);
+        float4 _Result;
+        _Result.rgb = lerp(_Render_Texture.rgb, _Render_Background.rgb, float(_Blending_Mode));
+        _Result.a = _Render_Texture.a;
 
-                _Render.rgb = _Render_Background.rgb;
-                _Result.a = _Render_Texture.a;
-            }
-
-        _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
+            float _Lum = dot(_Result.rgb, float3(0.299, 0.587, 0.114));
+            float _Delta = 0.5 - _Lum;
+    
+            _Result.rgb += _Delta * (_Mixing * 2.0);
     
     return _Result;
 }

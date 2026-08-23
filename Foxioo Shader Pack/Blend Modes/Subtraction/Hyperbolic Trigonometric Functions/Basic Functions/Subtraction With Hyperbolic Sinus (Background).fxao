@@ -63,8 +63,7 @@ uniform bool _Blending_Mode;
 /* Main */
 /************************************************************/
 
-vec3 Fun_Sinh(vec3 Color) 
-{
+vec3 Fun_Sinh(vec3 Color) {
     return (exp(Color) - exp(-Color)) * 0.5;
 }
 

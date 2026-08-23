@@ -85,7 +85,7 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
                 _Render = _Render_Background;
             }
 
-            _Result.rgb = 1.0 - sin(_Result.rgb);
+            _Result.rgb = 1.0 / sin(_Result.rgb);
             _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
  
         _Result.a = _Render_Texture.a;

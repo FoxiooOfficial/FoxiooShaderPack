@@ -78,7 +78,7 @@ struct FragmentInput {
                 }
 
                 {
-                    let _fusionSwizzle2 = 1.0 - sin(_Result.rgb);
+                    let _fusionSwizzle2 = 1.0 / sin(_Result.rgb);
                     _Result.x = _fusionSwizzle2.x;
                     _Result.y = _fusionSwizzle2.y;
                     _Result.z = _fusionSwizzle2.z;

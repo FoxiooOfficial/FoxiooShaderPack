@@ -46,7 +46,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
                 _Render = _Render_Background;
             }
 
-            _Result.rgb = 1.0 - cos(_Result.rgb);
+            _Result.rgb = 1.0 / cos(_Result.rgb);
             _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
  
         _Result.a = _Render_Texture.a;

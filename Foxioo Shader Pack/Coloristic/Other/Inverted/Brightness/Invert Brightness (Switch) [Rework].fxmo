@@ -93,22 +93,14 @@ void main(void)
     vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
     vec4 _Render_Background = texture(bckgTexture, In);
 
-        vec4 _Result, _Render;
-        
-            if(!_Blending_Mode)
-            {
-                _Result.rgb = Fun_LumInvert(_Render_Texture.rgb);
-                _Render = _Render_Texture;
-            }
-            else
-            {
-                _Result.rgb = Fun_LumInvert(_Render_Background.rgb);
+        vec4 _Result;
+        _Result.rgb = mix(_Render_Texture.rgb, _Render_Background.rgb, float(_Blending_Mode));
+        _Result.a = _Render_Texture.a;
 
-                _Render.rgb = _Render_Background.rgb;
-                _Result.a = _Render_Texture.a;
-            }
-
-        _Result.rgb = mix(_Render.rgb, _Result.rgb, _Mixing);
+            float _Lum = dot(_Result.rgb, vec3(0.299, 0.587, 0.114));
+            float _Delta = 0.5 - _Lum;
+    
+            _Result.rgb += _Delta * (_Mixing * 2.0);
 
     fragColor = _Result;
 }
