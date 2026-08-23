@@ -88,7 +88,7 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
 
             float2 _Art = floor(In.texCoord / _Pixel / _Block) * _Pixel * _Block;
             if(any(abs(Fun_Rand(_Art).xy) > _Distortion))
-                _Art = In.texCoord;
+                _Art = _Blending_Mode ? In.bgCoord : In.texCoord;
             else
                 _Art = In.texCoord + Fun_Rand(_Art) * 0.5 - 0.25;
 

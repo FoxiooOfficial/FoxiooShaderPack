@@ -49,7 +49,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
 
             float2 _Art = floor(In / _Pixel / _Block) * _Pixel * _Block;
             if(any(abs(Fun_Rand(_Art).xy) > _Distortion))
-                _Art = In;
+                _Art = _Blending_Mode ? In_Background : In;
             else
                 _Art = In + Fun_Rand(_Art) * 0.5 - 0.25;
 
