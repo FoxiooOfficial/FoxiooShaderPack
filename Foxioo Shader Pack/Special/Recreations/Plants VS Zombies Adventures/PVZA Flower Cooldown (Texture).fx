@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.0 (24.11.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -20,7 +21,9 @@ sampler2D S2D_Image : register(s0);
 /***********************************************************/
 
     float   _Mixing,
-            _Time, _InGray, _InMul, _OutGray, _OutMul;
+            _Time, 
+            _InGray, _InMul, 
+            _OutGray, _OutMul;
 
 /************************************************************/
 /* Main */
@@ -31,12 +34,13 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
     float4 _Render_Texture = tex2D(S2D_Image, In);
 
         float4 _Result = _Render_Texture;
-        if(In.y <= _Time)   _Result.rgb = lerp(_Result.rgb, _Result.r * 0.2126 + _Result.g * 0.7152 + _Result.b * 0.0722, _OutGray) * _OutMul;
-        else                _Result.rgb = lerp(_Result.rgb, _Result.r * 0.2126 + _Result.g * 0.7152 + _Result.b * 0.0722, _InGray) * _InMul;
+        float _Lum = dot(_Result.rgb, float3(0.2126, 0.7152, 0.0722));
 
-                _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
+        float3 _In = lerp(_Result.rgb, _Lum, _OutGray) * _OutMul;
+        float3 _Out = lerp(_Result.rgb, _Lum, _InGray) * _InMul;
 
-        _Result.a = _Render_Texture.a;
+            _Result.rgb = lerp(_Out, _In, step(In.y, _Time));
+            _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
 
     return _Result;
 }

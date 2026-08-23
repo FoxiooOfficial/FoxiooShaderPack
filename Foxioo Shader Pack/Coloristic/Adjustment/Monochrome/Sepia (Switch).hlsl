@@ -55,17 +55,6 @@ cbuffer PS_PIXELSIZE : register(b1)
 /* Main */
 /************************************************************/
 
-float Fun_Luminance(float3 _Result)
-{
-    const float _Kr = 0.299;
-    const float _Kg = 0.587;
-    const float _Kb = 0.114;
-
-    float _Y = _Kr * _Result.r + _Kg * _Result.g + _Kb * _Result.b;
-
-    return _Y;
-}
-
 float4 Demultiply(float4 _Render, bool _Premultiplied)
 {
     if(_Premultiplied)
