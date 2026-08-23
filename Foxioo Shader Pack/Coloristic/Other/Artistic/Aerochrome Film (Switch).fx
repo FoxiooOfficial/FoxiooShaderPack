@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.1 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -52,16 +53,13 @@ float3 RGBtoHSL(float3 _Render)
     {
         _S = _Delta / (1.0 - abs(2.0 * _L - 1.0));
 
-        if (_CMax == _Render.r)
-        {
+        if (_CMax == _Render.r) {
             _H = 60.0 * ((_Render.g - _Render.b) / _Delta);
         }
-        else if (_CMax == _Render.g)
-        {
+        else if (_CMax == _Render.g) {
             _H = 60.0 * ((_Render.b - _Render.r) / _Delta + 2.0);
         }
-        else
-        {
+        else {
             _H = 60.0 * ((_Render.r - _Render.g) / _Delta + 4.0);
         }
 
@@ -77,11 +75,11 @@ float3 HSLtoRGB(float _H, float _S, float _L)
     float _X = _C * (1.0 - abs((fmod(_H / 60.0, 2.0)) - 1.0));
     float _M = _L - _C * 0.5;
     
-    float3 _Render =    (_H < 60.0) ? float3(_C, _X,  0) :
-                        (_H < 120.0) ? float3(_X, _C,  0) :
-                        (_H < 180.0) ? float3( 0, _C, _X) :
-                        (_H < 240.0) ? float3( 0, _X, _C) :
-                        (_H < 300.0) ? float3(_X,  0, _C) :
+    float3 _Render =    (_H < 60.0)  ? float3(_C, _X,  0.0) :
+                        (_H < 120.0) ? float3(_X, _C,  0.0) :
+                        (_H < 180.0) ? float3(0.0, _C, _X)  :
+                        (_H < 240.0) ? float3(0.0, _X, _C)  :
+                        (_H < 300.0) ? float3(_X,  0.0, _C) :
                         float3(_C, 0, _X);
     
     return (_Render + _M);
@@ -92,47 +90,44 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In_Background);
 
-        float4 _Result = 0;
-        float4 _Render;
+        float4 _Result = _Blending_Mode ? _Render_Background : _Render_Texture;
+        float4 _Render = _Result;
 
-        if(_Blending_Mode == 0) { _Result = _Render_Texture; }
-        else                    { _Result = _Render_Background; }
-            _Render = _Result;
+        const float _HueTarget      = 120.0;
+        const float _HueSize        = 90.0;
+        const float _SaturationMin  = 0.15;
+        const float _HueEnd         = 357.0;
+        const float _HueEndAdd      = 0.25;
+        const float _HueEndLift     = 0.05;
 
-    const float _HueTarget      = 120.0;
-    const float _HueSize        = 90.0;
-    const float _SaturationMin  = 0.15;
-    const float _HueEnd         = 357.0;
-    const float _HueEndAdd      = 0.25;
-    const float _HueEndLift     = 0.05;
+            float3 _Fixed   = float3(0.0, 0.3, 0.0) * Fun_Luminance(_Render.rgb);
+            float3 _HSL     = RGBtoHSL(saturate(_Render.rgb + _Fixed));
+            float3 _HSLEnd  = _HSL;
 
-        float3 _Fixed   = float3(0, 0.3, 0) * Fun_Luminance(_Render.rgb);
-        float3 _HSL     = RGBtoHSL(saturate(_Render.rgb + _Fixed));
-        float3 _HSLEnd  = _HSL;
+                float _Diff = abs(_HSLEnd.x - _HueTarget);
+                _Diff = (_Diff > 180.0) ? 360.0 - _Diff : _Diff;
 
-            float _Diff = abs(_HSLEnd.x - _HueTarget);
-            _Diff = (_Diff > 180.0) ? 360.0 - _Diff : _Diff;
+                float3 _Mask;
+                _Mask.x = smoothstep(0.0, 1.0, (1.0 - (_Diff / _HueSize)));
+                _Mask.y = smoothstep(_SaturationMin, _SaturationMin + 0.25, _Mask.x);
 
-            float3 _Mask;
-            _Mask.x = smoothstep(0.0, 1.0, (1.0 - (_Diff / _HueSize)));
-            _Mask.y = smoothstep(_SaturationMin, _SaturationMin + 0.25, _Mask.x);
+            float3 _Sum = saturate(_Render.rgb + _Fixed);
+            float _DiffEx = ((_Sum.g - max(_Sum.r, _Sum.b)) * 3.0);
+            _Mask.z = _Mask.x * _Mask.y * _DiffEx;
 
-        float3 _Sum = saturate(_Render.rgb + _Fixed);
-        float _DiffEx = ((_Sum.g - max(_Sum.r, _Sum.b)) * 3.0);
-        _Mask.z = _Mask.x * _Mask.y * _DiffEx;
+                float3 _HueOut;
+                _HueOut.x = _HueEnd;
+                _HueOut.y = saturate(_HSLEnd.y + _HueEndAdd);
+                _HueOut.z = saturate(_HSLEnd.z + _HueEndLift);
 
-            float3 _HueOut;
-            _HueOut.x = _HueEnd;
-            _HueOut.y = saturate(_HSLEnd.y + _HueEndAdd);
-            _HueOut.z = saturate(_HSLEnd.z + _HueEndLift);
+            float3 _RenderHue = HSLtoRGB(_HueOut.x, _HueOut.y, _HueOut.z);
 
-        float3 _RenderHue = HSLtoRGB(_HueOut.x, _HueOut.y, _HueOut.z);
+                _RenderHue.rb *= 1.2;
+                _RenderHue.g *= 0.8;
 
-            _RenderHue.rb *= 1.2;
-            _RenderHue.g *= 0.8;
-
-        _Result.rgb = lerp(_Render.rgb, _RenderHue, saturate(_Mask.z * _Mixing));
-            _Result.a = _Render_Texture.a;
+            _Result.rgb = lerp(_Render.rgb, _RenderHue, saturate(_Mask.z * _Mixing));
+            
+        _Result.a = _Render_Texture.a;
 
     return _Result;
 }
