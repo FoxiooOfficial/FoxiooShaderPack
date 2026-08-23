@@ -1,0 +1,117 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(0) var background: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+//uniform float fPixelWidth;
+//uniform float fPixelHeight;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Blending_Mode: i32,
+    _Mixing: f32,
+    _Seed: f32,
+    _PointX: f32,
+    _PointY: f32,
+    _Speed: f32,
+    _Color: vec4f,
+    _LineLength: f32,
+    _Softness: f32,
+    _Weirdness: f32,
+    _Radius: f32,
+    _Freq: f32,
+    parameter13_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+fn Fun_Mod(_Value: f32, _Denom: f32) -> f32 {
+    return _Value - _Denom * (_Value / _Denom);
+}
+
+fn Fun_Hash21(_Pos: vec2f) -> f32 {
+    return fract(sin(dot(_Pos, vec2f(12.9898, 78.233))) * 43758.5453);
+}
+
+fn Fun_Noise(_Pos: vec2f, _Ran: vec2f) -> f32 {
+            var _A: f32 = Fun_Hash21(vec2f(floor(_Pos * _Ran + vec2f(0.0, 0.0) + params._Seed) / _Ran));
+            var _B: f32 = Fun_Hash21(vec2f(floor(_Pos * _Ran + vec2f(1.0, 0.0) + params._Seed) / _Ran));
+            var _C: f32 = Fun_Hash21(vec2f(floor(_Pos * _Ran + vec2f(0.0, 1.0) + params._Seed) / _Ran));
+            var _D: f32 = Fun_Hash21(vec2f(floor(_Pos * _Ran + vec2f(1.0, 1.0) + params._Seed) / _Ran));
+
+        var _Smooth: vec2f = smoothstep(vec2f((0.0)), vec2f((1.0)), vec2f(Fun_Mod(f32((_Pos.x * _Ran.x)), f32(1.0)), Fun_Mod(f32((_Pos.y * _Ran.y)), f32(1.0))));
+        return mix(mix(_A, _B, _Smooth.y), mix(_C, _D, _Smooth.y), _Smooth.x);
+}
+
+fn Fun_Noise_Gen(_Value: vec2f) -> f32 {
+    var _Sum: f32 = 0.0;
+
+            for (var i: i32 = 1; i < 6; i += 1)
+            {
+                var _Pow: f32 = 2.0 * pow(2.0, f32(i));
+                _Sum += Fun_Noise(vec2f(_Value + vec2f(f32(i), f32(i))), vec2f(_Pow, _Pow)) / pow(2.0, f32(i));
+            }
+
+        return _Sum;
+}
+
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        var _Render_Background: vec4f = texture2D(background, input.texCoord);
+
+            var _Render: vec4f = select(_Render_Texture, _Render_Background, (params._Blending_Mode != 0));
+
+            var _UV: vec2f = (input.texCoord - vec2f(params._PointX, params._PointY)) * 2.0;
+            var _UVZoom: vec2f = vec2f(params._Weirdness * length(_UV) + params._Speed, params._Freq * atan2(_UV.y, _UV.x));
+
+                    var _Noise: f32 = Fun_Noise_Gen(_UVZoom);
+                    _Noise = length(_UV) - params._Radius - params._LineLength * (_Noise - 0.5);
+                    _Noise = smoothstep(-params._Softness, params._Softness, _Noise);
+
+                var _Result: vec4f;
+
+                {
+                    let _fusionSwizzle0 = mix(_Render.rgb, params._Color.rgb, params._Mixing * _Noise * _Render_Texture.a);
+                    _Result.x = _fusionSwizzle0.x;
+                    _Result.y = _fusionSwizzle0.y;
+                    _Result.z = _fusionSwizzle0.z;
+                }
+                _Result.a = _Render_Texture.a;
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End
