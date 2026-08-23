@@ -62,10 +62,10 @@ float3 Fun_Outline(float2 In, float3 _Color)
     float aD2 = tex2D(S2D_Image, In + float2(0.0, _PX.y * 2.0))  .a;
 
     /* no outline. */
-    float aL3 = tex2D(S2D_Image, In + float2(-_PX.x, 0.0)) .a;
-    float aR3 = tex2D(S2D_Image, In + float2(_PX.x, 0.0))  .a;
-    float aU3 = tex2D(S2D_Image, In + float2(0.0, -_PX.y)) .a;
-    float aD3 = tex2D(S2D_Image, In + float2(0.0, _PX.y))  .a;
+    // float aL3 = tex2D(S2D_Image, In + float2(-_PX.x, 0.0)) .a;
+    // float aR3 = tex2D(S2D_Image, In + float2(_PX.x, 0.0))  .a;
+    // float aU3 = tex2D(S2D_Image, In + float2(0.0, -_PX.y)) .a;
+    // float aD3 = tex2D(S2D_Image, In + float2(0.0, _PX.y))  .a;
 
         float _EdgeDark  = step(0.01, abs(aL1 - _Alpha) + abs(aR1 - _Alpha) + abs(aU1 - _Alpha) + abs(aD1 - _Alpha));
         float _EdgeLight = step(0.01, abs(aL2 - _Alpha) + abs(aR2 - _Alpha) + abs(aU2 - _Alpha) + abs(aD2 - _Alpha));
@@ -82,16 +82,16 @@ float2 Fun_Hash21(float2 _Pos)
     _Noise.y = frac(sin(dot(_Pos, float2(63.7264, 10.873))) * 73156.8473) - 0.5;
     return _Noise;
 }
-float4 ps_main(float2 In : TEXCOORD0) : COLOR0
+float4 ps_main(float2 In : TEXCOORD0, float2 In_Background : TEXCOORD1) : COLOR0
 {
     float4 _Render_Texture = tex2D(S2D_Image, In);
     //float4 _OutlineInter = tex2D(S2D_Background, Fun_Liquid(In, 1).rg);
 
-    float2 _Mask = float2(  Fun_Liquid(In.xx * _Render_Texture.a, _Intensity * fPixelWidth),
-                            Fun_Liquid(In.yy * _Render_Texture.a, _Intensity * fPixelHeight));
+    float2 _Mask = float2(  Fun_Liquid(In_Background.xx * _Render_Texture.a, _Intensity * fPixelWidth),
+                            Fun_Liquid(In_Background.yy * _Render_Texture.a, _Intensity * fPixelHeight));
 
 
-    float2 _UVB = frac(In * 0.5) * 2.0;
+    float2 _UVB = frac(In_Background * 0.5) * 2.0;
     float2 _UVM = abs(_UVB - 1.0);
 
     float2 _UV = lerp(_UVB, _UVM, _Mask * _Mask * _Distortion);
@@ -100,7 +100,7 @@ float4 ps_main(float2 In : TEXCOORD0) : COLOR0
         for(int i = 0; i < 36; i++)
         {
             float _Mul = (i % 2) ? 1.0 : -1.0;
-            _Render_Background += tex2D(S2D_Background, _UV + Fun_Hash21(In) * float(5.0 + i) * _Mul * float2(fPixelWidth, fPixelHeight));
+            _Render_Background += tex2D(S2D_Background, _UV + Fun_Hash21(_UV) * float(5.0 + i) * _Mul * float2(fPixelWidth, fPixelHeight));
         }
         _Render_Background /= 36.0;
 

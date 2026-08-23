@@ -1,0 +1,115 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(0) var background: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Mixing: f32,
+    _Intensity: f32,
+    _Distortion: f32,
+    parameter4_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+fn Fun_Liquid(In: vec2f, _Size: f32) -> f32 {
+    var _Dist: vec2f = min(In, 1.0 - In);
+        var _DistMin: f32 = min(_Dist.x, _Dist.y);
+
+            return 1.0 - smoothstep(0.0, _Size, _DistMin);
+}
+
+fn Fun_Outline(In: vec2f, _Color: vec3f, input: FragmentInput) -> vec3f {
+    var _PX: vec2f = vec2f(fusion.fPixelWidth, fusion.fPixelHeight);
+        var _Alpha: f32 = texture2D(img, In).a * (input.color * fusion.blendColor).a;
+
+        /* Outline DARK! */
+        var aL1: f32 = texture2D(img, In + vec2f(-_PX.x, 0.0)) .a * (input.color * fusion.blendColor).a;
+        var aR1: f32 = texture2D(img, In + vec2f(_PX.x, 0.0))  .a * (input.color * fusion.blendColor).a;
+        var aU1: f32 = texture2D(img, In + vec2f(0.0, -_PX.y)) .a * (input.color * fusion.blendColor).a;
+        var aD1: f32 = texture2D(img, In + vec2f(0.0, _PX.y))  .a * (input.color * fusion.blendColor).a;
+
+        /* Outline LIGHT! */
+        var aL2: f32 = texture2D(img, In + vec2f(-_PX.x * 2.0, 0.0)) .a * (input.color * fusion.blendColor).a;
+        var aR2: f32 = texture2D(img, In + vec2f(_PX.x * 2.0, 0.0))  .a * (input.color * fusion.blendColor).a;
+        var aU2: f32 = texture2D(img, In + vec2f(0.0, -_PX.y * 2.0)) .a * (input.color * fusion.blendColor).a;
+        var aD2: f32 = texture2D(img, In + vec2f(0.0, _PX.y * 2.0))  .a * (input.color * fusion.blendColor).a;
+
+        /* no outline. */
+        // float aL3 = texture(imgTexture, In + vec2(-_PX.x, 0.0)) .a * blendColor.a;
+        // float aR3 = texture(imgTexture, In + vec2(_PX.x, 0.0))  .a * blendColor.a;
+        // float aU3 = texture(imgTexture, In + vec2(0.0, -_PX.y )) .a * blendColor.a;
+        // float aD3 = texture(imgTexture, In + vec2(0.0, _PX.y))  .a * blendColor.a;
+
+            var _EdgeDark: f32 = step(0.01, abs(aL1 - _Alpha) + abs(aR1 - _Alpha) + abs(aU1 - _Alpha) + abs(aD1 - _Alpha));
+            var _EdgeLight: f32 = step(0.01, abs(aL2 - _Alpha) + abs(aR2 - _Alpha) + abs(aU2 - _Alpha) + abs(aD2 - _Alpha));
+
+        if      (_EdgeDark > 0.5) {   return _Color * 0.48; }
+        else if (_EdgeLight > 0.5) {  return _Color * 5.56; }
+        else { return mix(_Color, vec3f(1.0, 1.0, 1.0), 0.269); }
+}
+
+fn Fun_Hash21(_Pos: vec2f) -> vec2f {
+    var _Noise: vec2f;
+        _Noise.x = fract(sin(dot(_Pos, vec2f(12.9898, 78.233))) * 43758.5453) - 0.5;
+        _Noise.y = fract(sin(dot(_Pos, vec2f(63.7264, 10.873))) * 73156.8473) - 0.5;
+        return _Noise;
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+
+        var _Mask: vec2f = vec2f(Fun_Liquid(vec2f(input.texCoord.x) * _Render_Texture.a, f32(params._Intensity * fusion.fPixelWidth)), Fun_Liquid(vec2f(input.texCoord.y) * _Render_Texture.a, f32(params._Intensity * fusion.fPixelHeight)));
+
+        var _UVB: vec2f = vec2f(input.texCoord * 0.5) * 2.0;
+        var _UVM: vec2f = abs(_UVB - 1.0);
+
+        var _UV: vec2f = mix(_UVB, _UVM, _Mask * _Mask * params._Distortion);
+
+            var _Render_Background: vec4f = vec4f(0.0);
+            for (var i: i32 = 0; i < 36; i += 1) {
+                var _Mul: f32 = select(-1.0, 1.0, ((f32(i)) - (2.0) * floor((f32(i)) / (2.0))) == 0.0);
+                _Render_Background += texture2D(background, _UV + Fun_Hash21(vec2f(input.texCoord)) * (5.0 + f32(i)) * _Mul * vec2f(fusion.fPixelWidth, fusion.fPixelHeight));
+            }
+            _Render_Background /= 36.0;
+
+            var _Outline: vec3f = Fun_Outline(vec2f(input.texCoord), vec3f(_Render_Background.rgb), input);
+            var _Render_Tint: vec4f = mix(_Render_Background, _Render_Texture, 0.5);
+
+        var _Render: vec4f = vec4f(mix(_Render_Texture.rgb, (_Render_Tint.rgb * 0.75 + _Outline.rgb * 0.25) * 0.9, params._Mixing), _Render_Texture.a);
+        _fusionOutput = _Render;
+    return _fusionOutput;
+}
+//@End
