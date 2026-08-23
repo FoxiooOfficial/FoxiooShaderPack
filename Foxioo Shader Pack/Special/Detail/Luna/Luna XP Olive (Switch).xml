@@ -3,10 +3,7 @@
 		<description>A recreation of the Windows XP "Luna" skin in olive.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
-			<website>https://github.com/FoxiooOfficial</website>
-				<BackgroundTexture>1</BackgroundTexture>
-			
-		    <sampler>
+			<website>https://github.com/FoxiooOfficial</website><sampler>
 				<index>0</index>
 				<filter>antialiasing</filter>
 				<addressU>border</addressU>
