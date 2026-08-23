@@ -1,0 +1,137 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+//uniform sampler2D bckgTexture;
+
+//uniform float fPixelWidth;
+//uniform float fPixelHeight;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Mixing: f32,
+    parameter2_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+
+        var _In: vec2f = input.texCoord;
+
+            _In *= 1.12;
+            _In.x -= 0.05;
+            var _Result: vec4f = vec4f(_In, 0.0, 1.0);
+
+            var _Center: vec2f = vec2f(_In * 2.0) - 1.2;
+            var _Cirl: f32 = sqrt(_Center.x * _Center.x + _Center.y * _Center.y);
+
+            var _CenterTopShadow: vec2f = vec2f(_In * 2.0) - vec2f(1.5, 0.3);
+                var _CenterTopShadowCirl: f32 = sqrt(_CenterTopShadow.x * _CenterTopShadow.x + _CenterTopShadow.y * _CenterTopShadow.y);
+
+            var _CenterBottomShadow: vec2f = vec2f(_In * 2.0) - vec2f(1.5, 1.3);
+                var _CenterBottomShadowCirl: f32 = sqrt(_CenterBottomShadow.x * _CenterBottomShadow.x + _CenterBottomShadow.y * _CenterBottomShadow.y);
+
+            if(_In.y > 0.57) {
+            _Cirl *= mix(0.95, 1.0, 1.0 - pow(_In.y - 0.55, 0.0));
+            }
+
+                var _TopColor: vec3f = mix(vec3f(0.9921, 0.79215, 0.0), vec3f(0.69803, 0.56078, 0.0), _CenterTopShadowCirl * _CenterTopShadowCirl);
+                var _Depth: f32 = pow(abs(0.55 - _In.y), 3.0);
+                var _BottomColor: vec3f = mix(vec3f(1.0, 0.9176, 0.0), vec3f(0.70196, 0.64313, 0.0), (_CenterBottomShadowCirl));
+                _BottomColor *= pow(_Depth, 0.001);
+
+                _Result.a = f32(_Cirl < 0.90);
+                {
+                    let _fusionSwizzle0 = mix(_TopColor, _BottomColor * vec3f(1.1), f32(_In.y > 0.57));
+                    _Result.x = _fusionSwizzle0.x;
+                    _Result.y = _fusionSwizzle0.y;
+                    _Result.z = _fusionSwizzle0.z;
+                }
+
+                var _Fish1In: vec2f = input.texCoord;
+                    _Fish1In.x -= 0.3;
+                    _Fish1In.y += 0.61;
+                    _Fish1In.x *= 1.07;
+                    var _Fish1: f32 = f32((_Fish1In.y + (pow(_Fish1In.x, 0.14 - pow(_Fish1In.x, 3.0)) * (1.0 - _Fish1In.x * 1.2)) * 0.50) * 0.50 > 0.5) * f32(_Fish1In.x > 0.0) * f32(_Fish1In.y < 1.0) * f32(_Fish1In.x < 0.6);
+                    _Result = mix(_Result,vec4f(_TopColor, 1.0), _Fish1);
+
+                //////////////////////////////////////
+                var _Center2: vec2f = ((vec2f(_In * 2.0) - 1.1) / vec2f(0.2, 0.3)) + vec2f(4.3, 0.0);
+                _Center2.x += _In.y;
+                var _CenterTailDist: vec2f = ((vec2f(_In * 2.0) - 1.1) / vec2f(0.2, 0.3)) + vec2f(4.3, 0.5);
+                var _CenterTail: f32 = sqrt(_CenterTailDist.x * _CenterTailDist.x + _CenterTailDist.y * _CenterTailDist.y);
+                var _TailColor: vec4f = mix(vec4f(0.69803, 0.56078, 0.0, 1.0), vec4f(1.0, 0.9176, 0.0, 1.0), 1.0 - _CenterTail * 0.5);
+
+                var _Fish2: f32 = f32(sqrt(_Center2.x * _Center2.x + _Center2.y * _Center2.y) < 0.9);
+                _Result = mix(_Result, _TailColor, _Fish2);
+
+                //////////////////////////////////////
+                var _Center3: vec2f = ((vec2f(_In * 2.0) - 1.1) / vec2f(0.4 / _In.y * 0.5, 0.3)) + vec2f(0.35, _In.x * 0.5 - 0.5);
+                var _Fish3: f32 = sqrt(_Center3.x * _Center3.x + _Center3.y * _Center3.y);
+
+                var _Center3Mid: vec2f = _Center3 - vec2f(0.1, -0.2);
+                var _FishMid: f32 = sqrt(_Center3Mid.x * _Center3Mid.x + _Center3Mid.y * _Center3Mid.y);
+                var _MidColor: vec3f = mix(vec3f(0.9921, 0.79215, 0.0), vec3f(0.69803, 0.56078, 0.0), _FishMid * _FishMid);
+                {
+                    let _fusionSwizzle1 = mix(_Result.rgb, _MidColor, f32(_Fish3 < 0.9));
+                    _Result.x = _fusionSwizzle1.x;
+                    _Result.y = _fusionSwizzle1.y;
+                    _Result.z = _fusionSwizzle1.z;
+                }
+
+                //////////////////////////////////////
+                var _EyeCenter: vec2f = (vec2f(_In * 2.0) - 1.1) + vec2f(-0.57, 0.2);
+                var _Eye: f32 = sqrt(_EyeCenter.x * _EyeCenter.x + _EyeCenter.y * _EyeCenter.y);
+
+                var _EyeBloomCenter: vec2f = (vec2f(_In * 2.0) - 1.1) + vec2f(-0.54, 0.23);
+                var _EyeBloomCirl: f32 = sqrt(_EyeBloomCenter.x * _EyeBloomCenter.x + _EyeBloomCenter.y * _EyeBloomCenter.y) * 7.0;
+
+                    var _EyeBloom: vec3f = mix(vec3f(0.6, 0.6, 0.6), vec3f(0.1137, 0.1137, 0.1137), pow(_EyeBloomCirl, 0.25));
+                    {
+                        let _fusionSwizzle2 = mix(_Result.rgb, _EyeBloom, f32(_Eye < 0.11));
+                        _Result.x = _fusionSwizzle2.x;
+                        _Result.y = _fusionSwizzle2.y;
+                        _Result.z = _fusionSwizzle2.z;
+                    }
+
+            //_Result.a *= _Render_Texture.a;
+            _Result = mix(_Render_Texture, _Result, params._Mixing);
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End
