@@ -1,0 +1,136 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(0) var background: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Blending_Mode: i32,
+    _Mixing: f32,
+    _Size: f32,
+    _Angle: f32,
+    parameter5_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+fn Fun_Luminance(_Result: vec3f) -> f32 {
+    const _Kr: f32 = 0.299;
+        const _Kg: f32 = 0.587;
+        const _Kb: f32 = 0.114;
+
+        var _Y: f32 = _Kr * _Result.r + _Kg * _Result.g + _Kb * _Result.b;
+
+        return _Y;
+}
+
+fn Fun_Sharp(_Sampler: texture_2d<f32>, In: vec2f, _Off: vec2f) -> vec3f {
+    var _Emboss: vec2f;
+
+        var _NW: vec3f = texture2D(_Sampler, In + vec2f(-_Off.x, -_Off.y)).rgb;
+        var _N: vec3f = texture2D(_Sampler, In + vec2f(0.0, -_Off.y)).rgb;
+        var _NE: vec3f = texture2D(_Sampler, In + vec2f(_Off.x, -_Off.y)).rgb;
+        var _W: vec3f = texture2D(_Sampler, In + vec2f(-_Off.x, 0.0))   .rgb;
+        var _C: vec3f = texture2D(_Sampler, In)                                 .rgb;
+        var _E: vec3f = texture2D(_Sampler, In + vec2f(_Off.x, 0.0))   .rgb;
+        var _SW: vec3f = texture2D(_Sampler, In + vec2f(-_Off.x, _Off.y)) .rgb;
+        var _S: vec3f = texture2D(_Sampler, In + vec2f(0.0, _Off.y)) .rgb;
+        var _SE: vec3f = texture2D(_Sampler, In + vec2f(_Off.x, _Off.y)) .rgb;
+
+            _Emboss.x = (Fun_Luminance(_NE) + 2.0 * Fun_Luminance(_E) + Fun_Luminance(_SE)) - (Fun_Luminance(_NW) + 2.0 * Fun_Luminance(_W) + Fun_Luminance(_SW));
+            _Emboss.y = (Fun_Luminance(_SW) + 2.0 * Fun_Luminance(_S) + Fun_Luminance(_SE)) - (Fun_Luminance(_NW) + 2.0 * Fun_Luminance(_N) + Fun_Luminance(_NE));
+            //_Emboss.y = -_Emboss.y;
+
+        var _Render: vec3f = normalize(vec3f(_Emboss.x, _Emboss.y, params._Mixing * max(1.0, params._Size)));
+        _Render = _Render * 0.5 + 0.5;
+
+        return _Render;
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        var _Render_Background: vec4f = texture2D(background, input.texCoord);
+
+            var _Result: vec4f;
+            var _Render: vec4f;
+            var _Offset: vec2f = params._Size * -vec2f(fusion.fPixelWidth, fusion.fPixelHeight);
+
+            var _Sin: f32 = sin(radians(params._Angle));
+            var _Cos: f32 = cos(radians(params._Angle));
+            _Offset = vec2f(_Offset.x * _Cos - _Offset.y * _Sin, _Offset.x * _Sin + _Offset.y * _Cos);
+
+                if(!(params._Blending_Mode != 0))
+                {
+                    {
+                        let _fusionSwizzle0 = _Render_Texture.rgb;
+                        _Result.x = _fusionSwizzle0.x;
+                        _Result.y = _fusionSwizzle0.y;
+                        _Result.z = _fusionSwizzle0.z;
+                    }
+                    {
+                        let _fusionSwizzle1 = Fun_Sharp(img, vec2f(input.texCoord), _Offset);
+                        _Render.x = _fusionSwizzle1.x;
+                        _Render.y = _fusionSwizzle1.y;
+                        _Render.z = _fusionSwizzle1.z;
+                    }
+                }
+                else
+                {
+                    {
+                        let _fusionSwizzle2 = _Render_Background.rgb;
+                        _Result.x = _fusionSwizzle2.x;
+                        _Result.y = _fusionSwizzle2.y;
+                        _Result.z = _fusionSwizzle2.z;
+                    }
+                    {
+                        let _fusionSwizzle3 = Fun_Sharp(background, vec2f(input.texCoord), _Offset);
+                        _Render.x = _fusionSwizzle3.x;
+                        _Render.y = _fusionSwizzle3.y;
+                        _Render.z = _fusionSwizzle3.z;
+                    }
+
+                }
+
+            {
+                let _fusionSwizzle4 = mix(_Result.rgb, _Render.rgb, params._Mixing);
+                _Result.x = _fusionSwizzle4.x;
+                _Result.y = _fusionSwizzle4.y;
+                _Result.z = _fusionSwizzle4.z;
+            }
+            _Result.a = _Render_Texture.a;
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End
