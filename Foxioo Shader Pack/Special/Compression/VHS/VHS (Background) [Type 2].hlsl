@@ -187,12 +187,12 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
     float _UV_Y = cos(In.texCoord.y * 4.0 / tan(In.texCoord.y - _Time / 36.0) + _Time * 0.01 + sin(In.texCoord.y * 3.0 - _Time * 0.0001) * 0.01 + sin(In.texCoord.y / 5.0 - _Time * 0.32)) * fPixelHeight + fPixelHeight * 2.0 * sin(In.texCoord.y / 7.12 + _Time * 0.001);
     _UV_Y += Fun_Rand(In.texCoord.xy + _UV_Y) * fPixelHeight;
 
-    float2 UV = In.texCoord + float2(sin(In.texCoord.y / fPixelWidth * 1.5 + _Time) * fPixelWidth * 0.5, _UV_Y * 0.5) * _Mixing;
+    float2 UV = In.bgCoord + float2(sin(In.texCoord.y / fPixelWidth * 1.5 + _Time) * fPixelWidth * 0.5, _UV_Y * 0.5) * _Mixing;
     float _Rand = Fun_Rand(UV + Fun_Rand(UV));
 
-    UV = lerp(In.texCoord, UV, _Mixing);
+    UV = lerp(In.bgCoord, UV, _Mixing);
 
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, UV) * In.Tint, _Premultiplied);
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, UV);
 
        float4 _Result = _Render_Background;

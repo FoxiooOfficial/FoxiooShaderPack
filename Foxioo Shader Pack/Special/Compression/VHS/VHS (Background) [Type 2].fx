@@ -150,12 +150,12 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
     float _UV_Y = cos(In.y * 4.0 / tan(In.y - _Time / 36.0) + _Time * 0.01 + sin(In.y * 3.0 - _Time * 0.0001) * 0.01 + sin(In.y / 5.0 - _Time * 0.32)) * fPixelHeight + fPixelHeight * 2.0 * sin(In.y / 7.12 + _Time * 0.001);
     _UV_Y += Fun_Rand(In.xy + _UV_Y) * fPixelHeight;
 
-    float2 UV = In + float2(sin(In.y / fPixelWidth * 1.5 + _Time) * fPixelWidth * 0.5, _UV_Y * 0.5) * _Mixing;
+    float2 UV = In_Background + float2(sin(In.y / fPixelWidth * 1.5 + _Time) * fPixelWidth * 0.5, _UV_Y * 0.5) * _Mixing;
     float _Rand = Fun_Rand(UV + Fun_Rand(UV));
 
-    UV = lerp(In, UV, _Mixing);
+    UV = lerp(In_Background, UV, _Mixing);
 
-    float4 _Render_Texture = tex2D(S2D_Image, UV);
+    float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, UV);
 
         float4 _Result = _Render_Background;
