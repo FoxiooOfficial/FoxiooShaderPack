@@ -66,7 +66,6 @@ uniform lowp vec4 blendColor;
 uniform bool _Blending_Mode;
 uniform float _Mixing;
 
-
 /************************************************************/
 /* Main */
 /************************************************************/
@@ -77,12 +76,13 @@ void main(void)
     vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
     vec4 _Render_Background = texture(bckgTexture, In);
 
-        vec4 _Render = _Blending_Mode ? _Render_Background : _Render_Texture;
+        vec4 _Render;
+        _Render.rgb = mix(_Render_Texture.rgb, _Render_Background.rgb, float(_Blending_Mode));
         _Render.a = _Render_Texture.a;
 
-        _Render.rgb = mix(_Render.rgb, vec3(1.0 - _Render.r, _Render.g, 1.0 - _Render.b), _Mixing);
+            _Render.r = mix(_Render.r, 1.0 - _Render.r, _Mixing);
+            _Render.b = mix(_Render.b, 1.0 - _Render.b, _Mixing);
 
-    _Render.a = _Render_Texture.a;
     fragColor = _Render;
 }
 //@End
