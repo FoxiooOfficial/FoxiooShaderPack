@@ -1,0 +1,279 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+//uniform sampler2D bckgTexture;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Mixing: f32,
+    _Frame: f32,
+    _Size: f32,
+    _Quality: i32,
+    _Interlacing: i32,
+    _Alpha: f32,
+    _Saturation: f32,
+    _Value: f32,
+    _Seed: f32,
+    _Time: f32,
+    parameter11_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+// Expanded source constant: M_PI
+fn Fun_Trunc(_Value: f32) -> f32 {
+    return sign(_Value) * floor(abs(_Value));
+}
+
+fn Fun_FMod(_Value: f32, _Denom: f32) -> f32 {
+    return _Value - _Denom * Fun_Trunc(f32(_Value / _Denom));
+}
+
+fn Fun_Luminance(_Result: vec3f) -> f32 {
+    const _Kr: f32 = 0.299;
+        const _Kg: f32 = 0.587;
+        const _Kb: f32 = 0.114;
+
+        var _Y: f32 = _Kr * _Result.r + _Kg * _Result.g + _Kb * _Result.b;
+
+        return _Y;
+}
+
+fn Fun_Sharp(_Sampler: texture_2d<f32>, In: vec2f, _Off: vec2f) -> vec3f {
+    var _Emboss: vec2f;
+
+        var _NW: vec3f = texture2D(_Sampler, In + vec2f(-_Off.x, -_Off.y)).rgb;
+        var _N: vec3f = texture2D(_Sampler, In + vec2f(0.0, -_Off.y)).rgb;
+        var _NE: vec3f = texture2D(_Sampler, In + vec2f(_Off.x, -_Off.y)).rgb;
+        var _W: vec3f = texture2D(_Sampler, In + vec2f(-_Off.x, 0.0))   .rgb;
+        var _C: vec3f = texture2D(_Sampler, In)                            .rgb;
+        var _E: vec3f = texture2D(_Sampler, In + vec2f(_Off.x, 0.0))   .rgb;
+        var _SW: vec3f = texture2D(_Sampler, In + vec2f(-_Off.x, _Off.y)) .rgb;
+        var _S: vec3f = texture2D(_Sampler, In + vec2f(0.0, _Off.y)) .rgb;
+        var _SE: vec3f = texture2D(_Sampler, In + vec2f(_Off.x, _Off.y)) .rgb;
+
+            _Emboss.x = (Fun_Luminance(_NE) + 2.0 * Fun_Luminance(_E) + Fun_Luminance(_SE)) - (Fun_Luminance(_NW) + 2.0 * Fun_Luminance(_W) + Fun_Luminance(_SW));
+            _Emboss.y = (Fun_Luminance(_SW) + 2.0 * Fun_Luminance(_S) + Fun_Luminance(_SE)) - (Fun_Luminance(_NW) + 2.0 * Fun_Luminance(_N) + Fun_Luminance(_NE));
+            //_Emboss.y = -_Emboss.y;
+
+        var _Diff: f32 = (_Emboss.x + _Emboss.y) * 0.5;
+        var _Render: vec3f = vec3f(clamp(0.5 + _Diff * params._Mixing, 0.0, 1.0));
+
+        return _Render;
+}
+
+fn Fun_ClipColor(_Color: vec3f) -> vec3f {
+    var _fusionParamColor = _Color;
+    var _Y: f32 = Fun_Luminance(vec3f(_fusionParamColor));
+        var _ColorMin: f32 = min(_fusionParamColor.r, min(_fusionParamColor.g, _fusionParamColor.b));
+        var _ColorMax: f32 = max(_fusionParamColor.r, max(_fusionParamColor.g, _fusionParamColor.b));
+
+        var _Div: f32 = _ColorMax - _Y;
+        if(_Div == 0.0) { _Div = 1e4; }
+
+        if(_ColorMin < 0.0) { _fusionParamColor = _Y + (((_fusionParamColor - _Y) * _Y) / (_Y - _ColorMin)); }
+        if(_ColorMax > 1.0) { _fusionParamColor = _Y + (((_fusionParamColor - _Y) * (1.0 - _Y)) / _Div); }
+
+        return _fusionParamColor;
+}
+
+fn Fun_SetLum(_Color: vec3f, _Y: f32) -> vec3f {
+    var _fusionParamColor = _Color;
+    var _GetLum: f32 = _Y - Fun_Luminance(vec3f(_fusionParamColor));
+        _fusionParamColor += _GetLum;
+
+        return Fun_ClipColor(vec3f(_fusionParamColor));
+}
+
+fn RGBtoHSV(_Render: vec3f) -> vec3f {
+    var _CMax: f32 = max(_Render.r, max(_Render.g, _Render.b));
+        var _CMin: f32 = min(_Render.r, min(_Render.g, _Render.b));
+        var _Delta: f32 = _CMax - _CMin;
+
+        var _H: f32 = 0.0;
+        var _S: f32 = 0.0;
+        var _V: f32 = _CMax;
+
+        if (_Delta > 0.0)
+        {
+            _S = select(0.0, (_Delta / _V), (_V > 0.0));
+
+            if (_CMax == _Render.r) {
+                _H = 60.0 * Fun_FMod(f32(((_Render.g - _Render.b) / _Delta)), f32(6.0));
+            }
+            else if (_CMax == _Render.g) {
+                _H = 60.0 * (((_Render.b - _Render.r) / _Delta) + 2.0);
+            }
+            else {
+                _H = 60.0 * (((_Render.r - _Render.g) / _Delta) + 4.0);
+            }
+        }
+
+        if (_H < 0.0) { _H += 360.0; }
+        return vec3f(_H, _S, _V);
+}
+
+fn HSVtoRGB(_H: f32, _S: f32, _V: f32) -> vec3f {
+    var _C: f32 = _V * _S;
+        var _X: f32 = _C * (1.0 - abs(Fun_FMod(f32(_H / 60.0), f32(2.0)) - 1.0));
+        var _M: f32 = _V - _C;
+
+        var _Render: vec3f = select(select(select(select(select(vec3f(_C, 0, _X), vec3f(_X, 0, _C), (_H < 300.0)), vec3f(0, _X, _C), (_H < 240.0)), vec3f(0, _C, _X), (_H < 180.0)), vec3f(_X, _C, 0), (_H < 120.0)), vec3f(_C, _X, 0), (_H < 60.0));
+
+        return (_Render + _M);
+}
+
+fn Fun_Rand(In: vec2f) -> f32 {
+    return fract(cos(dot(In.xy + params._Seed, vec2f(67.4684, 18.467)))* 3463456.95546);
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _UV_Y: f32 = cos(input.texCoord.y * 4.0 / tan(input.texCoord.y - params._Time / 36.0) + params._Time * 0.01 + sin(input.texCoord.y * 3.0 - params._Time * 0.0001) * 0.01 + sin(input.texCoord.y / 5.0 - params._Time * 0.32)) * fusion.fPixelHeight + fusion.fPixelHeight * 2.0 * sin(input.texCoord.y / 7.12 + params._Time * 0.001);
+        _UV_Y += Fun_Rand(vec2f(input.texCoord.xy + _UV_Y)) * fusion.fPixelHeight;
+
+        var UV: vec2f = input.texCoord + vec2f(sin(input.texCoord.y / fusion.fPixelWidth * 1.5 + params._Time) * fusion.fPixelWidth * 0.5, _UV_Y * 0.5) * params._Mixing;
+        var _Rand: f32 = Fun_Rand(vec2f(UV + Fun_Rand(UV)));
+
+        var _Render_Texture: vec4f = texture2D(img, UV) * (input.color * fusion.blendColor);
+
+            var _Result: vec4f = _Render_Texture;
+
+            /* etap 1; gain */
+                {
+                    let _fusionSwizzle0 = mix(_Result.rgb, _Result.rgb * (_Rand * 0.5 + 0.5), 0.3);
+                    _Result.x = _fusionSwizzle0.x;
+                    _Result.y = _fusionSwizzle0.y;
+                    _Result.z = _fusionSwizzle0.z;
+                }
+
+            /* etap 2; emboss! */
+            var _EOffset: vec2f = -2.5 * -vec2f(fusion.fPixelWidth, fusion.fPixelHeight);
+            var _Render_Emboss: vec3f = Fun_Sharp(img, UV, _EOffset);
+
+                {
+                    let _fusionSwizzle1 = mix(_Result.rgb, _Render_Emboss * _Result.rgb, 0.5);
+                    _Result.x = _fusionSwizzle1.x;
+                    _Result.y = _fusionSwizzle1.y;
+                    _Result.z = _fusionSwizzle1.z;
+                }
+
+            /* etap 3; color bleeding */
+            var _UV_X: f32 = clamp((1.0 - sin(abs(0.5 - UV.x) * 0.8 * (3.14159265358979323846))) * 12.0, 0.0, 1.0);
+            var _Lum: f32 = Fun_Luminance(vec3f(_Result.rgb * _UV_X));
+
+            var i: i32;
+
+            var _W: f32 = 0.0;
+
+                for(i = i32(0); i < params._Quality; i += 1)
+                {
+                    var _BOffset: vec2f = vec2f(f32(i) / f32(params._Quality) * fusion.fPixelWidth, 0.0);
+                    var _Weight: f32 = sin((f32(i + 1) / f32(params._Quality)) * (3.14159265358979323846));
+
+                        var _Render_ColorB: vec3f = texture2D(img, UV - _BOffset * params._Size).rgb;
+                        _Render_ColorB *= (Fun_Rand(vec2f(input.texCoord + Fun_Rand(vec2f(input.texCoord + f32(i))) + f32(i))) * 0.5 + 0.5);
+
+                        {
+                            let _fusionSwizzle2 = _Render_ColorB * _Weight;
+                            _Result.x += _fusionSwizzle2.x;
+                            _Result.y += _fusionSwizzle2.y;
+                            _Result.z += _fusionSwizzle2.z;
+                        }
+
+                    _W += _Weight;
+                }
+                {
+                    let _fusionSwizzle3 = _W;
+                    _Result.x /= _fusionSwizzle3;
+                    _Result.y /= _fusionSwizzle3;
+                    _Result.z /= _fusionSwizzle3;
+                }
+
+                    {
+                        let _fusionSwizzle4 = Fun_SetLum(vec3f(_Result.rgb), f32(_Lum));
+                        _Result.x = _fusionSwizzle4.x;
+                        _Result.y = _fusionSwizzle4.y;
+                        _Result.z = _fusionSwizzle4.z;
+                    }
+
+            /* etap 4; HSV */
+            var _HSV: vec3f = RGBtoHSV(vec3f(_Result.rgb));
+
+                _HSV.y = (_HSV.y * (params._Saturation / 50.0));
+                _HSV.z = (_HSV.z + (params._Value - 50.0) / 50.0);
+
+                var _UV_XN: f32 = clamp((1.0 - _UV_X) * 0.5, 0.0, 1.0) - abs(_UV_Y * 10.0);
+                    {
+                        let _fusionSwizzle5 = HSVtoRGB(f32(_HSV.x + _UV_XN), f32(_HSV.y + _UV_XN), f32(_HSV.z + _UV_Y * 9.0));
+                        _Result.x = _fusionSwizzle5.x;
+                        _Result.y = _fusionSwizzle5.y;
+                        _Result.z = _fusionSwizzle5.z;
+                    }
+
+                {
+                    let _fusionSwizzle6 = mix(_Result.rgb, vec3f(0.0), 0.3);
+                    _Result.x = _fusionSwizzle6.x;
+                    _Result.y = _fusionSwizzle6.y;
+                    _Result.z = _fusionSwizzle6.z;
+                }
+                {
+                    let _fusionSwizzle7 = 1.3;
+                    _Result.x *= _fusionSwizzle7;
+                    _Result.y *= _fusionSwizzle7;
+                    _Result.z *= _fusionSwizzle7;
+                }
+                {
+                    let _fusionSwizzle8 = abs(_UV_Y * 10.0);
+                    _Result.x += _fusionSwizzle8;
+                    _Result.y += _fusionSwizzle8;
+                    _Result.z += _fusionSwizzle8;
+                }
+
+            /* etap 5; interlacing!
+            // drawing with arrival; direct3d only! (i don't think is gonna works on glsl...) */
+
+            var _LVertical: i32 = i32((input.texCoord.y + params._Frame * fusion.fPixelHeight) / fusion.fPixelHeight);
+            var _LCondition: bool = ((f32(_LVertical)) - (2.0) * floor((f32(_LVertical)) / (2.0))) == 0.0;
+
+                if((params._Interlacing != 0) && _LCondition) {
+                    _Result.a *= select(1.0, params._Alpha, _LCondition);
+                }
+
+            _Result = mix(_Render_Texture, _Result, params._Mixing);
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End
