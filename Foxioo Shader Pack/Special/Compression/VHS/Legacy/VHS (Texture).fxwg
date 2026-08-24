@@ -1,0 +1,262 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+//uniform sampler2D bckgTexture;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    parameter1_value: i32,
+    _Mixing: f32,
+    _RingingMixing: f32,
+    parameter4_value: i32,
+    _RainbowFreq: f32,
+    _RainbowStrength: f32,
+    parameter7_value: i32,
+    _Saturation: f32,
+    _Value: f32,
+    parameter10_value: i32,
+    _Seed: f32,
+    _RainbowErrorNoise: f32,
+    _NoiseBig: f32,
+    _NoiseSmall: f32,
+    parameter15_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+//
+
+/************************************************************/
+/* Main */
+/************************************************************/
+fn Fun_FMod(_Value: f32, _Denom: f32) -> f32 {
+    return _Value - _Denom * floor(_Value / _Denom);
+}
+
+fn Fun_Luminance(_Result: vec3f) -> f32 {
+    const _Kr: f32 = 0.299;
+        const _Kg: f32 = 0.587;
+        const _Kb: f32 = 0.114;
+
+        var _Y: f32 = _Kr * _Result.r + _Kg * _Result.g + _Kb * _Result.b;
+
+        return _Y;
+}
+
+fn Fun_RGB_YCbCr(_Result: vec3f) -> vec3f {
+    const _Kr: f32 = 0.299;
+        const _Kg: f32 = 0.587;
+        const _Kb: f32 = 0.114;
+
+        var _Y: f32 = _Kr * _Result.r + _Kg * _Result.g + _Kb * _Result.b;
+        var _Cb: f32 = -0.168736 * _Result.r - 0.331264 * _Result.g + 0.5 * _Result.b + 0.5;
+        var _Cr: f32 = 0.5 * _Result.r - 0.418688 * _Result.g - 0.081312 * _Result.b + 0.5;
+
+        return vec3f(_Y, _Cb, _Cr);
+}
+
+fn Fun_Sharp(_Texture: texture_2d<f32>, _In: vec2f, _Color: vec3f, _Sharpness_Size: f32) -> vec3f {
+    var _Result_Sharpness: vec3f = 5.0 * _Color - (
+                    texture2D(_Texture, _In + (_Sharpness_Size * vec2f(fusion.fPixelWidth, fusion.fPixelHeight))) +
+                    texture2D(_Texture, _In - (_Sharpness_Size * vec2f(fusion.fPixelWidth, fusion.fPixelHeight))) +
+                    texture2D(_Texture, _In + (_Sharpness_Size * vec2f(fusion.fPixelWidth, fusion.fPixelHeight))) +
+                    texture2D(_Texture, _In - (_Sharpness_Size * vec2f(fusion.fPixelWidth, fusion.fPixelHeight)))
+                ).rgb;
+
+        return _Result_Sharpness * 0.15 + _Color * 0.85;
+}
+
+fn Fun_Ringing(_Texture: texture_2d<f32>, _In: vec2f, _Color: vec3f) -> vec3f {
+    var _fusionParamColor = _Color;
+    const _Max: i32 = 36;
+        const _Offset: f32 = -1.0;
+        const _SampleMul: f32 = 1.5 / f32(_Max);
+
+        for (var i: i32 = _Max; i > 0; i -= 1)
+        {
+            _fusionParamColor += mix(_fusionParamColor, texture2D(_Texture, clamp(vec2f((_In + _Offset * vec2f(f32(i)) * vec2f(fusion.fPixelWidth, 0.0))), vec2f(0.0), vec2f(1.0))).rgb, 0.5) * _SampleMul;
+        }
+
+        return _fusionParamColor;
+}
+
+fn Fun_Hash21(_Pos: vec2f) -> f32 {
+    return fract(sin(dot(_Pos, vec2f(12.9898, 78.233))) * 43758.5453);
+}
+
+fn Fun_Noise(_Pos: vec2f) -> f32 {
+    var _I: vec2f = floor(_Pos + params._Seed);    var _F: vec2f = fract(_Pos);
+
+            var _A: f32 = Fun_Hash21(vec2f(_I + vec2f(0.0, 0.0) + params._Seed));
+            var _B: f32 = Fun_Hash21(vec2f(_I + vec2f(1.0, 0.0) + params._Seed));
+            var _C: f32 = Fun_Hash21(vec2f(_I + vec2f(0.0, 1.0) + params._Seed));
+            var _D: f32 = Fun_Hash21(vec2f(_I + vec2f(1.0, 1.0) + params._Seed));
+
+        var _UV: vec2f = _F * _F * (3.0 - 2.0 *_F);
+
+        return mix(mix(_A, _B, _UV.x), mix(_C, _D, _UV.x), _UV.y);
+}
+
+fn RGBtoHSV(_Render: vec3f) -> vec3f {
+    var _CMax: f32 = max(_Render.r, max(_Render.g, _Render.b));
+        var _CMin: f32 = min(_Render.r, min(_Render.g, _Render.b));
+        var _Delta: f32 = _CMax - _CMin;
+
+        var _H: f32 = 0.0;
+        var _S: f32 = 0.0;
+        var _V: f32 = _CMax;
+
+        if (_Delta > 0.0)
+        {
+            _S = select(0.0, (_Delta / _V), (_V > 0.0));
+
+            if (_CMax == _Render.r)
+            {
+                _H = 60.0 * Fun_FMod(f32(((_Render.g - _Render.b) / _Delta)), f32(6.0));
+            }
+            else if (_CMax == _Render.g)
+            {
+                _H = 60.0 * (((_Render.b - _Render.r) / _Delta) + 2.0);
+            }
+            else
+            {
+                _H = 60.0 * (((_Render.r - _Render.g) / _Delta) + 4.0);
+            }
+        }
+
+        if (_H < 0.0) { _H += 360.0; }
+        return vec3f(_H, _S, _V);
+}
+
+fn HSVtoRGB(_H: f32, _S: f32, _V: f32) -> vec3f {
+    var _C: f32 = _V * _S;
+        var _X: f32 = _C * (1.0 - abs(Fun_FMod(f32(_H / 60.0), f32(2.0)) - 1.0));
+        var _M: f32 = _V - _C;
+
+        var _Render: vec3f = select(select(select(select(select(vec3f(_C, 0, _X), vec3f(_X, 0, _C), (_H < 300.0)), vec3f(0, _X, _C), (_H < 240.0)), vec3f(0, _C, _X), (_H < 180.0)), vec3f(_X, _C, 0), (_H < 120.0)), vec3f(_C, _X, 0), (_H < 60.0));
+
+        return (_Render + _M);
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+
+            var _Result: vec4f;
+
+                {
+                    let _fusionSwizzle0 = Fun_Sharp(img, vec2f(input.texCoord), vec3f(_Render_Texture.rgb), f32(1.5));
+                    _Result.x = _fusionSwizzle0.x;
+                    _Result.y = _fusionSwizzle0.y;
+                    _Result.z = _fusionSwizzle0.z;
+                }
+
+                    /* Noise */
+                        /* Big */
+                            var _Noise_In: vec2f = input.texCoord * vec2f(10.0, 80.0);
+
+                            var _Noise: vec3f = vec3f(Fun_Noise(_Noise_In), Fun_Noise(vec2f(_Noise_In + 1.0)), Fun_Noise(vec2f(_Noise_In + 2.0))); _Noise.r *= _Noise.b;
+                                var _Lum: f32 = Fun_Luminance(_Noise);
+                                {
+                                    let _fusionSwizzle1 = _Noise * _Lum * 0.05 * params._NoiseBig;
+                                    _Result.x += _fusionSwizzle1.x;
+                                    _Result.y += _fusionSwizzle1.y;
+                                    _Result.z += _fusionSwizzle1.z;
+                                }
+
+                        /* Small (Chrominance noise) */
+                            _Noise_In = input.texCoord * vec2f(1.6 / fusion.fPixelWidth, 1.6 / fusion.fPixelHeight);
+
+                            _Noise = vec3f(Fun_Noise(_Noise_In), Fun_Noise(vec2f(_Noise_In + 1.0)), Fun_Noise(vec2f(_Noise_In + 2.0)));
+                                {
+                                    let _fusionSwizzle2 = _Noise * _Lum * 0.22 * params._NoiseSmall;
+                                    _Result.x += _fusionSwizzle2.x;
+                                    _Result.y += _fusionSwizzle2.y;
+                                    _Result.z += _fusionSwizzle2.z;
+                                }
+
+                    /* Rainbow effects */
+                        var Y: f32 = Fun_Luminance(vec3f(_Result.rgb));
+                        var _Phase: f32 = (0.5 - abs(input.texCoord.x / Y - 0.5)) * params._RainbowFreq * 6.2831;
+
+                            var _Rainbow: vec3f = vec3f(sin(_Phase + 0.0), sin(_Phase + 2.094), sin(_Phase + 4.188));
+                            var _Rainbow_Pre: vec3f = params._RainbowStrength * _Rainbow;
+
+                        _Rainbow *= params._RainbowStrength;
+                        {
+                            let _fusionSwizzle3 = _Rainbow * Y;
+                            _Result.x += _fusionSwizzle3.x;
+                            _Result.y += _fusionSwizzle3.y;
+                            _Result.z += _fusionSwizzle3.z;
+                        }
+
+                    /* Ringing */
+                        var _Ringing: vec3f = Fun_Ringing(img, vec2f(input.texCoord + Fun_Luminance(_Rainbow_Pre) * 0.05), vec3f(_Result.rgb * _Rainbow));
+                        var _Ringing_Lum: f32 = Fun_Luminance(_Ringing);
+
+                        {
+                            let _fusionSwizzle4 = (_Ringing / _Rainbow) * params._RainbowErrorNoise;
+                            _Result.x += _fusionSwizzle4.x;
+                            _Result.y += _fusionSwizzle4.y;
+                            _Result.z += _fusionSwizzle4.z;
+                        }
+                        {
+                            let _fusionSwizzle5 = Fun_RGB_YCbCr(vec3f(_Ringing + _Rainbow_Pre * 0.1)) * _Ringing_Lum * params._RingingMixing;
+                            _Result.x += _fusionSwizzle5.x;
+                            _Result.y += _fusionSwizzle5.y;
+                            _Result.z += _fusionSwizzle5.z;
+                        }
+
+                    /* Saturation */
+                        var _HSV: vec3f = RGBtoHSV(vec3f(_Result.rgb));
+
+                        _HSV.y = (_HSV.y * (params._Saturation / 50.0));
+                        _HSV.z = (_HSV.z + (params._Value - 50.0) / 50.0);
+
+                        {
+                            let _fusionSwizzle6 = HSVtoRGB(f32(_HSV.x), f32(_HSV.y), f32(_HSV.z));
+                            _Result.x = _fusionSwizzle6.x;
+                            _Result.y = _fusionSwizzle6.y;
+                            _Result.z = _fusionSwizzle6.z;
+                        }
+
+                    {
+                        let _fusionSwizzle7 = mix(_Render_Texture.rgb, _Result.rgb, params._Mixing);
+                        _Result.x = _fusionSwizzle7.x;
+                        _Result.y = _fusionSwizzle7.y;
+                        _Result.z = _fusionSwizzle7.z;
+                    }
+
+                _Result.a = _Render_Texture.a;
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End
