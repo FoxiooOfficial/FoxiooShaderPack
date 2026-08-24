@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.1 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -28,22 +29,19 @@ cbuffer PS_VARIABLES : register(b0)
     bool _Blending_Mode;
     float _Mixing;
     float _Threshold;
-    bool _Negative;
+    int _Negative;
     float4 _ColorLight;
     float4 _ColorShadow;
     bool __;
-
-	bool _Is_Pre_296_Build;
-	bool ___;
 };
 
 struct PS_INPUT
 {
-  float4 Tint : COLOR0;
-  float2 texCoord : TEXCOORD0;
-  float2 bgCoord : TEXCOORD1;
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+	float2 bgCoord : TEXCOORD1;
+    float4 Position : SV_POSITION;
 };
-
 
 struct PS_OUTPUT
 {
@@ -60,68 +58,49 @@ cbuffer PS_PIXELSIZE : register(b1)
 /* Main */
 /************************************************************/
 
-float Fun_Luminance(float3 _Result)
+float4 Demultiply(float4 _Render, bool _Premultiplied)
 {
-    const float _Kr = 0.299;
-    const float _Kg = 0.587;
-    const float _Kb = 0.114;
+    if(_Premultiplied)
+    {
+	    if ( _Render.a != 0.0 ) {
+            _Render.rgb /= _Render.a;
+        }
+    }
 
-    float _Y = _Kr * _Result.r + _Kg * _Result.g + _Kb * _Result.b;
-
-    return _Y;
+	return _Render;
 }
 
-PS_OUTPUT ps_main( in PS_INPUT In )
+float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
 {
-    PS_OUTPUT Out;
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
+    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
 
-    float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord) * In.Tint;
+        float4 _Result;
+        _Result.rgb = lerp(_Render_Texture.rgb, _Render_Background.rgb, _Blending_Mode);
+        _Result.a = _Render_Texture.a;
 
-        float4 _Result = 0;
+            float4 _Render = _Result;
+            float _Lum = dot(_Result.rgb + _Threshold, float3(0.299, 0.587, 0.114));
 
-        _Result = _Blending_Mode ? _Render_Background : _Render_Texture;
-        float4 _Render = _Result;
+            _Render.rgb = lerp(_ColorShadow.rgb, _ColorLight.rgb, step(0.5, abs(_Negative - _Lum)));
+            _Result.rgb = lerp(_Result.rgb, _Render.rgb, _Mixing);
 
-            _Render.rgb = lerp(_ColorShadow.rgb, _ColorLight.rgb, abs(float(_Negative) - (saturate(pow(max(Fun_Luminance(_Result.rgb + _Threshold), 0.0), 150.0)))));
-
-        _Result.rgb = lerp(_Result.rgb, _Render.rgb, _Mixing);
-
-    _Result.a = _Render_Texture.a;
-    Out.Color = _Result;
-    
-    return Out;
+    return _Result;
 }
 
 /************************************************************/
-/* Premultiplied Alpha */
+/* Render */
 /************************************************************/
 
-float4 Demultiply(float4 _Color)
-{
-	if ( _Color.a != 0 )   _Color.rgb /= _Color.a;
-	return _Color;
+float4 ps_main(in PS_INPUT In) : SV_TARGET{
+    float4 _Render = Main(In, false);
+    return _Render;
 }
 
-PS_OUTPUT ps_main_pm( in PS_INPUT In ) 
+float4 ps_main_pm(in PS_INPUT In) : SV_TARGET
 {
-    PS_OUTPUT Out;
+    float4 _Render = Main(In, true);
+    _Render.rgb *= _Render.a;
 
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord) * In.Tint;
-
-        float4 _Result = 0;
-
-        _Result = _Blending_Mode ? _Render_Background : _Render_Texture;
-        float4 _Render = _Result;
-
-            _Render.rgb = lerp(_ColorShadow.rgb, _ColorLight.rgb, abs(float(_Negative) - (saturate(pow(max(Fun_Luminance(_Result.rgb + _Threshold), 0.0), 150.0)))));
-
-        _Result.rgb = lerp(_Result.rgb, _Render.rgb, _Mixing);
-
-    _Result.a = _Render_Texture.a;
-    _Result.rgb *= _Result.a;
-
-    Out.Color = _Result;
-    return Out;
+    return _Render;
 }
