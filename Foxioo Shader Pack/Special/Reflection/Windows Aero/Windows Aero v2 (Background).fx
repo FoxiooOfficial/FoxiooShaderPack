@@ -111,7 +111,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
         float4 _Result;
 
             // blur!!
-            _Result.rgb = Fun_Blur(In);
+            _Result.rgb = Fun_Blur(In_Background);
             _Result.rgb = lerp(_Result.rgb, _AColor, _ALerp);
 
             // outline
