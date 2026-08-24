@@ -1,0 +1,158 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(0) var background: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Mixing: f32,
+    _PosX: f32,
+    _PosY: f32,
+    parameter4_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+const _AColor: vec3f = vec3f(0.08333, 0.36842, 0.85714);
+const _Amix: vec3f = vec3f(0.24, 0.19, 0.14);
+const _BorderHigh: vec3f = vec3f(0.15, 0.16, 0.17);
+const _BorderLow: vec3f = vec3f(0.96, 0.98, 0.99);
+const _BorderCyan: vec3f = vec3f(0.0, 1.0, 1.0);
+
+const SAMPLES_INNER: i32 = 6;
+const SAMPLES_BLUR: i32 = 8;
+// Expanded source constant: JUMP_INNER
+// Expanded source constant: JUMP_BLUR
+// Expanded source constant: PIXELSIZE
+
+/************************************************************/
+/* Main */
+/************************************************************/
+fn Fun_Blur(In: vec2f) -> vec3f {
+    var _Render: vec3f = vec3f(0.0);
+        var _Sum: f32 = (f32(SAMPLES_BLUR) - 1.0) / 2.0;
+
+        var y: i32;
+        var x: i32;
+        for(y = i32(0); y < SAMPLES_BLUR; y += 1)
+        {
+            for(x = i32(0); x < SAMPLES_BLUR; x += 1)
+            {
+                var _Off: vec2f = vec2f(f32(x), f32(y)) - _Sum;
+                _Render += texture2D(background, In + _Off * (vec2f(fusion.fPixelWidth, fusion.fPixelHeight)) * (1.0)).rgb;
+            }
+        }
+
+        return _Render / f32(SAMPLES_BLUR * SAMPLES_BLUR);
+}
+
+fn Fun_Inner(In: vec2f) -> f32 {
+    var _Alpha: f32 = 0.0;
+        for (var y: i32 = 0; y <= SAMPLES_INNER; y += 1)
+        {
+            for (var x: i32 = 0; x <= SAMPLES_INNER; x += 1)
+            {
+                var _Offset: vec2f = (vec2f(f32(x), f32(y)) / f32(SAMPLES_INNER) - 0.5);
+                var _Render: vec4f = texture2D(img, In + _Offset * (2.0) * (vec2f(fusion.fPixelWidth, fusion.fPixelHeight)));
+
+                _Alpha += dot(_Render.rgb, vec3f(0.299, 0.587, 0.114)) * _Render.a;
+            }
+        }
+        return _Alpha / f32(SAMPLES_INNER * SAMPLES_INNER);
+}
+
+fn Fun_Aero_Light(In: vec2f) -> f32 {
+    var _D: f32 = In.x - In.y;
+
+            var _P1: f32 = sin(_D * 0.75);
+            var _P2: f32 = sin(_D * 0.4 + 0.1);
+            var _P3: f32 = sin(_D * 0.65 + 0.2);
+            var _P4: f32 = sin(_D * 1.1 + 0.3);
+
+        var _Light: f32 = 0.5 + 0.5 * ((_P1 + _P2 * 0.5 + _P3 * 0.25 - _P4 * 0.6) / 1.75);
+        return _Light;
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        //vec4 _Render_Background = texture(bckgTexture, In);
+
+            var _Result: vec4f;
+
+                // blur!!
+                {
+                    let _fusionSwizzle0 = Fun_Blur(vec2f(input.texCoord));
+                    _Result.x = _fusionSwizzle0.x;
+                    _Result.y = _fusionSwizzle0.y;
+                    _Result.z = _fusionSwizzle0.z;
+                }
+                {
+                    let _fusionSwizzle1 = mix(_Result.rgb, _AColor, _Amix);
+                    _Result.x = _fusionSwizzle1.x;
+                    _Result.y = _fusionSwizzle1.y;
+                    _Result.z = _fusionSwizzle1.z;
+                }
+
+                // outline
+                var _Outline: f32 = Fun_Inner(vec2f(input.texCoord));
+                var _Border: vec3f = mix(_BorderHigh, _BorderLow, clamp(_Outline * 1.5, 0.0, 1.0));
+                _Border *= mix(_Border, _BorderCyan, input.texCoord.x + input.texCoord.y);
+
+                {
+                    let _fusionSwizzle2 = mix(_Result.rgb, _Border, clamp(1.0 - _Outline, 0.0, 1.0));
+                    _Result.x = _fusionSwizzle2.x;
+                    _Result.y = _fusionSwizzle2.y;
+                    _Result.z = _fusionSwizzle2.z;
+                }
+
+                // lines
+                {
+                    let _fusionSwizzle3 = _BorderHigh * Fun_Aero_Light(vec2f(input.texCoord / (vec2f(fusion.fPixelWidth, fusion.fPixelHeight)) * 0.04 + vec2f(params._PosX, params._PosY) * (vec2f(fusion.fPixelWidth, fusion.fPixelHeight))));
+                    _Result.x += _fusionSwizzle3.x;
+                    _Result.y += _fusionSwizzle3.y;
+                    _Result.z += _fusionSwizzle3.z;
+                }
+
+                // light
+                {
+                    let _fusionSwizzle4 = clamp(abs(0.5 - input.texCoord.x) * (1.0 - input.texCoord.y * 2.0), 0.0, 1.0) * 0.5;
+                    _Result.x += _fusionSwizzle4;
+                    _Result.y += _fusionSwizzle4;
+                    _Result.z += _fusionSwizzle4;
+                }
+
+            _Result.a = _Render_Texture.a + _Outline * 3.0;
+            _Result = mix(_Render_Texture, _Result, params._Mixing);
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End

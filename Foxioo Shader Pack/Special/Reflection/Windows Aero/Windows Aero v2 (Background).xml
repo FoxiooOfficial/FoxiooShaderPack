@@ -1,6 +1,6 @@
 <effect>
-	<name>Addition (Background)</name>
-		<description>Base and blend colors are added.</description> 
+	<name>Windows Aero V2 (Background)</name>
+		<description>This shader simulates the Windows 7/Vista window effect.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
@@ -8,13 +8,27 @@
 				<dx8>0</dx8>
 				<PSVersion>1.1</PSVersion>
 				
+		<sampler>
+		    <index>0</index>
+		    <filter>linear</filter>
+		    <addressU>border</addressU>
+		    <addressV>border</addressV>
+		</sampler>
+
+			<sampler>
+			    <index>1</index>
+			    <filter>linear</filter>
+			    <addressU>clamp</addressU>
+			    <addressV>clamp</addressV>
+			</sampler>
 		<parameter>
-			<name>/* Foxioo Addition (Background) Shader | 2026.08.20a */</name>
+		
+			<name>/* Foxioo Windows Aero V2 (Background) Shader | 2026.08.25 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
 
-			<description>Base and blend colors are added.</description>
+			<description>This shader simulates the Windows 7/Vista window effect.</description>
 		</parameter>
 
 			<parameter>
@@ -29,14 +43,26 @@
 			</parameter>
 
 			<parameter>
-				<name>Background Multiplication</name>
-				<variable>_Mul</variable>
+				<name>Position X</name>
+				<variable>_PosX</variable>
 				
-				<description>This variable defines the background multiplication factor. In previous versions of FSP shaders, it was _Mixing, but this has now been fixed.</description>
+				<description>A variable that determines the position of the rainbow in the X axis.</description> 
 
 				<type>float</type>
 
-				<value>1.0</value>
+				<value>0</value>
+			</parameter>
+
+
+			<parameter>
+				<name>Position Y</name>
+				<variable>_PosY</variable>
+				
+				<description>A variable that determines the position of the rainbow in the Y axis.</description> 
+
+				<type>float</type>
+
+				<value>0</value>
 			</parameter>
 
         <parameter>

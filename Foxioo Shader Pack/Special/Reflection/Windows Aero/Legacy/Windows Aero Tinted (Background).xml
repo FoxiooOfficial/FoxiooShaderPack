@@ -1,18 +1,18 @@
 <effect>
-	<name>Windows Aero Tinted (Background)</name>
-		<description>Shader simulates the Windows 7/Vista window effect, also changing color tones.</description> 
+	<name>Windows Aero Tinted (Background) [Legacy]</name>
+		<description>(Old version; use version V2 for the real effect) Shader simulates the Windows 7/Vista window effect, also changing color tones.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Windows Aero Tinted (Background) Shader | 2026.08.20 */</name>
+			<name>/* Foxioo Windows Aero Tinted (Background) [Legacy] Shader | 2026.08.25 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
 
-			<description>Shader simulates the Windows 7/Vista window effect, also changing color tones.</description>
+			<description>(Old version; use version V2 for the real effect) Shader simulates the Windows 7/Vista window effect, also changing color tones.</description>
 		</parameter>
 
 		<parameter>

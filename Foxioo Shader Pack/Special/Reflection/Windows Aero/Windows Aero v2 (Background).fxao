@@ -47,29 +47,105 @@ uniform sampler2D imgTexture;
 uniform sampler2D bckgTexture;
 
 uniform lowp vec4 blendColor;
-//uniform float fPixelWidth;
-//uniform float fPixelHeight;
+uniform float fPixelWidth;
+uniform float fPixelHeight;
 
 /***********************************************************/
 /* Variables */
 /***********************************************************/
 
 uniform float _Mixing;
-uniform float _Mul;
+uniform float _PosX;
+uniform float _PosY;
+
+const vec3 _AColor     = vec3(0.08333, 0.36842, 0.85714);
+const vec3 _Amix      = vec3(0.24, 0.19, 0.14);
+const vec3 _BorderHigh = vec3(0.15, 0.16, 0.17);
+const vec3 _BorderLow  = vec3(0.96, 0.98, 0.99);
+const vec3 _BorderCyan = vec3(0.0, 1.0, 1.0);
+
+const int SAMPLES_INNER  = 6;
+const int SAMPLES_BLUR   = 8;
+#define JUMP_INNER         2.0
+#define JUMP_BLUR          1.0
+#define PIXELSIZE          vec2(fPixelWidth, fPixelHeight)
 
 /************************************************************/
 /* Main */
 /************************************************************/
 
+vec3 Fun_Blur(vec2 In)
+{
+    vec3 _Render = vec3(0.0);
+    float _Sum = (float(SAMPLES_BLUR) - 1.0) / 2.0;
+
+    for(int y = 0; y < SAMPLES_BLUR; ++y)
+    {
+        for(int x = 0; x < SAMPLES_BLUR; ++x)
+        {
+            vec2 _Off = vec2(x, y) - _Sum;
+            _Render += texture2D(bckgTexture, In + _Off * PIXELSIZE * JUMP_BLUR).rgb;
+        }
+    }
+
+    return _Render / float(SAMPLES_BLUR * SAMPLES_BLUR);
+}
+
+float Fun_Inner(vec2 In)
+{
+    float _Alpha = 0.0;
+    for(int y = 0; y <= SAMPLES_INNER; y++)
+    {
+        for(int x = 0; x <= SAMPLES_INNER; x++)
+        {
+            vec2 _Offset = (vec2(x, y) / float(SAMPLES_INNER) - 0.5);
+            vec4 _Render = texture2D(imgTexture, In + _Offset * JUMP_INNER * PIXELSIZE);
+
+            _Alpha += dot(_Render.rgb, vec3(0.299, 0.587, 0.114)) * _Render.a;
+        }
+    }
+    return _Alpha / float(SAMPLES_INNER * SAMPLES_INNER);
+}
+
+float Fun_Aero_Light(vec2 In)
+{   
+    float _D = In.x - In.y;
+
+        float _P1 = sin(_D * 0.75);
+        float _P2 = sin(_D * 0.4 + 0.1);
+        float _P3 = sin(_D * 0.65 + 0.2);
+        float _P4 = sin(_D * 1.1 + 0.3);
+
+    float _Light = 0.5 + 0.5 * ((_P1 + _P2 * 0.5 + _P3 * 0.25 - _P4 * 0.6) / 1.75);
+    return _Light;
+}
+
 void main(void)
 {
     vec4 _Render_Texture = texture2D(imgTexture, In) * blendColor;
-    vec4 _Render_Background = texture2D(bckgTexture, In);
+    //vec4 _Render_Background = texture(bckgTexture, In);
 
-            vec4 _Result = _Render_Texture + (_Render_Background * _Mul);
-            _Result.rgb = mix(_Render_Texture.rgb, _Result.rgb, _Mixing);
+        vec4 _Result;
+
+            // blur!!
+            _Result.rgb = Fun_Blur(In);
+            _Result.rgb = mix(_Result.rgb, _AColor, _Amix);
+
+            // outline
+            float _Outline = Fun_Inner(In);
+            vec3 _Border = mix(_BorderHigh, _BorderLow, clamp(_Outline * 1.5, 0.0, 1.0));
+            _Border *= mix(_Border, _BorderCyan, In.x + In.y);
+
+            _Result.rgb = mix(_Result.rgb, _Border, clamp(1.0 - _Outline, 0.0, 1.0));
+
+            // lines
+            _Result.rgb += _BorderHigh * Fun_Aero_Light(In / PIXELSIZE * 0.04 + vec2(_PosX, _PosY) * PIXELSIZE);
+
+            // light
+            _Result.rgb += clamp(abs(0.5 - In.x) * (1.0 - In.y * 2.0), 0.0, 1.0) * 0.5;
             
-        _Result.a = _Render_Texture.a;
+        _Result.a = _Render_Texture.a + _Outline * 3.0;
+        _Result = mix(_Render_Texture, _Result, _Mixing);
 
     gl_FragColor = _Result;
 }

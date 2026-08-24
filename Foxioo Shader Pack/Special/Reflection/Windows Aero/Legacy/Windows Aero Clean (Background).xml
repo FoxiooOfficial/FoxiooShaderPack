@@ -1,18 +1,18 @@
 <effect>
 	<name>Windows Aero Clean (Background)</name>
-		<description>Shader simulates the Windows 7/Vista window effect, also multiplying colors.</description> 
+		<description>(Old version; use version V2 for the real effect) [Legacy] Shader simulates the Windows 7/Vista window effect, also multiplying colors.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Windows Aero Clean (Background) Shader | 2026.08.20 */</name>
+			<name>/* Foxioo Windows Aero Clean (Background) [Legacy] Shader | 2026.08.25 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
 
-			<description>Shader simulates the Windows 7/Vista window effect, also multiplying colors.</description>
+			<description>(Old version; use version V2 for the real effect) Shader simulates the Windows 7/Vista window effect, also multiplying colors.</description>
 		</parameter>
 
 		<parameter>
