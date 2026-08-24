@@ -1,0 +1,176 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(0) var background: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Mixing: f32,
+    parameter2_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+// Expanded source constant: GOLDEN_ANGLE
+// Expanded source constant: PI
+
+const SAMPLES_INNER: i32 = 12;
+const SAMPLES_BLUR: i32 = 16;
+const _Sigma: f32 = 40.0;
+const _Mul: f32 = 0.7;
+const _Radius: f32 = 16.0;
+const _Size: f32 = 24.0;
+const _Liquid: f32 = 0.05;
+fn Fun_Hash12(_UV: vec2f) -> f32 {
+    var _Pos: vec3f = fract(vec3f(_UV.xyx) * 0.103116);
+        _Pos += dot(_Pos, _Pos.yzx + 33.333);
+        return fract((_Pos.x + _Pos.y) * _Pos.z);
+}
+
+fn Fun_Blur(UV: vec2f, _Pixel: vec2f) -> vec3f {
+    var _SigmaULTRA: f32 = 1.0 / (2.0 * _Sigma * _Sigma);
+
+        var _Angle: f32 = (Fun_Hash12(vec2f(UV.xy)) * 2.0 * (3.14159265359));
+        var _Sin: f32;
+        var _Cos: f32;
+        //sincos(_Angle, _Sin, _Cos);
+        _Sin = sin(_Angle);
+        _Cos = cos(_Angle);
+
+        var _Result: vec3f = vec3f(0.0);
+        var _Sum: f32 = 0.0;
+
+        for (var i: i32 = 0; i < SAMPLES_BLUR; i += 1)
+        {
+            var _Rad: f32 = sqrt((f32(i) + 0.5) / f32(SAMPLES_BLUR));
+            var _Thr: f32 = f32(i) * (2.39996323);
+
+                var _Off: vec2f;
+                //sincos(_Thr, _Off.x, _Off.y);
+                _Off.x = sin(_Thr);
+                _Off.y = cos(_Thr);
+                _Off *= _Rad * _Radius;
+
+                var _Rot: vec2f = vec2f(_Cos * _Off.x - _Sin * _Off.y, _Sin * _Off.x + _Cos * _Off.y);
+
+            var _Weight: f32 = exp(-pow(_Rad * _Radius / 4.0, 2.0) * _SigmaULTRA);
+
+            _Result += texture2D(background, UV.xy + _Rot * _Pixel).rgb * _Weight;
+            _Sum += _Weight;
+        }
+
+        _Result /= _Sum;
+        return _Result;
+}
+
+fn Fun_Inner(In: vec2f, _Pixel: vec2f, _Tint: f32) -> f32 {
+    var _Alpha: f32 = 0.0;
+        var _Idx: f32 = 0.0;
+        for (var y: i32 = 0; y <= SAMPLES_INNER; y += 1)
+        {
+            for (var x: i32 = 0; x <= SAMPLES_INNER; x += 1)
+            {
+                var _Offset: vec2f = (vec2f(f32(x), f32(y)) / f32(SAMPLES_INNER) - 0.5) * _Size;
+
+                _Offset *= _Pixel;
+
+                _Alpha += texture2D(img, In + _Offset).a * _Tint;
+                _Idx += 1.0;
+            }
+        }
+
+        _Alpha /= _Idx;
+
+        return _Alpha;
+}
+
+fn Fun_Mirror(In: vec2f) -> vec2f {
+    return 1.0 - abs(fract(In / 2.0) * 2.0 - 1.0);
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        var _Render_Texture_NT: vec4f = texture2D(img, input.texCoord);
+        //vec4 _Render_Background = texture(bckgTexture, In_Background);
+
+            var _Result: vec4f = vec4f(0.0);
+            var _Pixel: vec2f = vec2f(fusion.fPixelWidth, fusion.fPixelHeight);
+
+                var _UV: vec2f = input.texCoord;
+                //_UV.z = max(abs(_UV.x - 0.5), abs(_UV.y - 0.5)) * 2.0;
+                //_UV.z = 1.0 - pow(_UV.z, 10.0);
+
+                _UV = Fun_Mirror(_UV);
+
+                var _Lum: f32 = dot(_Render_Texture_NT.rgb, vec3f(0.212, 0.715, 0.072));
+                var _Mirror: f32 = Fun_Inner(vec2f(input.texCoord), _Pixel, f32((input.color * fusion.blendColor).a));
+                var _MirrorCopy: f32 = _Mirror;
+
+                    _Mirror *= 0.5 + (pow(_Lum, 6.0) / 6.0) * 0.5;
+                    var _Off: vec2f = Fun_Mirror(vec2f(_UV + ((_UV - 0.5) / max(0.01, _Mirror)) * _Liquid));
+
+                    {
+                        let _fusionSwizzle0 = Fun_Blur(_Off, _Pixel);
+                        _Result.x = _fusionSwizzle0.x;
+                        _Result.y = _fusionSwizzle0.y;
+                        _Result.z = _fusionSwizzle0.z;
+                    }
+                    //_Result.rgb = lerp(float3(0.3, 0.3, 0.3), _Result.rgb, 0.9);
+
+                {
+                    let _fusionSwizzle1 = pow(abs(_Result.rgb * (1.0 - _MirrorCopy)), vec3f(1.5)) * 2.0;
+                    _Result.x += _fusionSwizzle1.x;
+                    _Result.y += _fusionSwizzle1.y;
+                    _Result.z += _fusionSwizzle1.z;
+                }
+                {
+                    let _fusionSwizzle2 = mix(_Result.rgb + normalize(_Result.rgb), clamp(_Render_Texture.rgb * 0.55 + 0.12, vec3f(0.0), vec3f(1.0)), _Mul);
+                    _Result.x = _fusionSwizzle2.x;
+                    _Result.y = _fusionSwizzle2.y;
+                    _Result.z = _fusionSwizzle2.z;
+                }
+                {
+                    let _fusionSwizzle3 = mix(_Render_Texture.rgb, _Result.rgb, params._Mixing);
+                    _Result.x = _fusionSwizzle3.x;
+                    _Result.y = _fusionSwizzle3.y;
+                    _Result.z = _fusionSwizzle3.z;
+                }
+
+            _Result.a = _Render_Texture.a;
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End

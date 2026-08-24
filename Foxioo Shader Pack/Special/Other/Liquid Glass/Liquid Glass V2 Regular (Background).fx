@@ -118,17 +118,19 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
         float2 _Pixel = float2(fPixelWidth, fPixelHeight);
             
             float2 _UV = In;
+            float2 _UV_Background = In_Background;
             //_UV.z = max(abs(_UV.x - 0.5), abs(_UV.y - 0.5)) * 2.0;
             //_UV.z = 1.0 - pow(_UV.z, 10.0);
 
             _UV = Fun_Mirror(_UV);
+            _UV_Background = Fun_Mirror(_UV_Background);
 
             float _Lum = dot(_Render_Texture.rgb, float3(0.212, 0.715, 0.072));
             float _Mirror = Fun_Inner(_UV, _Pixel);
             float _MirrorCopy = _Mirror;
 
                 _Mirror *= 0.5 + (pow(_Lum, 6.0) / 6.0) * 0.5;
-                float2 _Off = Fun_Mirror(_UV + ((_UV - 0.5) / max(0.01, _Mirror)) * _Liquid);
+                float2 _Off = Fun_Mirror(_UV_Background + ((_UV_Background - 0.5) / max(0.01, _Mirror)) * _Liquid);
 
                 _Result.rgb = Fun_Blur(_Off, _Pixel);
                 //_Result.rgb = lerp(float3(0.3, 0.3, 0.3), _Result.rgb, 0.9);
