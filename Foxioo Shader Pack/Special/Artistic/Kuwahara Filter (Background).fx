@@ -101,7 +101,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In_Background);
 
-        float4 _Result = Fun_Kuwahara(In, S2D_Background);
+        float4 _Result = Fun_Kuwahara(In_Background, S2D_Background);
 
             _Result.rgb = lerp(_Render_Background.rgb, _Result.rgb, _Mixing);
             _Result.a = _Render_Texture.a;

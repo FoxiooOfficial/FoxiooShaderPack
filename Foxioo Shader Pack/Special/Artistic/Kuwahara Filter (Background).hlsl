@@ -138,7 +138,7 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
     float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
 
-        float4 _Result = Fun_Kuwahara(In.texCoord, S2D_Background, S2D_BackgroundSampler);
+        float4 _Result = Fun_Kuwahara(In.bgCoord, S2D_Background, S2D_BackgroundSampler);
 
             _Result.rgb = lerp(_Render_Background.rgb, _Result.rgb, _Mixing);
             _Result.a = _Render_Texture.a;

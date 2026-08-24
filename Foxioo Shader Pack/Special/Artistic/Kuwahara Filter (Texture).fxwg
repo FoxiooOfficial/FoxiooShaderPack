@@ -1,0 +1,147 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+//uniform sampler2D bckgTexture;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Mixing: f32,
+    _Size: f32,
+    parameter3_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+const RADIUS: i32 = 4;
+const ZERO: f32 = 0.0;
+fn Fun_Sign(x: i32) -> f32 {
+    if(x < 0) {       return -1.0; }
+        else if(x == 0) { return 0.0; }
+        else {            return 1.0; }
+}
+
+fn Fun_Kuwahara(UV: vec2f, _Sampler: texture_2d<f32>) -> vec4f {
+    var _SumColor: array<vec4f, 4>;
+        _SumColor[i32(0)] = vec4f(ZERO);
+        _SumColor[i32(1)] = vec4f(ZERO);
+        _SumColor[i32(2)] = vec4f(ZERO);
+        _SumColor[i32(3)] = vec4f(ZERO);
+
+        var _SumLum: array<f32, 4>;
+        _SumLum[i32(0)] = ZERO;
+        _SumLum[i32(1)] = ZERO;
+        _SumLum[i32(2)] = ZERO;
+        _SumLum[i32(3)] = ZERO;
+
+        var _SumLumSq: array<f32, 4>;
+        _SumLumSq[i32(0)] = ZERO;
+        _SumLumSq[i32(1)] = ZERO;
+        _SumLumSq[i32(2)] = ZERO;
+        _SumLumSq[i32(3)] = ZERO;
+
+        var _Count: array<i32, 4>;
+        _Count[i32(0)] = i32(ZERO);
+        _Count[i32(1)] = i32(ZERO);
+        _Count[i32(2)] = i32(ZERO);
+        _Count[i32(3)] = i32(ZERO);
+
+        var _Offset: vec2f = vec2f(fusion.fPixelWidth, fusion.fPixelHeight) * params._Size;
+
+            for (var _Y: i32 = -RADIUS; _Y <= RADIUS; _Y += 1)
+            {
+                for (var _X: i32 = -RADIUS; _X <= RADIUS; _X += 1)
+                {
+                    var _Off: vec2f = vec2f(f32(_X), f32(_Y)) * _Offset;
+                    var _Render: vec4f = texture2D(_Sampler, UV + _Off);
+
+                    var _Lum: f32 = dot(_Render.rgb, vec3f(0.2126, 0.7152, 0.0722));
+
+                    var _R: i32 = i32((min(Fun_Sign(i32(_X)), 0.0) + 1.0) + max(0.0, Fun_Sign(i32(_Y))) * 2.0);
+
+                    _SumColor[i32(_R)] += _Render;
+                    _SumLum[i32(_R)] += _Lum;
+                    _SumLumSq[i32(_R)] += _Lum * _Lum;
+                    _Count[i32(_R)] += 1;
+                }
+            }
+
+        var _Mean: array<vec4f, 4>;
+        var _Var: array<f32, 4>;
+
+            for (var i: i32 = 0; i < 4; i += 1)
+            {
+                if (_Count[i32(i)] > 0)
+                {
+                    var _Invert: f32 = 1.0 / f32(_Count[i32(i)]);
+                    _Mean[i32(i)] = _SumColor[i32(i)] * _Invert;
+
+                    var _E: f32 = _SumLum[i32(i)] * _Invert;
+                    var _P: f32 = _SumLumSq[i32(i)] * _Invert - _E * _E;
+
+                    _Var[i32(i)] = max(0.0, _P);
+                }
+                else
+                {
+                    _Mean[i32(i)] = vec4f(ZERO);
+                    _Var[i32(i)] = 0.0;
+                }
+            }
+
+        var _Best: i32 = 0;
+        var _BVar: f32 = _Var[i32(0)];
+
+            for (var ii: i32 = 1; ii < 4; ii += 1)
+            {
+                if (_Var[i32(ii)] < _BVar)
+                {
+                    _BVar = _Var[i32(ii)];
+                    _Best = i32(ii);
+                }
+            }
+
+        return _Mean[i32(_Best)];
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+
+            var _Result: vec4f = Fun_Kuwahara(vec2f(input.texCoord), img) * (input.color * fusion.blendColor);
+
+                _Result = mix(_Render_Texture, _Result, params._Mixing);
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End
