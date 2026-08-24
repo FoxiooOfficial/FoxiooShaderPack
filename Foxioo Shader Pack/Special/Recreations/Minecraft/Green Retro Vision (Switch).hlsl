@@ -31,8 +31,6 @@ cbuffer PS_VARIABLES : register(b0)
     float4 _ColorLight;
     float4 _ColorShadow;
 	bool ___;
-    bool _Is_Pre_296_Build;
-    bool ____;
 };
 
 struct PS_INPUT
@@ -83,16 +81,18 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
 
         float4 _Result, _Render;
         _Render.a = _Render_Texture.a;
-
-        float2 UV = floor(In.texCoord / _PixelSize / _ResSize) * _PixelSize * _ResSize;
-
+        
             if(!_Blending_Mode)
             {
+                float2 UV = floor(In.texCoord / _PixelSize / _ResSize) * _PixelSize * _ResSize;
+
                 _Result = Demultiply(S2D_Image.Sample(S2D_ImageSampler, UV) * In.Tint, _Premultiplied);
                 _Render = _Render_Texture;
             }
             else
             {
+                float2 UV = floor(In.bgCoord / _PixelSize / _ResSize) * _PixelSize * _ResSize;
+
                 _Result.rgb = S2D_Background.Sample(S2D_BackgroundSampler, UV).rgb;
                 _Render = _Render_Background;
 
