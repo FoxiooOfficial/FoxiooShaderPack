@@ -34,6 +34,7 @@ struct PS_INPUT
 {
     float4 Tint : COLOR0;
     float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
 };
 
 struct PS_OUTPUT
