@@ -18,7 +18,7 @@
 			</sampler>
 
 		<parameter>
-			<name>/* Foxioo Minimum Filter (Switch) Shader | 2026.08.20 */</name>
+			<name>/* Foxioo Minimum Filter (Switch) Shader | 2026.08.26 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
