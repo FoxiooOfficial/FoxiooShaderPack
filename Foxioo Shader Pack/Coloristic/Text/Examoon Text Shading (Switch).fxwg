@@ -1,0 +1,97 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Mixing: f32,
+    _PT: f32,
+    _DPI: f32,
+    _Height: f32,
+    parameter5_value: i32,
+    _OffsetY: f32,
+    _ScaleY: f32,
+    _Light: vec4f,
+    _Dark: vec4f,
+    parameter10_value: i32,
+    _PosX: f32,
+    _PosY: f32,
+    _Shadow: vec4f,
+    _Alpha: f32,
+    parameter15_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+// Expanded source constant: M_PI
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        var _Result: vec4f;
+
+            _Result.a = _Render_Texture.a;
+
+            var _Res: vec2f = vec2f(fusion.fPixelWidth, fusion.fPixelHeight);
+            var _FontSize: f32 = params._DPI / 72.0 * params._PT * _Res.y;
+
+                var _Gradient: f32 = cos(((input.texCoord.y - params._OffsetY * _FontSize) * params._ScaleY * 2.0) * (3.14159265358979323846) / _FontSize * (2.0 / params._Height));
+
+                    {
+                        let _fusionSwizzle0 = mix(params._Dark.rgb, params._Light.rgb, _Gradient);
+                        _Result.x = _fusionSwizzle0.x;
+                        _Result.y = _fusionSwizzle0.y;
+                        _Result.z = _fusionSwizzle0.z;
+                    }
+
+                var _ShadowOffset: vec2f = vec2f(params._PosX, params._PosY) * _Res;
+
+                    var _Render_Shadow: vec4f = texture2D(img, input.texCoord - _ShadowOffset) * (input.color * fusion.blendColor);
+                        {
+                            let _fusionSwizzle1 = params._Shadow.rgb;
+                            _Render_Shadow.x = _fusionSwizzle1.x;
+                            _Render_Shadow.y = _fusionSwizzle1.y;
+                            _Render_Shadow.z = _fusionSwizzle1.z;
+                        }
+                        _Render_Shadow.a *= params._Alpha;
+
+                _Result = mix(_Render_Shadow, _Result, _Result.a);
+
+            _Result = mix(_Render_Texture, _Result, params._Mixing);
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End
