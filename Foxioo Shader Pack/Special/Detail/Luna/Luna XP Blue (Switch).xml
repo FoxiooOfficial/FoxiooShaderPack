@@ -11,7 +11,8 @@
 				<borderColor>16711680</borderColor>
 			</sampler>
 
-		<parameter>
+				<BackgroundTexture>1</BackgroundTexture>
+<parameter>
 			<name>/* Foxioo Luna XP Blue (Switch) Shader | 2026.08.23 */</name>
 			<property>checkbox</property>
 
