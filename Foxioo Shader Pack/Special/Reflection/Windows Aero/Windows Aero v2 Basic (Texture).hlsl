@@ -55,7 +55,7 @@ cbuffer PS_PIXELSIZE : register(b1)
 
 static const float3 _Main       = float3(0.73, 0.82, 0.92);
 static const float3 _Accent     = float3(0.6, 0.71, 0.82);
-static const float3 _Lerp       = float3(0.24, 0.19, 0.14);
+static const float3 _Lerp      = float3(0.24, 0.19, 0.14);
 
 static const float3 _BorderHigh = float3(0.15, 0.16, 0.17);
 static const float3 _BorderLow  = float3(0.96, 0.98, 0.99);
