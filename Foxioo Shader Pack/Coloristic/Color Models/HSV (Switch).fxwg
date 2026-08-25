@@ -1,0 +1,131 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(0) var background: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+//uniform float fPixelWidth;
+//uniform float fPixelHeight;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Blending_Mode: i32,
+    _Mixing: f32,
+    _Hue: f32,
+    _Saturation: f32,
+    _Value: f32,
+    parameter6_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+fn Fun_FMod(a: f32, b: f32) -> f32 {
+    return a - b * floor(a / b);
+}
+
+fn RGBtoHSV(_Render: vec3f) -> vec3f {
+    var _CMax: f32 = max(_Render.r, max(_Render.g, _Render.b));
+        var _CMin: f32 = min(_Render.r, min(_Render.g, _Render.b));
+        var _Delta: f32 = _CMax - _CMin;
+
+        var _H: f32 = 0.0;
+        var _S: f32 = 0.0;
+        var _V: f32 = _CMax;
+
+        if (_Delta > 0.0)
+        {
+            _S = select(0.0, (_Delta / _V), (_V > 0.0));
+
+            if (_CMax == _Render.r) {
+                _H = 60.0 * Fun_FMod(f32(((_Render.g - _Render.b) / _Delta)), f32(6.0));
+            }
+
+            else if (_CMax == _Render.g) {
+                _H = 60.0 * (((_Render.b - _Render.r) / _Delta) + 2.0);
+            }
+            else {
+                _H = 60.0 * (((_Render.r - _Render.g) / _Delta) + 4.0);
+            }
+        }
+
+        if (_H < 0.0) {
+            _H += 360.0;
+        }
+
+        return vec3f(_H, _S, _V);
+}
+
+fn HSVtoRGB(_H: f32, _S: f32, _V: f32) -> vec3f {
+    var _C: f32 = _V * _S;
+        var _X: f32 = _C * (1.0 - abs(Fun_FMod(f32(_H / 60.0), f32(2.0)) - 1.0));
+        var _M: f32 = _V - _C;
+
+        var _Render: vec3f = select(select(select(select(select(vec3f(_C, 0.0, _X), vec3f(_X, 0.0, _C), (_H < 300.0)), vec3f(0.0, _X, _C), (_H < 240.0)), vec3f(0.0, _C, _X), (_H < 180.0)), vec3f(_X, _C, 0.0), (_H < 120.0)), vec3f(_C, _X, 0.0), (_H < 60.0));
+
+        return (_Render + _M);
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        var _Render_Background: vec4f = texture2D(background, input.texCoord);
+
+            var _Render: vec4f = select(_Render_Texture, _Render_Background, (params._Blending_Mode != 0));
+            var _Result: vec4f = _Render;
+
+                var _HSV: vec3f = RGBtoHSV(vec3f(_Render.rgb));
+
+                    _HSV.x = Fun_FMod(f32(_HSV.x + params._Hue), f32(360.0));
+                        if (_HSV.x < 0.0) { _HSV.x += 360.0; }
+
+                    _HSV.y = (_HSV.y * (params._Saturation / 50.0));
+                    _HSV.z = (_HSV.z + (params._Value - 50.0) / 50.0);
+
+                {
+                    let _fusionSwizzle0 = HSVtoRGB(f32(_HSV.x), f32(_HSV.y), f32(_HSV.z));
+                    _Result.x = _fusionSwizzle0.x;
+                    _Result.y = _fusionSwizzle0.y;
+                    _Result.z = _fusionSwizzle0.z;
+                }
+
+            {
+                let _fusionSwizzle1 = mix(_Render.rgb, _Result.rgb, params._Mixing);
+                _Result.x = _fusionSwizzle1.x;
+                _Result.y = _fusionSwizzle1.y;
+                _Result.z = _fusionSwizzle1.z;
+            }
+            _Result.a = _Render_Texture.a;
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End
