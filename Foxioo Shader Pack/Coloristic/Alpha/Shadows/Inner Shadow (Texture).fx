@@ -45,7 +45,7 @@ sampler2D S2D_Image : register(s0) = sampler_state
 /* Main */
 /************************************************************/
 
-static const int _Samples = 4;
+static const int _Samples = 16;
 
 float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
 {
@@ -86,4 +86,4 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_2_a ps_main(); } }
+technique tech_main { pass P0 { PixelShader = compile ps_3_0 ps_main(); } }

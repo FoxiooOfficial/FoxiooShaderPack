@@ -1,0 +1,93 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+//uniform sampler2D bckgTexture;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Mixing: f32,
+    _PosX: f32,
+    _PosY: f32,
+    _Size: f32,
+    _Color: vec4f,
+    _ColorAccent: vec4f,
+    _ColorAlpha: f32,
+    _AlphaMul: f32,
+    _AlphaBack: f32,
+    parameter10_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+const _Samples: i32 = 16;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+
+        var _Alpha: f32 = 0.0;
+        var _Idx: f32 = 0.0;
+
+        for (var y: i32 = 0; y <= _Samples; y += 1)
+        {
+            for (var x: i32 = 0; x <= _Samples; x += 1)
+            {
+                var _Offset: vec2f = (vec2f(f32(x), f32(y)) / f32(_Samples) - 0.5) * params._Size;
+
+                _Offset = vec2f(fusion.fPixelWidth, fusion.fPixelHeight) * (_Offset + vec2f(params._PosX, params._PosY));
+
+                _Alpha += texture2D(img, input.texCoord + _Offset).a * (input.color * fusion.blendColor).a;
+                _Idx += 1.0;
+            }
+        }
+
+        _Alpha /= _Idx;
+
+            var _InnerMask: f32 = _Render_Texture.a * (1.0 - _Alpha);
+
+            _InnerMask = clamp(_InnerMask * params._AlphaMul, 0.0, 1.0);
+
+                var _OutlineColor: vec4f = mix(params._ColorAccent, params._Color, _InnerMask);
+                _OutlineColor.a = _Render_Texture.a * params._ColorAlpha;
+
+            var _Render: vec4f = _Render_Texture;
+            _Render.a *= params._AlphaBack;
+
+            _Render = mix(_Render, _OutlineColor, _InnerMask * params._Mixing);
+
+        _fusionOutput = _Render;
+    return _fusionOutput;
+}
+//@End
