@@ -1,0 +1,71 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+/***********************************************************/
+/* Textures */
+/***********************************************************/
+
+texture T_Image;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+    float _Mixing;
+    float _Mask;
+    vector _ColorIn;
+
+/***********************************************************/
+/* Tech Main */
+/***********************************************************/
+
+technique tech_main
+{
+    pass P0
+    {
+        Texture[0] = <T_Image>;                     // sampler2D S2D_Image      : register(s0);
+        MinFilter[0] = LINEAR;
+        MagFilter[0] = LINEAR;
+        MipFilter[0] = LINEAR;
+        AddressU[0] = WRAP;
+        AddressV[0] = WRAP;
+
+        PixelShaderConstant[0] = <_Mixing>;         // c0
+        PixelShaderConstant[1] = <_Mask>;           // c1
+        PixelShaderConstant[2] = <_ColorIn>;        // c2
+        
+        PixelShader = asm
+        {
+            ps.1.4;
+            
+            /** Consts **************************************************/
+            def c3, 0, 0, 0, -1;
+            def c4, 0, 0, 0, 1;
+            def c5, 0, 0, 0, 0;
+
+            /** Samplers ************************************************/
+            /*
+                t0 -> float4 _Render_Texture = tex2D(S2D_Image, In);
+            */
+            texld r0, t0;
+            
+            /** Assembly ************************************************/
+
+                mad r1.w, c1.x, c3.w, r0.w;
+                cmp r1.w, r1.w, c4.w, c5.w;
+                mul r2.w, c0.x, c3.w;
+            + mov r1.xyz, c2;
+                add r2.w, r2.w, c4.w;
+                mul r0, r0, r2.w;
+                mad r0, r1, c0.x, r0;
+        };
+    }
+}
