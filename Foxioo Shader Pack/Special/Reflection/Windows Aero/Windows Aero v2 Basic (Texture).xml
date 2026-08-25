@@ -1,10 +1,9 @@
 <effect>
-	<name>Windows Aero V2 (Background)</name>
+	<name>Windows Aero V2 Basic (Texture)</name>
 		<description>This shader simulates the Windows 7/Vista window effect.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
-			<website>https://github.com/FoxiooOfficial</website>
-				<BackgroundTexture>1</BackgroundTexture>
+			<website>https://github.com/FoxiooOfficial</website><dx8>0</dx8>
 				
 		<sampler>
 		    <index>0</index>
@@ -13,15 +12,8 @@
 		    <addressV>border</addressV>
 		</sampler>
 
-			<sampler>
-			    <index>1</index>
-			    <filter>linear</filter>
-			    <addressU>clamp</addressU>
-			    <addressV>clamp</addressV>
-			</sampler>
 		<parameter>
-		
-			<name>/* Foxioo Windows Aero V2 (Background) Shader | 2026.08.25 */</name>
+			<name>/* Foxioo Windows Aero V2 Basic (Texture) Shader | 2026.08.26 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
@@ -38,29 +30,6 @@
 				<type>float</type>
 
 				<value>1</value>
-			</parameter>
-
-			<parameter>
-				<name>Position X</name>
-				<variable>_PosX</variable>
-				
-				<description>A variable that determines the position of the rainbow in the X axis.</description> 
-
-				<type>float</type>
-
-				<value>0</value>
-			</parameter>
-
-
-			<parameter>
-				<name>Position Y</name>
-				<variable>_PosY</variable>
-				
-				<description>A variable that determines the position of the rainbow in the Y axis.</description> 
-
-				<type>float</type>
-
-				<value>0</value>
 			</parameter>
 
         <parameter>

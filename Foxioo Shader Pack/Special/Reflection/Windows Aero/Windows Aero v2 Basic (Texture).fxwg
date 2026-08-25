@@ -1,0 +1,101 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+//uniform sampler2D bckgTexture;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    _Mixing: f32,
+    parameter1_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+const _Main: vec3f = vec3f(0.73, 0.82, 0.92);
+const _Accent: vec3f = vec3f(0.6, 0.71, 0.82);
+const _Lerp: vec3f = vec3f(0.24, 0.19, 0.14);
+
+const _BorderHigh: vec3f = vec3f(0.15, 0.16, 0.17);
+const _BorderLow: vec3f = vec3f(0.96, 0.98, 0.99);
+const _BorderCyan: vec3f = vec3f(0.0, 1.0, 1.0);
+
+const SAMPLES_INNER: i32 = 6;
+// Expanded source constant: JUMP_INNER
+// Expanded source constant: PIXELSIZE
+
+/************************************************************/
+/* Main */
+/************************************************************/
+fn Fun_Inner(In: vec2f) -> f32 {
+    var _Alpha: f32 = 0.0;
+        for (var y: i32 = 0; y <= SAMPLES_INNER; y += 1)
+        {
+            for (var x: i32 = 0; x <= SAMPLES_INNER; x += 1)
+            {
+                var _Offset: vec2f = (vec2f(f32(x), f32(y)) / f32(SAMPLES_INNER) - 0.5);
+                var _Render: vec4f = texture2D(img, In + _Offset * (2.0) * (vec2f(fusion.fPixelWidth, fusion.fPixelHeight)));
+
+                _Alpha += dot(_Render.rgb, vec3f(0.299, 0.587, 0.114)) * _Render.a;
+            }
+        }
+        return _Alpha / f32(SAMPLES_INNER * SAMPLES_INNER);
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        //vec4 _Render_Background = texture(bckgTexture, In);
+
+            var _Result: vec4f;
+
+                // color!!
+                {
+                    let _fusionSwizzle0 = mix(_Main, _Accent, _Lerp);
+                    _Result.x = _fusionSwizzle0.x;
+                    _Result.y = _fusionSwizzle0.y;
+                    _Result.z = _fusionSwizzle0.z;
+                }
+
+                // outline
+                var _Outline: f32 = Fun_Inner(vec2f(input.texCoord));
+                var _Border: vec3f = mix(_BorderHigh, _BorderLow, clamp(_Outline * 1.5, 0.0, 1.0));
+                {
+                    let _fusionSwizzle1 = mix(_Result.rgb, _Border, clamp(1.0 - _Outline, 0.0, 1.0));
+                    _Result.x = _fusionSwizzle1.x;
+                    _Result.y = _fusionSwizzle1.y;
+                    _Result.z = _fusionSwizzle1.z;
+                }
+
+            _Result.a = _Render_Texture.a + _Outline * 3.0;
+            _Result = mix(_Render_Texture, _Result, params._Mixing);
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End
