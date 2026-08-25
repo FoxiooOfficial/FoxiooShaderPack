@@ -1,0 +1,178 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(0) var background: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+//uniform float fPixelWidth;
+//uniform float fPixelHeight;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Blending_Mode: i32,
+    _Mixing: f32,
+    _Luminance: f32,
+    _A: f32,
+    _B: f32,
+    parameter6_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+/*  Based on:
+    https://gist.github.com/manojpandey/f5ece715132c572c80421febebaf66ae#file-rgb2lab-py-L29]
+    https://github.com/antimatter15/rgb-lab/blob/master/color.js
+*/
+fn Fun_NormalizeRGB_In(_Render: f32) -> f32 {
+    var _Base: f32;
+
+            if(_Render > 0.04045) {
+                _Base = pow((_Render + 0.055) / 1.055, 2.4);
+            }
+            else {
+                _Base = _Render / 12.92;
+            }
+
+        return _Base;
+}
+
+fn Fun_NormalizeRGB_Out(_Render: f32) -> f32 {
+    var _Base: f32;
+
+            if(_Render > 0.0031308) {
+                _Base = 1.055 * pow(_Render, 1.0 / 2.4) - 0.055;
+            }
+            else {
+                _Base = _Render * 12.92;
+            }
+
+        return _Base;
+}
+
+fn Fun_NormalizeXYZ_In(_Render: f32) -> f32 {
+    var _Base: f32;
+
+            if(_Render > 0.008856) {
+                _Base = pow(_Render, 1.0 / 3.0);
+            }
+            else {
+                _Base = (7.787 * _Render) + (16.0 / 116.0);
+            }
+
+        return _Base;
+}
+
+fn Fun_NormalizeXYZ_Out(_Render: f32) -> f32 {
+    var _Base: f32;
+        var _Cubic: f32 = _Render * _Render * _Render;
+
+            if(_Cubic > 0.008856) {
+                _Base = _Cubic;
+            }
+            else {
+                _Base = (_Render - 16.0 / 116.0) / 7.787;
+            }
+
+        return _Base;
+}
+
+fn RGBtoLab(_Render: vec3f) -> vec3f {
+    var _fusionParamRender = _Render;
+    _fusionParamRender.r = Fun_NormalizeRGB_In(f32(_fusionParamRender.r));
+        _fusionParamRender.g = Fun_NormalizeRGB_In(f32(_fusionParamRender.g));
+        _fusionParamRender.b = Fun_NormalizeRGB_In(f32(_fusionParamRender.b));
+
+            var XYZ: vec3f;
+            XYZ.x = Fun_NormalizeXYZ_In(f32((_fusionParamRender.r * 0.4124 + _fusionParamRender.g * 0.3576 + _fusionParamRender.b * 0.1805) / 0.95047));
+            XYZ.y = Fun_NormalizeXYZ_In(f32((_fusionParamRender.r * 0.2126 + _fusionParamRender.g * 0.7152 + _fusionParamRender.b * 0.0722) / 1.00000));
+            XYZ.z = Fun_NormalizeXYZ_In(f32((_fusionParamRender.r * 0.0193 + _fusionParamRender.g * 0.1192 + _fusionParamRender.b * 0.9505) / 1.08883));
+
+        var _Lab: vec3f;
+        _Lab.x = (116.0 * XYZ.y) - 16.0;
+        _Lab.y = 500.0 * (XYZ.x - XYZ.y);
+        _Lab.z = 200.0 * (XYZ.y - XYZ.z);
+
+        return  _Lab;
+}
+
+fn LabtoRGB(_LAB: vec3f) -> vec3f {
+    var Y: f32 = (_LAB.x + 16.0) / 116.0;
+        var X: f32 = _LAB.y / 500.0 + Y;
+        var Z: f32 = Y - _LAB.z / 200.0;
+
+            X = Fun_NormalizeXYZ_Out(f32(X)) * 0.95047;
+            Y = Fun_NormalizeXYZ_Out(f32(Y));
+            Z = Fun_NormalizeXYZ_Out(f32(Z)) * 1.08883;
+
+            var _Render: vec3f;
+            _Render.r = Fun_NormalizeRGB_Out(f32(X * 3.2406 + Y * -1.5372 + Z * -0.4986));
+            _Render.g = Fun_NormalizeRGB_Out(f32(X * -0.9689 + Y * 1.8758 + Z * 0.0415));
+            _Render.b = Fun_NormalizeRGB_Out(f32(X * 0.0557 + Y * -0.2040 + Z * 1.0570));
+
+        return _Render;
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        var _Render_Background: vec4f = texture2D(background, input.texCoord);
+
+            var _Render: vec4f = select(_Render_Texture, _Render_Background, (params._Blending_Mode != 0));
+            var _Result: vec4f = _Render;
+
+                var Lab: vec3f = RGBtoLab(vec3f(_Render.rgb));
+
+                        Lab.x = (Lab.x + (params._Luminance - 50.0) * 2.0);
+                        Lab.y += (params._A - 50.0) * 2.0;
+                        Lab.z += (params._B - 50.0) * 2.0;
+
+                    {
+                        let _fusionSwizzle0 = LabtoRGB(Lab);
+                        _Result.x = _fusionSwizzle0.x;
+                        _Result.y = _fusionSwizzle0.y;
+                        _Result.z = _fusionSwizzle0.z;
+                    }
+
+                {
+                    let _fusionSwizzle1 = mix(_Render.rgb, _Result.rgb, params._Mixing);
+                    _Result.x = _fusionSwizzle1.x;
+                    _Result.y = _fusionSwizzle1.y;
+                    _Result.z = _fusionSwizzle1.z;
+                }
+
+            _Result.a = _Render_Texture.a;
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End
