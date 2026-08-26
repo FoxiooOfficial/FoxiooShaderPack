@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.4 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -32,22 +33,14 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In_Background);
 
+        float4 _Render = _Blending_Mode ? _Render_Background : _Render_Texture;
         float4 _Result;
-        float4 _Render;
 
-        if(_Blending_Mode == 0)
-        {
-            _Result = atan(_Render_Texture * _Mul);
-            _Render = _Render_Texture;
-        }
-        else
-        {
-            _Result = atan(_Render_Background * _Mul);
-            _Render = _Render_Background;
-        }
+            _Result.a = _Render_Texture.a;
+            _Result.rgb = _Render.rgb * _Mul;
 
-        _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing); 
-        _Result.a = _Render_Texture.a;
+                _Result.rgb = atan(_Result.rgb);
+                _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
 
     return _Result;
 }
