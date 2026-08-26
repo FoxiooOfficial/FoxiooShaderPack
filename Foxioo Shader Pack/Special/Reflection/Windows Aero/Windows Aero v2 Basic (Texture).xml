@@ -3,7 +3,7 @@
 		<description>This shader simulates the Windows 7/Vista window effect.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
-			<website>https://github.com/FoxiooOfficial</website><dx8>0</dx8>
+			<website>https://github.com/FoxiooOfficial</website>
 				
 		<sampler>
 		    <index>0</index>
