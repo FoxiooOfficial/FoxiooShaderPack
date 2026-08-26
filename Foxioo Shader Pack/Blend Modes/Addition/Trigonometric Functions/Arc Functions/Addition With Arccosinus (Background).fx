@@ -75,7 +75,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
 
 		float4 _Result = _Render_Texture + (_Render_Background * _Mul);
 
-        _Result.rgb = Fun_Acos(_Result.rgb, clamp(_Render_Switch, 0, 2));
+        _Result.rgb = Fun_Acos(_Result.rgb, _Render_Switch);
         _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
 
         _Result.a = _Render_Texture.a;

@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.4 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -21,16 +22,51 @@ sampler2D S2D_Background : register(s1);
 
     float _Mixing, _Mul;
     int _Render_Switch;
+
     bool _Blending_Mode;
 
 /************************************************************/
 /* Main */
 /************************************************************/
 
-float4 Fun_Acos(float4 _Color)
-{  
-    float4 _2Color = _Color * _Color;
-    return 3.14159265359 / 2 - (_Color + (_2Color * _Color) / 6 + (3 * _2Color * _2Color * _Color) / 40 + (5 * _2Color * _2Color * _2Color * _Color) / 112);
+#define M_PI 3.14159265359
+#define M_PI_2 1.57079632679
+#define M_NAN 0x7FC00000
+
+float3 Fun_Real(float3 _Color, float3 _Render)
+{   
+    float NaN = _Mixing < 0.0 ? M_NAN : 0.0;
+    return lerp(_Render, (float3)NaN, abs(_Color) > (float3)1.0);
+}
+
+float3 Fun_Acos(float3 _Color, int _Case)
+{   
+    float3 _Render = acos(_Color);
+    float3 _Real = Fun_Real(_Color, _Render);
+
+    if(_Case == 0)
+        return _Render;
+
+    else if(_Case == 1) // D3D9 simulated
+    { 
+        float a = -1.0 / M_PI * 1.07596f;
+        float3 _Out = 0.0;
+
+        float3 _Neg = M_PI_2 - (a * pow(_Color + M_PI, (float3)2.0));
+        float3 _Pos = M_PI_2 - (-a * pow(-_Color + M_PI, (float3)2.0));
+
+        _Out = lerp(_Out, _Neg, _Color < (float3)-1.0);
+        _Out = lerp(_Out, _Pos, _Color > (float3)1.0);
+
+          return saturate(_Out * 1.3 + 0.1) + saturate(_Real);
+    }
+
+    else if(_Case == 2) // D3D11, OGL simulated
+    {
+        return _Real;
+    }
+
+    else return (float3)0.0f;
 }
 
 float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
@@ -38,27 +74,14 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In_Background);
 
+        float4 _Render = _Blending_Mode ? _Render_Background : _Render_Texture;
         float4 _Result;
-        float4 _Render;
 
-        if(_Blending_Mode == false)
-        {
-            if (_Render_Switch == 0) { _Result = acos(_Render_Texture * _Mul); }
-            if (_Render_Switch == 1) { _Result = abs(Fun_Acos(_Render_Texture * _Mul)); }
-            if (_Render_Switch == 2) { _Result = Fun_Acos(_Render_Texture * _Mul); }
-		    
-            _Render = _Render_Texture;
-        }
-        else
-        {
-            if (_Render_Switch == 0) { _Result = acos(_Render_Background * _Mul); }
-            if (_Render_Switch == 1) { _Result = abs(Fun_Acos(_Render_Background * _Mul)); }
-            if (_Render_Switch == 2) { _Result = Fun_Acos(_Render_Background * _Mul); }
-            _Render = _Render_Background;
-        }
+            _Result.a = _Render_Texture.a;
+            _Result.rgb = _Render.rgb * _Mul;
 
-        _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing); 
-        _Result.a = _Render_Texture.a;
+                _Result.rgb = Fun_Acos(_Result.rgb, _Render_Switch);
+                _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
 
     return _Result;
 }

@@ -115,7 +115,7 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
 
 		float4 _Result = _Render_Texture * (_Render_Background * _Mul);
 
-            _Result.rgb = Fun_Asin(_Result.rgb, clamp(_Render_Switch, 0, 2));
+            _Result.rgb = Fun_Asin(_Result.rgb, _Render_Switch);
             _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
 
         _Result.a = _Render_Texture.a;

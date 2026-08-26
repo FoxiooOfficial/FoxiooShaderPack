@@ -71,12 +71,12 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
 
         if(_Blending_Mode == false)
         {
-            _Result = Fun_Asin(_Render_Texture * _Mul, clamp(_Render_Switch, 0, 2));
+            _Result = Fun_Asin(_Render_Texture * _Mul, _Render_Switch);
             _Render = _Render_Texture;
         }
         else
         {
-            _Result = Fun_Asin(_Render_Background * _Mul, clamp(_Render_Switch, 0, 2));
+            _Result = Fun_Asin(_Render_Background * _Mul, _Render_Switch);
             _Render = _Render_Background;
         }
 

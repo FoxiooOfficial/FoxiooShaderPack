@@ -1,0 +1,123 @@
+// Experimental semi-automated FXMO to FXWG port.
+// Review and compile this file before using it in Fusion.
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(0) var background: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+//uniform float fPixelWidth;
+//uniform float fPixelHeight;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Blending_Mode: i32,
+    _Mixing: f32,
+    _Mul: f32,
+    _Render_Switch: i32,
+    parameter5_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+fn Fun_Real(_Color: vec3f, _Render: vec3f) -> vec3f
+{
+    var NaN: f32 = select(0.0, bitcast<f32>(0x7fc00000u + select(0u, 1u, params._Mixing < 0.0)), params._Mixing < 0.0);
+    return select(_Render, vec3f(NaN), abs(_Color) > vec3f(1.0));
+}
+
+fn Fun_Acos(_Color: vec3f, _Case: i32) -> vec3f {
+    var _Render: vec3f = acos(_Color);
+    var _Real: vec3f = Fun_Real(_Color, _Render);
+
+    if (_Case == 0) {
+        return _Render;
+    } 
+    else if (_Case == 1) // D3D9 simulated
+    {
+        var a: f32 = -1.0 / (3.14159265359) * 1.07596;
+        var _Out: vec3f = vec3f(0.0);
+
+        var _Neg: vec3f = _Color + (3.14159265359);
+        _Neg = (1.57079632679) - (a * (_Neg * _Neg));
+
+        var _Pos: vec3f = -_Color + (3.14159265359);
+        _Pos = (1.57079632679) - (-a * (_Pos * _Pos));
+
+        _Out = select(_Out, _Neg, _Color < vec3f(-1.0));
+        _Out = select(_Out, _Pos, _Color > vec3f(1.0));
+
+        return clamp(_Out * 1.3 + 0.1, vec3f(0.0), vec3f(1.0)) + clamp(_Real, vec3f(0.0), vec3f(1.0));
+    } 
+    else if (_Case == 2) // D3D11, OGL simulated
+    {
+        return _Real;
+    } 
+    else { 
+        return vec3f(0.0); 
+    }
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        var _Render_Background: vec4f = texture2D(background, input.texCoord);
+
+            var _Render: vec4f = select(_Render_Texture, _Render_Background, (params._Blending_Mode != 0));
+            var _Result: vec4f;
+
+                _Result.a = _Render_Texture.a;
+                {
+                    let _fusionSwizzle0 = _Render.rgb * params._Mul;
+                    _Result.x = _fusionSwizzle0.x;
+                    _Result.y = _fusionSwizzle0.y;
+                    _Result.z = _fusionSwizzle0.z;
+                }
+
+                    {
+                        let _fusionSwizzle1 = Fun_Acos(vec3f(_Result.rgb), i32(params._Render_Switch));
+                        _Result.x = _fusionSwizzle1.x;
+                        _Result.y = _fusionSwizzle1.y;
+                        _Result.z = _fusionSwizzle1.z;
+                    }
+                    {
+                        let _fusionSwizzle2 = mix(_Render.rgb, _Result.rgb, params._Mixing);
+                        _Result.x = _fusionSwizzle2.x;
+                        _Result.y = _fusionSwizzle2.y;
+                        _Result.z = _fusionSwizzle2.z;
+                    }
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End
