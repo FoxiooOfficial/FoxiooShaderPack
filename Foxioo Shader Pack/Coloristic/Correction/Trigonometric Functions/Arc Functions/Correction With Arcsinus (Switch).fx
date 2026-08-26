@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.4 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -21,6 +22,7 @@ sampler2D S2D_Background : register(s1);
 
     float _Mixing, _Mul;
     int _Render_Switch;
+
     bool _Blending_Mode;
 
 /************************************************************/
@@ -28,37 +30,41 @@ sampler2D S2D_Background : register(s1);
 /************************************************************/
 
 #define M_PI 3.14159265359
+#define M_PI_2 1.57079632679
+#define M_NAN 0x7FC00000
 
-float4 Fun_Asin(float4 _Color, int _Case)
+float3 Fun_Real(float3 _Color, float3 _Render)
 {   
-    float4 _Render = asin(_Color);
+    float NaN = _Mixing < 0.0 ? M_NAN : 0.0;
+    return lerp(_Render, (float3)NaN, abs(_Color) > (float3)1.0);
+}
+
+float3 Fun_Asin(float3 _Color, int _Case)
+{   
+    float3 _Render = asin(_Color);
+    float3 _Real = Fun_Real(_Color, _Render);
 
     if(_Case == 0) // Native
         return _Render;
 
-    else if(_Case == 1) // D3D9
+    else if(_Case == 1) // D3D9 simulated
     { 
+        float a = -1.0 / M_PI * 1.07596f;
+        float3 _Out = 0.0;
 
-        float a = -1.0 / M_PI * 1.07596;
-        float p = -M_PI;
+        float3 _Neg = a * pow(_Color + M_PI, (float3)2.0);
+        float3 _Pos = -a * pow(-_Color + M_PI, (float3)2.0);
 
-        if(any(_Color < -1.0))
-            return a * pow((_Color - p), 2.0);
+        _Out = lerp(_Out, _Neg, _Color < (float3)-1.0);
+        _Out = lerp(_Out, _Pos, _Color > (float3)1.0);
 
-        else if(any(_Color > 1.0))
-            return -a * pow((-_Color - p), 2.0);
-
-        else
-            return _Render;
+        return saturate(_Out / (M_PI * 0.43)) + saturate(_Real);
     }
 
-    else if(_Case == 2) // D3D11, OGL
-    { 
-        return (any(abs(_Render > 1.0))) ? _Color <= 1.0f : _Render;
-
-    }
-
-    else return float4(0.0f, 0.0f, 0.0f, 0.0f);
+    else if(_Case == 2) // D3D11, OGL simulated
+        return _Real;
+        
+    else return (float3)0.0;
 }
 
 float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
@@ -66,22 +72,14 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In_Background);
 
+        float4 _Render = _Blending_Mode ? _Render_Background : _Render_Texture;
         float4 _Result;
-        float4 _Render;
 
-        if(_Blending_Mode == false)
-        {
-            _Result = Fun_Asin(_Render_Texture * _Mul, _Render_Switch);
-            _Render = _Render_Texture;
-        }
-        else
-        {
-            _Result = Fun_Asin(_Render_Background * _Mul, _Render_Switch);
-            _Render = _Render_Background;
-        }
+            _Result.a = _Render_Texture.a;
+            _Result.rgb = _Render.rgb * _Mul;
 
-        _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing); 
-        _Result.a = _Render_Texture.a;
+                _Result.rgb = Fun_Asin(_Result.rgb, _Render_Switch);
+                _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
 
     return _Result;
 }
@@ -90,4 +88,4 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_2_a ps_main(); } }
+technique tech_main { pass P0 { PixelShader = compile ps_2_0 ps_main(); } }
