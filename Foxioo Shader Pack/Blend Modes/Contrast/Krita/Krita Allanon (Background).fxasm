@@ -20,7 +20,6 @@ texture T_Background;
 /* Variables */
 /***********************************************************/
 
-float _Mul;
 float _Mixing;
 
 /***********************************************************/
@@ -46,15 +45,14 @@ technique tech_main
         AddressV[2] = WRAP;
 
         PixelShaderConstant[0] = <_Mixing>;         // c0
-        PixelShaderConstant[1] = <_Mul>;            // c1
         
         PixelShader = asm
         {
             ps.1.1;
             
             /** Consts **************************************************/
-            def c2, 1, 0, 0, -1;
-            def c3, 0, 0, 0, 1;
+            def c1, 1, 0, 0, -1;
+            def c2, 0, 0, 0, 1;
 
             /** Samplers ************************************************/
             /*
@@ -66,15 +64,14 @@ technique tech_main
             
             /** Assembly ************************************************/
 
-                dp3 r0, c2, c1;
-                mul r0.w, r0.w, c2.w;
-            + dp3 r1.xyz, c2, c0;
-                mad r1.xyz, t1, r1, t0;
-            + add r0.w, r0.w, c3.w;
-                mul r0.xyz, t0, r0.w;
-            + mov r0.w, t0.w;
-                dp3 t1.xyz, c2, c1;
-                mad r0.xyz, r1, t1, r0;
+                add r0.xyz, t1, t0;
+                dp3 r1, c1, c0;
+                mul r1.w, r1.w, c1.w;
+            + dp3 t1.xyz, c1, c0;
+                mul_d2 r0.xyz, r0, t1;
+            + add r1.w, r1.w, c2.w;
+                mov r0.w, t0.w;
+            + mad r0.xyz, t0, r1.w, r0;
         };
     }
 }
