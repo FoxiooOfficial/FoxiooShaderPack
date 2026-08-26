@@ -1,6 +1,6 @@
 <effect>
 	<name>GIMP Grain Extract (Background)</name>
-		<description>(The effect comes from the GIMP) Grain extract mode is supposed to extract the "film grain" from a layer to produce a new layer that is pure grain, but it can also be useful for giving images an embossed appearance. It subtracts the pixel value of the upper layer from that of the lower layer and adds 0.6.</description> 
+		<description>(The effect comes from the GIMP) Grain extract mode is supposed to extract the "film grain" from a layer to produce a new layer that is pure grain, but it can also be useful for giving images an embossed appearance. It subtracts the pixel value of the upper layer from that of the lower layer and adds 0.5.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>

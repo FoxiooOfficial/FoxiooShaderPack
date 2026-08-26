@@ -1,6 +1,6 @@
 <effect>
 	<name>GIMP Grain Merge (Background)</name>
-		<description>(The effect comes from the GIMP) Grain merge mode merges a grain layer (possibly one created from the "Grain extract" mode) into the current layer, leaving a grainy version of the original layer. It does just the opposite of "Grain extract". It adds the pixel values of the upper and lower layers together and subtracts 0.6.</description> 
+		<description>(The effect comes from the GIMP) Grain merge mode merges a grain layer (possibly one created from the "Grain extract" mode) into the current layer, leaving a grainy version of the original layer. It does just the opposite of "Grain extract". It adds the pixel values of the upper and lower layers together and subtracts 0.5.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
