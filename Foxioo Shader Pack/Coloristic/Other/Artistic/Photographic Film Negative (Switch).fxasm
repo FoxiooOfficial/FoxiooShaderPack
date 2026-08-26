@@ -21,7 +21,7 @@ texture T_Background;
 /***********************************************************/
 
 float _Mixing;
-dword _Blending_Mode;
+float _Blending_Mode;
 
 /***********************************************************/
 /* Tech Main */

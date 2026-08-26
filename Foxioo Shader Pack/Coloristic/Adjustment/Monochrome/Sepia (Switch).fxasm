@@ -24,7 +24,7 @@ texture T_Background;
 
     vector _Color;
 
-    dword _Blending_Mode;
+    float _Blending_Mode;
 
 /***********************************************************/
 /* Tech Main */

@@ -70,7 +70,7 @@ technique tech_main
 
                 (r2)_Result.rgb = lerp((r2)_Result.rgb, (r3)_Render.rgb, (c0)_Mixing);
 
-                return float4((r2)_Result.rgb, (r0)T_Image.a);
+                return vector((r2)_Result.rgb, (r0)T_Image.a);
             */
             lrp r2, c1.x, r1, r0;
             mov r3, r2;

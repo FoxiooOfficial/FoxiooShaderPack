@@ -23,8 +23,8 @@ texture T_Background;
     float _Mixing;
     float _Threshold;
 
-    dword _Blending_Mode;
-    dword _Negative;
+    float _Blending_Mode;
+    float _Negative;
 
     vector _ColorLight;
     vector _ColorShadow;

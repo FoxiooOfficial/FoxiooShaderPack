@@ -50,7 +50,7 @@ technique tech_main
 
             /** Samplers ************************************************/
             /*
-                t0 -> float4 _Render_Texture = tex2D(S2D_Image, TEXCOORD0);
+                t0 -> vector _Render_Texture = tex2D(S2D_Image, TEXCOORD0);
             */
             tex t0
 

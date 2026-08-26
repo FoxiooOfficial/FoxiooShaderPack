@@ -21,9 +21,9 @@ texture T_Background;
 /***********************************************************/
 
 float _Mixing;
-float4 _Color;
-float4 _ColorShadow;
-dword _Blending_Mode;
+vector _Color;
+vector _ColorShadow;
+float _Blending_Mode;
 
 /***********************************************************/
 /* Tech Main */
