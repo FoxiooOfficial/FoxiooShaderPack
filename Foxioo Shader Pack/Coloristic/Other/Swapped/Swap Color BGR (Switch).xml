@@ -1,0 +1,49 @@
+<effect>
+	<name>Swap Color BGR (Switch)</name>
+		<description>Changes the RGB color to BGR.</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+				<dx8>0</dx8>
+				<PSVersion>1.4</PSVersion>
+
+		<parameter>
+			<name>/* Foxioo Swap Color BGR (Switch) Shader | 2026.08.26 */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>Changes the RGB color to BGR.</description>
+		</parameter>
+
+			<parameter>
+				<name>Blending Mode</name>
+				<variable>_Blending_Mode</variable>
+
+				<description>This variable determines what the base should be. Setting it to 0 sets the base as the texture of the object on which the effect is applied, and setting it to 1 sets this as the background.</description>
+
+				<type>int</type>
+				<property>checkbox</property>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+        <parameter>
+            <name>/* */</name>
+            <property>checkbox</property>
+            <variable>___</variable>
+        </parameter>
+
+</effect>
