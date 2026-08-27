@@ -1,0 +1,71 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(0) var background: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Blending_Mode: i32,
+    _X: i32,
+    _Y: i32,
+    parameter4_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render: vec4f;
+        var UV: vec2f = abs(vec2f(select(0.0, 1.0, (params._X != 0)), select(0.0, 1.0, (params._Y != 0))) - input.texCoord);
+
+            if((params._Blending_Mode != 0))
+            {
+                {
+                    let _fusionSwizzle0 = texture2D(background, UV).rgb;
+                    _Render.x = _fusionSwizzle0.x;
+                    _Render.y = _fusionSwizzle0.y;
+                    _Render.z = _fusionSwizzle0.z;
+                }
+                _Render.a = texture2D(img, input.texCoord).a * (input.color * fusion.blendColor).a;
+            }
+            else
+            {
+                _Render = texture2D(img, UV) * (input.color * fusion.blendColor);
+            }
+
+        _fusionOutput = _Render;
+    return _fusionOutput;
+}
+//@End
