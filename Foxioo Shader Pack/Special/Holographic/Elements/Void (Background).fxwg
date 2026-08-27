@@ -1,0 +1,116 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(0) var background: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Mixing: f32,
+    _Border: f32,
+    parameter3_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+const SAMPLES_INNER: i32 = 12;
+// Expanded source constant: PIXELSIZE
+fn Fun_Inner(In: vec2f) -> f32 {
+    var _Alpha: f32 = 0.0;
+        for (var y: i32 = 0; y <= SAMPLES_INNER; y += 1)
+        {
+            for (var x: i32 = 0; x <= SAMPLES_INNER; x += 1)
+            {
+                var _Offset: vec2f = (vec2f(f32(x), f32(y)) / f32(SAMPLES_INNER) - 0.5);
+                var _Render: f32 = texture2D(img, In + _Offset * params._Border * (vec2f(fusion.fPixelWidth, fusion.fPixelHeight))).a;
+
+                _Alpha += _Render;
+            }
+        }
+        return _Alpha / f32(SAMPLES_INNER * SAMPLES_INNER);
+}
+
+fn Fun_Lum(_Result: vec4f) -> f32 {
+    return (0.2126 * _Result.r + 0.7152 * _Result.g + 0.0722 * _Result.b) * _Result.a;
+}
+
+fn Fun_Random(In: vec2f) -> f32 {
+    return fract(sin(dot(In, vec2f(12.9898, 78.233))) * 43758.5453);
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        var _Render_Background: vec4f = texture2D(background, input.texCoord);
+
+        var _Rand: f32 = Fun_Random(vec2f(input.texCoord + _Render_Texture.rb + _Render_Texture.bg + _Render_Background.rg + _Render_Background.br));
+        var _Lum: f32 = Fun_Lum(_Render_Texture);
+        var _Lum_Background: f32 = Fun_Lum(_Render_Background);
+
+            var _Space: vec3f = mix(vec3f(0.0, 0.0, 0.0), vec3f(0.15, 0.05, 0.25), _Lum);
+            _Space += (_Space * (texture2D(background, input.texCoord + tan(_Lum) * _Lum * 0.25 - tan(_Lum_Background) * 0.25 - _Rand).rgb) * 1.5);
+            _Space *= 0.5;
+
+                var _Void: vec3f = texture2D(background, input.texCoord + (_Render_Background.rg * (1.0 - _Render_Texture.rg) + _Rand) * 0.1).rgb;
+                _Space = mix(_Space, _Space + _Void * vec3f(0.15, 0.05, 0.25), 1.0 - _Lum);
+
+                var _Result: vec4f = _Render_Texture;
+                {
+                    let _fusionSwizzle0 = mix( _Render_Texture.rgb,
+                                    _Space + pow(Fun_Random(vec2f(input.texCoord + _Space.rb + _Space.bg + _Render_Background.rg + _Render_Background.br + _Rand)), 255.0),
+                                    params._Mixing);
+                    _Result.x = _fusionSwizzle0.x;
+                    _Result.y = _fusionSwizzle0.y;
+                    _Result.z = _fusionSwizzle0.z;
+                }
+
+                var _Inner: f32 = (1.0 - Fun_Inner(vec2f(input.texCoord))) * _Render_Texture.a;
+                {
+                    let _fusionSwizzle1 = ((_Inner / pow(cos(_Lum - _Inner), 6.0)) * clamp(params._Mixing, 0.0, 1.0)) * 0.05;
+                    _Result.x += _fusionSwizzle1;
+                    _Result.y += _fusionSwizzle1;
+                    _Result.z += _fusionSwizzle1;
+                }
+                {
+                    let _fusionSwizzle2 = clamp(_Inner * _Inner + (1.0 - _Lum) * 0.15, 0.0, 1.0) * 4.0;
+                    _Result.x += _fusionSwizzle2;
+                    _Result.y += _fusionSwizzle2;
+                    _Result.z += _fusionSwizzle2;
+                }
+
+            _Result = mix(_Render_Texture, _Result, params._Mixing);
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End
