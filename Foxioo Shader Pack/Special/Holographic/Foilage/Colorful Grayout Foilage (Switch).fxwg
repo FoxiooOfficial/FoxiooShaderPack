@@ -1,0 +1,97 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(0) var background: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+//uniform float fPixelWidth;
+//uniform float fPixelHeight;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Blending_Mode: i32,
+    _Mixing: f32,
+    _Phase: f32,
+    _PosX: f32,
+    _PosY: f32,
+    parameter6_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+fn Fun_Luminance(_Result: vec3f) -> f32 {
+    const _Kr: f32 = 0.299;
+        const _Kg: f32 = 0.587;
+        const _Kb: f32 = 0.114;
+
+        var _Y: f32 = _Kr * _Result.r + _Kg * _Result.g + _Kb * _Result.b;
+
+        return _Y;
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        var _Render_Background: vec4f = texture2D(background, input.texCoord);
+
+                var _Render: vec4f = select(_Render_Texture, _Render_Background, (params._Blending_Mode != 0));
+                var _Lum: vec3f = vec3f(Fun_Luminance(vec3f(_Render.rgb)));
+                _Lum *= _Lum;
+
+                    var _UV: vec2f = input.texCoord + vec2f(params._PosX, params._PosY);
+
+                    _Lum.r = mix(_Lum.r, cos(_Lum.r * 9.0 + _UV.y * 9.0 + _Render.r) *  sin(_UV.x * 6.0 - _Lum.r), params._Phase * sin(_Lum.r * 15. + 2. * _Render.r));
+                    _Lum.g = mix(_Lum.g, cos(_Lum.g * 8.0 + _UV.x * 10.0 + _Render.g) * sin(_UV.y * 6.0 - _Lum.g), params._Phase * sin(_Lum.g * 17. + 2. * _Render.g));
+                    _Lum.b = mix(_Lum.b, cos(_Lum.b * 10. + _UV.y * 13.0 + _Render.b) * sin(_UV.x * 6.0 - _Lum.b), params._Phase * sin(_Lum.b * 13. + 2. * _Render.b));
+
+                    _Lum.r += abs(0.1 * sin(_Lum.r * 4. + _UV.x * 4.0 + _Render.r) * sin(_UV.y * 9.0 - _Lum.r));
+                    _Lum.g += abs(0.1 * sin(_Lum.g * 4. + _UV.y * 4.0 + _Render.g) * sin(_UV.x * 9.0 - _Lum.g));
+                    _Lum.b += abs(0.1 * sin(_Lum.b * 4. + _UV.x * 4.0 + _Render.b) * sin(_UV.y * 9.0 - _Lum.b));
+
+                var _LumEx: vec3f = vec3f(Fun_Luminance(vec3f(_Lum.rgb)));
+
+                    _Lum.r = mix(_Lum.r, cos(_LumEx.r * 9.0 + _UV.y * 9.0 +  _Lum.r) * sin(_UV.x * 6.0 - _LumEx.r), 0.2 * sin(_LumEx.r * 15. + 2. * _Lum.r));
+                    _Lum.g = mix(_Lum.g, cos(_LumEx.g * 8.0 + _UV.x * 10.0 + _Lum.g) * sin(_UV.y * 6.0 - _LumEx.g), 0.2 * sin(_LumEx.g * 17. + 2. * _Lum.g));
+                    _Lum.b = mix(_Lum.b, cos(_LumEx.b * 10. + _UV.y * 13.0 + _Lum.b) * sin(_UV.x * 6.0 - _LumEx.b), 0.2 * sin(_LumEx.b * 13. + 2. * _Lum.b));
+
+            {
+                let _fusionSwizzle0 = mix(_Render.rgb, _Lum, params._Mixing);
+                _Render.x = _fusionSwizzle0.x;
+                _Render.y = _fusionSwizzle0.y;
+                _Render.z = _fusionSwizzle0.z;
+            }
+
+        _Render.a = _Render_Texture.a;
+        _fusionOutput = _Render;
+    return _fusionOutput;
+}
+//@End

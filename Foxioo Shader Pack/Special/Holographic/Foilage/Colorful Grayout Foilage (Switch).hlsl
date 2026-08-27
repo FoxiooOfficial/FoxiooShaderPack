@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.1 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -31,8 +32,6 @@ cbuffer PS_VARIABLES : register(b0)
     float _PosX;
     float _PosY;
     bool __;
-	bool _Is_Pre_296_Build;
-	bool ___;
 };
 
 struct PS_INPUT
@@ -69,13 +68,22 @@ float Fun_Luminance(float3 _Result)
     return _Y;
 }
 
-
-PS_OUTPUT ps_main( in PS_INPUT In )
+float4 Demultiply(float4 _Render, bool _Premultiplied)
 {
-    PS_OUTPUT Out;
+    if(_Premultiplied)
+    {
+	    if ( _Render.a != 0.0 ) {
+            _Render.rgb /= _Render.a;
+        }
+    }
 
-    float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord) * In.Tint;
+	return _Render;
+}
+
+float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
+{
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
+    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
 
         float4 _Render =    _Blending_Mode ? _Render_Background : _Render_Texture;
 
@@ -99,56 +107,24 @@ PS_OUTPUT ps_main( in PS_INPUT In )
                 _Lum.b = lerp(_Lum.b, cos(_LumEx.b * 10. + _UV.y * 13.0 + _Lum.b) * sin(_UV.x * 6.0 - _LumEx.b), 0.2 * sin(_LumEx.b * 13. + 2. * _Lum.b));
 
         _Render.rgb = lerp(_Render.rgb, _Lum, _Mixing);
-    
-    _Render.a = _Render_Texture.a;
-    Out.Color = _Render;
-    
-    return Out;
+        _Render.a = _Render_Texture.a;
+
+    return _Render;
 }
 
 /************************************************************/
-/* Premultiplied Alpha */
+/* Render */
 /************************************************************/
 
-float4 Demultiply(float4 _Color)
-{
-	if ( _Color.a != 0 )   _Color.rgb /= _Color.a;
-	return _Color;
+float4 ps_main(in PS_INPUT In) : SV_TARGET{
+    float4 _Render = Main(In, false);
+    return _Render;
 }
 
-PS_OUTPUT ps_main_pm( in PS_INPUT In ) 
+float4 ps_main_pm(in PS_INPUT In) : SV_TARGET
 {
-    PS_OUTPUT Out;
-
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord) * In.Tint;
-
-        float4 _Render =    _Blending_Mode ? _Render_Background : _Render_Texture;
-
-            float3 _Lum = Fun_Luminance(_Render.rgb);
-            _Lum *= _Lum;
-
-                float2 _UV = In.texCoord + float2(_PosX, _PosY);
-
-                _Lum.r = lerp(_Lum.r, cos(_Lum.r * 9.0 + _UV.y * 9.0 + _Render.r) *  sin(_UV.x * 6.0 - _Lum.r), _Phase * sin(_Lum.r * 15. + 2. * _Render.r));
-                _Lum.g = lerp(_Lum.g, cos(_Lum.g * 8.0 + _UV.x * 10.0 + _Render.g) * sin(_UV.y * 6.0 - _Lum.g), _Phase * sin(_Lum.g * 17. + 2. * _Render.g));
-                _Lum.b = lerp(_Lum.b, cos(_Lum.b * 10. + _UV.y * 13.0 + _Render.b) * sin(_UV.x * 6.0 - _Lum.b), _Phase * sin(_Lum.b * 13. + 2. * _Render.b));
-
-                _Lum.r += abs(0.1 * sin(_Lum.r * 4. + _UV.x * 4.0 + _Render.r) * sin(_UV.y * 9.0 - _Lum.r));
-                _Lum.g += abs(0.1 * sin(_Lum.g * 4. + _UV.y * 4.0 + _Render.g) * sin(_UV.x * 9.0 - _Lum.g));
-                _Lum.b += abs(0.1 * sin(_Lum.b * 4. + _UV.x * 4.0 + _Render.b) * sin(_UV.y * 9.0 - _Lum.b));
-
-            float3 _LumEx = Fun_Luminance(_Lum.rgb);
-
-                _Lum.r = lerp(_Lum.r, cos(_LumEx.r * 9.0 + _UV.y * 9.0 +  _Lum.r) * sin(_UV.x * 6.0 - _LumEx.r), 0.2 * sin(_LumEx.r * 15. + 2. * _Lum.r));
-                _Lum.g = lerp(_Lum.g, cos(_LumEx.g * 8.0 + _UV.x * 10.0 + _Lum.g) * sin(_UV.y * 6.0 - _LumEx.g), 0.2 * sin(_LumEx.g * 17. + 2. * _Lum.g));
-                _Lum.b = lerp(_Lum.b, cos(_LumEx.b * 10. + _UV.y * 13.0 + _Lum.b) * sin(_UV.x * 6.0 - _LumEx.b), 0.2 * sin(_LumEx.b * 13. + 2. * _Lum.b));
-
-        _Render.rgb = lerp(_Render.rgb, _Lum, _Mixing);
-
-    _Render.a = _Render_Texture.a;
+    float4 _Render = Main(In, true);
     _Render.rgb *= _Render.a;
 
-    Out.Color = _Render;
-    return Out;
+    return _Render;
 }
