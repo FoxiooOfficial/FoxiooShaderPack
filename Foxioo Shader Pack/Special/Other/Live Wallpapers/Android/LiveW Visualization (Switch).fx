@@ -34,15 +34,12 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
     float4 _Render_Background = tex2D(S2D_Background, In_Background);
 
         float4 _Result, _Render;
+        _Result.a = _Render_Texture.a;
 
-        if(!_Blending_Mode)
-        {
+        if(!_Blending_Mode) {
             _Render = _Render_Texture;
         }
-        else
-        {
-            _Result.a = _Render_Texture.a;
-    
+        else {
             _Render = _Render_Background;
         }
 

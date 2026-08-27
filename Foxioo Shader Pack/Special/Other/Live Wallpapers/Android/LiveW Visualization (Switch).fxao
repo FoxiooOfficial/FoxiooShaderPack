@@ -70,15 +70,12 @@ void main(void)
     vec4 _Render_Background = texture2D(bckgTexture, In);
 
         vec4 _Result, _Render;
+        _Result.a = _Render_Texture.a;
 
-        if(!_Blending_Mode)
-        {
+        if(!_Blending_Mode) {
             _Render = _Render_Texture;
         }
-        else
-        {
-            _Result.a = _Render_Texture.a;
-    
+        else{
             _Render = _Render_Background;
         }
 

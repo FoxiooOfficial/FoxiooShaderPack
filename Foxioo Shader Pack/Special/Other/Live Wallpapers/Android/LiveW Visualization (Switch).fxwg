@@ -1,0 +1,124 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(0) var background: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+//uniform float fPixelWidth;
+//uniform float fPixelHeight;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Blending_Mode: i32,
+    _Mixing: f32,
+    _Time: f32,
+    _Alpha: f32,
+    parameter5_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        var _Render_Background: vec4f = texture2D(background, input.texCoord);
+
+            var _Result: vec4f;
+            var _Render: vec4f;
+
+                _Result.a = _Render_Texture.a;
+
+            if(!(params._Blending_Mode != 0)){
+                _Render = _Render_Texture;
+            }
+            else {
+                _Render = _Render_Background;
+            }
+
+            {
+                let _fusionSwizzle0 = mix(_Render.rgb, vec3f(0.0, 0.0, 0.0), params._Alpha);
+                _Result.x = _fusionSwizzle0.x;
+                _Result.y = _fusionSwizzle0.y;
+                _Result.z = _fusionSwizzle0.z;
+            }
+            var t: f32 = params._Time;
+
+            var _Off: f32 = cos(input.texCoord.x * 2.0 - t * 0.6
+                            + sin(input.texCoord.x * 0.031 - t * 2.0) * 0.1
+                            - sin(input.texCoord.x * 4.0 - t * 0.2) * 0.2
+                            + cos(input.texCoord.x * 0.0115 - t) * 0.1
+                            - cos(input.texCoord.x / 0.1 - t * 2.0) * 0.3
+                            + sin(t * 0.02) * 0.1) * 0.2;
+
+            var _UV: vec2f = vec2f(input.texCoord + vec2f(0.0, -0.5 + _Off)) * vec2f(960.0, 4.0);
+            var _High: f32 = (1.0 / _Off) / 8.0;
+
+            var _Y: f32 = sin(_UV.x * 0.002 + t) * 160.0 +
+                        sin(_UV.x * 0.007 + t) * 80.0 +
+                        sin(_UV.x * 0.023 - t) * 40.0 +
+                        sin(_UV.x * 0.011 + t) * 20.0 +
+                        sin(_UV.x * 0.031 - t) * 10.0;
+
+            _Y /= 310.0;
+
+                var _Size: vec2f = vec2f(_Y / _High, -_Y / _High);
+
+                    var _Min: f32 = min(_Size.x, _Size.y);
+                    var _Max: f32 = max(_Size.x, _Size.y);
+                    var _Lerp: f32 = _UV.y - _Off * 2.0;
+
+            var _Hight: f32 = 0.02;
+            var _Wave: f32 = smoothstep(_Min - _Hight, _Min, _Lerp) * smoothstep(_Max + _Hight, _Max, _Lerp);
+            var _Gradient: f32 = clamp(abs(_Lerp) / _Max, 0.0, 1.0);
+
+            const _Blue: vec3f = vec3f(0.0, 0.0, 1.0);
+            const _White: vec3f = vec3f(1.0, 1.0, 1.0);
+
+            {
+                let _fusionSwizzle1 = mix(_Result.rgb, _Result.rgb + mix(_White, _Blue, _Gradient), _Wave);
+                _Result.x = _fusionSwizzle1.x;
+                _Result.y = _fusionSwizzle1.y;
+                _Result.z = _fusionSwizzle1.z;
+            }
+            {
+                let _fusionSwizzle2 = mix(_Render.rgb, _Result.rgb, params._Mixing);
+                _Result.x = _fusionSwizzle2.x;
+                _Result.y = _fusionSwizzle2.y;
+                _Result.z = _fusionSwizzle2.z;
+            }
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End
