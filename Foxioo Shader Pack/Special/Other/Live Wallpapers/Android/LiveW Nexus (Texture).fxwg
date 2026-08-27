@@ -1,0 +1,183 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+//uniform sampler2D bckgTexture;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Mixing: f32,
+    _Time: f32,
+    _Scale: f32,
+    parameter4_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+const _Size: f32 = 8.0;
+const _Background: vec4f = vec4f(0.51, 0.42, 0.34, 0.25);
+
+var<private> _Palette: array<vec3f, 4>;
+fn Fun_Round(x: vec2f) -> vec2f {
+    return floor(x + 0.5);
+}
+
+fn Fun_Square(In: vec2f, _Offset: vec2f, _Dir: vec2f, _Color: i32) -> vec3f {
+    var _PixelSize: vec2f = vec2f(fusion.fPixelWidth, fusion.fPixelHeight);
+
+        var _Round: vec2f = Fun_Round(vec2f(_Offset * 16.0 / 3.0)) / 16.0;
+        var _Grid: vec2f = (_Round) / _Size;
+
+            var _Anim: vec2f = (params._Time * _Dir) / 16.0;
+            var _Up: vec2f = _Grid + _Anim;
+
+        var _Off: vec2f = In - _Up;
+            _Off = fract(_Off + 0.5) - 0.5; // loop!
+
+        // tail
+        var _OffPIXEL: vec2f = _Off / _PixelSize;
+        var _Norm: vec2f = _Dir / length(_Dir);
+
+        var _Dot: f32 = dot(_OffPIXEL, _Norm);
+        var _DirSide: f32 = abs(dot(_OffPIXEL, _Norm.yx));
+
+        var _TailSize: vec2f = _Size * vec2f(15.0, 0.4);
+
+            var _Tail: f32 = clamp(1.0 + _Dot / _TailSize.x, 0.0, 1.0);
+            var _TailMask: f32 = clamp(1.0 - max(0.0, _DirSide - _TailSize.y), 0.0, 1.0);
+
+            var _Trail: f32 = f32(_Dot < 0.0) * (_Tail * _TailMask);
+
+        //glow
+        var _Dist: vec2f = abs(_Off / _PixelSize) - _Size / 2.0;
+
+        var _Distance: f32 = length(max(_Dist, vec2f(0.0)));
+
+            var _Glow: f32 = exp(-_Distance * 0.1) * 0.5;
+            var _Alpha: f32 = clamp(f32(max(_Dist.x, _Dist.y) <= 0.0) + _Glow + _Trail * 0.35, 0.0, 1.0);
+
+        return _Alpha * _Palette[_Color];
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+
+            var _Result: vec4f = vec4f(0.0);
+
+            _Palette[0] = vec3f(0.98, 0.1, 0.23);
+            _Palette[1] = vec3f(0.07, 0.73, 0.98);
+            _Palette[2] = vec3f(0.11, 0.91, 0.08);
+            _Palette[3] = vec3f(1.0, 0.99, 0.31);
+
+            // Background
+            var _UV: vec2f = input.texCoord / 2.0 * params._Scale;
+            var _In_Background: vec2f = _UV / _Size / vec2f(fusion.fPixelWidth, fusion.fPixelHeight);
+            var _In_Frac: vec2f = fract(_In_Background - vec2f(0.5, 0.0));
+
+            {
+                let _fusionSwizzle0 = vec3f(mix(_Background.w,
+                                mix(_Background.x, mix(_Background.y, _Background.z, step(_In_Frac.x, 0.5)),
+                                    step(abs((0.5 - _In_Frac.x) / _In_Frac.y * 0.5), 0.5)
+                                    ),
+                                step(abs((0.5 - _In_Frac.x) / (_In_Frac.y - 1.0) * 0.5), 0.5)
+                                ));
+                _Result.x = _fusionSwizzle0.x;
+                _Result.y = _fusionSwizzle0.y;
+                _Result.z = _fusionSwizzle0.z;
+            }
+
+                //_Result.rgb -= mix(_Background.z, 0.0, step((1.5 - _In_Frac.x), 1.0)) * (1.0 - _Background.w);
+
+                // nexus!
+                {
+                    let _fusionSwizzle1 = Fun_Square(_UV, vec2f(1.0, 3.0), vec2f(0.0, -1.0), i32(0));
+                    _Result.x += _fusionSwizzle1.x;
+                    _Result.y += _fusionSwizzle1.y;
+                    _Result.z += _fusionSwizzle1.z;
+                }
+                {
+                    let _fusionSwizzle2 = Fun_Square(_UV, vec2f(5.0, 1.0), vec2f(0.0, 0.5), i32(1));
+                    _Result.x += _fusionSwizzle2.x;
+                    _Result.y += _fusionSwizzle2.y;
+                    _Result.z += _fusionSwizzle2.z;
+                }
+                {
+                    let _fusionSwizzle3 = Fun_Square(_UV, vec2f(5.0, -7.0), vec2f(-0.25, 0.0), i32(2));
+                    _Result.x += _fusionSwizzle3.x;
+                    _Result.y += _fusionSwizzle3.y;
+                    _Result.z += _fusionSwizzle3.z;
+                }
+                {
+                    let _fusionSwizzle4 = Fun_Square(_UV, vec2f(1.5, 1.0), vec2f(0.75, 0.0), i32(3));
+                    _Result.x += _fusionSwizzle4.x;
+                    _Result.y += _fusionSwizzle4.y;
+                    _Result.z += _fusionSwizzle4.z;
+                }
+                {
+                    let _fusionSwizzle5 = Fun_Square(_UV, vec2f(15.0, 11.0), vec2f(-0.5, 0.0), i32(0));
+                    _Result.x += _fusionSwizzle5.x;
+                    _Result.y += _fusionSwizzle5.y;
+                    _Result.z += _fusionSwizzle5.z;
+                }
+                {
+                    let _fusionSwizzle6 = Fun_Square(_UV, vec2f(-6.0, 5.0), vec2f(0.5, 0.0), i32(1));
+                    _Result.x += _fusionSwizzle6.x;
+                    _Result.y += _fusionSwizzle6.y;
+                    _Result.z += _fusionSwizzle6.z;
+                }
+                {
+                    let _fusionSwizzle7 = Fun_Square(_UV, vec2f(-4.0, 0.0), vec2f(0.0, 1.0), i32(3));
+                    _Result.x += _fusionSwizzle7.x;
+                    _Result.y += _fusionSwizzle7.y;
+                    _Result.z += _fusionSwizzle7.z;
+                }
+                {
+                    let _fusionSwizzle8 = Fun_Square(_UV, vec2f(12.0, 1.0), vec2f(0.0, -0.75), i32(2));
+                    _Result.x += _fusionSwizzle8.x;
+                    _Result.y += _fusionSwizzle8.y;
+                    _Result.z += _fusionSwizzle8.z;
+                }
+
+            {
+                let _fusionSwizzle9 = mix(_Render_Texture.rgb, _Result.rgb, params._Mixing);
+                _Result.x = _fusionSwizzle9.x;
+                _Result.y = _fusionSwizzle9.y;
+                _Result.z = _fusionSwizzle9.z;
+            }
+            _Result.a = _Render_Texture.a;
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End
