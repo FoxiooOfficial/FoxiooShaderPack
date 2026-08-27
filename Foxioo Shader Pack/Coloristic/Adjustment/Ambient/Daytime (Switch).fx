@@ -48,12 +48,13 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
 
             if (!_Blending_Mode) {   
                 _Render = _Render_Texture; 
-                _Result = _Render_Texture;
             }
             else {
                 _Render = _Render_Background; 
-                _Result = _Render_Background;
             }
+            
+            _Result.rgb = _Render.rgb;
+            _Result.a = _Render_Texture.a;
 
                 float _TimeFix = fmod(_Time, 24.0);
                 if (_TimeFix < 0.0) _TimeFix = 24.0 - abs(_TimeFix);
