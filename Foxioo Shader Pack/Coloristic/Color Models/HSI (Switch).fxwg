@@ -1,0 +1,156 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(0) var background: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+//uniform float fPixelWidth;
+//uniform float fPixelHeight;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Blending_Mode: i32,
+    _Mixing: f32,
+    _Hue: f32,
+    _Saturation: f32,
+    _Intensity: f32,
+    parameter6_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+// Expanded source constant: RAD
+
+// Expanded source constant: DEG_60
+// Expanded source constant: DEG_120
+// Expanded source constant: DEG_240
+// Expanded source constant: DEG
+fn RGBtoHSI(_Render: vec3f) -> vec3f {
+    var _R: f32 = _Render.r;
+        var _G: f32 = _Render.g;
+        var _B: f32 = _Render.b;
+
+        var _I: f32 = (_R + _G + _B) / 3.0;
+        var _S: f32 = 0.0;
+        var _H: f32 = 0.0;
+
+        if (_I > 0.0)
+        {
+            var _CMin: f32 = min(_R, min(_G, _B));
+            _S = 1.0 - (_CMin / _I);
+        }
+
+            var _Num: f32 = 0.5 * ((_R - _G) + (_R - _B));
+            var _Den: f32 = sqrt((_R - _G) * (_R - _G) + (_R - _B) * (_G - _B)) + 1e-6;
+            var _Theta: f32 = acos(clamp(_Num / _Den, -1.0, 1.0)) * ((180.0 / 3.14159265));
+
+            if (_B > _G) {
+                _H = 360.0 - _Theta;
+            }
+            else {
+                _H = _Theta;
+            }
+
+        return vec3f(_H, _S, _I);
+}
+
+fn HSItoRGB(_H: f32, _S: f32, _I: f32) -> vec3f {
+    var _fusionParamH = _H;
+    var _R: f32;
+        var _G: f32;
+        var _B: f32;
+
+        _fusionParamH = ((_fusionParamH) - (360.0) * floor((_fusionParamH) / (360.0)));
+        if (_fusionParamH < 0.0) { _fusionParamH += 360.0; }
+
+        var _Rad: f32 = _fusionParamH * (3.14159265 / 180.0);
+
+            if (_fusionParamH < 120.0)
+            {
+                _B = _I * (1.0 - _S);
+                _R = _I * (1.0 + (_S * cos(_Rad)) / cos((1.04719755) - _Rad));
+                _G = 3.0 * _I - (_R + _B);
+            }
+            else if (_fusionParamH < 240.0)
+            {
+                _Rad -= (2.09439510);
+                _R = _I * (1.0 - _S);
+                _G = _I * (1.0 + (_S * cos(_Rad)) / cos((1.04719755) - _Rad));
+                _B = 3.0 * _I - (_R + _G);
+            }
+            else
+            {
+                _Rad -= (4.18879020);
+                _G = _I * (1.0 - _S);
+                _B = _I * (1.0 + (_S * cos(_Rad)) / cos((1.04719755)- _Rad));
+                _R = 3.0 * _I - (_G + _B);
+            }
+
+        return clamp(vec3f(_R, _G, _B), vec3f(0.0), vec3f(1.0));
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        var _Render_Background: vec4f = texture2D(background, input.texCoord);
+
+            var _Render: vec4f = select(_Render_Texture, _Render_Background, (params._Blending_Mode != 0));
+            var _Result: vec4f = _Render;
+
+                var _HSI: vec3f = RGBtoHSI(vec3f(_Render.rgb));
+
+                    _HSI.x = ((_HSI.x + params._Hue) - (360.0) * floor((_HSI.x + params._Hue) / (360.0)));
+                        if (_HSI.x < 0.0) { _HSI.x += 360.0; }
+
+                    _HSI.y = (_HSI.y * (params._Saturation / 50.0));
+                    _HSI.z = (_HSI.z + (params._Intensity - 50.0) / 50.0);
+
+                {
+                    let _fusionSwizzle0 = HSItoRGB(f32(_HSI.x), f32(_HSI.y), f32(_HSI.z));
+                    _Result.x = _fusionSwizzle0.x;
+                    _Result.y = _fusionSwizzle0.y;
+                    _Result.z = _fusionSwizzle0.z;
+                }
+
+            {
+                let _fusionSwizzle1 = mix(_Render.rgb, _Result.rgb, params._Mixing);
+                _Result.x = _fusionSwizzle1.x;
+                _Result.y = _fusionSwizzle1.y;
+                _Result.z = _fusionSwizzle1.z;
+            }
+            _Result.a = _Render_Texture.a;
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End

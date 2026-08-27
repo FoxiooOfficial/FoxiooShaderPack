@@ -32,8 +32,6 @@ cbuffer PS_VARIABLES : register(b0)
     float _Saturation;
     float _Intensity;
     bool __;
-	bool _Is_Pre_296_Build;
-	bool ___;
 };
 
 struct PS_INPUT
@@ -59,133 +57,123 @@ cbuffer PS_PIXELSIZE : register(b1)
 /* Main */
 /************************************************************/
 
-float3 Fun_RGBtoHSI(float3 _Render)
+#define RAD 180.0 / 3.14159265
+
+#define DEG_60 1.04719755
+#define DEG_120 2.09439510
+#define DEG_240 4.18879020
+#define DEG 3.14159265 / 180.0
+
+float3 RGBtoHSI(float3 _Render)
 {
-    float _Num = 0.5 * ((_Render.r - _Render.g) + (_Render.r - _Render.b));
-    float _Den = sqrt((_Render.r - _Render.g) * (_Render.r - _Render.g) + (_Render.r - _Render.b)*(_Render.g - _Render.b));
+    float _R = _Render.r;
+    float _G = _Render.g;
+    float _B = _Render.b;
 
-    float _Theta = acos(saturate(_Num / _Den)) * 180.0 / 3.14159265;
+    float _I = (_R + _G + _B) / 3.0;
+    float _S = 0.0;
+    float _H = 0.0;
 
-        float _H        = (_Render.b <= _Render.g) ? _Theta : 360.0 - _Theta;
+    if (_I > 0.0)
+    {
+        float _CMin = min(_R, min(_G, _B));
+        _S = 1.0 - (_CMin / _I);
+    }
 
-            float _Min    = min(_Render.r, min(_Render.g, _Render.b));
-            float _Sum    = _Render.r + _Render.g + _Render.b;
+        float _Num = 0.5 * ((_R - _G) + (_R - _B));
+        float _Den = sqrt((_R - _G) * (_R - _G) + (_R - _B) * (_G - _B)) + 1e-6;
+        float _Theta = acos(clamp(_Num / _Den, -1.0, 1.0)) * (RAD);
 
-        float _S = 1.0 - (3.0 * _Min / _Sum);
-        float _I = _Sum / 3.0;
+        if (_B > _G)
+            _H = 360.0 - _Theta;
+        else
+            _H = _Theta;
 
     return float3(_H, _S, _I);
 }
 
-float3 Fun_HSItoRGB(float _H, float _S, float _I)
+float3 HSItoRGB(float _H, float _S, float _I)
 {
-    float3 _Render;
+    float _R, _G, _B;
 
-    float _Rad = _H * 3.14159265 / 180.0;
+    _H = fmod(_H, 360.0);
+    if (_H < 0.0) _H += 360.0;
+    
+    float _Rad = _H * DEG;
+        
+        if (_H < 120.0)
+        {
+            _B = _I * (1.0 - _S);
+            _R = _I * (1.0 + (_S * cos(_Rad)) / cos(DEG_60 - _Rad));
+            _G = 3.0 * _I - (_R + _B);
+        }
+        else if (_H < 240.0)
+        {
+            _Rad -= DEG_120;
+            _R = _I * (1.0 - _S);
+            _G = _I * (1.0 + (_S * cos(_Rad)) / cos(DEG_60 - _Rad));
+            _B = 3.0 * _I - (_R + _G);
+        }
+        else
+        {
+            _Rad -= DEG_240;
+            _G = _I * (1.0 - _S);
+            _B = _I * (1.0 + (_S * cos(_Rad)) / cos(DEG_60- _Rad));
+            _R = 3.0 * _I - (_G + _B);
+        }
 
-    if (_H < 120.0)
-    {
-        _Render.b = _I * (1.0 - _S);
-        _Render.r = _I * (1.0 + (_S * cos(_Rad)) / cos(3.14159265 / 3.0 - _Rad));
-        _Render.g = 3.0 * _I - (_Render.r + _Render.b);
-    }
-    else if (_H < 240.0)
-    {
-        _H = _H - 120.0;
-
-            _Rad = _H * 3.14159265 / 180.0;
-
-        _Render.r = _I * (1.0 - _S);
-        _Render.g = _I * (1.0 + (_S * cos(_Rad)) / cos(3.14159265 / 3.0 - _Rad));
-        _Render.b = 3.0 * _I - (_Render.r + _Render.g);
-    }
-    else
-    {
-        _H = _H - 240.0;
-
-            _Rad = _H * 3.14159265 / 180.0;
-
-        _Render.g = _I * (1.0 - _S);
-        _Render.b = _I * (1.0 + (_S * cos(_Rad)) / cos(3.14159265 / 3.0 - _Rad));
-        _Render.r = 3.0 * _I - (_Render.g + _Render.b);
-    }
-
-    return (_Render);
+    return saturate(float3(_R, _G, _B));
 }
 
-PS_OUTPUT ps_main( in PS_INPUT In )
+float4 Demultiply(float4 _Render, bool _Premultiplied)
 {
-    PS_OUTPUT Out;
+    if(_Premultiplied)
+    {
+	    if ( _Render.a != 0.0 ) {
+            _Render.rgb /= _Render.a;
+        }
+    }
 
-    float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord) * In.Tint;
+	return _Render;
+}
 
-        float4 _Render =    _Blending_Mode ? _Render_Background : _Render_Texture;
-        float4 _Result =    _Render;
+float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
+{
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
+    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
 
-    /* Hue Adjustment */
-        float3 _HSI = Fun_RGBtoHSI(_Render.rgb);
-            _HSI.x = fmod(_HSI.x + _Hue, 360.0);
-            if (_HSI.x < 0.0) { _HSI.x += 360.0; }
+        float4 _Render = _Blending_Mode ? _Render_Background : _Render_Texture;
+        float4 _Result = _Render;
 
-    /* Saturation Adjustment */
-        _HSI.y = (_HSI.y * (_Saturation / 50.0));
+            float3 _HSI = RGBtoHSI(_Render.rgb);
 
-    /* Intensity Adjustment */
-        _HSI.z = (_HSI.z + (_Intensity - 50.0) / 50.0);
+                _HSI.x = fmod(_HSI.x + _Hue, 360.0);
+                    if (_HSI.x < 0.0) _HSI.x += 360.0;
+        
+                _HSI.y = (_HSI.y * (_Saturation / 50.0));
+                _HSI.z = (_HSI.z + (_Intensity - 50.0) / 50.0);
 
-    /* Back to RGB */
-        _Render.rgb = Fun_HSItoRGB(_HSI.x, _HSI.y, _HSI.z);
+            _Result.rgb = HSItoRGB(_HSI.x, _HSI.y, _HSI.z);
 
-    /* Mixing */
-        _Render.rgb = lerp(_Result.rgb, _Render.rgb, _Mixing);
-    
-    _Render.a = _Render_Texture.a;
-    Out.Color = _Render;
-    
-    return Out;
+        _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
+        _Result.a = _Render_Texture.a;
+
+    return _Result;
 }
 
 /************************************************************/
-/* Premultiplied Alpha */
+/* Render */
 /************************************************************/
 
-float4 Demultiply(float4 _Color)
-{
-	if ( _Color.a != 0 )   _Color.rgb /= _Color.a;
-	return _Color;
+float4 ps_main(in PS_INPUT In) : SV_TARGET{
+    float4 _Render = Main(In, false);
+    return _Render;
 }
 
-PS_OUTPUT ps_main_pm( in PS_INPUT In ) 
+float4 ps_main_pm(in PS_INPUT In) : SV_TARGET
 {
-    PS_OUTPUT Out;
-
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint);
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord) * In.Tint;
-
-        float4 _Render =    _Blending_Mode ? _Render_Background : _Render_Texture;
-        float4 _Result =    _Render;
-
-    /* Hue Adjustment */
-        float3 _HSI = Fun_RGBtoHSI(_Render.rgb);
-            _HSI.x = fmod(_HSI.x + _Hue, 360.0);
-            if (_HSI.x < 0.0) { _HSI.x += 360.0; }
-
-    /* Saturation Adjustment */
-        _HSI.y = (_HSI.y * (_Saturation / 50.0));
-
-    /* Intensity Adjustment */
-        _HSI.z = (_HSI.z + (_Intensity - 50.0) / 50.0);
-
-    /* Back to RGB */
-        _Render.rgb = Fun_HSItoRGB(_HSI.x, _HSI.y, _HSI.z);
-
-    /* Mixing */
-        _Render.rgb = lerp(_Result.rgb, _Render.rgb, _Mixing);
-    
-    _Render.a = _Render_Texture.a;
+    float4 _Render = Main(In, true);
     _Render.rgb *= _Render.a;
 
-    Out.Color = _Render;
-    return Out;
+    return _Render;
 }
