@@ -35,8 +35,8 @@
 				<type>float</type>
 
 				<value>16.0</value>
-						    <preview_value>4.0</preview_value>
-</parameter>
+				<preview_value>4.0</preview_value>
+		</parameter>
 
         <parameter>
             <name>/* */</name>
