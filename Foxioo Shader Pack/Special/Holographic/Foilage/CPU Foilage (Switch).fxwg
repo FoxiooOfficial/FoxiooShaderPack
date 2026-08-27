@@ -1,0 +1,133 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(0) var background: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+//uniform float fPixelWidth;
+//uniform float fPixelHeight;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    parameter1_value: i32,
+    _PosX: f32,
+    _PosY: f32,
+    parameter4_value: i32,
+    _RotX: f32,
+    parameter6_value: i32,
+    _PointX: f32,
+    _PointY: f32,
+    parameter9_value: i32,
+    _Scale: f32,
+    _ScaleX: f32,
+    _ScaleY: f32,
+    parameter13_value: i32,
+    _Blending_Mode: i32,
+    _Mixing: f32,
+    _ChannelRed: i32,
+    _ChannelGreen: i32,
+    _ChannelBlue: i32,
+    parameter19_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+// Expanded source constant: POINTS
+// Expanded source constant: RAD
+fn Fun_RotationX(In: vec2f) -> vec2f {
+    var UV: vec2f;
+        var _Sin: f32 = sin((0.01745329251) * params._RotX);
+        var _Cos: f32 = cos((0.01745329251) * params._RotX);
+
+            UV = (vec2f(params._PointX, params._PointY)) + mat2x2<f32>(_Cos, _Sin, -_Sin, _Cos) * (In - (vec2f(params._PointX, params._PointY)));
+
+        return UV;
+}
+
+fn Fun_Channel(UV: vec2f, _Mode: i32) -> f32 {
+    if(_Mode == 0) {
+            return UV.x;
+        }
+
+        else if(_Mode == 1) {
+            return UV.y;
+        }
+
+        else {
+            return UV.x + UV.y;
+        }
+}
+
+fn Fun_Rainbow(In: vec2f) -> vec3f {
+    const _Frag: f32 = 6.28318;
+        var _Render: vec3f;
+
+        var _Red: f32 = Fun_Channel(In, i32(f32(params._ChannelRed)));
+        var _Green: f32 = Fun_Channel(In, i32(f32(params._ChannelGreen)));
+        var _Blue: f32 = Fun_Channel(In, i32(f32(params._ChannelBlue)));
+
+        _Render.r = sin(_Frag * _Red + 0.0) * 0.5 + 0.5;
+        _Render.g = sin(_Frag * _Green + 2.0) * 0.5 + 0.5;
+        _Render.b = sin(_Frag * _Blue + 4.0) * 0.5 + 0.5;
+
+        return _Render;
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        var _Render_Background: vec4f = texture2D(background, input.texCoord);
+
+            var _Result: vec4f = select(_Render_Texture, _Render_Background, (params._Blending_Mode != 0));
+
+            _Result.a = _Render_Texture.a;
+
+            var _Average: f32 = (_Result.r + _Result.g + _Result.b) / 3.0;
+
+                var _UV: vec2f = Fun_RotationX(vec2f(input.texCoord * _Average));
+                var _Scale_: vec2f = vec2f(params._ScaleX * params._Scale, params._ScaleY * params._Scale);
+                var _Pos: vec2f = vec2f(-params._PosX, params._PosY);
+
+        var _Render_Rainbow: vec3f = Fun_Rainbow(vec2f(_UV - _Pos) * _Scale_);
+
+        {
+            let _fusionSwizzle0 = _Render_Rainbow.rgb * _Average * params._Mixing;
+            _Result.x += _fusionSwizzle0.x;
+            _Result.y += _fusionSwizzle0.y;
+            _Result.z += _fusionSwizzle0.z;
+        }
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End
