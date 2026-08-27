@@ -29,7 +29,7 @@ sampler2D S2D_Image : register(s0);
 
 float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
 {
-    float4 _Render_Texture = (tex2D(S2D_Image, In));
+    float4 _Render_Texture = tex2D(S2D_Image, In);
 
         float4 _Freeze_0 = float4(_Color.rgb, tex2D(S2D_Image, In).a);
         float4 _Freeze_1 = float4(_Color.rgb, tex2D(S2D_Image, In - (float2(_PosXFreeze, _PosYFreeze) * float2(fPixelWidth, fPixelHeight))).a) * 0.5;

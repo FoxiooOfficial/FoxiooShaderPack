@@ -78,7 +78,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
 {
     In = frac(In);
 
-    float4 _Render_Texture = (tex2D(S2D_Image, In));
+    float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In_Background);
         
         float _Rand = Fun_Random(In + _Render_Texture.rb + _Render_Texture.bg + _Render_Background.rg + _Render_Background.br);

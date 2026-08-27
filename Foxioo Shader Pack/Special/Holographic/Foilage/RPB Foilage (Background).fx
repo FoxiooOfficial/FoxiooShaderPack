@@ -39,7 +39,7 @@ float Fun_Luminance(float3 _Result)
 
 float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
 {
-    float4 _Render_Texture = (tex2D(S2D_Image, In));
+    float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In_Background);
 
         float4 _Result = _Render_Background * float4(0.1, 1.0, 1.0, 1.0);
