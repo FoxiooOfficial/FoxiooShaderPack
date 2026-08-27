@@ -55,45 +55,22 @@ uniform lowp vec4 blendColor;
 /***********************************************************/
 
 uniform bool _Blending_Mode;
-uniform float _Temperature;
 uniform float _Mixing;
-
 
 /************************************************************/
 /* Main */
 /************************************************************/
-
-float Fun_FMod(float _Value, float _Denom)
-{
-    return _Value - _Denom * floor(_Value / _Denom);
-}
 
 void main(void)
 {
     vec4 _Render_Texture = texture2D(imgTexture, In) * blendColor;
     vec4 _Render_Background = texture2D(bckgTexture, In);
 
-        vec4 _Result, _Render;
-
-                if(!_Blending_Mode)
-                {
-                    _Result.r = _Render_Texture.r + (_Temperature / 273.15);
-                    _Result.g = _Render_Texture.g + (_Temperature / 273.15) / 2.0;
-                    _Result.b = _Render_Texture.b;
-                    _Render = _Render_Texture;
-                }
-                else
-                {
-                    _Result.r = _Render_Background.r + (_Temperature / 273.15);
-                    _Result.g = _Render_Background.g + (_Temperature / 273.15) / 2.0;
-                    _Result.b = _Render_Background.b;
-                    _Render = _Render_Background;
-                }
-
-            _Result.rgb = mix(_Render.rgb, _Result.rgb, _Mixing);
-
+        vec4 _Result;
+        _Result.rgb = mix(_Render_Texture.rgb, _Render_Background.rgb, float(_Blending_Mode));
         _Result.a = _Render_Texture.a;
 
+        _Result.rg += _Mixing * vec2(1.0, 0.5);   // _Mixing / 273.5;
 
     gl_FragColor = _Result;
 }

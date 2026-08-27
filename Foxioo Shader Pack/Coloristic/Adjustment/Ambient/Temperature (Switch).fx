@@ -20,7 +20,7 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
-    float _Temperature, _Mixing;
+    float _Mixing;
 
     bool _Blending_Mode;
 
@@ -33,26 +33,11 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
     float4 _Render_Texture = tex2D(S2D_Image, In);
     float4 _Render_Background = tex2D(S2D_Background, In_Background);
 
-        float4 _Result, _Render;
-
-                if(!_Blending_Mode)
-                {
-                    _Result.r = _Render_Texture.r + (_Temperature / 273.15);
-                    _Result.g = _Render_Texture.g + (_Temperature / 273.15) / 2.0;
-                    _Result.b = _Render_Texture.b;
-                    _Render = _Render_Texture;
-                }
-                else
-                {
-                    _Result.r = _Render_Background.r + (_Temperature / 273.15);
-                    _Result.g = _Render_Background.g + (_Temperature / 273.15) / 2.0;
-                    _Result.b = _Render_Background.b;
-                    _Render = _Render_Background;
-                }
-
-            _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
-
+        float4 _Result;
+        _Result.rgb = lerp(_Render_Texture.rgb, _Render_Background.rgb, float(_Blending_Mode));
         _Result.a = _Render_Texture.a;
+
+        _Result.rg += _Mixing * float2(1.0, 0.5);   // _Mixing / 273.5;
 
     return _Result;
 }
@@ -61,4 +46,4 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_2_0 ps_main(); } }
+technique tech_main { pass P0 { PixelShader = compile ps_1_1 ps_main(); } }
