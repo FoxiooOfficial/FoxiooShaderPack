@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.1 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -19,8 +20,7 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
-    float   _Mixing,
-            fPixelWidth, fPixelHeight;
+    float   _Mixing;
 
 /************************************************************/
 /* Main */
@@ -44,7 +44,10 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
 
         float4 _Result = _Render_Background * float4(0.1, 1.0, 1.0, 1.0);
 
-            float3 _Render = tex2D(S2D_Image, In + sin(Fun_Luminance(_Render_Texture.rgb + _Render_Background.rgb) * 3.14 + Fun_Luminance(_Render_Background.rgb) + Fun_Luminance(_Render_Texture.rgb)) * 0.05);
+            float3 _Render = tex2D(S2D_Image, In + sin( Fun_Luminance(_Render_Texture.rgb + _Render_Background.rgb) * 3.14 + 
+                                                        Fun_Luminance(_Render_Background.rgb) + 
+                                                        Fun_Luminance(_Render_Texture.rgb))
+                                                     * 0.05);
 
             const float3 _ColorR = float3(255.0, 70.0, 0.0) / 255;
             const float3 _ColorG = float3(128.0, 255.0, 132.0) / 255;
