@@ -1,0 +1,129 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(0) var background: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Blending_Mode: i32,
+    _Mixing: f32,
+    parameter3_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+const _Off: f32 = 1.0;
+fn Fun_Luminance(_Result: vec4f) -> f32 {
+    const _Kr: f32 = 0.299;
+        const _Kg: f32 = 0.587;
+        const _Kb: f32 = 0.114;
+
+        var _Y: f32 = _Kr * _Result.r + _Kg * _Result.g + _Kb * _Result.b;
+
+        return _Y * _Result.a;
+}
+
+fn Fun_AA(_Sampler: texture_2d<f32>, In: vec2f, _Render: vec4f, _Alpha: f32) -> vec4f {
+    var _Size: vec2f = vec2f(fusion.fPixelWidth, fusion.fPixelHeight);
+
+        /* kinda emboss
+            NE -> 45*    (+X, +Y);
+            SE -> 135*   (-X, +Y);
+            SW -> 225*   (+X, -Y);
+            NW -> 315*   (-X, -Y);
+
+            based on FXAA
+            this helps: https://catlikecoding.com/unity/tutorials/custom-srp/fxaa/ :3
+        */
+        var _NW: vec4f = texture2D(_Sampler, In + vec2f(-_Off, -_Off) * _Size);
+        var _NE: vec4f = texture2D(_Sampler, In + vec2f(_Off, -_Off) * _Size);
+        var _SW: vec4f = texture2D(_Sampler, In + vec2f(-_Off, _Off) * _Size);
+        var _SE: vec4f = texture2D(_Sampler, In + vec2f(_Off, _Off) * _Size);
+
+            /* give me luminance!!! */
+            var _LumNW: f32 = Fun_Luminance(_NW);
+            var _LumNE: f32 = Fun_Luminance(_NE);
+            var _LumSW: f32 = Fun_Luminance(_SW);
+            var _LumSE: f32 = Fun_Luminance(_SE);
+            var _LumM: f32 = Fun_Luminance(_Render);
+
+            /* offset
+                dir -> difference between the x and y offsets
+            */
+            var _Dir: vec2f = vec2f(-((_LumNW + _LumNE) - (_LumSW + _LumSE)), ((_LumNW + _LumSW) - (_LumNE + _LumSE)));
+
+            var _DirNorm: f32 = max((_LumNW + _LumNE + _LumSW + _LumSE) / 32.0, 1.0 / 128.0);
+            var _DirInv: f32 = 1.0 / (min(abs(_Dir.x), abs(_Dir.y)) + _DirNorm);
+
+                _Dir = clamp(_Dir * _DirInv, vec2f(-8.0, -8.0), vec2f(8.0, 8.0)) * _Size;
+
+            var _Result: vec4f = _Render * 0.5;
+            var _ClearType: vec4f = vec4f(0.0);
+            var _SampleSum: vec4f = vec4f(0.0);
+
+            /* super cleantype colors! */
+            const _M: vec4f = vec4f(1.0, 0.31, 0.08, 1.0);    /* left -> orange */
+            const _P: vec4f = vec4f(0.16, 0.58, 1.0, 1.0);    /* right -> blue */
+
+                for (var i: i32 = 0; i < 4; i += 1)
+                {
+                    var _Offset: f32 = (f32(i) / 3.0 - 0.5);
+                    var _Sample: vec4f = texture2D(_Sampler, In + _Dir * _Offset * params._Mixing);
+
+                    var _Mul: vec4f = (mix(_P, _M, clamp((_Dir.y / _Size.y), -1.0, 1.0)));
+
+                    _Result += _Sample * 0.25;
+                    _ClearType += _Sample * _Mul;
+                    _SampleSum += _Sample;
+                }
+
+                _SampleSum /= 4.0;
+                _ClearType /= 4.0;
+
+                _ClearType = mix(_ClearType, _Render, _SampleSum.r * _SampleSum.g * _SampleSum.b * _SampleSum.a);
+
+        return mix(_Render, _ClearType, params._Mixing) * _Alpha;
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        var _Render_Background: vec4f = texture2D(background, input.texCoord);
+
+            var _Render: vec4f = select(Fun_AA(img, vec2f(input.texCoord), _Render_Texture, f32(1.0)) * (input.color * fusion.blendColor), Fun_AA(background, vec2f(input.texCoord), _Render_Background, f32(_Render_Texture.a)), (params._Blending_Mode != 0));
+
+        _fusionOutput = _Render;
+    return _fusionOutput;
+}
+//@End
