@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.1 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -11,6 +12,7 @@
 /***********************************************************/
 /* Samplers */
 /***********************************************************/
+
 sampler2D S2D_Image : register(s0);
 sampler2D S2D_Background : register(s1);
 
