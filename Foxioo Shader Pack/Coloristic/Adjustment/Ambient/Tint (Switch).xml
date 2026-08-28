@@ -7,9 +7,9 @@
 				<BackgroundTexture>1</BackgroundTexture>
 				<dx8>yes</dx8>
 				<PSVersion>1.1</PSVersion>
-				
+
 		<parameter>
-			<name>/* Foxioo Tint (Switch) Shader | 2026.08.27 */</name>
+			<name>/* Foxioo Tint (Switch) Shader | 2026.08.29 */</name>
 			<property>checkbox</property>
 
 			<description>Shader changes color tint.</description>
