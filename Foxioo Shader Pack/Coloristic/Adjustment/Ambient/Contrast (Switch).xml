@@ -1,18 +1,18 @@
 <effect>
 	<name>Contrast (Switch)</name>
-		<description>Shader changes color contrast</description> 
+		<description>Shader changes color contrast.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 				<dx8>yes</dx8>
 				<PSVersion>1.4</PSVersion>
-				
+
 		<parameter>
 			<name>/* Foxioo Contrast (Switch) Shader | 2026.08.28 */</name>
 			<property>checkbox</property>
 
-			<description>Shader changes color contrast</description>
+			<description>Shader changes color contrast.</description>
 
 			<variable>_</variable>
 		</parameter>
