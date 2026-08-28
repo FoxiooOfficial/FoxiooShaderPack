@@ -1,4 +1,4 @@
-# Foxioo Shader Pack
+# Foxioo's Shader Pack
 
 <div align="center">
    <a href="https://github.com/FoxiooOfficial/FoxiooShaderPack">
@@ -6,7 +6,7 @@
    </a>
 </div>
 
-Foxioo Shader Pack *(aka. "FSP")* is a huge, free and open-source shader pack created for Clickteam Fusion 2.5 to make your projects even more beautiful!
+Foxioo's Shader Pack *(aka. "FSP")* is a huge, free and open-source shader pack created for Clickteam Fusion 2.5 to make your projects even more beautiful!
 
 ## Contents
 
@@ -21,7 +21,7 @@ Foxioo Shader Pack *(aka. "FSP")* is a huge, free and open-source shader pack cr
 
 ## About The Project
 
-**Foxioo Shader Pack is a project I’ve been developing since 2024, and its goal is to "fill in" the gaps in many effects within the Fusion community also i made it for a hobby and learning purposes;**
+**Foxioo's Shader Pack is a project I’ve been developing since 2024, and its goal is to "fill in" the gaps in many effects within the Fusion community also i made it for a hobby and learning purposes;**
 
 - In 2022/2023, I began experimenting with effects, learning the basics of HLSL, and modifying and building upon effects created by Looki *(Interestingly, I still have those effects on my hard drive from that time, and they haven’t been published in FSP-maybe I’ll publish them, but in improved versions)*.
 
@@ -37,7 +37,7 @@ Shaders are amazing; thanks to them, I created another project called [Tails7](h
 
 ## Technical Specifications
 
-- Description was last updated on **August 21, 2026**
+- Description was last updated on **August 28, 2026**
 - I'm count the number of effects in the latest release; there are currently **420**
    - The last release was on **[April 13, 2026](https://github.com/FoxiooOfficial/FoxiooShaderPack/releases/)**
    - FSP release requirements:
