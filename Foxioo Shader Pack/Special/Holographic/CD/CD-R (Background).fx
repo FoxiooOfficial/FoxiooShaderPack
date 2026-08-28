@@ -18,7 +18,8 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
-    float _Mixing;
+    float   _Mixing, 
+            fPixelWidth, fPixelHeight;
 
 /************************************************************/
 /* Main */
@@ -42,7 +43,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
 
         float _Lum = Fun_Luminance(_Render_Texture.rgb);
         float _LumBg = Fun_Luminance(_Render_Background.rgb);
-        float _Render_Texture_Lum = Fun_Luminance(tex2D(S2D_Image, In + (_Lum * 0.1 - _LumBg * 0.0025)).rgb);
+        float _Render_Texture_Lum = Fun_Luminance(tex2D(S2D_Image, In + float2(fPixelWidth, fPixelHeight) * (_Lum - _LumBg)).rgb);
 
         float2 CD = In - 0.5 - _Lum * 0.1;
         float _Dist = length(CD);
@@ -85,7 +86,6 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
                 _Result.rgb = lerp(_Result.rgb, _Result.rgb + _CDOffset.rgb + _CDRainbow.rgb * 1.2, _RayPattern * 3.0);
 
         _Result.rgb = lerp(_Result.rgb, _Result.rgb + _CDOffset.rgb * 1.5 * _Dist, _OrPtr * 0.05);
-
         _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
 
         _Result.a = _Render_Texture.a;

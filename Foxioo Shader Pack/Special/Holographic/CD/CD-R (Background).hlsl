@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.1 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -27,18 +28,15 @@ cbuffer PS_VARIABLES : register(b0)
     bool _;
     float _Mixing;
     bool __;
-
-	bool _Is_Pre_296_Build;
-	bool ___;
 };
 
 struct PS_INPUT
 {
-  float4 Tint : COLOR0;
-  float2 texCoord : TEXCOORD0;
-  float2 bgCoord : TEXCOORD1;
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+	float2 bgCoord : TEXCOORD1;
+    float4 Position : SV_POSITION;
 };
-
 
 struct PS_OUTPUT
 {
@@ -66,16 +64,27 @@ float Fun_Luminance(float3 _Result)
     return _Y;
 }
 
-PS_OUTPUT ps_main( in PS_INPUT In )
+float4 Demultiply(float4 _Render, bool _Premultiplied)
 {
-    PS_OUTPUT Out;
+    if(_Premultiplied)
+    {
+	    if ( _Render.a != 0.0 ) {
+            _Render.rgb /= _Render.a;
+        }
+    }
 
-    float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
+	return _Render;
+}
+
+float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
+{
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
+
 
         float _Lum = Fun_Luminance(_Render_Texture.rgb);
         float _LumBg = Fun_Luminance(_Render_Background.rgb);
-        float _Render_Texture_Lum = Fun_Luminance(S2D_Image.Sample(S2D_ImageSampler, In.texCoord + (_Lum * 0.1 - _LumBg * 0.0025)).rgb);
+        float _Render_Texture_Lum = Fun_Luminance(S2D_Image.Sample(S2D_ImageSampler, In.texCoord + float2(fPixelWidth, fPixelHeight) * (_Lum - _LumBg)).rgb);
 
         float2 CD = In.texCoord - 0.5 - _Lum * 0.1;
         float _Dist = length(CD);
@@ -118,83 +127,26 @@ PS_OUTPUT ps_main( in PS_INPUT In )
                 _Result.rgb = lerp(_Result.rgb, _Result.rgb + _CDOffset.rgb + _CDRainbow.rgb * 1.2, _RayPattern * 3.0);
 
         _Result.rgb = lerp(_Result.rgb, _Result.rgb + _CDOffset.rgb * 1.5 * _Dist, _OrPtr * 0.05);
-
         _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
 
         _Result.a = _Render_Texture.a;
-    Out.Color = _Result;
-    
-    return Out;
+
+    return _Result;
 }
 
 /************************************************************/
-/* Premultiplied Alpha */
+/* Render */
 /************************************************************/
 
-float4 Demultiply(float4 _Color)
-{
-	if ( _Color.a != 0 )   _Color.rgb /= _Color.a;
-	return _Color;
+float4 ps_main(in PS_INPUT In) : SV_TARGET{
+    float4 _Render = Main(In, false);
+    return _Render;
 }
 
-PS_OUTPUT ps_main_pm( in PS_INPUT In ) 
+float4 ps_main_pm(in PS_INPUT In) : SV_TARGET
 {
-    PS_OUTPUT Out;
+    float4 _Render = Main(In, true);
+    _Render.rgb *= _Render.a;
 
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
-
-        float _Lum = Fun_Luminance(_Render_Texture.rgb);
-        float _LumBg = Fun_Luminance(_Render_Background.rgb);
-        float _Render_Texture_Lum = Fun_Luminance(Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord + (_Lum * 0.1 - _LumBg * 0.0025))).rgb);
-
-        float2 CD = In.texCoord - 0.5 - _Lum * 0.1;
-        float _Dist = length(CD);
-        CD = smoothstep(0.5, 0, length(float2(CD.x - 0.5, CD.y)) * 0.1 + cos(CD.y) * 0.1);
-        CD = frac(CD / 2.0);
-        CD = abs(CD * 2.0 - 1.0);
-        
-        static const float _Frag = 6.28318;
-        float4 _CDOffset = float4(
-            sin(_Frag * CD.x + CD.y) * 0.5 + 0.5, 
-            sin(_Frag * CD.x + CD.y + 2.0) * 0.5 + 0.5,
-            sin(_Frag * CD.x + CD.y + 4.0) * 0.5 + 0.5, 
-            1);
-
-            float4 _Result = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord + CD * 0.1);
-            _Result.rgb = lerp(float3(0.529, 0.541, 0.568) * _Result.rgb * 0.15, float3(0.529, 0.541, 0.568) + _Result.rgb * 0.5, Fun_Luminance(_Result.rgb));
-            _Result.rgb = lerp(_Result.rgb, _Render_Texture_Lum * 0.5, 0.95 + _Lum * 0.05);
-
-        float3 _CDRainbow = float3(
-            sin(_Frag * atan(((In.texCoord.x - In.texCoord.y) + (CD.x + CD.y) * 0.1 - _LumBg))) * 0.5 + 0.5, 
-            sin(_Frag * atan(((In.texCoord.x + In.texCoord.y) + (CD.x - CD.y) * 0.1 - _LumBg) * 1.2) + 2.0) * 0.5 + 0.5,
-            sin(_Frag * atan(((In.texCoord.x - In.texCoord.y) + (CD.x + CD.y) * 0.1 - _LumBg) * 1.4) + 4.0) * 0.5 + 0.5
-            );
-
-            _Result.rgb += _CDRainbow * 0.1;
-
-        float _OrFreq = lerp(300.0, 1000.0, _Dist * _LumBg);
-        float _OrPtr = sin(_Dist * _OrFreq) * 0.5 + 0.5;
-        _OrPtr = smoothstep(0.3, 0.7, _OrPtr);
-
-                float _Angle = atan2((In.texCoord.y + _OrPtr * 0.01) - 0.5, (In.texCoord.x + _OrPtr * 0.01) - 0.5);
-                float _RayPattern = abs(sin(_Angle + (1.0 - (_LumBg - _Lum))));
-                _RayPattern = smoothstep(0.0, 3.0 * _Lum, 0.5 * saturate(_RayPattern * _Lum * 0.25 * abs(_LumBg - atan2((In.texCoord.y + _OrPtr * 0.01), _LumBg - (In.texCoord.x + _OrPtr * 0.01)))));
-                
-                    _Result.rgb = lerp(_Result.rgb, _Result.rgb + _CDOffset.rgb + _CDRainbow.rgb * 1.2, _RayPattern * 2.0);
-
-                _RayPattern = abs(sin(_Angle * 2 + (_LumBg - _Lum)));
-                _RayPattern = smoothstep(0.0, 3.0 * _Lum, saturate(_RayPattern * _Lum * 0.25 * abs(atan2((_OrPtr * 0.01 - CD.y), (_OrPtr * 0.01 - CD.x)))));
-
-                _Result.rgb = lerp(_Result.rgb, _Result.rgb + _CDOffset.rgb + _CDRainbow.rgb * 1.2, _RayPattern * 3.0);
-
-        _Result.rgb = lerp(_Result.rgb, _Result.rgb + _CDOffset.rgb * 1.5 * _Dist, _OrPtr * 0.05);
-
-        _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
-
-    _Result.a = _Render_Texture.a;
-    _Result.rgb *= _Result.a;
-
-    Out.Color = _Result;
-    return Out;
+    return _Render;
 }
