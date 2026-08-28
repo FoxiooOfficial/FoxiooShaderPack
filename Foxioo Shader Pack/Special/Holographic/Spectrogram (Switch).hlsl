@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.0 (20.10.2026) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -29,9 +30,6 @@ cbuffer PS_VARIABLES : register(b0)
     float _Mixing;
     float _Time;
     bool __;
-
-	bool _Is_Pre_296_Build;
-	bool ___;
 };
 
 struct PS_INPUT
@@ -57,109 +55,88 @@ cbuffer PS_PIXELSIZE : register(b1)
 /* Main */
 /************************************************************/
 
-float Fun_Lum (float4 _Result) { return (0.2126 * _Result.r + 0.7152 * _Result.g + 0.0722 * _Result.b); }
+float Fun_Lum(float4 _Result) { 
+    return (0.2126 * _Result.r + 0.7152 * _Result.g + 0.0722 * _Result.b);
+}
 
-PS_OUTPUT ps_main( in PS_INPUT In )
+float2 Fun_UV(float2 UV, float _Lum) {
+    return float2(_Lum * sin(_Lum + UV.x * _Lum * 200.0 * _Mixing + _Time) * 0.01 * _Mixing, _Lum * cos(_Lum + UV.y * 400.0 * _Mixing + sin(UV.x * 10.0 + _Time * _Lum) + _Time) * 0.01 * _Mixing);
+}
+
+float4 Demultiply(float4 _Render, bool _Premultiplied)
 {
-    PS_OUTPUT Out;
+    if(_Premultiplied)
+    {
+	    if ( _Render.a != 0.0 ) {
+            _Render.rgb /= _Render.a;
+        }
+    }
 
-    float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
+	return _Render;
+}
+
+float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
+{
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
 
     float4 _Result, _Render;
-
-        if (_Blending_Mode == 0)
-        {   
-            _Render = _Render_Texture; 
-            _Result = _Render_Texture;
-        }
-        else
-        {
-            _Render = _Render_Background; 
-            _Result = _Render_Background;
-        }
-
-        const float3 _Color0 = float3(1.0, 1.0, 1.0); // Whi
-        const float3 _Color1 = float3(1.0, 1.0, 0.0); // Yel
-        const float3 _Color2 = float3(1.0, 0.0, 0.0); // Red
-        const float3 _Color3 = float3(0.5, 0.0, 0.5); // Pur
-        const float3 _Color4 = float3(0.0, 0.0, 0.25); // Blu
-        const float3 _Color5 = float3(0.0, 0.0, 0.0); // Blk
-
-            //_Result.rgb = pow(_Result.rgb, 2.2); 
-            float _Lum = Fun_Lum(_Result);
-
-            if(!_Blending_Mode) _Result = S2D_Image.Sample(S2D_ImageSampler, In.texCoord + float2(_Lum * sin(_Lum + In.texCoord.x * _Lum * 200.0 * _Mixing + _Time) * 0.01 * _Mixing, _Lum * cos(_Lum + In.texCoord.y * 400.0 * _Mixing + sin(In.texCoord.x * 10.0 + _Time * _Lum) + _Time) * 0.01 * _Mixing)) * In.Tint;
-            else                _Result = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord + float2(_Lum * sin(_Lum + In.texCoord.x * _Lum * 200.0 * _Mixing + _Time) * 0.01 * _Mixing, _Lum * cos(_Lum + In.texCoord.y * 400.0 * _Mixing + sin(In.texCoord.x * 10.0 + _Time * _Lum) + _Time) * 0.01 * _Mixing));
-            
-                _Lum = Fun_Lum(_Result);
-                if (_Lum < 0.2)         _Result.rgb = lerp(_Color5, _Color4, _Lum / 0.2);
-                else if (_Lum < 0.4)    _Result.rgb = lerp(_Color4, _Color3, (_Lum - 0.2) / 0.2);
-                else if (_Lum < 0.6)    _Result.rgb = lerp(_Color3, _Color2, (_Lum - 0.4) / 0.2);
-                else if (_Lum < 0.8)    _Result.rgb = lerp(_Color2, _Color1, (_Lum - 0.6) / 0.2);
-                else                    _Result.rgb = lerp(_Color1, _Color0, (_Lum - 0.8) / 0.2);
-                _Result = lerp(_Render, _Result, _Mixing);
-
-        _Result.a = _Render_Texture.a;
-
-        Out.Color = _Result;
-    return Out;
-}
-/************************************************************/
-/* Premultiplied Alpha */
-/************************************************************/
-
-float4 Demultiply(float4 _Color)
-{
-	if ( _Color.a != 0 )   _Color.rgb /= _Color.a;
-	return _Color;
-}
-
-PS_OUTPUT ps_main_pm( in PS_INPUT In ) 
-{
-    PS_OUTPUT Out;
-
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
-
-    float4 _Result, _Render;
-
-        if (_Blending_Mode == 0)
-        {   
-            _Render = _Render_Texture; 
-            _Result = _Render_Texture;
-        }
-        else
-        {
-            _Render = _Render_Background; 
-            _Result = _Render_Background;
-        }
     
-        const float3 _Color0 = float3(1.0, 1.0, 1.0); // Whi
-        const float3 _Color1 = float3(1.0, 1.0, 0.0); // Yel
-        const float3 _Color2 = float3(1.0, 0.0, 0.0); // Red
-        const float3 _Color3 = float3(0.5, 0.0, 0.5); // Pur
-        const float3 _Color4 = float3(0.0, 0.0, 0.25); // Blu
-        const float3 _Color5 = float3(0.0, 0.0, 0.0); // Blk
+        if(!_Blending_Mode) {   
+            _Render = _Render_Texture;
 
-            //_Result.rgb = pow(_Result.rgb, 2.2); 
-            float _Lum = Fun_Lum(_Result);
+        }
+        else {
+            _Render.rgb = _Render_Background.rgb;
+            _Render.a = _Render_Texture.a;
+        }
 
-            if(!_Blending_Mode) _Result = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord + float2(_Lum * sin(_Lum + In.texCoord.x * _Lum * 200.0 * _Mixing + _Time) * 0.01 * _Mixing, _Lum * cos(_Lum + In.texCoord.y * 400.0 * _Mixing + sin(In.texCoord.x * 10.0 + _Time * _Lum) + _Time) * 0.01 * _Mixing))) * In.Tint;
-            else                _Result = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord + float2(_Lum * sin(_Lum + In.texCoord.x * _Lum * 200.0 * _Mixing + _Time) * 0.01 * _Mixing, _Lum * cos(_Lum + In.texCoord.y * 400.0 * _Mixing + sin(In.texCoord.x * 10.0 + _Time * _Lum) + _Time) * 0.01 * _Mixing));
-            
-                _Lum = Fun_Lum(_Result);
-                if (_Lum < 0.2)         _Result.rgb = lerp(_Color5, _Color4, _Lum / 0.2);
-                else if (_Lum < 0.4)    _Result.rgb = lerp(_Color4, _Color3, (_Lum - 0.2) / 0.2);
-                else if (_Lum < 0.6)    _Result.rgb = lerp(_Color3, _Color2, (_Lum - 0.4) / 0.2);
-                else if (_Lum < 0.8)    _Result.rgb = lerp(_Color2, _Color1, (_Lum - 0.6) / 0.2);
-                else                    _Result.rgb = lerp(_Color1, _Color0, (_Lum - 0.8) / 0.2);
-                _Result = lerp(_Render, _Result, _Mixing);
+        _Result = _Render_Texture;
 
-        _Result = lerp(_Render, _Result, _Mixing);
-        _Result.a = _Render_Texture.a;
+            const float3 _Color0 = float3(1.0, 1.0, 1.0); // Whi
+            const float3 _Color1 = float3(1.0, 1.0, 0.0); // Yel
+            const float3 _Color2 = float3(1.0, 0.0, 0.0); // Red
+            const float3 _Color3 = float3(0.5, 0.0, 0.5); // Pur
+            const float3 _Color4 = float3(0.0, 0.0, 0.25); // Blu
+            const float3 _Color5 = float3(0.0, 0.0, 0.0); // Blk
 
-    _Result.rgb *= _Result.a;
-    Out.Color = _Result;
-    return Out;  
+                float _Lum = Fun_Lum(_Result);
+                float2 _Off;
+                    
+                if(!_Blending_Mode) {
+                    _Off = Fun_UV(In.texCoord, _Lum);
+                    _Result = S2D_Image.Sample(S2D_ImageSampler, In.texCoord + _Off);
+                }
+                else {
+                    _Off = Fun_UV(In.bgCoord, _Lum);
+                    _Result.rgb = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord + _Off).rgb;
+                    _Result.a = _Render.a;
+                }
+
+                    _Lum = Fun_Lum(_Result);
+                    if (_Lum < 0.2)         _Result.rgb = lerp(_Color5, _Color4, _Lum / 0.2);
+                    else if (_Lum < 0.4)    _Result.rgb = lerp(_Color4, _Color3, (_Lum - 0.2) / 0.2);
+                    else if (_Lum < 0.6)    _Result.rgb = lerp(_Color3, _Color2, (_Lum - 0.4) / 0.2);
+                    else if (_Lum < 0.8)    _Result.rgb = lerp(_Color2, _Color1, (_Lum - 0.6) / 0.2);
+                    else                    _Result.rgb = lerp(_Color1, _Color0, (_Lum - 0.8) / 0.2);
+
+            _Result = lerp(_Render, _Result, _Mixing);
+    return _Result;
+}
+
+/************************************************************/
+/* Render */
+/************************************************************/
+
+float4 ps_main(in PS_INPUT In) : SV_TARGET{
+    float4 _Render = Main(In, false);
+    return _Render;
+}
+
+float4 ps_main_pm(in PS_INPUT In) : SV_TARGET
+{
+    float4 _Render = Main(In, true);
+    _Render.rgb *= _Render.a;
+
+    return _Render;
 }

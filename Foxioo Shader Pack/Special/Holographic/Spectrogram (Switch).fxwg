@@ -1,0 +1,141 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(0) var background: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+//uniform float fPixelWidth;
+//uniform float fPixelHeight;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Blending_Mode: i32,
+    _Mixing: f32,
+    _Time: f32,
+    parameter4_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+fn Fun_Lum(_Result: vec4f) -> f32 {
+    return (0.2126 * _Result.r + 0.7152 * _Result.g + 0.0722 * _Result.b);
+}
+
+fn Fun_UV(UV: vec2f, _Lum: f32) -> vec2f {
+    return vec2f(_Lum * sin(_Lum + UV.x * _Lum * 200.0 * params._Mixing + params._Time) * 0.01 * params._Mixing, _Lum * cos(_Lum + UV.y * 400.0 * params._Mixing + sin(UV.x * 10.0 + params._Time * _Lum) + params._Time) * 0.01 * params._Mixing);
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        var _Render_Background: vec4f = texture2D(background, input.texCoord);
+
+        var _Result: vec4f;
+        var _Render: vec4f;
+
+            if(!(params._Blending_Mode != 0)) {
+                _Render = _Render_Texture;
+
+            }
+            else {
+                {
+                    let _fusionSwizzle0 = _Render_Background.rgb;
+                    _Render.x = _fusionSwizzle0.x;
+                    _Render.y = _fusionSwizzle0.y;
+                    _Render.z = _fusionSwizzle0.z;
+                }
+                _Render.a = _Render_Texture.a;
+            }
+
+            _Result = _Render_Texture;
+
+                const _Color0: vec3f = vec3f(1.0, 1.0, 1.0); // Whi
+                const _Color1: vec3f = vec3f(1.0, 1.0, 0.0); // Yel
+                const _Color2: vec3f = vec3f(1.0, 0.0, 0.0); // Red
+                const _Color3: vec3f = vec3f(0.5, 0.0, 0.5); // Pur
+                const _Color4: vec3f = vec3f(0.0, 0.0, 0.25); // Blu
+                const _Color5: vec3f = vec3f(0.0, 0.0, 0.0); // Blk
+
+                    var _Lum: f32 = Fun_Lum(_Result);
+                    var _Off: vec2f = Fun_UV(vec2f(input.texCoord), f32(_Lum));
+
+                    if(!(params._Blending_Mode != 0)) {
+                        _Result = texture2D(img, input.texCoord + _Off);
+                    }
+                    else {
+                        {
+                            let _fusionSwizzle1 = texture2D(background, input.texCoord + _Off).rgb;
+                            _Result.x = _fusionSwizzle1.x;
+                            _Result.y = _fusionSwizzle1.y;
+                            _Result.z = _fusionSwizzle1.z;
+                        }
+                        _Result.a = _Render.a;
+                    }
+
+                        _Lum = Fun_Lum(_Result);
+                        if (_Lum < 0.2) {         {
+                 let _fusionSwizzle2 = mix(_Color5, _Color4, _Lum / 0.2);
+                 _Result.x = _fusionSwizzle2.x;
+                 _Result.y = _fusionSwizzle2.y;
+                 _Result.z = _fusionSwizzle2.z;
+             } }
+                        else if (_Lum < 0.4) {    {
+            let _fusionSwizzle3 = mix(_Color4, _Color3, (_Lum - 0.2) / 0.2);
+            _Result.x = _fusionSwizzle3.x;
+            _Result.y = _fusionSwizzle3.y;
+            _Result.z = _fusionSwizzle3.z;
+        } }
+                        else if (_Lum < 0.6) {    {
+            let _fusionSwizzle4 = mix(_Color3, _Color2, (_Lum - 0.4) / 0.2);
+            _Result.x = _fusionSwizzle4.x;
+            _Result.y = _fusionSwizzle4.y;
+            _Result.z = _fusionSwizzle4.z;
+        } }
+                        else if (_Lum < 0.8) {    {
+            let _fusionSwizzle5 = mix(_Color2, _Color1, (_Lum - 0.6) / 0.2);
+            _Result.x = _fusionSwizzle5.x;
+            _Result.y = _fusionSwizzle5.y;
+            _Result.z = _fusionSwizzle5.z;
+        } }
+                        else {                    {
+                            let _fusionSwizzle6 = mix(_Color1, _Color0, (_Lum - 0.8) / 0.2);
+                            _Result.x = _fusionSwizzle6.x;
+                            _Result.y = _fusionSwizzle6.y;
+                            _Result.z = _fusionSwizzle6.z;
+                        } }
+
+                _Result = mix(_Render, _Result, params._Mixing);
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End
