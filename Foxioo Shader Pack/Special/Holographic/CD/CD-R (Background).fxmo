@@ -86,7 +86,7 @@ void main(void)
 
         float _Lum = Fun_Luminance(_Render_Texture.rgb);
         float _LumBg = Fun_Luminance(_Render_Background.rgb);
-        float _Render_Texture_Lum = Fun_Luminance(texture(imgTexture, In + vec2(fPixelWidth, fPixelHeight) * (_Lum - _LumBg)).rgb);
+        float _Render_Texture_Lum = Fun_Luminance(texture(imgTexture, In + vec2(fPixelWidth, fPixelHeight) * (_Lum - _LumBg)).rgb * blendColor.rgb);
 
         vec2 CD = In - 0.5 - _Lum * 0.1;
         float _Dist = length(CD);

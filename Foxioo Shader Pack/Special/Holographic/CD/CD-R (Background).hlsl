@@ -84,7 +84,7 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
 
         float _Lum = Fun_Luminance(_Render_Texture.rgb);
         float _LumBg = Fun_Luminance(_Render_Background.rgb);
-        float _Render_Texture_Lum = Fun_Luminance(S2D_Image.Sample(S2D_ImageSampler, In.texCoord + float2(fPixelWidth, fPixelHeight) * (_Lum - _LumBg)).rgb);
+        float _Render_Texture_Lum = Fun_Luminance(S2D_Image.Sample(S2D_ImageSampler, In.texCoord + float2(fPixelWidth, fPixelHeight) * (_Lum - _LumBg)).rgb * In.Tint.rgb);
 
         float2 CD = In.texCoord - 0.5 - _Lum * 0.1;
         float _Dist = length(CD);
