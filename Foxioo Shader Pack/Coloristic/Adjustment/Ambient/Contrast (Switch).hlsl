@@ -75,7 +75,7 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
         _Result.rgb = lerp(_Render_Texture.rgb, _Render_Background.rgb, float(_Blending_Mode));
         _Result.a = _Render_Texture.a;
 
-        _Result.rg += _Mixing * float2(1.0, 0.5);   // _Mixing / 273.5;
+            _Result.rgb = lerp(_Result.rgb, float3(0.5, 0.5, 0.5), _Mixing);
 
     return _Result;
 }
