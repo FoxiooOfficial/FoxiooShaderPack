@@ -1,0 +1,50 @@
+<effect>
+	<name>Brightness (Switch)</name>
+		<description>Shader changes color brightness.</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+				<dx8>yes</dx8>
+				<PSVersion>1.1</PSVersion>
+				
+		<parameter>
+			<name>/* Foxioo Brightness (Switch) Shader | 2026.08.29 */</name>
+			<property>checkbox</property>
+
+			<description>Shader changes color brightness.</description>
+
+			<variable>_</variable>
+		</parameter>
+
+			<parameter>
+				<name>Blending Mode</name>
+				<variable>_Blending_Mode</variable>
+
+				<description>This variable determines what the base should be. Setting it to 0 sets the base as the texture of the object on which the effect is applied, and setting it to 1 sets this as the background.</description>
+
+				<type>int</type>
+				<property>checkbox</property>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>0.5</value>
+			</parameter>
+	
+        <parameter>
+            <name>/* */</name>
+            <property>checkbox</property>
+            <variable>___</variable>
+        </parameter>
+
+
+</effect>
