@@ -9,7 +9,7 @@
 				<PSVersion>1.1</PSVersion>
 				
 		<parameter>
-			<name>/* Foxioo GIMP Grain Extract (Background) Shader | 2026.08.20a */</name>
+			<name>/* Foxioo's GIMP Grain Extract (Background) Shader | 2026.08.20a */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

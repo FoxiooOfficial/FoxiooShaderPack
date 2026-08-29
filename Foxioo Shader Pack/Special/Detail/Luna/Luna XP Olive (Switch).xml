@@ -13,7 +13,7 @@
 
 				<BackgroundTexture>1</BackgroundTexture>
 <parameter>
-			<name>/* Foxioo Luna XP Olive (Switch) Shader | 2026.08.23 */</name>
+			<name>/* Foxioo's Luna XP Olive (Switch) Shader | 2026.08.23 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

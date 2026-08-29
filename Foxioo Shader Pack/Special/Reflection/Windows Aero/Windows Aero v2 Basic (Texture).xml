@@ -13,7 +13,7 @@
 		</sampler>
 
 		<parameter>
-			<name>/* Foxioo Windows Aero V2 Basic (Texture) Shader | 2026.08.26 */</name>
+			<name>/* Foxioo's Windows Aero V2 Basic (Texture) Shader | 2026.08.26 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

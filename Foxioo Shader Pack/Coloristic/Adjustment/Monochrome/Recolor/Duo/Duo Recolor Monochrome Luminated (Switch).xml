@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Duo Recolor Monochrome Luminated (Switch) Shader | 2026.08.23 */</name>
+			<name>/* Foxioo's Duo Recolor Monochrome Luminated (Switch) Shader | 2026.08.23 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

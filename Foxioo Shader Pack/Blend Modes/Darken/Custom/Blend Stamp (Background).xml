@@ -9,7 +9,7 @@
 				<dx8>1</dx8>
 				<PSVersion>1.4</PSVersion>
 		<parameter>
-			<name>/* Foxioo Blend Stamp (Background) Shader | 2026.08.20a */</name>
+			<name>/* Foxioo's Blend Stamp (Background) Shader | 2026.08.20a */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

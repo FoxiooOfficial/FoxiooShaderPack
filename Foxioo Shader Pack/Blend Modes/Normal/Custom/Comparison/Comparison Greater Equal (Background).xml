@@ -9,7 +9,7 @@
 				<PSVersion>1.4</PSVersion>
 
 		<parameter>
-			<name>/* Foxioo Comparison Greater Equal (Background) Shader | 2026.08.22a */</name>
+			<name>/* Foxioo's Comparison Greater Equal (Background) Shader | 2026.08.22a */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

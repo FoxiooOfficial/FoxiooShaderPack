@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo HSL (Switch) [Rework] Shader | 2026.08.26 */</name>
+			<name>/* Foxioo's HSL (Switch) [Rework] Shader | 2026.08.26 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

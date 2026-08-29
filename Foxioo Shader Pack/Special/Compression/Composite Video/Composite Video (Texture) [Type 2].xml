@@ -15,7 +15,7 @@
 
 
 		<parameter>
-			<name>/* Foxioo Composite Video (Texture) [Type 2; PAL] Shader | 2026.08.20 */</name>
+			<name>/* Foxioo's Composite Video (Texture) [Type 2; PAL] Shader | 2026.08.20 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

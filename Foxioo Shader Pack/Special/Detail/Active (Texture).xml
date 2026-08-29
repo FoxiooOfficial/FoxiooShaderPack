@@ -7,7 +7,7 @@
 				<BackgroundTexture>0</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Active (Texture) Shader | 2026.08.23 */</name>
+			<name>/* Foxioo's Active (Texture) Shader | 2026.08.23 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

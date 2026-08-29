@@ -9,7 +9,7 @@
 				<PSVersion>1.4</PSVersion>
 
 		<parameter>
-			<name>/* Foxioo Photoshop Lighter Color (Background) Shader | 2026.08.21 */</name>
+			<name>/* Foxioo's Photoshop Lighter Color (Background) Shader | 2026.08.21 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

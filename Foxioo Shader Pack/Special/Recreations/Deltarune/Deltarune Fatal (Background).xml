@@ -6,7 +6,7 @@
 			<website>https://github.com/FoxiooOfficial</website>
 			
 		<parameter>
-			<name>/* Foxioo Deltarune Fatal (Texture) Shader | 2026.08.23 */</name>
+			<name>/* Foxioo's Deltarune Fatal (Texture) Shader | 2026.08.23 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

@@ -7,7 +7,7 @@
 				<BackgroundTexture>0</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Composite Video (Texture) [Type 1] Shader | 2026.08.20 */</name>
+			<name>/* Foxioo's Composite Video (Texture) [Type 1] Shader | 2026.08.20 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

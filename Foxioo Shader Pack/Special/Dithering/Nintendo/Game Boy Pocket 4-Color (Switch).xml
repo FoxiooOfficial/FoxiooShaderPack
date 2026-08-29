@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Game Boy Pocket 4-Color Palette (Switch) Shader | 2026.08.22 */</name>
+			<name>/* Foxioo's Game Boy Pocket 4-Color Palette (Switch) Shader | 2026.08.22 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

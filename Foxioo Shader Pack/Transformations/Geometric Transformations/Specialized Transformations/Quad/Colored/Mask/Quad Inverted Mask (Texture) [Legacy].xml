@@ -7,7 +7,7 @@
 				<BackgroundTexture>0</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Inverted Quad Mask (Texture) [Legacy] | 1.0 (18.11.2025) */</name>
+			<name>/* Foxioo's Inverted Quad Mask (Texture) [Legacy] | 1.0 (18.11.2025) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

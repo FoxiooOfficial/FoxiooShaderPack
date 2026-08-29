@@ -17,7 +17,7 @@
 			</sampler>
 
 		<parameter>
-			<name>/* Foxioo Arithmetic Mean Filter (Switch) Shader | 2026.08.20 */</name>
+			<name>/* Foxioo's Arithmetic Mean Filter (Switch) Shader | 2026.08.20 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

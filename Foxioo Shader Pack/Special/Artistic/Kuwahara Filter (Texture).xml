@@ -7,7 +7,7 @@
 				<BackgroundTexture>0</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Kuwahara Filter (Texture) Shader | 2026.08.24 */</name>
+			<name>/* Foxioo's Kuwahara Filter (Texture) Shader | 2026.08.24 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

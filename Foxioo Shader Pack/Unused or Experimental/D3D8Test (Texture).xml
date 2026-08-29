@@ -9,7 +9,7 @@
 				<PSVersion>1.1</PSVersion>
 
 		<parameter>
-			<name>/* Foxioo Direct3D8 Test Shader (Texture) | 2026.08.20 */</name>
+			<name>/* Foxioo's Direct3D8 Test Shader (Texture) | 2026.08.20 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

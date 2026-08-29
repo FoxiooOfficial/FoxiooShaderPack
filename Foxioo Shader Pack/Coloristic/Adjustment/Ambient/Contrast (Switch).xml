@@ -9,7 +9,7 @@
 				<PSVersion>1.4</PSVersion>
 
 		<parameter>
-			<name>/* Foxioo Contrast (Switch) Shader | 2026.08.28 */</name>
+			<name>/* Foxioo's Contrast (Switch) Shader | 2026.08.28 */</name>
 			<property>checkbox</property>
 
 			<description>Shader changes color contrast.</description>

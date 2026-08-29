@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Quad With Metalic Reflections (Background) [Legacy] | 1.4 (18.11.2025) */</name>
+			<name>/* Foxioo's Quad With Metalic Reflections (Background) [Legacy] | 1.4 (18.11.2025) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

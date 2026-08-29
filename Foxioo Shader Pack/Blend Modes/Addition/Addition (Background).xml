@@ -9,7 +9,7 @@
 				<PSVersion>1.1</PSVersion>
 				
 		<parameter>
-			<name>/* Foxioo Addition (Background) Shader | 2026.08.20a */</name>
+			<name>/* Foxioo's Addition (Background) Shader | 2026.08.20a */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

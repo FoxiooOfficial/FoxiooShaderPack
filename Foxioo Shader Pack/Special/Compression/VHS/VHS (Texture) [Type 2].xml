@@ -14,7 +14,7 @@
 		</sampler>
 
 		<parameter>
-			<name>/* Foxioo VHS (Texture) [Type 2] Shader | 2026.08.25 */</name>
+			<name>/* Foxioo's VHS (Texture) [Type 2] Shader | 2026.08.25 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Correction With Square Root (Switch) Shader | 2026.08.26 */</name>
+			<name>/* Foxioo's Correction With Square Root (Switch) Shader | 2026.08.26 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

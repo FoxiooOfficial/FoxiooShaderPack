@@ -23,7 +23,7 @@
 		</sampler>
 		
 		<parameter>
-			<name>/* Foxioo Flip (Switch) Shader | 2026.08.27 */</name>
+			<name>/* Foxioo's Flip (Switch) Shader | 2026.08.27 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

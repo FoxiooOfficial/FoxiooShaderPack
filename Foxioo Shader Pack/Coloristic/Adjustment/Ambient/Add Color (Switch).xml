@@ -9,7 +9,7 @@
 				<PSVersion>1.1</PSVersion>
 				
 		<parameter>
-			<name>/* Foxioo Add Color (Switch) Shader | 2026.08.29 */</name>
+			<name>/* Foxioo's Add Color (Switch) Shader | 2026.08.29 */</name>
 			<property>checkbox</property>
 
 			<description>This shader adds color to the final result.</description>

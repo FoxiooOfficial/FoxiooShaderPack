@@ -7,7 +7,7 @@
 				<BackgroundTexture>0</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Quad Fixed (Texture) [Antialiasing] | 1.0 (28.11.2025) */</name>
+			<name>/* Foxioo's Quad Fixed (Texture) [Antialiasing] | 1.0 (28.11.2025) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

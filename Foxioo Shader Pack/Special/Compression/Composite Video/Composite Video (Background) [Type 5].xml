@@ -21,7 +21,7 @@
 
 
 		<parameter>
-			<name>/* Foxioo Composite Video (Background) [Type 5; NTSC] Shader | 2026.08.20 */</name>
+			<name>/* Foxioo's Composite Video (Background) [Type 5; NTSC] Shader | 2026.08.20 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

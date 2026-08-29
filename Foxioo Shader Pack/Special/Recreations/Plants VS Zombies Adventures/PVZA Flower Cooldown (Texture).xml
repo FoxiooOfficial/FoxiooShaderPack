@@ -7,7 +7,7 @@
 				<BackgroundTexture>0</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Plants VS Zombies Adventures Flower Cooldown (Texture) Shader | 2026.08.24 */</name>
+			<name>/* Foxioo's Plants VS Zombies Adventures Flower Cooldown (Texture) Shader | 2026.08.24 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

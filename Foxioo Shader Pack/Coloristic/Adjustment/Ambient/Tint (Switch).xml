@@ -9,7 +9,7 @@
 				<PSVersion>1.1</PSVersion>
 
 		<parameter>
-			<name>/* Foxioo Tint (Switch) Shader | 2026.08.29 */</name>
+			<name>/* Foxioo's Tint (Switch) Shader | 2026.08.29 */</name>
 			<property>checkbox</property>
 
 			<description>Shader changes color tint.</description>

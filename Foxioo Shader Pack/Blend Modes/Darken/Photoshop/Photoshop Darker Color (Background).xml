@@ -9,7 +9,7 @@
 				<dx8>yes</dx8>
 				<PSVersion>1.4</PSVersion>
 		<parameter>
-			<name>/* Foxioo Photoshop Darker Color (Background) Shader | 2026.08.21 */</name>
+			<name>/* Foxioo's Photoshop Darker Color (Background) Shader | 2026.08.21 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

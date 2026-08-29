@@ -8,7 +8,7 @@
 			<PSVersion>1.1</PSVersion>
 
 		<parameter>
-			<name>/* Foxioo Chroma Key Color Inverted (Texture) Shader | 2026.08.23 */</name>
+			<name>/* Foxioo's Chroma Key Color Inverted (Texture) Shader | 2026.08.23 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Simulation Color Blindness AIO (Switch) Shader | 2026.08.23 */</name>
+			<name>/* Foxioo's Simulation Color Blindness AIO (Switch) Shader | 2026.08.23 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

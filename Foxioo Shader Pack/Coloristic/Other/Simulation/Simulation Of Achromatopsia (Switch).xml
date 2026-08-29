@@ -9,7 +9,7 @@
 				<PSVersion>1.4</PSVersion>
 
 		<parameter>
-			<name>/* Foxioo Simulation Of Achromatopsia (Switch) Shader | 2026.08.23 */</name>
+			<name>/* Foxioo's Simulation Of Achromatopsia (Switch) Shader | 2026.08.23 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

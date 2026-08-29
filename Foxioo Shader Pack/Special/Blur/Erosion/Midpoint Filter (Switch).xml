@@ -17,7 +17,7 @@
 			</sampler>
 
 		<parameter>
-			<name>/* Foxioo Midpoint Filter (Switch) Shader | 2026.08.26 */</name>
+			<name>/* Foxioo's Midpoint Filter (Switch) Shader | 2026.08.26 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

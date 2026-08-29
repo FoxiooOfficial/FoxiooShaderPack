@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo CPU Foilage (Switch) Shader | 2026.08.27 */</name>
+			<name>/* Foxioo's CPU Foilage (Switch) Shader | 2026.08.27 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

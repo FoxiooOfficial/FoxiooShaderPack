@@ -9,7 +9,7 @@
 				<PSVersion>1.1</PSVersion>
 
 		<parameter>
-			<name>/* Foxioo Temperature (Switch) Shader | 2026.08.27 */</name>
+			<name>/* Foxioo's Temperature (Switch) Shader | 2026.08.27 */</name>
 			<property>checkbox</property>
 
 			<description>Shader changes color temperature.</description>

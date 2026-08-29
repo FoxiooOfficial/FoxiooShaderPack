@@ -9,7 +9,7 @@
 				<PSVersion>1.4</PSVersion>
 
 		<parameter>
-			<name>/* Foxioo Invert Color Blue (Switch) Shader | 2026.08.24 */</name>
+			<name>/* Foxioo's Invert Color Blue (Switch) Shader | 2026.08.24 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

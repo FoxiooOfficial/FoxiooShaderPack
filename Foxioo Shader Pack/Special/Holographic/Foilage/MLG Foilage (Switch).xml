@@ -7,7 +7,7 @@
 				<BackgroundTexture>1</BackgroundTexture>
 				
 		<parameter>
-			<name>/* Foxioo MLG Foilage (Switch) Shader | 2026.08.29 */</name>
+			<name>/* Foxioo's MLG Foilage (Switch) Shader | 2026.08.29 */</name>
 			<property>checkbox</property>
 
 			<description>This shader creates a rainbow gradient effect based on the texture's luminance, just like the MLG images (RIP eyes).</description>

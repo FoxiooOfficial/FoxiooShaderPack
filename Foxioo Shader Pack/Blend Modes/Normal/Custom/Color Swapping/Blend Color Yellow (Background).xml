@@ -9,7 +9,7 @@
 				<PSVersion>1.1</PSVersion>
 
 		<parameter>
-			<name>/* Foxioo Blend Color Yellow (Background) Shader | 2026.08.22a */</name>
+			<name>/* Foxioo's Blend Color Yellow (Background) Shader | 2026.08.22a */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

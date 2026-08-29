@@ -9,7 +9,7 @@
 				<PSVersion>1.4</PSVersion>
 
 		<parameter>
-			<name>/* Foxioo Invert Chroma (Switch) Shader | 2026.08.28 */</name>
+			<name>/* Foxioo's Invert Chroma (Switch) Shader | 2026.08.28 */</name>
 			<property>checkbox</property>
 			<variable>_</variable>
 

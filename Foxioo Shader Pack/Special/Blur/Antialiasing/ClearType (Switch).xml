@@ -6,7 +6,7 @@
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
 		<parameter>
-			<name>/* Foxioo ClearType (Switch) Shader | 2026.08.27 */</name>
+			<name>/* Foxioo's ClearType (Switch) Shader | 2026.08.27 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

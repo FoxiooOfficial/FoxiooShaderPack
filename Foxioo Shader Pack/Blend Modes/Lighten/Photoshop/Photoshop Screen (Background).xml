@@ -9,7 +9,7 @@
 				<PSVersion>1.1</PSVersion>
 
 		<parameter>
-			<name>/* Foxioo Photoshop Screen (Background) Shader | 2026.08.20a */</name>
+			<name>/* Foxioo's Photoshop Screen (Background) Shader | 2026.08.20a */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

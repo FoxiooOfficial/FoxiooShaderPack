@@ -8,7 +8,7 @@
 				<zbuffer>1</zbuffer>
 			
 		<parameter>
-			<name>/* Foxioo Tails7 Sprite (Texture) Shader | 2026.08.20 */</name>
+			<name>/* Foxioo's Tails7 Sprite (Texture) Shader | 2026.08.20 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

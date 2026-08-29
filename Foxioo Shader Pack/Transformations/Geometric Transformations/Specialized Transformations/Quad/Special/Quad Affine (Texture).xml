@@ -7,7 +7,7 @@
 				<BackgroundTexture>0</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Quad Affine (Texture) | 1.0 (09.11.2025) */</name>
+			<name>/* Foxioo's Quad Affine (Texture) | 1.0 (09.11.2025) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

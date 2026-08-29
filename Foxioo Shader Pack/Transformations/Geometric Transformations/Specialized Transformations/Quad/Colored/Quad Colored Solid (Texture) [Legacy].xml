@@ -7,7 +7,7 @@
 				<BackgroundTexture>0</BackgroundTexture>
 			
 		<parameter>
-			<name>/* Foxioo Quad Colored Solid (Texture) [Legacy] | 1.1 (18.11.2025) */</name>
+			<name>/* Foxioo's Quad Colored Solid (Texture) [Legacy] | 1.1 (18.11.2025) */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
