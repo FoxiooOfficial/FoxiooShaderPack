@@ -33,10 +33,11 @@ void main()
     vec2 _DirCorner = sign(In - 0.5);
     vec4 _Pos = vec4(position / _PixelSize, 0.0, 1.0);
 
-        vec2 _PixelPadding = abs(_Mixing * _Mul) * _PixelSize;
+        float _Expanded = abs(_Mixing * _Mul);
+        vec2 _PixelPadding = _Expanded * _PixelSize;
         vec4 _PosExpanded = _Pos;
 
-            _PosExpanded.xy += _DirCorner * _PixelPadding / _PixelSize;
+            _PosExpanded.xy += _DirCorner * _Expanded;
 
     gl_Position = vec4(projectionMatrix * transformMatrix * objectMatrix * vec3(_PosExpanded.xy * _PixelSize, 1.0), 1.0);
 

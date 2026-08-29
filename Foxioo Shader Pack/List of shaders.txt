@@ -1,0 +1,1373 @@
+Here is the list of all shaders from the August 29, 2026 (UTC+0200) release.
+
+1: | Addition (Background)
+2: | Addition With Hyperbolic Cosinus (Background)
+3: | Addition With Hyperbolic Sinus (Background)
+4: | Addition With Hyperbolic Tangent (Background)
+5: | Addition With Hyperbolic Cosecant (Background)
+6: | Addition With Hyperbolic Cotangent (Background)
+7: | Addition With Hyperbolic Secant (Background)
+8: | Addition With Floating Modulus (Background)
+9: | Addition With Power (Background)
+10: | Addition With Reciprocal Square Root (Background)
+11: | Addition With Square Root (Background)
+12: | Addition With Ceil (Background)
+13: | Addition With Floor (Background)
+14: | Addition With Round (Background)
+15: | Addition With Trunc (Background)
+16: | Addition With Arccosinus (Background)
+17: | Addition With Arcsinus (Background)
+18: | Addition With Arctangent (Background)
+19: | Addition With Cosinus (Background)
+20: | Addition With Sinus (Background)
+21: | Addition With Tangent (Background)
+22: | Addition With Cosecant (Background)
+23: | Addition With Cotangent (Background)
+24: | Addition With Secant (Background)
+25: | Blend Intensity (Background)
+26: | Blend Value (Background)
+27: | Photoshop Color (Background)
+28: | Photoshop Hue (Background)
+29: | Photoshop Luminosity (Background)
+30: | Photoshop Saturation (Background)
+31: | GIMP Grain Extract (Background)
+32: | GIMP Grain Merge (Background)
+33: | Krita Allanon (Background)
+34: | Krita Hard Mix (Background)
+35: | Krita Hard Mix Softer (Background)
+36: | Krita Interpolation (Background)
+37: | Krita Interpolation - 2X (Background)
+38: | Krita Parallel (Background)
+39: | Photoshop Hard Light (Background)
+40: | Photoshop Hard Mix (Background)
+41: | Photoshop Linear Light (Background)
+42: | Photoshop Overlay (Background)
+43: | Photoshop Pin Light (Background)
+44: | Photoshop Soft Light (Background)
+45: | Photoshop Vivid Light (Background)
+46: | Blend Stamp (Background)
+47: | Photoshop Color Burn (Background)
+48: | Photoshop Darken (Background)
+49: | Photoshop Darker Color (Background)
+50: | Photoshop Linear Burn (Background)
+51: | Division (Background)
+52: | Division With Hyperbolic Cosinus (Background)
+53: | Division With Hyperbolic Sinus (Background)
+54: | Division With Hyperbolic Tangent (Background)
+55: | Division With Hyperbolic Cosecant (Background)
+56: | Division With Hyperbolic Cotangent (Background)
+57: | Division With Hyperbolic Secant (Background)
+58: | Division With Floating Modulus (Background)
+59: | Division With Power (Background)
+60: | Division With Reciprocal Square Root (Background)
+61: | Division With Square Root (Background)
+62: | Division With Ceil (Background)
+63: | Division With Floor (Background)
+64: | Division With Round (Background)
+65: | Division With Trunc (Background)
+66: | Division With Arccosinus (Background)
+67: | Division With Arcsinus (Background)
+68: | Division With Arctangent (Background)
+69: | Division With Cosinus (Background)
+70: | Division With Sinus (Background)
+71: | Division With Tangent (Background)
+72: | Division With Cosecant (Background)
+73: | Division With Cotangent (Background)
+74: | Division With Secant (Background)
+75: | Blend Inverted (Background)
+76: | Blend Inverted Exclusion (Background)
+77: | Blend Phoenix (Background)
+78: | Blend Signed Difference (Background)
+79: | Krita Additive Subtractive (Background)
+80: | Krita Arcus Tangens (Background)
+81: | Krita Negation (Background)
+82: | Krita Penumbra A (Background)
+83: | Krita Penumbra B (Background)
+84: | Krita Penumbra C (Background)
+85: | Krita Penumbra D (Background)
+86: | Photoshop Difference (Background)
+87: | Photoshop Exclusion (Background)
+88: | Light (Background)
+89: | Photoshop Color Dodge (Background)
+90: | Photoshop Lighten (Background)
+91: | Photoshop Lighter Color (Background)
+92: | Photoshop Screen (Background)
+93: | Logical ARLEFTSHIFT Base (Background)
+94: | Logical ARLEFTSHIFT Blend (Background)
+95: | Logical ARRIGHTSHIFT Base (Background)
+96: | Logical ARRIGHTSHIFT Blend (Background)
+97: | Logical AND (Background)
+98: | Logical OR (Background)
+99: | Logical XOR (Background)
+100: | Logical ROTATELEFT Base (Background)
+101: | Logical ROTATELEFT Blend (Background)
+102: | Logical ROTATERIGHT Base (Background)
+103: | Logical ROTATERIGHT Blend (Background)
+104: | Logical IMPLY (Background)
+105: | Logical NIMPLY (Background)
+106: | Logical XIMPLY (Background)
+107: | Logical XNIMPLY (Background)
+108: | Logical NAND (Background)
+109: | Logical NOR (Background)
+110: | Logical XNOR (Background)
+111: | Logical LEFTSHIFT Base (Background)
+112: | Logical LEFTSHIFT Blend (Background)
+113: | Logical RIGHTSHIFT Base (Background)
+114: | Logical RIGHTSHIFT Blend (Background)
+115: | Multiplication (Background)
+116: | Multiplication With Hyperbolic Cosinus (Background)
+117: | Multiplication With Hyperbolic Sinus (Background)
+118: | Multiplication With Hyperbolic Tangent (Background)
+119: | Multiplication With Hyperbolic Cosecant (Background)
+120: | Multiplication With Hyperbolic Cotangent (Background)
+121: | Multiplication With Hyperbolic Secant (Background)
+122: | Multiplication With Floating Modulus (Background)
+123: | Multiplication With Power (Background)
+124: | Multiplication With Reciprocal Square Root (Background)
+125: | Multiplication With Square Root (Background)
+126: | Multiplication With Ceil (Background)
+127: | Multiplication With Floor (Background)
+128: | Multiplication With Round (Background)
+129: | Multiplication With Trunc (Background)
+130: | Multiplication With Arccosinus (Background)
+131: | Multiplication With Arcsinus (Background)
+132: | Multiplication With Arctangent (Background)
+133: | Multiplication With Cosinus (Background)
+134: | Multiplication With Sinus (Background)
+135: | Multiplication With Tangent (Background)
+136: | Multiplication With Cosecant (Background)
+137: | Multiplication With Cotangent (Background)
+138: | Multiplication With Secant (Background)
+139: | Blend Average (Background)
+140: | Semi-Transparent (Background)
+141: | Blend Color Blue (Background)
+142: | Blend Color Cyan (Background)
+143: | Blend Color Green (Background)
+144: | Blend Color Magenta (Background)
+145: | Blend Color Red (Background)
+146: | Blend Color Yellow (Background)
+147: | Comparison Different (Background)
+148: | Comparison Equal (Background)
+149: | Comparison Greater (Background)
+150: | Comparison Greater Equal (Background)
+151: | Comparison Less (Background)
+152: | Comparison Less Equal (Background)
+153: | Photoshop Dissolve (Texture)
+154: | Krita Frect (Background)
+155: | Krita Freeze (Background)
+156: | Krita Freeze-Reflect (Background)
+157: | Krita Reeze (Background)
+158: | Krita Reflect-Freeze (Background)
+159: | Krita Gleat (Background)
+160: | Krita Glow (Background)
+161: | Krita Glow-Heat (Background)
+162: | Krita Heat-Glow (Background)
+163: | Krita Heat (Background)
+164: | Krita Helow (Background)
+165: | Krita Heat-Glow and Freeze-Reflect Hybrid (Background)
+166: | PaintDotNET Glow (Background)
+167: | PaintDotNET Reflect (Background)
+168: | Subtraction (Background)
+169: | Subtraction With Hyperbolic Cosinus (Background)
+170: | Subtraction With Hyperbolic Sinus (Background)
+171: | Subtraction With Hyperbolic Tangent (Background)
+172: | Subtraction With Hyperbolic Cosecant (Background)
+173: | Subtraction With Hyperbolic Cotangent (Background)
+174: | Subtraction With Hyperbolic Secant (Background)
+175: | Subtraction With Floating Modulus (Background)
+176: | Subtraction With Power (Background)
+177: | Subtraction With Reciprocal Square Root (Background)
+178: | Subtraction With Square Root (Background)
+179: | Subtraction With Ceil (Background)
+180: | Subtraction With Floor (Background)
+181: | Subtraction With Round (Background)
+182: | Subtraction With Trunc (Background)
+183: | Subtraction With Arccosinus (Background)
+184: | Subtraction With Arcsinus (Background)
+185: | Subtraction With Arctangent (Background)
+186: | Subtraction With Cosinus (Background)
+187: | Subtraction With Sinus (Background)
+188: | Subtraction With Tangent (Background)
+189: | Subtraction With Cosecant (Background)
+190: | Subtraction With Cotangent (Background)
+191: | Subtraction With Secant (Background)
+192: | Color Combiner (Switch)
+193: | Add Color (Switch)
+194: | Ambient (Switch)
+195: | Brightness (Switch)
+196: | Contrast (Switch)
+197: | Daytime (Switch)
+198: | Temperature (Switch)
+199: | Tint (Switch)
+200: | Color Accent (Switch)
+201: | Monochrome Average (Switch)
+202: | Sepia (Switch)
+203: | Duo Recolor Monochrome (Switch)
+204: | Duo Recolor Monochrome Luminated (Switch)
+205: | Duo Recolor Monochrome Tint-To-White (Switch)
+206: | Recolor Monochrome (Switch)
+207: | Recolor Monochrome Luminated (Switch)
+208: | Recolor Monochrome Tint-To-White (Switch)
+209: | Cut-Off Alpha (Texture)
+210: | Cut-Off Alpha Test (Texture)
+211: | Hard Cut-Off Alpha (Texture)
+212: | Inverted Alpha (Texture)
+213: | No Alpha (Texture)
+214: | Premultiplied To Straight Alpha (Texture)
+215: | Show Alpha (Texture)
+216: | Straight To Premultiplied Alpha (Texture)
+217: | Ultra Cut-Off Alpha (Texture)
+218: | Bubble Content Mask (Texture)
+219: | Bubble Mask (Texture)
+220: | Chroma Key Color (Texture)
+221: | Chroma Key Inverted (Texture)
+222: | Inner Shadow (Texture)
+223: | Outer Shadow (Texture)
+224: | Texture Mask (Texture)
+225: | Texture Mask Maximum (Texture)
+226: | Texture Mask Minimum (Texture)
+227: | Texture Mask Threshold Greater  (Texture)
+228: | Texture Mask Threshold Less (Texture)
+229: | CIELab (Switch)
+230: | CMYK (Switch)
+231: | HSI (Switch)
+232: | HSL (Switch) [Legacy]
+233: | HSL (Switch) [Rework]
+234: | HSV (Switch)
+235: | Correction With Hyperbolic Cosinus (Switch)
+236: | Correction With Hyperbolic Sinus (Switch)
+237: | Correction With Hyperbolic Tangent (Switch)
+238: | Correction With Hyperbolic Cosecant (Switch)
+239: | Correction With Hyperbolic Cotangent (Switch)
+240: | Correction With Hyperbolic Secant (Switch)
+241: | Correction With Floating Modulus (Switch)
+242: | Correction With Power (Switch)
+243: | Correction With Reciprocal Square Root (Switch)
+244: | Correction With Square Root (Switch)
+245: | Correction With Ceil (Switch)
+246: | Correction With Floor (Switch)
+247: | Correction With Round (Switch)
+248: | Correction With Trunc (Switch)
+249: | Correction With Arccosinus (Switch)
+250: | Correction With Arcsinus (Switch)
+251: | Correction With Arctangent (Switch)
+252: | Correction With Cosinus (Switch)
+253: | Correction With Sinus (Switch)
+254: | Correction With Tangent (Switch)
+255: | Correction With Cosecant (Switch)
+256: | Correction With Cotangent (Switch)
+257: | Correction With Secant (Switch)
+258: | Aerochrome Film (Switch)
+259: | Photographic Film Negative (Switch)
+260: | Superholo (Switch)
+261: | Invert Color Blue (Switch)
+262: | Invert Color Cyan (Switch)
+263: | Invert Color Green (Switch)
+264: | Invert Color Magenta (Switch)
+265: | Invert Color Red (Switch)
+266: | Invert Color White (Switch)
+267: | Invert Color Yellow (Switch)
+268: | Invert Brightness (Switch) [Legacy]
+269: | Invert Brightness (Switch) [Rework]
+270: | Invert Chroma (Switch)
+271: | Simulation Color Blindness AIO (Switch)
+272: | Simulation Of Achromatomaly (Switch)
+273: | Simulation Of Achromatopsia (Switch)
+274: | Simulation Of Deuteranomaly (Switch)
+275: | Simulation Of Deuteranopia (Switch)
+276: | Simulation Of Protanomaly (Switch)
+277: | Simulation Of Protanopia (Switch)
+278: | Simulation Of Tritanomaly (Switch)
+279: | Simulation Of Tritanopia (Switch)
+280: | Swap Color BGR (Switch)
+281: | Swap Color BRG (Switch)
+282: | Swap Color GBR (Switch)
+283: | Swap Color GRB (Switch)
+284: | Swap Color RBG (Switch)
+285: | Conversion To CMYK (Switch)
+286: | Conversion To ICtCp (Switch)
+287: | Conversion To Y'CbCr (Switch)
+288: | Conversion To Y'CoCg (Switch)
+289: | Conversion To Y'DbDr (Switch)
+290: | Conversion To Y'PbPr (Switch)
+291: | Conversion To YIQ (Switch)
+292: | Conversion To YUV (Switch)
+293: | Examoon Text Shading (Switch)
+294: | Examoon Text Sinus Tranfromation (Switch)
+295: | CMYK Halftone Dot (Switch)
+296: | Kuwahara Filter (Background)
+297: | Kuwahara Filter (Texture)
+298: | Anime Zoom! Effect (Switch)
+299: | Animeish (Switch) [Legacy]
+300: | Mangaish (Switch)
+301: | Genshin Shader 3.0 Skin (Switch)
+302: | Better Bloom (Background)
+303: | Vector Gradient Bloom (Switch)
+304: | Noise Blur (Switch)
+305: | Noise Blur Smooth (Background)
+306: | Noise Blur Smooth (Texture)
+307: | Vector Gradient Blur (Switch)
+308: | ClearType (Switch)
+309: | FXAA Fast Approximate Anti-Aliasing (Switch)
+310: | Arithmetic Mean Filter (Switch)
+311: | Geometric Mean Filter (Switch)
+312: | Harmonic Mean Filter (Switch)
+313: | Maximum Filter (Switch)
+314: | Midpoint Filter (Switch)
+315: | Minimum Filter (Switch)
+316: | Range Filter (Switch)
+317: | CRT (Switch)
+318: | Hologram (Switch)
+319: | JPEG Compression (Switch)
+320: | LCD (Switch)
+321: | TV Analog Noise (Switch)
+322: | Block Artifacts (Switch)
+323: | Codebook (Switch)
+324: | Composite Video (Background) [Type 2]
+325: | Composite Video (Background) [Type 3]
+326: | Composite Video (Background) [Type 4]
+327: | Composite Video (Background) [Type 5]
+328: | Composite Video (Texture) [Type 2]
+329: | Composite Video (Texture) [Type 3]
+330: | Composite Video (Texture) [Type 4]
+331: | Composite Video (Texture) [Type 5]
+332: | Composite Video Compression (Background)
+333: | Composite Video Compression (Texture)
+334: | VHS (Background) [Type 2]
+335: | VHS (Texture) [Type 2]
+336: | VHS (Background)
+337: | VHS (Texture)
+338: | Active (Texture)
+339: | Emboss (Switch)
+340: | Normal Map (Switch) [Direct3D]
+341: | Normal Map (Switch)
+342: | Sharpness (Switch)
+343: | Bevel Smooth (Texture)
+344: | Luna XP Blue (Switch)
+345: | Luna XP Olive (Switch)
+346: | Luna XP Silver (Switch)
+347: | Acorn RISCOS2n3 16-Color (Switch)
+348: | Apple Macintosh II 16-Color (Switch)
+349: | Apple Macintosh II 256-Color (Switch)
+350: | Apple Macintosh II 4-Color (Switch)
+351: | Atkinson Dithering 2-Color (Switch)
+352: | BIOS (Switch)
+353: | CGA 2-Color (Switch)
+354: | CGA 4-Color_0 (Switch)
+355: | CGA 4-Color_0LI (Switch)
+356: | CGA 4-Color_1 (Switch)
+357: | CGA 4-Color_1LI (Switch)
+358: | CGA 4-Color_2 (Switch)
+359: | CGA 4-Color_2LI (Switch)
+360: | EGA 64-Color (Switch)
+361: | PICO-8 16-Color (Switch)
+362: | PICO-8 16-ColorHP (Switch)
+363: | Magnavox Odyssey 2 16-Color (Switch)
+364: | MS Paint (Switch)
+365: | MS Windows 16-Color (Switch)
+366: | MS Windows 20-Color (Switch)
+367: | Game Boy 4-Color (Switch)
+368: | Game Boy Light 4-Color (Switch)
+369: | Game Boy Pocket 4-Color (Switch)
+370: | NES 55-Color (Switch)
+371: | Oracle Solaris 16-Color (Switch)
+372: | VGA 256-Color (Switch)
+373: | Aurora (Switch)
+374: | Frutiger Aero (Background)
+375: | Klisza (Background)
+376: | Segmented Liquid-Crystal Display (Switch)
+377: | Spectrogram (Switch)
+378: | CD-R (Background)
+379: | CD-R Blu (Background)
+380: | Burn (Switch)
+381: | Freeze (Switch)
+382: | Void (Background)
+383: | Colorful Grayout Foilage (Switch)
+384: | CPU Foilage (Switch)
+385: | MLG Foilage (Switch)
+386: | Rainbow Foilage (Switch)
+387: | RPB Foilage (Background)
+388: | Alpha Fish (Texture)
+389: | LiveW Nexus (Background)
+390: | LiveW Nexus (Texture)
+391: | LiveW Visualization (Switch)
+392: | Aura (Background)
+393: | Marching Ants Outline (Texture) [Type 1]
+394: | Genshin Impact Natlan Outline (Background)
+395: | Deltarune Church Prophecy Panel (Texture)
+396: | Deltarune Fatal (Background)
+397: | Deltarune Freeze (Texture)
+398: | Deltarune Jevil Background Fight (Switch)
+399: | Deltarune Vessel Background (Switch)
+400: | Geometry Dash Glass Blocks (Background)
+401: | Enchantment Glint (Switch)
+402: | End Portal (Texture)
+403: | Green Retro Vision (Switch)
+404: | PVZA Flower Cooldown (Texture)
+405: | Screen Space Reflection (Texture)
+406: | Water Reflected (Background)
+407: | Liquid Glass v2 (Background)
+408: | Liquid Glass v2 HQ (Background)
+409: | Liquid Glass V2 HQ Regular (Background)
+410: | Liquid Glass V2 Regular (Background)
+411: | Liquid Glass (Background)
+412: | Liquid Glass Blurry (Background)
+413: | Windows Aero v2 (Background)
+414: | Windows Aero v2 Basic (Texture)
+415: | Windows Aero (Background)
+416: | Windows Aero Clean (Background)
+417: | Windows Aero Tinted (Background)
+418: | Chromatic Aberration (Switch)
+419: | Offset Color (Background)
+420: | Reversed Offset Color (Background)
+421: | Self Offset Color (Switch)
+422: | Flip (Switch)
+423: | Shear (Switch)
+424: | Bend (Switch)
+425: | Squeeze (Switch)
+426: | Bulge (Switch)
+427: | Fisheye Lens Equidistant (Switch)
+428: | Fisheye Lens Equisolid Angle (Switch)
+429: | Fisheye Lens Orthographic (Switch)
+430: | Fisheye Lens Rectilinear (Switch)
+431: | Fisheye Lens Stereographic (Switch)
+432: | Polar (Switch)
+433: | Pinch (Switch)
+434: | Swirl (Switch)
+435: | Mode 7 (Switch) [Antialiasing]
+436: | Mode 7 (Switch) [Z-Buffer]
+437: | Mode 7 (Switch)
+438: | Polygon (Texture)
+439: | Polygon Colored Solid (Texture)
+440: | Polygon Blend Add (Background)
+441: | Polygon Blend Div (Background)
+442: | Polygon Blend Mul (Background)
+443: | Polygon Blend Sub (Background)
+444: | Polygon Colored Vertex Flat (Texture)
+445: | Polygon Colored Vertex Flat Add (Texture)
+446: | Polygon Colored Vertex Flat Div (Texture)
+447: | Polygon Colored Vertex Flat Mul (Texture)
+448: | Polygon Colored Vertex Flat Sub (Texture)
+449: | Polygon Colored Vertex (Texture)
+450: | Polygon Colored Vertex Add (Texture)
+451: | Polygon Colored Vertex Div (Texture)
+452: | Polygon Colored Vertex Mul (Texture)
+453: | Polygon Colored Vertex Sub (Texture)
+454: | Polygon Inverted Mask (Texture)
+455: | Polygon Inverted Mask Overwrite (Texture)
+456: | Polygon Mask (Texture)
+457: | Polygon Mask Overwrite (Texture)
+458: | Polygon Wireframe (Texture)
+459: | Quad Fixed (Texture) [Antialiasing] [Legacy]
+460: | Quad Fixed (Texture) [Antialiasing]
+461: | Quad Fixed (Texture) [Legacy]
+462: | Quad Fixed (Texture)
+463: | Quad Colored Solid (Texture) [Legacy]
+464: | Quad Colored Solid (Texture)
+465: | Quad Inverted Mask (Texture) [Legacy]
+466: | Quad Inverted Mask (Texture)
+467: | Quad Mask (Texture) [Legacy]
+468: | Quad Mask (Texture)
+469: | Quad Colored Vertex (Texture) [Legacy]
+470: | Quad Colored Vertex (Texture)
+471: | Quad Colored Vertex Manhattan (Texture) [Legacy]
+472: | Quad Colored Vertex Manhattan (Texture)
+473: | Quad Test Without Border (Texture)
+474: | Quad Wire-Frame (Texture)
+475: | Quad With Glass Reflections (Background) [Legacy]
+476: | Quad With Glass Reflections (Background)
+477: | Quad With Metalic Reflections (Background) [Legacy]
+478: | Quad With Metalic Reflections (Background)
+479: | Quad With Reflections (Background) [Legacy]
+480: | Quad With Reflections (Background)
+481: | Quad Affine (Texture)
+482: | Quad PSX (Texture)
+483: | T7Sprite (Texture)
+484: | Kaleidoscope (Switch)
+485: | Foliage Wind (Switch)
+486: | Liquid Wave Bending (Switch)
+487: | Oscillation (Switch)
+488: | Ripple Radial (Switch)
+489: | Sinus Wave (Switch)
+490: | Sinus Wave Offset (Switch)
+491: | D3D8Test (Texture)
+492: | Quad With Floor Reflection (Background)
+493: | Unity Bloom (Background)
+
+
+Compilation errors:
+1: ❌ Error in Light (Background) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmphkmigj1f.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmphkmigj1f.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Blend Modes\Lighten\Custom\Light (Background).fxao:70: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Blend Modes\Lighten\Custom\Light (Background).fxao:70: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Blend%20Modes/Lighten/Custom/Light%20%28Background%29.fxao
+
+2: ❌ Error in Color Combiner (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpi7i4zcv9.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpi7i4zcv9.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Coloristic\Adjustment\Color Combiner (Switch).fxao:76: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Coloristic\Adjustment\Color Combiner (Switch).fxao:76: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Coloristic/Adjustment/Color%20Combiner%20%28Switch%29.fxao
+
+3: ❌ Error in Bubble Content Mask (Texture) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpkkoyxq86.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpkkoyxq86.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Coloristic\Alpha\Bubble\Bubble Content Mask (Texture).fxao:76: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Coloristic\Alpha\Bubble\Bubble Content Mask (Texture).fxao:76: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Coloristic/Alpha/Bubble/Bubble%20Content%20Mask%20%28Texture%29.fxao
+
+4: ❌ Error in CMYK (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpjphfeno4.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpjphfeno4.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Coloristic\Color Models\CMYK (Switch).fxao:107: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Coloristic\Color Models\CMYK (Switch).fxao:107: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Coloristic/Color%20Models/CMYK%20%28Switch%29.fxao
+
+5: ❌ Error in CMYK Halftone Dot (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpyrzcl2l8.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpyrzcl2l8.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Artistic\CMYK Halftone Dot (Switch).fxao:129: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Artistic\CMYK Halftone Dot (Switch).fxao:129: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Special/Artistic/CMYK%20Halftone%20Dot%20%28Switch%29.fxao
+
+6: ❌ Error in Animeish (Switch) [Legacy] (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpjfwfa63z.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpjfwfa63z.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Artistic\Animeish\Animeish (Switch) [Legacy].fxao:82: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Artistic\Animeish\Animeish (Switch) [Legacy].fxao:82: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Special/Artistic/Animeish/Animeish%20%28Switch%29%20%5BLegacy%5D.fxao
+
+7: ❌ Error in Mangaish (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpachz0a4y.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpachz0a4y.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Artistic\Animeish\Mangaish (Switch).fxao:120: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Artistic\Animeish\Mangaish (Switch).fxao:120: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Special/Artistic/Animeish/Mangaish%20%28Switch%29.fxao
+
+8: ❌ Error in Genshin Shader 3.0 Skin (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmp_we3ctoe.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmp_we3ctoe.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Artistic\Animeish\Genshin Shader 3.0\Genshin Shader 3.0 Skin (Switch).fxao:140: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Artistic\Animeish\Genshin Shader 3.0\Genshin Shader 3.0 Skin (Switch).fxao:140: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Special/Artistic/Animeish/Genshin%20Shader%203.0/Genshin%20Shader%203.0%20Skin%20%28Switch%29.fxao
+
+9: ❌ Error in Vector Gradient Bloom (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpua05cv59.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpua05cv59.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Bloom\Vector Gradient Bloom (Switch).fxao:92: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Bloom\Vector Gradient Bloom (Switch).fxao:92: '&&' :  wrong operand types: no operation '&&' exists that takes a left-hand operand of type ' uniform bool' and a right operand of type ' temp float' (or there is no acceptable conversion)
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Bloom\Vector Gradient Bloom (Switch).fxao:92: '' : compilation terminated 
+ERROR: 3 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Special/Bloom/Vector%20Gradient%20Bloom%20%28Switch%29.fxao
+
+10: ❌ Error in Noise Blur (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpxwfuw1qx.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpxwfuw1qx.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Blur\Noise Blur (Switch).fxao:91: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Blur\Noise Blur (Switch).fxao:91: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Special/Blur/Noise%20Blur%20%28Switch%29.fxao
+
+11: ❌ Error in Noise Blur Smooth (Background) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpps7i4hld.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpps7i4hld.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Blur\Noise Blur Smooth (Background).fxao:71: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Blur\Noise Blur Smooth (Background).fxao:71: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Special/Blur/Noise%20Blur%20Smooth%20%28Background%29.fxao
+
+12: ❌ Error in Vector Gradient Blur (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpie0fvlvq.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpie0fvlvq.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Blur\Vector Gradient Blur (Switch).fxao:92: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Blur\Vector Gradient Blur (Switch).fxao:92: '&&' :  wrong operand types: no operation '&&' exists that takes a left-hand operand of type ' uniform bool' and a right operand of type ' temp float' (or there is no acceptable conversion)
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Blur\Vector Gradient Blur (Switch).fxao:92: '' : compilation terminated 
+ERROR: 3 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Special/Blur/Vector%20Gradient%20Blur%20%28Switch%29.fxao
+
+13: ❌ Error in CRT (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpr_vm43h7.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpr_vm43h7.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Compression\CRT (Switch).fxao:114: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Compression\CRT (Switch).fxao:114: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Special/Compression/CRT%20%28Switch%29.fxao
+
+14: ❌ Error in Hologram (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmp15jj_mec.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmp15jj_mec.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Compression\Hologram (Switch).fxao:69: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Compression\Hologram (Switch).fxao:69: '&&' :  wrong operand types: no operation '&&' exists that takes a left-hand operand of type ' uniform bool' and a right operand of type ' temp float' (or there is no acceptable conversion)
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Compression\Hologram (Switch).fxao:69: '' : compilation terminated 
+ERROR: 3 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Special/Compression/Hologram%20%28Switch%29.fxao
+
+15: ❌ Error in JPEG Compression (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpwhtabgtz.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpwhtabgtz.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Compression\JPEG Compression (Switch).fxao:118: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Compression\JPEG Compression (Switch).fxao:118: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Special/Compression/JPEG%20Compression%20%28Switch%29.fxao
+
+16: ❌ Error in LCD (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmp80egsmzn.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmp80egsmzn.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Compression\LCD (Switch).fxao:71: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Compression\LCD (Switch).fxao:71: '&&' :  wrong operand types: no operation '&&' exists that takes a left-hand operand of type ' uniform bool' and a right operand of type ' temp float' (or there is no acceptable conversion)
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Compression\LCD (Switch).fxao:71: '' : compilation terminated 
+ERROR: 3 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Special/Compression/LCD%20%28Switch%29.fxao
+
+17: ❌ Error in TV Analog Noise (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpxig5qc2f.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpxig5qc2f.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Compression\TV Analog Noise (Switch).fxao:107: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Compression\TV Analog Noise (Switch).fxao:107: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Special/Compression/TV%20Analog%20Noise%20%28Switch%29.fxao
+
+18: ❌ Error in Frutiger Aero (Background) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpjlv2um8m.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpjlv2um8m.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Holographic\Frutiger Aero (Background).fxao:91: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Holographic\Frutiger Aero (Background).fxao:91: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Special/Holographic/Frutiger%20Aero%20%28Background%29.fxao
+
+19: ❌ Error in Burn (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmp4tlfshgr.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmp4tlfshgr.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Holographic\Elements\Burn (Switch).fxao:78: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Holographic\Elements\Burn (Switch).fxao:78: '&&' :  wrong operand types: no operation '&&' exists that takes a left-hand operand of type ' uniform bool' and a right operand of type ' temp float' (or there is no acceptable conversion)
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Holographic\Elements\Burn (Switch).fxao:78: '' : compilation terminated 
+ERROR: 3 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Special/Holographic/Elements/Burn%20%28Switch%29.fxao
+
+20: ❌ Error in Freeze (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpuzpm50u1.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpuzpm50u1.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Holographic\Elements\Freeze (Switch).fxao:78: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Holographic\Elements\Freeze (Switch).fxao:78: '&&' :  wrong operand types: no operation '&&' exists that takes a left-hand operand of type ' uniform bool' and a right operand of type ' temp float' (or there is no acceptable conversion)
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Holographic\Elements\Freeze (Switch).fxao:78: '' : compilation terminated 
+ERROR: 3 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Special/Holographic/Elements/Freeze%20%28Switch%29.fxao
+
+21: ❌ Error in Aura (Background) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpkw9nt6ey.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpkw9nt6ey.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Outline\Aura (Background).fxao:95: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Outline\Aura (Background).fxao:95: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Special/Outline/Aura%20%28Background%29.fxao
+
+22: ❌ Error in Genshin Impact Natlan Outline (Background) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpx347huwi.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpx347huwi.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Outline\Recreations\Genshin Impact\Genshin Impact Natlan Outline (Background).fxao:109: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Outline\Recreations\Genshin Impact\Genshin Impact Natlan Outline (Background).fxao:109: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Special/Outline/Recreations/Genshin%20Impact/Genshin%20Impact%20Natlan%20Outline%20%28Background%29.fxao
+
+23: ❌ Error in Deltarune Jevil Background Fight (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmppliqg1le.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmppliqg1le.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Recreations\Deltarune\Deltarune Jevil Background Fight (Switch).fxao:107: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Recreations\Deltarune\Deltarune Jevil Background Fight (Switch).fxao:107: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Special/Recreations/Deltarune/Deltarune%20Jevil%20Background%20Fight%20%28Switch%29.fxao
+
+24: ❌ Error in Geometry Dash Glass Blocks (Background) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmp84qo9e8l.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmp84qo9e8l.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Recreations\Geometry Dash\Geometry Dash Glass Blocks (Background).fxao:67: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Recreations\Geometry Dash\Geometry Dash Glass Blocks (Background).fxao:67: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Special/Recreations/Geometry%20Dash/Geometry%20Dash%20Glass%20Blocks%20%28Background%29.fxao
+
+25: ❌ Error in Enchantment Glint (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmp_qf5l9ys.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmp_qf5l9ys.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Recreations\Minecraft\Enchantment Glint (Switch).fxao:93: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Recreations\Minecraft\Enchantment Glint (Switch).fxao:93: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Special/Recreations/Minecraft/Enchantment%20Glint%20%28Switch%29.fxao
+
+26: ❌ Error in Water Reflected (Background) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmp35id93z1.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmp35id93z1.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Reflection\Water Reflected (Background).fxao:108: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Reflection\Water Reflected (Background).fxao:108: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Special/Reflection/Water%20Reflected%20%28Background%29.fxao
+
+27: ❌ Error in Windows Aero (Background) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpecrldk9u.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpecrldk9u.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Reflection\Windows Aero\Legacy\Windows Aero (Background).fxao:136: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Reflection\Windows Aero\Legacy\Windows Aero (Background).fxao:136: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Special/Reflection/Windows%20Aero/Legacy/Windows%20Aero%20%28Background%29.fxao
+
+28: ❌ Error in Windows Aero Clean (Background) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpq6ua_6hk.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpq6ua_6hk.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Reflection\Windows Aero\Legacy\Windows Aero Clean (Background).fxao:136: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Reflection\Windows Aero\Legacy\Windows Aero Clean (Background).fxao:136: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Special/Reflection/Windows%20Aero/Legacy/Windows%20Aero%20Clean%20%28Background%29.fxao
+
+29: ❌ Error in Windows Aero Tinted (Background) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpgig2m52c.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpgig2m52c.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Reflection\Windows Aero\Legacy\Windows Aero Tinted (Background).fxao:136: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Special\Reflection\Windows Aero\Legacy\Windows Aero Tinted (Background).fxao:136: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Special/Reflection/Windows%20Aero/Legacy/Windows%20Aero%20Tinted%20%28Background%29.fxao
+
+30: ❌ Error in Chromatic Aberration (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmp4xtrlqz3.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmp4xtrlqz3.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Color Transformations\Chromatic Aberration (Switch).fxao:117: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Color Transformations\Chromatic Aberration (Switch).fxao:117: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Color%20Transformations/Chromatic%20Aberration%20%28Switch%29.fxao
+
+31: ❌ Error in Offset Color (Background) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpizzgt65z.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpizzgt65z.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Color Transformations\Offset Color (Background).fxao:74: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Color Transformations\Offset Color (Background).fxao:74: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Color%20Transformations/Offset%20Color%20%28Background%29.fxao
+
+32: ❌ Error in Reversed Offset Color (Background) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpsb7hxz6q.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpsb7hxz6q.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Color Transformations\Reversed Offset Color (Background).fxao:74: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Color Transformations\Reversed Offset Color (Background).fxao:74: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Color%20Transformations/Reversed%20Offset%20Color%20%28Background%29.fxao
+
+33: ❌ Error in Self Offset Color (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmp0ixpav96.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmp0ixpav96.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Color Transformations\Self Offset Color (Switch).fxao:74: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Color Transformations\Self Offset Color (Switch).fxao:74: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Color%20Transformations/Self%20Offset%20Color%20%28Switch%29.fxao
+
+34: ❌ Error in Shear (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpi7re4xf3.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpi7re4xf3.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Affine Transformations\Shear (Switch).fxao:105: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Affine Transformations\Shear (Switch).fxao:105: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Geometric%20Transformations/Affine%20Transformations/Shear%20%28Switch%29.fxao
+
+35: ❌ Error in Bend (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpna2z2nzi.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpna2z2nzi.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Curvature Transformations\Bending\Bend (Switch).fxao:127: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Curvature Transformations\Bending\Bend (Switch).fxao:127: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Geometric%20Transformations/Curvature%20Transformations/Bending/Bend%20%28Switch%29.fxao
+
+36: ❌ Error in Squeeze (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpsrg1t_x4.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpsrg1t_x4.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Curvature Transformations\Bending\Squeeze (Switch).fxao:121: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Curvature Transformations\Bending\Squeeze (Switch).fxao:121: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Geometric%20Transformations/Curvature%20Transformations/Bending/Squeeze%20%28Switch%29.fxao
+
+37: ❌ Error in Bulge (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpsfxor41i.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpsfxor41i.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Curvature Transformations\Bulging\Bulge (Switch).fxao:115: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Curvature Transformations\Bulging\Bulge (Switch).fxao:115: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Geometric%20Transformations/Curvature%20Transformations/Bulging/Bulge%20%28Switch%29.fxao
+
+38: ❌ Error in Fisheye Lens Equidistant (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpz6ca6eim.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpz6ca6eim.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Curvature Transformations\Bulging\Fisheye Lens\Fisheye Lens Equidistant (Switch).fxao:115: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Curvature Transformations\Bulging\Fisheye Lens\Fisheye Lens Equidistant (Switch).fxao:115: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Geometric%20Transformations/Curvature%20Transformations/Bulging/Fisheye%20Lens/Fisheye%20Lens%20Equidistant%20%28Switch%29.fxao
+
+39: ❌ Error in Fisheye Lens Equisolid Angle (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpnemafeis.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpnemafeis.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Curvature Transformations\Bulging\Fisheye Lens\Fisheye Lens Equisolid Angle (Switch).fxao:117: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Curvature Transformations\Bulging\Fisheye Lens\Fisheye Lens Equisolid Angle (Switch).fxao:117: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Geometric%20Transformations/Curvature%20Transformations/Bulging/Fisheye%20Lens/Fisheye%20Lens%20Equisolid%20Angle%20%28Switch%29.fxao
+
+40: ❌ Error in Fisheye Lens Orthographic (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpvye7r_26.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpvye7r_26.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Curvature Transformations\Bulging\Fisheye Lens\Fisheye Lens Orthographic (Switch).fxao:116: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Curvature Transformations\Bulging\Fisheye Lens\Fisheye Lens Orthographic (Switch).fxao:116: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Geometric%20Transformations/Curvature%20Transformations/Bulging/Fisheye%20Lens/Fisheye%20Lens%20Orthographic%20%28Switch%29.fxao
+
+41: ❌ Error in Fisheye Lens Rectilinear (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpjuttfc97.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpjuttfc97.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Curvature Transformations\Bulging\Fisheye Lens\Fisheye Lens Rectilinear (Switch).fxao:117: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Curvature Transformations\Bulging\Fisheye Lens\Fisheye Lens Rectilinear (Switch).fxao:117: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Geometric%20Transformations/Curvature%20Transformations/Bulging/Fisheye%20Lens/Fisheye%20Lens%20Rectilinear%20%28Switch%29.fxao
+
+42: ❌ Error in Fisheye Lens Stereographic (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpc_mlaowx.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpc_mlaowx.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Curvature Transformations\Bulging\Fisheye Lens\Fisheye Lens Stereographic (Switch).fxao:116: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Curvature Transformations\Bulging\Fisheye Lens\Fisheye Lens Stereographic (Switch).fxao:116: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Geometric%20Transformations/Curvature%20Transformations/Bulging/Fisheye%20Lens/Fisheye%20Lens%20Stereographic%20%28Switch%29.fxao
+
+43: ❌ Error in Polar (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmp1coro51f.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmp1coro51f.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Curvature Transformations\Circular\Polar (Switch).fxao:113: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Curvature Transformations\Circular\Polar (Switch).fxao:113: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Geometric%20Transformations/Curvature%20Transformations/Circular/Polar%20%28Switch%29.fxao
+
+44: ❌ Error in Pinch (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpqhnmnhvw.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpqhnmnhvw.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Curvature Transformations\Pinching\Pinch (Switch).fxao:115: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Curvature Transformations\Pinching\Pinch (Switch).fxao:115: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Geometric%20Transformations/Curvature%20Transformations/Pinching/Pinch%20%28Switch%29.fxao
+
+45: ❌ Error in Swirl (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpfsf1tq7z.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpfsf1tq7z.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Curvature Transformations\Vortex\Swirl (Switch).fxao:123: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Curvature Transformations\Vortex\Swirl (Switch).fxao:123: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Geometric%20Transformations/Curvature%20Transformations/Vortex/Swirl%20%28Switch%29.fxao
+
+46: ❌ Error in Mode 7 (Switch) [Antialiasing] (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpg4th8oyz.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpg4th8oyz.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Specialized Transformations\Modes\Mode 7 (Switch) [Antialiasing].fxao:169: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Specialized Transformations\Modes\Mode 7 (Switch) [Antialiasing].fxao:169: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Geometric%20Transformations/Specialized%20Transformations/Modes/Mode%207%20%28Switch%29%20%5BAntialiasing%5D.fxao
+
+47: ❌ Error in Mode 7 (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmps5cygs_6.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmps5cygs_6.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Specialized Transformations\Modes\Mode 7 (Switch).fxao:169: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Specialized Transformations\Modes\Mode 7 (Switch).fxao:169: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Geometric%20Transformations/Specialized%20Transformations/Modes/Mode%207%20%28Switch%29.fxao
+
+48: ❌ Error in Quad With Glass Reflections (Background) [Legacy] (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmp5kegn6d6.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmp5kegn6d6.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Specialized Transformations\Quad\Reflections\Quad With Glass Reflections (Background) [Legacy].fxao:120: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Specialized Transformations\Quad\Reflections\Quad With Glass Reflections (Background) [Legacy].fxao:120: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Geometric%20Transformations/Specialized%20Transformations/Quad/Reflections/Quad%20With%20Glass%20Reflections%20%28Background%29%20%5BLegacy%5D.fxao
+
+49: ❌ Error in Quad With Glass Reflections (Background) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmp_1qwdgpn.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmp_1qwdgpn.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Specialized Transformations\Quad\Reflections\Quad With Glass Reflections (Background).fxao:243: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Specialized Transformations\Quad\Reflections\Quad With Glass Reflections (Background).fxao:243: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Geometric%20Transformations/Specialized%20Transformations/Quad/Reflections/Quad%20With%20Glass%20Reflections%20%28Background%29.fxao
+
+50: ❌ Error in Quad With Metalic Reflections (Background) [Legacy] (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpn0lniv76.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpn0lniv76.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Specialized Transformations\Quad\Reflections\Quad With Metalic Reflections (Background) [Legacy].fxao:118: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Specialized Transformations\Quad\Reflections\Quad With Metalic Reflections (Background) [Legacy].fxao:118: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Geometric%20Transformations/Specialized%20Transformations/Quad/Reflections/Quad%20With%20Metalic%20Reflections%20%28Background%29%20%5BLegacy%5D.fxao
+
+51: ❌ Error in Quad With Metalic Reflections (Background) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmp92mbf6f9.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmp92mbf6f9.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Specialized Transformations\Quad\Reflections\Quad With Metalic Reflections (Background).fxao:241: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Specialized Transformations\Quad\Reflections\Quad With Metalic Reflections (Background).fxao:241: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Geometric%20Transformations/Specialized%20Transformations/Quad/Reflections/Quad%20With%20Metalic%20Reflections%20%28Background%29.fxao
+
+52: ❌ Error in Quad With Reflections (Background) [Legacy] (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmp8xy_hnor.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmp8xy_hnor.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Specialized Transformations\Quad\Reflections\Quad With Reflections (Background) [Legacy].fxao:120: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Specialized Transformations\Quad\Reflections\Quad With Reflections (Background) [Legacy].fxao:120: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Geometric%20Transformations/Specialized%20Transformations/Quad/Reflections/Quad%20With%20Reflections%20%28Background%29%20%5BLegacy%5D.fxao
+
+53: ❌ Error in Quad With Reflections (Background) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpajfe1r3f.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpajfe1r3f.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Specialized Transformations\Quad\Reflections\Quad With Reflections (Background).fxao:243: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Specialized Transformations\Quad\Reflections\Quad With Reflections (Background).fxao:243: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Geometric%20Transformations/Specialized%20Transformations/Quad/Reflections/Quad%20With%20Reflections%20%28Background%29.fxao
+
+54: ❌ Error in Kaleidoscope (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmp6p8miiz2.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmp6p8miiz2.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Symmetric Transformations\Kaleidoscope (Switch).fxao:124: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Symmetric Transformations\Kaleidoscope (Switch).fxao:124: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Geometric%20Transformations/Symmetric%20Transformations/Kaleidoscope%20%28Switch%29.fxao
+
+55: ❌ Error in Foliage Wind (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpapw7qjbe.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpapw7qjbe.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Wave Transformations\Foliage Wind (Switch).fxao:107: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Wave Transformations\Foliage Wind (Switch).fxao:107: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Geometric%20Transformations/Wave%20Transformations/Foliage%20Wind%20%28Switch%29.fxao
+
+56: ❌ Error in Liquid Wave Bending (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmp7bephs6e.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmp7bephs6e.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Wave Transformations\Liquid Wave Bending (Switch).fxao:96: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Wave Transformations\Liquid Wave Bending (Switch).fxao:96: '&&' :  wrong operand types: no operation '&&' exists that takes a left-hand operand of type ' uniform bool' and a right operand of type ' temp float' (or there is no acceptable conversion)
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Wave Transformations\Liquid Wave Bending (Switch).fxao:96: '' : compilation terminated 
+ERROR: 3 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Geometric%20Transformations/Wave%20Transformations/Liquid%20Wave%20Bending%20%28Switch%29.fxao
+
+57: ❌ Error in Oscillation (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpoeyrt47s.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpoeyrt47s.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Wave Transformations\Oscillation (Switch).fxao:113: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Wave Transformations\Oscillation (Switch).fxao:113: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Geometric%20Transformations/Wave%20Transformations/Oscillation%20%28Switch%29.fxao
+
+58: ❌ Error in Ripple Radial (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpw_drg6g3.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpw_drg6g3.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Wave Transformations\Ripple Radial (Switch).fxao:114: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Wave Transformations\Ripple Radial (Switch).fxao:114: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Geometric%20Transformations/Wave%20Transformations/Ripple%20Radial%20%28Switch%29.fxao
+
+59: ❌ Error in Sinus Wave (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmp2futfda6.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmp2futfda6.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Wave Transformations\Sinus Wave (Switch).fxao:113: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Wave Transformations\Sinus Wave (Switch).fxao:113: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Geometric%20Transformations/Wave%20Transformations/Sinus%20Wave%20%28Switch%29.fxao
+
+60: ❌ Error in Sinus Wave Offset (Switch) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmp23h2ojg7.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmp23h2ojg7.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Wave Transformations\Sinus Wave Offset (Switch).fxao:113: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Transformations\Geometric Transformations\Wave Transformations\Sinus Wave Offset (Switch).fxao:113: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Transformations/Geometric%20Transformations/Wave%20Transformations/Sinus%20Wave%20Offset%20%28Switch%29.fxao
+
+61: ❌ Error in Quad With Floor Reflection (Background) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmpembhvtb1.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmpembhvtb1.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Unused or Experimental\Quad With Floor Reflection (Background).fxao:108: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Unused or Experimental\Quad With Floor Reflection (Background).fxao:108: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Unused%20or%20Experimental/Quad%20With%20Floor%20Reflection%20%28Background%29.fxao
+
+62: ❌ Error in Unity Bloom (Background) (FXAO Fragment):
+Command: C:\Program Files (x86)\Steam\steamapps\common\Clickteam Fusion 2.5\Effects\Foxioo Shader Pack\_Scirpts\__Compiler\bin\glslangValidator.exe -S frag -l -e main C:\Users\Foxioo\AppData\Local\Temp\tmp6tp4d6tx.frag
+Return code: 2
+Output: C:\Users\Foxioo\AppData\Local\Temp\tmp6tp4d6tx.frag
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Unused or Experimental\Unity Bloom (Background).fxao:139: '_Is_Pre_296_Build' : undeclared identifier 
+ERROR: C:\Users\Foxioo\Documents\GitHub\FoxiooShaderPack\Foxioo Shader Pack\Unused or Experimental\Unity Bloom (Background).fxao:139: '' : compilation terminated 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Error: 
+
+Source file: file:///C%3A/Users/Foxioo/Documents/GitHub/FoxiooShaderPack/Foxioo%20Shader%20Pack/Unused%20or%20Experimental/Unity%20Bloom%20%28Background%29.fxao
+

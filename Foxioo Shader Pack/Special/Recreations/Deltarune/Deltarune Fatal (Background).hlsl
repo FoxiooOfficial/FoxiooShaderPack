@@ -96,10 +96,11 @@ PS_INPUT vs_main(VS_INPUT In)
 	float2 _PixelSize = float2(fPixelWidth, fPixelHeight);
 	float2 _DirCorner = sign(In.texCoord - 0.5);
 
-        float2 _PixelPadding = abs(_Mixing * _Mul) * float2(fPixelWidth, fPixelHeight);
+        float _Expanded = abs(_Mixing * _Mul);
+        float2 _PixelPadding = _Expanded * float2(fPixelWidth, fPixelHeight);
         float4 _PosExpanded = float4(In.Position, 1.0);
 
-            _PosExpanded.xy += _DirCorner * abs(_Mixing * _Mul);
+            _PosExpanded.xy += _DirCorner * _Expanded;
 
 	Out.Position = mul(_PosExpanded, transformMatrix);
 	Out.Position = mul(Out.Position, projectionMatrix);

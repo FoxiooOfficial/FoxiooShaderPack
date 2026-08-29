@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.1 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -15,95 +16,169 @@
 Texture2D<float4> S2D_Image : register(t0);
 SamplerState S2D_ImageSampler : register(s0);
 
+//Texture2D<float4> S2D_Background : register(t1);
+//SamplerState S2D_BackgroundSampler : register(s1);
+
 /***********************************************************/
 /* Variables */
 /***********************************************************/
 
-cbuffer PS_VARIABLES : register(b0)
-{
-    bool _;
-    float _Mixing;
-    float4 _Color;
-    float _Fade;
-    float _PosXFreeze;
-    float _PosYFreeze;
-    bool __;
-};
-
 struct PS_INPUT
 {
-  float4 Tint : COLOR0;
-  float2 texCoord : TEXCOORD0;
-  float2 bgCoord : TEXCOORD1;
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+	//float2 bgCoord : TEXCOORD1;
+    float4 Position : SV_POSITION;
 };
 
+#ifdef FUSION_PIXEL_SHADER
 
-struct PS_OUTPUT
+    cbuffer PS_VARIABLES : register(b0)
+    {
+        bool _;
+        float _Mixing;
+        float4 _Color;
+        float _Fade;
+        float _PosX;
+        float _PosY;
+        bool __;
+    };
+
+    cbuffer PS_PIXELSIZE : register(b1)
+    {
+        float fPixelWidth;
+        float fPixelHeight;
+    };
+
+#endif // FUSION_PIXEL_SHADER
+
+/***********************************************************/
+
+struct VS_INPUT
 {
-    float4 Color   : SV_TARGET;
+    float4 Tint     : COLOR0;
+    float2 texCoord : TEXCOORD0;
+	//float2 bgCoord : TEXCOORD1;
+    float3 Position : SV_POSITION;
 };
 
-cbuffer PS_PIXELSIZE : register(b1)
+#ifdef FUSION_VERTEX_SHADER
+
+	cbuffer VS_MATRICES : register(b0)
+	{
+		row_major float4x4 transformMatrix;
+		row_major float4x4 projectionMatrix;
+	};
+
+    cbuffer VS_VARIABLES : register(b1)
+    {
+        bool _;
+        float _Mixing;
+        float4 _Color;
+        float _Fade;
+        float _PosX;
+        float _PosY;
+        bool __;
+    };
+
+    cbuffer VS_PIXELSIZE : register(b2)
+    {
+        float fPixelWidth;
+        float fPixelHeight;
+    };
+
+#endif // FUSION_VERTEX_SHADER
+
+/************************************************************/
+/* Vertex Shader */
+/************************************************************/
+
+#ifdef FUSION_VERTEX_SHADER
+
+PS_INPUT vs_main(VS_INPUT In)
 {
-	float fPixelWidth;
-	float fPixelHeight;
-};
+	PS_INPUT Out;
+
+	float2 _PixelSize = float2(fPixelWidth, fPixelHeight);
+	float2 _DirCorner = sign(In.texCoord - 0.5);
+
+        float2 _Expanded = abs(max(_PosX, _PosY));
+        float2 _PixelPadding = _Expanded * float2(fPixelWidth, fPixelHeight);
+        float4 _PosExpanded = float4(In.Position, 1.0);
+
+            _PosExpanded.xy += _DirCorner * _Expanded;
+
+	Out.Position = mul(_PosExpanded, transformMatrix);
+	Out.Position = mul(Out.Position, projectionMatrix);
+
+	Out.Tint = In.Tint;
+	Out.texCoord = In.texCoord + _DirCorner * _PixelPadding;
+
+	return Out;
+}
+
+#endif // FUSION_VERTEX_SHADER
 
 /************************************************************/
 /* Main */
 /************************************************************/
 
-PS_OUTPUT ps_main( in PS_INPUT In )
-{
-    PS_OUTPUT Out;
-
-    float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
-
-        float4 _Freeze_0 = float4(_Color.rgb, S2D_Image.Sample(S2D_ImageSampler, In.texCoord).a * In.Tint.a);
-        float4 _Freeze_1 = float4(_Color.rgb, S2D_Image.Sample(S2D_ImageSampler, In.texCoord - (float2(_PosXFreeze, _PosYFreeze) * float2(fPixelWidth, fPixelHeight))).a * In.Tint.a) * 0.5;
-        float4 _Freeze_2 = float4(_Color.rgb, S2D_Image.Sample(S2D_ImageSampler, In.texCoord + (float2(_PosXFreeze, _PosYFreeze) * float2(fPixelWidth, fPixelHeight))).a * In.Tint.a) * 0.5;
-
-        float4 _Freeze_Sum = (_Freeze_0 + _Freeze_1 + _Freeze_2);
-        if(_Fade < 1.0 - In.texCoord.y) _Freeze_Sum = 0;
-
-        float4 _Result = lerp(_Render_Texture, _Render_Texture + _Freeze_Sum, _Mixing);
-    Out.Color = _Result;
+#ifdef FUSION_PIXEL_SHADER
     
-    return Out;
+float4 Fun_Render(Texture2D _Tex, SamplerState _TexSampler, float2 In, bool _Ex) {
+    if(any(In <= 0.0 || In >= 1.0) || (_Fade < 1.0 - In.y && _Ex))
+        return 0.0;
+    else
+        return _Tex.Sample(_TexSampler, In);
+}
+
+float4 Demultiply(float4 _Render, bool _Premultiplied)
+{
+    if(_Premultiplied)
+    {
+        if ( _Render.a != 0.0 ) {
+            _Render.rgb /= _Render.a;
+        }
+    }
+    return _Render;
+}
+
+float4 Main(PS_INPUT In, bool _Premultiplied) : SV_TARGET
+{
+    float4 _Render_Texture = Demultiply(Fun_Render(S2D_Image, S2D_ImageSampler, In.texCoord, false) * In.Tint, _Premultiplied);
+
+    float2 _Off = float2(_PosX, _PosY) * float2(fPixelWidth, fPixelHeight);
+        
+        float4 _Freeze_Sum;
+        _Freeze_Sum.rgb = _Color.rgb;
+        _Freeze_Sum.a  = Fun_Render(S2D_Image, S2D_ImageSampler, In.texCoord, true).a;
+        _Freeze_Sum.a += Fun_Render(S2D_Image, S2D_ImageSampler, In.texCoord - _Off, true).a * 0.5;
+        _Freeze_Sum.a += Fun_Render(S2D_Image, S2D_ImageSampler, In.texCoord + _Off, true).a * 0.5;
+        
+        _Freeze_Sum.a = saturate(_Freeze_Sum.a);
+        _Freeze_Sum *= _Freeze_Sum.a;
+
+           float4 _Result = saturate(_Freeze_Sum + _Render_Texture);
+            _Result = lerp(_Render_Texture, _Result, _Mixing);
+
+	return _Result;
 }
 
 /************************************************************/
-/* Premultiplied Alpha */
+/* Render */
 /************************************************************/
 
-float4 Demultiply(float4 _Color)
-{
-	if ( _Color.a != 0 )   _Color.rgb /= _Color.a;
-	return _Color;
+float4 ps_main(PS_INPUT In) : SV_TARGET{
+    float4 _Render = Main(In, false);
+    return _Render;
 }
 
-PS_OUTPUT ps_main_pm( in PS_INPUT In ) 
+float4 ps_main_pm(PS_INPUT In) : SV_TARGET
 {
-    PS_OUTPUT Out;
+    float4 _Render = Main(In, true);
+    _Render.rgb *= _Render.a;
 
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
-
-        float4 _Freeze_0 = S2D_Image.Sample(S2D_ImageSampler, In.texCoord);
-        float4 _Freeze_1 = S2D_Image.Sample(S2D_ImageSampler, In.texCoord - (float2(_PosXFreeze, _PosYFreeze) * float2(fPixelWidth, fPixelHeight)));
-        float4 _Freeze_2 = S2D_Image.Sample(S2D_ImageSampler, In.texCoord + (float2(_PosXFreeze, _PosYFreeze) * float2(fPixelWidth, fPixelHeight)));
-
-            _Freeze_0 = float4(_Color.rgb, _Freeze_0.a * In.Tint.a);
-            _Freeze_1 = float4(_Color.rgb, _Freeze_1.a * In.Tint.a) * 0.5;
-            _Freeze_2 = float4(_Color.rgb, _Freeze_2.a * In.Tint.a) * 0.5;
-
-        float4 _Freeze_Sum = (_Freeze_0 + _Freeze_1 + _Freeze_2);
-        if(_Fade < 1.0 - In.texCoord.y) _Freeze_Sum = 0;
-
-        float4 _Result = lerp(_Render_Texture, _Render_Texture + _Freeze_Sum, _Mixing);
-
-    _Result.a = saturate(_Result.a);
-    _Result.rgb *= _Result.a;
-
-    Out.Color = _Result;
-    return Out;
+    return _Render;
 }
+
+#endif // FUSION_PIXEL_SHADER

@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.1 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -16,16 +17,32 @@
 uniform mat4 transformMatrix;
 uniform mat4 projectionMatrix;
 
+uniform float _PosX;
+uniform float _PosY;
+uniform float fPixelWidth;
+uniform float fPixelHeight;
+
 attribute vec4 position;
 attribute vec2 texCoord;
 varying vec2 In;
 
 void main(void)
 {
-	In = texCoord;
-	gl_Position = projectionMatrix * transformMatrix * position;
-}
+    In = texCoord;
 
+    vec2 _PixelSize = vec2(fPixelWidth, fPixelHeight);
+    vec2 _DirCorner = sign(In - 0.5);
+
+        float _Expanded = abs(max(_PosX, _PosY));
+        vec2 _PixelPadding = vec2(_Expanded);
+        vec4 _PosExpanded = position;
+
+        _PosExpanded.xy += _DirCorner * _PixelPadding;
+
+    gl_Position = projectionMatrix * transformMatrix * _PosExpanded;
+
+    In = In + _DirCorner * _Expanded * _PixelSize;
+}
 //@End
 
 /* ####################################################### */
@@ -56,30 +73,38 @@ uniform float fPixelHeight;
 uniform float _Mixing;
 uniform vec4 _Color;
 uniform float _Fade;
-uniform float _PosXFreeze;
-uniform float _PosYFreeze;
-//
+uniform float _PosX;
+uniform float _PosY;
 
 /************************************************************/
 /* Main */
 /************************************************************/
 
+vec4 Fun_Render(sampler2D _Tex, vec2 In, bool _Ex)
+{
+    if(In.x <= 0.0 || In.y <= 0.0 || In.x >= 1.0 || In.y >= 1.0 || (_Fade < 1.0 - In.y && _Ex))
+        return vec4(0.0);
+    else
+        return texture2D(_Tex, In);
+}
+
 void main(void)
 {
-    //vec2 In_Background = vec2(In.x, 1.0 - In.y);
+    vec4 _Render_Texture = Fun_Render(imgTexture, In, false) * blendColor;
 
-    vec4 _Render_Texture = texture2D(imgTexture, In) * blendColor;
-    //vec4 _Render_Background = _Is_Pre_296_Build ? texture2D(bckgTexture, In_Background) : texture2D(bckgTexture, In);
-
-        vec4 _Freeze_0 = vec4(vec3(_Color.rgb), texture2D(imgTexture, In).a);
-        vec4 _Freeze_1 = vec4(vec3(_Color.rgb), texture2D(imgTexture, In - (vec2(_PosXFreeze, _PosYFreeze) * vec2(fPixelWidth, fPixelHeight))).a) * 0.5;
-        vec4 _Freeze_2 = vec4(vec3(_Color.rgb), texture2D(imgTexture, In + (vec2(_PosXFreeze, _PosYFreeze) * vec2(fPixelWidth, fPixelHeight))).a) * 0.5;
-
-        vec4 _Freeze_Sum = (_Freeze_0 + _Freeze_1 + _Freeze_2);
-        if(_Fade < 1.0 - In.y) _Freeze_Sum = vec4(0.0);
+    vec2 _Off = vec2(_PosX, _PosY) * vec2(fPixelWidth, fPixelHeight);
         
-           vec4 _Result = mix(_Render_Texture, _Render_Texture + _Freeze_Sum, _Mixing);
+        vec4 _Freeze_Sum;
+        _Freeze_Sum.rgb = _Color.rgb;
+        _Freeze_Sum.a  = Fun_Render(imgTexture, In, true).a;
+        _Freeze_Sum.a += Fun_Render(imgTexture, In - _Off, true).a * 0.5;
+        _Freeze_Sum.a += Fun_Render(imgTexture, In + _Off, true).a * 0.5;
+        
+        _Freeze_Sum.a = clamp(_Freeze_Sum.a, 0.0, 1.0);
+        _Freeze_Sum *= _Freeze_Sum.a;
 
+           vec4 _Result = clamp(_Freeze_Sum + _Render_Texture, 0.0, 1.0);
+            _Result = mix(_Render_Texture, _Result, _Mixing);
     gl_FragColor = _Result;
 }
 

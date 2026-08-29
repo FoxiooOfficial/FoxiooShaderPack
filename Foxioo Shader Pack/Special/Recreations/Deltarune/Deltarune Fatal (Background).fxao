@@ -32,10 +32,11 @@ void main(void)
     vec2 _PixelSize = vec2(fPixelWidth, fPixelHeight);
     	vec2 _DirCorner = sign(texCoord - 0.5);
 
-            vec2 _PixelPadding = abs(_Mixing * _Mul) * vec2(fPixelWidth, fPixelHeight);
+            float _Expanded = abs(_Mixing * _Mul);
+            vec2 _PixelPadding = _Expanded * vec2(fPixelWidth, fPixelHeight);
             vec4 _PosExpanded = vertexPosition;
 
-                _PosExpanded.xy += _DirCorner * abs(_Mixing * _Mul);
+                _PosExpanded.xy += _DirCorner * _Expanded;
 
     	gl_Position = projectionMatrix * transformMatrix * (_PosExpanded);
 
