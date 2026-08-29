@@ -29,10 +29,11 @@ void main()
     In = (textureMatrix * Pos).xy;
 
     vec2 _PixelSize = vec2(fPixelWidth, fPixelHeight);
-    vec2 InOff = abs(vec2(_OffsetX, _OffsetY) * _PixelSize * 2.0);
     vec2 _DirCorner = sign(In - 0.5);
 
-        vec2 _PixelPadding = InOff / _PixelSize; // Radius
+    vec2 _Expanded = abs(vec2(_OffsetX, _OffsetY) * 2.0) / _PixelSize;
+
+        vec2 _PixelPadding = _Expanded; // Radius
         vec2 _PosExpanded = position;
 
         _PosExpanded.xy += _DirCorner * _PixelPadding;
@@ -40,7 +41,7 @@ void main()
     vec3 pos = vec3(_PosExpanded, 1.0);
     gl_Position = vec4(projectionMatrix * transformMatrix * objectMatrix * pos, 1.0);
 
-    In = In + _DirCorner * InOff / _PixelSize;
+    In = In + _DirCorner * _Expanded;
 }
 //@End
 
@@ -105,10 +106,19 @@ float Fun_Lum(vec4 _Result) {
     return dot(_Result.rgb, vec3(0.2126, 0.7152, 0.0722)) * _Result.a;
 }
 
+vec4 Fun_Render(sampler2D _Tex, vec2 In)
+{
+    if(In.x <= 0.0 || In.y <= 0.0 || In.x >= 1.0 || In.y >= 1.0)
+        return vec4(0.0);
+    else
+        return texture(_Tex, In);
+}
+
+
 out vec4 fragColor;
 void main(void)
 {
-    vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
+    vec4 _Render_Texture = Fun_Render(imgTexture, In) * blendColor;
 
         /* main panel */
         vec2 UV = In + vec2(_PosX, _PosY);
@@ -127,10 +137,10 @@ void main(void)
             // sub panels
             vec2 _UV_Echo = vec2(_OffsetX, _OffsetY) * vec2(fPixelWidth, fPixelHeight);
             
-                vec4 _Echo1 = texture(imgTexture, In + _UV_Echo) * blendColor;
+                vec4 _Echo1 = Fun_Render(imgTexture, In + _UV_Echo) * blendColor;
                     _Result.a += Fun_Lum(_Echo1) / 2.0;
 
-                vec4 _Echo2 = texture(imgTexture, In + _UV_Echo * 2.0) * blendColor;
+                vec4 _Echo2 = Fun_Render(imgTexture, In + _UV_Echo * 2.0) * blendColor;
                     _Result.a += Fun_Lum(_Echo2) / 3.0;
 
         /* End */

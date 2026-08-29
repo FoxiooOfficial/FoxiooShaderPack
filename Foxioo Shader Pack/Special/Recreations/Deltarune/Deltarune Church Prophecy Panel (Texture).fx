@@ -21,23 +21,6 @@ sampler2D _Texture : register(s1);
 /* Variables */
 /***********************************************************/
 
-float4x4 transformMatrix;
-float4x4 projectionMatrix;
-
-struct VS_INPUT
-{
-    float4 Tint     : COLOR0;
-    float2 texCoord : TEXCOORD0;
-    float4 Position : POSITION;
-};
-
-struct PS_INPUT
-{
-    float4 Tint     : COLOR0;
-    float2 texCoord : TEXCOORD0;
-    float4 Position : POSITION;
-};
-
     float   _Mixing,
             _PosX, _PosY,
             _Scale, _ScaleX, _ScaleY,
@@ -50,38 +33,47 @@ struct PS_INPUT
     
     float4  _ColorLight, _ColorShadow;
 
+    float4x4    transformMatrix,
+                projectionMatrix;
+
+struct VS_INPUT
+{
+    float4 Tint     : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float4 Position : POSITION;
+};
+
+struct VS_OUTPUT
+{
+    float4 Tint     : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float4 Position : POSITION;
+};
+
 /************************************************************/
 /* Vertex Shader */
 /************************************************************/
 
-/*
-    Based on "Blur (outside rect)"
-    Created by: Sphax - Flavien Clermont / NaitorStudios
-*/
-PS_INPUT Fun_VertexExpand(VS_INPUT input, float2 InOff)
+VS_OUTPUT vs_main(VS_INPUT In)
 {
-	PS_INPUT _Output;
+	VS_OUTPUT Out;
 
 	float2 _PixelSize = float2(fPixelWidth, fPixelHeight);
-	float2 _DirCorner = sign(input.texCoord - 0.5);
-    
-	    float2 _PixelPadding = InOff / _PixelSize; // Radius
-	    float4 _PosExpanded = input.Position;
+	float2 _DirCorner = sign(In.texCoord - 0.5);
 
-	        _PosExpanded.xy += _DirCorner * _PixelPadding;
+        float2 _Expanded = abs(float2(_OffsetX, _OffsetY) * 2.0);
+        float2 _PixelPadding = _Expanded * float2(fPixelWidth, fPixelHeight);
+        float4 _PosExpanded = In.Position;
 
-	_Output.Position = mul(_PosExpanded, transformMatrix);
-	_Output.Position = mul(_Output.Position, projectionMatrix);
-    
-    _Output.Tint = input.Tint;
-	_Output.texCoord = input.texCoord + _DirCorner * InOff;
+            _PosExpanded.xy += _DirCorner * _Expanded;
 
-	return _Output;
-}
+	Out.Position = mul(_PosExpanded, transformMatrix);
+	Out.Position = mul(Out.Position, projectionMatrix);
 
-PS_INPUT vs_main(VS_INPUT input)
-{
-	return Fun_VertexExpand(input, abs(float2(_OffsetX, _OffsetY) * 2.0));
+	Out.Tint = In.Tint;
+	Out.texCoord = In.texCoord + _DirCorner * _PixelPadding;
+
+	return Out;
 }
 
 /************************************************************/
@@ -100,7 +92,7 @@ float Fun_Lum(float4 _Result) {
     return dot(_Result.rgb, float3(0.2126, 0.7152, 0.0722)) * _Result.a;
 }
 
-float4 ps_main(PS_INPUT In) : COLOR0
+float4 ps_main(VS_OUTPUT In) : COLOR0
 //float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
 {
     float4 _Render_Texture = Fun_PixelSample(S2D_Image, In.texCoord);
@@ -146,6 +138,6 @@ technique tech_main
     pass P0
     {
         PixelShader = compile ps_2_0 ps_main();
-        VertexShader = compile vs_3_0 vs_main();
+        VertexShader = compile vs_1_1 vs_main();
     }
 }

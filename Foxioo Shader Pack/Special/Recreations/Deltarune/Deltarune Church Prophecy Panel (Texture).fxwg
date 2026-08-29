@@ -1,0 +1,188 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_vertex
+struct Projection {
+    size: vec2f,
+    scale: vec2f,
+};
+
+@group(0) @binding(0) var<uniform> projection: Projection;
+
+struct VertexInput {
+    @location(0) position: vec2f,
+    @location(1) texCoord: vec2f,
+    @location(2) color: vec4f,
+    @location(3) ink: f32,
+    @location(4) bgCoord: vec2f,
+};
+
+struct VertexOutput {
+    @builtin(position) position: vec4f,
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+    @location(2) ink: f32,
+    @location(3) bgCoord: vec2f,
+};
+
+struct Params {
+    parameter0_value: i32,
+    parameter1_value: i32,
+    _PosX: f32,
+    _PosY: f32,
+    _OffsetX: f32,
+    _OffsetY: f32,
+    parameter6_value: i32,
+    _Scale: f32,
+    _ScaleX: f32,
+    _ScaleY: f32,
+    parameter10_value: i32,
+    _Mixing: f32,
+    _Color: i32,
+    _ColorLight: vec4f,
+    _ColorShadow: vec4f,
+    parameter16_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+@vertex fn vs_main(input: VertexInput) -> VertexOutput {
+    var output: VertexOutput;
+    var Pos: vec3f = vec3f(input.position, 1.0);
+        output.texCoord = (fusion.textureMatrix * Pos).xy;
+
+        var _PixelSize: vec2f = vec2f(fusion.fPixelWidth, fusion.fPixelHeight);
+        var _DirCorner: vec2f = sign(output.texCoord - 0.5);
+
+        var _Expanded: vec2f = abs(vec2f(params._OffsetX, params._OffsetY) * 2.0) / _PixelSize;
+
+            var _PixelPadding: vec2f = _Expanded; // Radius
+            var _PosExpanded: vec2f = input.position;
+
+            {
+                let _fusionSwizzle0 = _DirCorner * _PixelPadding;
+                _PosExpanded.x += _fusionSwizzle0.x;
+                _PosExpanded.y += _fusionSwizzle0.y;
+            }
+
+        var pos: vec3f = vec3f(_PosExpanded, 1.0);
+        output.position = vec4f(fusion.projectionMatrix * fusion.transformMatrix * fusion.objectMatrix * pos, 1.0);
+
+        output.texCoord = output.texCoord + _DirCorner * _Expanded;
+    output.bgCoord = input.bgCoord;
+    output.color = input.color;
+    output.ink = input.ink;
+    return output;
+}
+//@End
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(1) var _Texture: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+//uniform sampler2D bckgTexture;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    parameter1_value: i32,
+    _PosX: f32,
+    _PosY: f32,
+    _OffsetX: f32,
+    _OffsetY: f32,
+    parameter6_value: i32,
+    _Scale: f32,
+    _ScaleX: f32,
+    _ScaleY: f32,
+    parameter10_value: i32,
+    _Mixing: f32,
+    _Color: i32,
+    _ColorLight: vec4f,
+    _ColorShadow: vec4f,
+    parameter16_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+fn Fun_Lum(_Result: vec4f) -> f32 {
+    return dot(_Result.rgb, vec3f(0.2126, 0.7152, 0.0722)) * _Result.a;
+}
+
+fn Fun_Render(_Tex: texture_2d<f32>, In: vec2f) -> vec4f {
+    if(In.x <= 0.0 || In.y <= 0.0 || In.x >= 1.0 || In.y >= 1.0) {
+            return vec4f(0.0);
+        }
+        else {
+            return texture2D(_Tex, In);
+        }
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = Fun_Render(img, vec2f(input.texCoord)) * (input.color * fusion.blendColor);
+
+            /* main panel */
+            var UV: vec2f = input.texCoord + vec2f(params._PosX, params._PosY);
+            UV = (UV * vec2f(params._ScaleX, params._ScaleY) * params._Scale) / 256.0;
+            UV /= vec2f(fusion.fPixelWidth, fusion.fPixelHeight);
+            UV = UV - floor(UV); // frac(UV)?
+
+                var _Render_Texture_Lum: f32 = Fun_Lum(_Render_Texture);
+                var _Texture_UV: vec4f = texture2D(_Texture, UV);
+
+                var _Result: vec4f = _Texture_UV;
+                var _Result_Lum: f32 = Fun_Lum(_Result);
+
+                _Result.a *= _Render_Texture_Lum;
+
+                // sub panels
+                var _UV_Echo: vec2f = vec2f(params._OffsetX, params._OffsetY) * vec2f(fusion.fPixelWidth, fusion.fPixelHeight);
+
+                    var _Echo1: vec4f = Fun_Render(img, vec2f(input.texCoord + _UV_Echo)) * (input.color * fusion.blendColor);
+                        _Result.a += Fun_Lum(_Echo1) / 2.0;
+
+                    var _Echo2: vec4f = Fun_Render(img, vec2f(input.texCoord + _UV_Echo * 2.0)) * (input.color * fusion.blendColor);
+                        _Result.a += Fun_Lum(_Echo2) / 3.0;
+
+            /* End */
+                if((params._Color != 0)) {
+                    {
+                        let _fusionSwizzle0 = mix(params._ColorShadow.rgb, params._ColorLight.rgb, _Result_Lum);
+                        _Result.x = _fusionSwizzle0.x;
+                        _Result.y = _fusionSwizzle0.y;
+                        _Result.z = _fusionSwizzle0.z;
+                    }
+                }
+
+            _Result = mix(_Render_Texture, _Result, params._Mixing);
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End
