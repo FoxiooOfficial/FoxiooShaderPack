@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.1 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -16,6 +17,15 @@
 uniform mat4 transformMatrix;
 uniform mat4 projectionMatrix;
 
+uniform float _TuneTail;
+uniform float _TuneHead;
+uniform float _Angle;
+uniform float _PosY;
+uniform float _PosX;
+uniform float _Mixing;
+uniform float fPixelWidth;
+uniform float fPixelHeight;
+
 attribute vec4 position;
 attribute vec2 texCoord;
 varying vec2 In;
@@ -23,11 +33,31 @@ varying vec2 In;
 void main(void)
 {
     In = texCoord;
-    gl_Position = projectionMatrix * transformMatrix * position;
+
+    vec2 _PixelSize = vec2(fPixelWidth, fPixelHeight);
+    vec2 _DirCorner = sign(In - 0.5);
+
+        vec2 _Pivot = vec2(_PosX, _PosY);
+        _Pivot *= _Pivot;
+
+        vec2 _Min = abs(vec2(0.0, 0.0) - _Pivot);
+        vec2 _Max = abs(vec2(1.0, 1.0) - _Pivot);
+        float _Rad = length(max(_Min, _Max));
+
+            float _Tune = max(abs(_TuneTail), abs(_TuneHead));
+            float _Ang = abs(radians(_Angle)) * _Tune;
+
+        float _Expanded = _Rad * 2.0 * sin(min(_Ang * 0.5, 1.57079632));
+        vec2 _PixelPadding = vec2(_Expanded);
+        vec4 _PosExpanded = position;
+
+        _PosExpanded.xy += _DirCorner * _PixelPadding / _PixelSize;
+
+    gl_Position = projectionMatrix * transformMatrix * _PosExpanded;
+
+    In = In + _DirCorner * _Expanded;
 }
-
 //@End
-
 /* ####################################################### */
 
 //@Begin_fragment
@@ -55,111 +85,54 @@ uniform vec4 blendColor;
 
 uniform float _PosX;
 uniform float _PosY;
-
-uniform float _RotX;
-
-uniform float _PointX;
-uniform float _PointY;
-
-uniform float _ScaleX;
-uniform float _ScaleY;
-uniform float _Scale;
-
 uniform float _Mixing;
 uniform bool _Blending_Mode;
-uniform int _Looping_Mode;
-
+uniform float _TuneTail;
+uniform float _TuneHead;
 uniform float _Angle;
 uniform float _Start;
-uniform float _TuneHead;
-uniform float _TuneTail;
-
-
 
 /************************************************************/
 /* Main */
 /************************************************************/
 
-vec2 Fun_RotationX(vec2 In)
-{
-    vec2 _Points = vec2(_PointX, _PointY);
-    vec2 _UV = In;
-    float _RotX_Fix = _RotX * (3.14159265 / 180.0);
-
-    mat2 _Mat = mat2(
-        cos(_RotX_Fix), sin(_RotX_Fix),
-        -sin(_RotX_Fix), cos(_RotX_Fix)
-    );
-
-    _UV = _Points + _Mat * (_UV - _Points);
-
-    return _UV;
+vec4 Fun_Render(sampler2D _Tex, vec2 In) {
+    if(In.x <= 0.0 || In.y <= 0.0 || In.x >= 1.0 || In.y >= 1.0)
+        return vec4(0.0);
+    else
+        return texture2D(_Tex, In);
 }
 
 vec2 Fun_Bend(vec2 In)
 {
-    vec2 _Point = vec2(_PointX, _PointY);
+    vec2 _Point = vec2(_PosX, _PosY);
     vec2 _Center = In - _Point;
     float _Distance = length(_Center);
     
         float _Blend = ((_Distance - _Start) / (1.0 - _Start));
         float _Factor = step(_Start, _Distance);
-    
-            float _TuningFactor = mix(_TuneTail, mix(_TuneTail, _TuneHead, _Blend), _Factor);
-    
-    float _Ang = radians(_Angle) * _TuningFactor;
-    vec2 _Os = vec2(cos(_Ang), sin(_Ang));
-        
-        mat2 _Rot = mat2(_Os.x, -_Os.y, _Os.y,  _Os.x);
 
-        return _Rot * _Center + _Point;
-
+            float _Tune = mix(_TuneTail, mix(_TuneTail, _TuneHead, _Blend), _Factor);
+            float _Ang = radians(_Angle) * _Tune;
+            
+        vec2 _Os = vec2(cos(_Ang), sin(_Ang));
+        mat2 _Rot = mat2(_Os.x, _Os.y, -_Os.y, _Os.x);
+    
+    return _Rot * _Center + _Point;
 }
 
 void main(void)
 {
-    vec2 In_Background = vec2(In.x, 1.0 - In.y);
+    vec4 _Render_Texture = Fun_Render(imgTexture, In) * blendColor;
 
-    vec4 _Render_Texture = texture2D(imgTexture, In) * blendColor;
-    vec4 _Render_Background = texture2D(bckgTexture, In);
-    vec4 _Render;
+    vec2 UV = mix(In, Fun_Bend(In), _Mixing);
 
-    vec2 _Pos = vec2(_PosX, _PosY);
-    vec2 UV;
+        vec4 _Result = Fun_Render(imgTexture, UV) * blendColor;
 
-        if(_Is_Pre_296_Build && _Blending_Mode)
-            UV = Fun_RotationX(In_Background + _Pos);
-        else
-            UV = Fun_RotationX(In + _Pos);
+        if(_Blending_Mode)
+            _Result = Fun_Render(bckgTexture, UV) * vec4(1.0, 1.0, 1.0, _Result.a);
 
-        UV = ((UV - vec2(_PointX, _PointY)) * vec2(_ScaleX, _ScaleY) * _Scale) + vec2(_PointX, _PointY);
-
-    UV = Fun_Bend(UV);
-
-    if (_Looping_Mode == 0)
-    {
-        UV = fract(UV);
-    }
-    else if (_Looping_Mode == 1)
-    {
-        UV /= 2.0;
-        UV = fract(UV);
-        UV = abs(UV * 2.0 - 1.0);
-    }
-    else if(_Looping_Mode == 2)
-    {
-        UV = clamp(UV, 0.0, 1.0);
-    }
-
-
-    if(_Blending_Mode == false) {   _Render = texture2D(imgTexture, UV) * blendColor;  }
-    else {                      _Render = vec4(texture2D(bckgTexture, UV).rgb, _Render_Texture.a);  }
-
-        if (_Looping_Mode == 3 && (UV.x < 0.0 || UV.x > 1.0 || UV.y < 0.0 || UV.y > 1.0))
-        {
-            _Render = vec4(0.0);
-        }
-    gl_FragColor = _Render;
+    gl_FragColor = _Result;
 }
 
 //@End

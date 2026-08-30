@@ -27,7 +27,7 @@ struct PS_INPUT
 {
     float4 Tint : COLOR0;
     float2 texCoord : TEXCOORD0;
-	float2 bgCoord : TEXCOORD1;
+	//float2 bgCoord : TEXCOORD1;
     float4 Position : SV_POSITION;
 };
 
@@ -59,7 +59,7 @@ struct VS_INPUT
 {
     float4 Tint     : COLOR0;
     float2 texCoord : TEXCOORD0;
-	float2 bgCoord : TEXCOORD1;
+	//float2 bgCoord : TEXCOORD1;
     float3 Position : SV_POSITION;
 };
 
@@ -103,7 +103,7 @@ PS_INPUT vs_main(VS_INPUT In)
 	PS_INPUT Out;
 
 	float2 _PixelSize = float2(fPixelWidth, fPixelHeight);
-	float4 _DirCorner = float4(sign(In.texCoord - 0.5), sign(In.bgCoord - 0.5));
+	float2 _DirCorner = sign(In.texCoord - 0.5);
 
             float2 _PivotMin = float2(0.0, 0.0) - float2(_PosX, _PosY);
             float2 _PivotMax = float2(1.0, 1.0) - float2(_PosX, _PosY);
@@ -123,7 +123,7 @@ PS_INPUT vs_main(VS_INPUT In)
 
 	Out.Tint = In.Tint;
 	Out.texCoord = In.texCoord + _DirCorner.xy * _PixelPadding;
-    Out.bgCoord = In.bgCoord; //+ _DirCorner.zw * _PixelPadding;
+    //Out.bgCoord = In.bgCoord; //+ _DirCorner.zw * _PixelPadding;
 
 	return Out;
 }

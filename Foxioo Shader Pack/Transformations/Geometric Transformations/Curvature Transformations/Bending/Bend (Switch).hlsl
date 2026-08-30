@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.1 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -11,7 +12,6 @@
 /***********************************************************/
 /* Samplers */
 /***********************************************************/
-
 
 Texture2D<float4> S2D_Image : register(t0);
 SamplerState S2D_ImageSampler : register(s0);
@@ -23,178 +23,195 @@ SamplerState S2D_BackgroundSampler : register(s1);
 /* Variables */
 /***********************************************************/
 
-
-cbuffer PS_VARIABLES : register(b0)
-{
-    bool _;
-    bool __;
-    float _PosX;
-    float _PosY;
-    bool ___;
-    float _RotX;
-    bool ____;
-    float _PointX;
-    float _PointY;
-    bool ______;        
-    float _Scale;
-    float _ScaleX;
-    float _ScaleY;
-    bool _______;
-    int _Looping_Mode;
-    bool _Blending_Mode;
-    float _Mixing;
-    float _Angle;
-    float _Start;
-    float _TuneHead;
-    float _TuneTail;
-    bool ________;
-	bool _Is_Pre_296_Build;
-	bool _________;
-};
-
 struct PS_INPUT
 {
     float4 Tint : COLOR0;
     float2 texCoord : TEXCOORD0;
-	float2 bgCoord : TEXCOORD1;
+	//float2 bgCoord : TEXCOORD1;
     float4 Position : SV_POSITION;
 };
 
-struct PS_OUTPUT
+#ifdef FUSION_PIXEL_SHADER
+
+    cbuffer PS_VARIABLES : register(b0)
+    {
+        bool _;
+        bool _Blending_Mode;
+        float _Mixing;
+        float _Angle;
+        float _Start;
+        float _TuneHead;
+        float _TuneTail;
+        float _PosX;
+        float _PosY;
+        bool __;
+    };
+
+    cbuffer PS_PIXELSIZE : register(b1)
+    {
+        float fPixelWidth;
+        float fPixelHeight;
+    };
+
+#endif // FUSION_PIXEL_SHADER
+
+/***********************************************************/
+
+struct VS_INPUT
 {
-    float4 Color   : SV_TARGET;
+    float4 Tint     : COLOR0;
+    float2 texCoord : TEXCOORD0;
+	//float2 bgCoord : TEXCOORD1;
+    float3 Position : SV_POSITION;
 };
 
-cbuffer PS_PIXELSIZE : register(b1)
+#ifdef FUSION_VERTEX_SHADER
+
+	cbuffer VS_MATRICES : register(b0)
+	{
+		row_major float4x4 transformMatrix;
+		row_major float4x4 projectionMatrix;
+	};
+
+    cbuffer VS_VARIABLES : register(b1)
+    {
+        bool _;
+        bool _Blending_Mode;
+        float _Mixing;
+        float _Angle;
+        float _Start;
+        float _TuneHead;
+        float _TuneTail;
+        float _PosX;
+        float _PosY;
+        bool __;
+    };
+
+    cbuffer VS_PIXELSIZE : register(b2)
+    {
+        float fPixelWidth;
+        float fPixelHeight;
+    };
+
+#endif // FUSION_VERTEX_SHADER
+
+/************************************************************/
+/* Vertex Shader */
+/************************************************************/
+
+#ifdef FUSION_VERTEX_SHADER
+
+// fusion-fx-preview: allow-fxc-warnings
+PS_INPUT vs_main(VS_INPUT In)
 {
-	float fPixelWidth;
-	float fPixelHeight;
-};
+	PS_INPUT Out;
+
+	float2 _PixelSize = float2(fPixelWidth, fPixelHeight);
+	float2 _DirCorner = sign(In.texCoord - 0.5);
+
+        float2 _Pivot = float2(_PosX, _PosY);
+        _Pivot *= _Pivot;
+
+        float2 _Min = abs(float2(0.0, 0.0) - _Pivot);
+        float2 _Max = abs(float2(1.0, 1.0) - _Pivot);
+        float _Rad = length(max(_Min, _Max));
+
+            float _Tune = max(abs(_TuneTail), abs(_TuneHead));
+            float _Ang = abs(radians(_Angle)) * _Tune;
+
+        float2 _Expanded = _Rad * 2.0 * sin(min(_Ang * 0.5, 1.57079632));
+        float2 _PixelPadding = _Expanded;
+        float4 _PosExpanded = float4(In.Position, 1.0);
+
+            //if(!_Blending_Mode)
+                _PosExpanded.xy += _DirCorner.xy * _Expanded / float2(fPixelWidth, fPixelHeight);
+            //else
+            //    _PosExpanded.xy += _DirCorner.zw * _Expanded / float2(fPixelWidth, fPixelHeight);
+
+	Out.Position = mul(_PosExpanded, transformMatrix);
+	Out.Position = mul(Out.Position, projectionMatrix);
+
+	Out.Tint = In.Tint;
+	Out.texCoord = In.texCoord + _DirCorner.xy * _PixelPadding;
+    //Out.bgCoord = In.bgCoord + _DirCorner.zw * _PixelPadding;
+
+	return Out;
+}
+
+#endif // FUSION_VERTEX_SHADER
 
 /************************************************************/
 /* Main */
 /************************************************************/
 
-float2 Fun_RotationX(float2 In)
-{
-    float2 _Points = float2(_PointX, _PointY);
-    float2 _UV = In;
-    float _RotX_Fix = _RotX * (3.14159265 / 180);
-
-        _UV = _Points + mul(float2x2(cos(_RotX_Fix), sin(_RotX_Fix), -sin(_RotX_Fix), cos(_RotX_Fix)), _UV - _Points);
-
-    return _UV;
+#ifdef FUSION_PIXEL_SHADER
+    
+float4 Fun_Render(Texture2D _Tex, SamplerState _TexSampler, float2 In) {
+    if(any(In <= 0.0 || In >= 1.0))
+        return 0.0;
+    else
+        return _Tex.Sample(_TexSampler, In);
 }
 
 float2 Fun_Bend(float2 In)
 {
-    float2 _Point = float2(_PointX, _PointY);
+    float2 _Point = float2(_PosX, _PosY);
     float2 _Center = In - _Point;
     float _Distance = length(_Center);
     
         float _Blend = ((_Distance - _Start) / (1.0 - _Start));
         float _Factor = step(_Start, _Distance);
-    
-            float _TuningFactor = lerp(_TuneTail, lerp(_TuneTail, _TuneHead, _Blend), _Factor);
-    
-    float _Ang = radians(_Angle) * _TuningFactor;
-    float2 _Os = float2(cos(_Ang), sin(_Ang));
-        
+
+            float _Tune = lerp(_TuneTail, lerp(_TuneTail, _TuneHead, _Blend), _Factor);
+            float _Ang = radians(_Angle) * _Tune;
+            
+        float2 _Os = float2(cos(_Ang), sin(_Ang));
         float2x2 _Rot = float2x2(_Os.x, -_Os.y, _Os.y, _Os.x);
     
-        return mul(_Rot, _Center) + _Point;
+    return mul(_Rot, _Center) + _Point;
 }
 
-PS_OUTPUT ps_main( in PS_INPUT In )
-{ 
-    PS_OUTPUT Out;
-
-    float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
-    float4 _Render = 0;
-
-    float2  _Pos = float2(_PosX, _PosY),
-        UV = Fun_RotationX((In.texCoord + _Pos));
-        UV = ((UV - float2(_PointX, _PointY)) * float2(_ScaleX, _ScaleY) * _Scale) + float2(_PointX, _PointY);
-
-        UV = lerp(UV, Fun_Bend(UV), _Mixing);
-
-            if(_Looping_Mode == 0)
-            {
-                UV = frac(UV);
-            }
-            else if(_Looping_Mode == 1)
-            {
-                UV /= 2;
-                UV = frac(UV);
-                UV = abs(UV * 2.0 - 1.0);
-            }
-            else if(_Looping_Mode == 2)
-            {
-                UV = clamp(UV, 0.0, 1.0);
-            }
-
-    if(_Blending_Mode == 0) {   _Render = S2D_Image.Sample(S2D_ImageSampler, UV) * In.Tint; }
-    else {                      _Render = float4(S2D_Background.Sample(S2D_BackgroundSampler, UV).rgb, _Render_Texture.a);  }
-
-        if (_Looping_Mode == 3 && any(UV < 0.0 || UV > 1.0))
-        {
-            _Render = 0;
-        }
-
-    Out.Color = _Render;
-    return Out;
-}
-
-/************************************************************/
-/* Premultiplied Alpha */
-/************************************************************/
-
-float4 Demultiply(float4 _Color)
+float4 Demultiply(float4 _Render, bool _Premultiplied)
 {
-	if ( _Color.a != 0 )   _Color.rgb /= _Color.a;
-	return _Color;
+    if(_Premultiplied)
+    {
+        if ( _Render.a != 0.0 ) {
+            _Render.rgb /= _Render.a;
+        }
+    }
+    return _Render;
 }
 
-PS_OUTPUT ps_main_pm( in PS_INPUT In )
-{ 
-    PS_OUTPUT Out;
+float4 Main(PS_INPUT In, bool _Premultiplied) : SV_TARGET
+{
+    float4 _Render_Texture = Demultiply(Fun_Render(S2D_Image, S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
+    //return float4(In.bgCoord.xy, 0.0, 1.0);
 
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint);
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
-    float4 _Render = 0;
+    float2 UV = lerp(In.texCoord, Fun_Bend(In.texCoord), _Mixing);
 
-    float2  _Pos = float2(_PosX, _PosY),
-        UV = Fun_RotationX((In.texCoord + _Pos));
-        UV = ((UV - float2(_PointX, _PointY)) * float2(_ScaleX, _ScaleY) * _Scale) + float2(_PointX, _PointY);
+        float4 _Result = Demultiply(Fun_Render(S2D_Image, S2D_ImageSampler, UV) * In.Tint, _Premultiplied);
 
-        UV = lerp(UV, Fun_Bend(UV), _Mixing);
+        if(_Blending_Mode)
+            _Result = Fun_Render(S2D_Background, S2D_BackgroundSampler, UV) * float4(1.0, 1.0, 1.0, _Result.a);
 
-            if(_Looping_Mode == 0)
-            {
-                UV = frac(UV);
-            }
-            else if(_Looping_Mode == 1)
-            {
-                UV /= 2;
-                UV = frac(UV);
-                UV = abs(UV * 2.0 - 1.0);
-            }
-            else if(_Looping_Mode == 2)
-            {
-                UV = clamp(UV, 0.0, 1.0);
-            }
+    return _Result;
+}
 
-    if(_Blending_Mode == 0) {   _Render = Demultiply(S2D_Image.Sample(S2D_ImageSampler, UV)) * In.Tint; }
-    else {                      _Render = float4(S2D_Background.Sample(S2D_BackgroundSampler, UV).rgb, _Render_Texture.a);    }
+/************************************************************/
+/* Render */
+/************************************************************/
 
-        if (_Looping_Mode == 3 && any(UV < 0.0 || UV > 1.0))
-        {
-            _Render = 0;
-        }
+float4 ps_main(PS_INPUT In) : SV_TARGET{
+    float4 _Render = Main(In, false);
+    return _Render;
+}
 
+float4 ps_main_pm(PS_INPUT In) : SV_TARGET
+{
+    float4 _Render = Main(In, true);
     _Render.rgb *= _Render.a;
 
-    Out.Color = _Render;
-    return Out;
+    return _Render;
 }
+
+#endif // FUSION_PIXEL_SHADER

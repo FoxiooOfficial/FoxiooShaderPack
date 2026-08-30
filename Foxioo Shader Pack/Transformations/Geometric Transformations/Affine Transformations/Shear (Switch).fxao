@@ -44,11 +44,11 @@ void main(void)
         vec2 _PixelPadding = vec2(_Expanded);
         vec4 _PosExpanded = position;
 
-        _PosExpanded.xy += _DirCorner * _PixelPadding;
+        _PosExpanded.xy += _DirCorner * _PixelPadding / _PixelSize;
 
     gl_Position = projectionMatrix * transformMatrix * _PosExpanded;
 
-    In = In + _DirCorner * _Expanded * _PixelSize;
+    In = In + _DirCorner * _Expanded;
 }
 //@End
 /* ####################################################### */
