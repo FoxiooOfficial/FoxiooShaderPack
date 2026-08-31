@@ -1,0 +1,116 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(0) var background: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Mixing: f32,
+    _ColorIn: vec4f,
+    _ColorBackground: vec4f,
+    _OutlineColor: vec4f,
+    _OutlineAlpha: f32,
+    _OutlineOffset: f32,
+    _OutlineCorner: i32,
+    parameter8_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+// Expanded source constant: _SIZE
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        var _Render_Background: vec4f = texture2D(background, input.texCoord);
+
+        var _Result: vec4f;
+        var _Inside: f32;
+
+        if((_Render_Background.r == params._ColorIn.r) && (_Render_Background.g == params._ColorIn.g) && (_Render_Background.b == params._ColorIn.b))
+        {
+            /* inside */
+            {
+                let _fusionSwizzle0 = _Render_Texture.rgb;
+                _Result.x = _fusionSwizzle0.x;
+                _Result.y = _fusionSwizzle0.y;
+                _Result.z = _fusionSwizzle0.z;
+            }
+            _Result.a = 1.0;
+            _Inside = 1.0;
+
+            {
+                let _fusionSwizzle1 = mix(params._ColorBackground.rgb, _Render_Texture.rgb, _Render_Texture.a);
+                _Result.x = _fusionSwizzle1.x;
+                _Result.y = _fusionSwizzle1.y;
+                _Result.z = _fusionSwizzle1.z;
+            }
+        }
+        else
+        {
+            /* outside!!! */
+            _Result = vec4f(0.0, 0.0, 0.0, 0.0);
+            _Inside = 0.0;
+        }
+
+            /* outline !! */
+            var _Outline: f32 = 0.0;
+            for (var y: i32 = -(1); y <= (1); y += 1)
+            {
+                for (var x: i32 = -(1); x <= (1); x += 1)
+                {
+                    var _Test: bool = (x == i32(0)) != (y == i32(0));
+                    var _Include: bool = select(_Test, true, (params._OutlineCorner != 0));
+
+                    if (_Include)
+                    {
+                        var _Off: vec2f = vec2f(fusion.fPixelWidth, fusion.fPixelHeight) * vec2f(f32(x), f32(y)) * params._OutlineOffset;
+                        var _Render_Back: vec3f = texture2D(background, input.texCoord + _Off).rgb;
+                        var _Comp: bool = (_Render_Back.r == params._ColorIn.r) && (_Render_Back.g == params._ColorIn.g) && (_Render_Back.b == params._ColorIn.b);
+                        _Outline += f32(_Comp);
+                    }
+                }
+            }
+
+                _Outline = clamp(_Outline, 0.0, 1.0);
+                _Inside = clamp(_Inside, 0.0, 1.0);
+
+            _Result = mix(vec4f(params._OutlineColor.rgb, params._OutlineAlpha), _Result, 1.0 - (_Outline - _Inside));
+            _Result = mix(_Render_Texture, _Result, params._Mixing);
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End

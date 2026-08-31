@@ -74,8 +74,6 @@ uniform float _OutlineOffset;
 
 uniform bool _OutlineCorner;
 
-
-
 #define _SIZE 1
 
 /************************************************************/
@@ -85,15 +83,13 @@ uniform bool _OutlineCorner;
 out vec4 fragColor;
 void main(void)
 {   
-    vec2 In_Background = In;
-    if(_Is_Pre_296_Build) In_Background = vec2(In.x, 1.0 - In.y);
-
     vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
-    vec4 _Render_Background = texture(bckgTexture, In_Background);
+    vec4 _Render_Background = texture(bckgTexture, In);
 
     vec4 _Result;
     float _Inside;
-    if(_Render_Background.r == _ColorIn.r && _Render_Background.g == _ColorIn.g && _Render_Background.b == _ColorIn.b)
+
+    if((_Render_Background.r == _ColorIn.r) && (_Render_Background.g == _ColorIn.g) && (_Render_Background.b == _ColorIn.b))
     {   
         /* inside */
         _Result.rgb = _Render_Texture.rgb;
@@ -109,33 +105,30 @@ void main(void)
         _Inside = 0.0;
     }
 
-    /* outline !! */
-    float _Outline = 0.0;
-    for(int y = -_SIZE; y <= _SIZE; y++)
-    {
-        for(int x = -_SIZE; x <= _SIZE; x++)
+        /* outline !! */
+        float _Outline = 0.0;
+        for (int y = -_SIZE; y <= _SIZE; y++)
         {
-            bool _Test = (x == 0) != (y == 0);
-            bool _Include = _OutlineCorner ? true : _Test;
-
-            if (_Include)
+            for (int x = -_SIZE; x <= _SIZE; x++)
             {
-                vec2 _Off = vec2(fPixelWidth, fPixelHeight) * vec2(float(x), float(y)) * _OutlineOffset;
-                float _Comp = 0.0;
+                bool _Test = (x == 0) != (y == 0);
+                bool _Include = _OutlineCorner ? true : _Test;
 
-                vec3 _Color = texture(bckgTexture, In_Background + _Off).rgb;
-                if(_Color.r == _ColorIn.r && _Color.g == _ColorIn.g && _Color.b == _ColorIn.b);
-                    _Comp = 1.0;
-
-                _Outline += _Comp;
+                if (_Include)
+                {
+                    vec2 _Off = vec2(fPixelWidth, fPixelHeight) * vec2(x, y) * _OutlineOffset;
+                    vec3 _Render_Back = texture(bckgTexture, In + _Off).rgb;
+                    bool _Comp = (_Render_Back.r == _ColorIn.r) && (_Render_Back.g == _ColorIn.g) && (_Render_Back.b == _ColorIn.b);
+                    _Outline += float(_Comp);
+                }
             }
         }
-    }
 
-    _Outline = clamp(_Outline, 0.0, 1.0);
-    _Inside = clamp(_Inside, 0.0, 1.0);
+            _Outline = clamp(_Outline, 0.0, 1.0);
+            _Inside = clamp(_Inside, 0.0, 1.0);
 
         _Result = mix(vec4(_OutlineColor.rgb, _OutlineAlpha), _Result, 1.0 - (_Outline - _Inside));
+        _Result = mix(_Render_Texture, _Result, _Mixing);
 
     fragColor = _Result;
 }

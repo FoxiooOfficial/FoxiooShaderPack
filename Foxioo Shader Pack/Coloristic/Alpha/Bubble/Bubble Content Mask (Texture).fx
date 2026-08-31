@@ -7,6 +7,7 @@
 
 /***********************************************************/
 
+
 /* ####################################################### */
 
 /***********************************************************/
@@ -57,6 +58,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
 
     float4 _Result;
     float _Inside;
+
     if(all(_Render_Background.rgb == _ColorIn.rgb))
     {   
         /* inside */
@@ -73,28 +75,29 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
         _Inside = 0.0;
     }
 
-    /* outline !! */
-    float _Outline = 0.0;
-    for (int y = -_SIZE; y <= _SIZE; y++)
-    {
-        for (int x = -_SIZE; x <= _SIZE; x++)
+        /* outline !! */
+        float _Outline = 0.0;
+        for (int y = -_SIZE; y <= _SIZE; y++)
         {
-            bool _Test = (x == 0) != (y == 0);
-            bool _Include = _OutlineCorner ? true : _Test;
-
-            if (_Include)
+            for (int x = -_SIZE; x <= _SIZE; x++)
             {
-                float2 _Off = float2(fPixelWidth, fPixelHeight) * float2(x, y) * _OutlineOffset;
-                bool _Comp = all(tex2D(S2D_Background, In + _Off).rgb == _ColorIn.rgb);
-                _Outline += (float)_Comp;
+                bool _Test = (x == 0) != (y == 0);
+                bool _Include = _OutlineCorner ? true : _Test;
+
+                if (_Include)
+                {
+                    float2 _Off = float2(fPixelWidth, fPixelHeight) * float2(x, y) * _OutlineOffset;
+                    bool _Comp = all(tex2D(S2D_Background, In + _Off).rgb == _ColorIn.rgb);
+                    _Outline += (float)_Comp;
+                }
             }
         }
-    }
 
-    _Outline = saturate(_Outline);
-    _Inside = saturate(_Inside);
+            _Outline = saturate(_Outline);
+            _Inside = saturate(_Inside);
 
-    _Result = lerp(float4(_OutlineColor.rgb, _OutlineAlpha), _Result, 1.0 - (_Outline - _Inside));
+        _Result = lerp(float4(_OutlineColor.rgb, _OutlineAlpha), _Result, 1.0 - (_Outline - _Inside));
+        _Result = lerp(_Render_Texture, _Result, _Mixing);
 
     return _Result;
 }

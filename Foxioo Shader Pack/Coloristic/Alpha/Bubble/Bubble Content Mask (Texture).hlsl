@@ -34,8 +34,6 @@ cbuffer PS_VARIABLES : register(b0)
     float _OutlineOffset;
     bool _OutlineCorner;
     bool __;
-	bool _Is_Pre_296_Build;
-	bool ___;
 };
 
 struct PS_INPUT
@@ -63,11 +61,22 @@ cbuffer PS_PIXELSIZE : register(b1)
 /* Main */
 /************************************************************/
 
-PS_OUTPUT ps_main( in PS_INPUT In )
+float4 Demultiply(float4 _Render, bool _Premultiplied)
+{
+    if(_Premultiplied)
+    {
+        if ( _Render.a != 0.0 ) {
+            _Render.rgb /= _Render.a;
+        }
+    }
+    return _Render;
+}
+
+float4 Main(PS_INPUT In, bool _Premultiplied) : SV_TARGET
 {
     PS_OUTPUT Out;
 
-    float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
 
     float4 _Result;
@@ -88,95 +97,46 @@ PS_OUTPUT ps_main( in PS_INPUT In )
         _Inside = 0.0;
     }
 
-    /* outline !! */
-    float _Outline = 0.0;
-    for(int y = -_SIZE; y <= _SIZE; y++)
-    {
-        for(int x = -_SIZE; x <= _SIZE; x++)
+        /* outline !! */
+        float _Outline = 0.0;
+        for(int y = -_SIZE; y <= _SIZE; y++)
         {
-            bool _Test = (x == 0) != (y == 0);
-            bool _Include = _OutlineCorner ? true : _Test;
-
-            if (_Include)
+            for(int x = -_SIZE; x <= _SIZE; x++)
             {
-                float2 _Off = float2(fPixelWidth, fPixelHeight) * float2(x, y) * _OutlineOffset;
-                bool _Comp = all(S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord + _Off).rgb == _ColorIn.rgb);
+                bool _Test = (x == 0) != (y == 0);
+                bool _Include = _OutlineCorner ? true : _Test;
 
-                _Outline += (float)_Comp;
+                if (_Include)
+                {
+                    float2 _Off = float2(fPixelWidth, fPixelHeight) * float2(x, y) * _OutlineOffset;
+                    bool _Comp = all(S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord + _Off).rgb == _ColorIn.rgb);
+
+                    _Outline += (float)_Comp;
+                }
             }
         }
-    }
+            _Outline = saturate(_Outline);
+            _Inside = saturate(_Inside);
 
-    _Outline = saturate(_Outline);
-    _Inside = saturate(_Inside);
+        _Result = lerp(float4(_OutlineColor.rgb, _OutlineAlpha), _Result, 1.0 - (_Outline - _Inside));
+        _Result = lerp(_Render_Texture, _Result, _Mixing);
 
-    _Result = lerp(float4(_OutlineColor.rgb, _OutlineAlpha), _Result, 1.0 - (_Outline - _Inside));
-
-    Out.Color = _Result;
-    return Out;
+	return _Result;
 }
 
 /************************************************************/
-/* Premultiplied Alpha */
+/* Render */
 /************************************************************/
 
-float4 Demultiply(float4 _Color)
-{
-	if ( _Color.a != 0 )   _Color.rgb /= _Color.a;
-	return _Color;
+float4 ps_main(PS_INPUT In) : SV_TARGET{
+    float4 _Render = Main(In, false);
+    return _Render;
 }
 
-PS_OUTPUT ps_main_pm( in PS_INPUT In ) 
+float4 ps_main_pm(PS_INPUT In) : SV_TARGET
 {
-    PS_OUTPUT Out;
+    float4 _Render = Main(In, true);
+    _Render.rgb *= _Render.a;
 
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint);
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
-
-    float4 _Result;
-    float _Inside;
-    if(all(_Render_Background.rgb == _ColorIn.rgb))
-    {   
-        /* inside */
-        _Result.rgb = _Render_Texture.rgb;
-        _Result.a = 1.0;
-        _Inside = 1.0;
-
-        _Result.rgb = lerp(_ColorBackground.rgb, _Render_Texture.rgb, _Render_Texture.a);
-    }
-    else
-    {   
-        /* outside!!! */
-        _Result = float4(0.0, 0.0, 0.0, 0.0);
-        _Inside = 0.0;
-    }
-
-    /* outline !! */
-    float _Outline = 0.0;
-    for(int y = -_SIZE; y <= _SIZE; y++)
-    {
-        for(int x = -_SIZE; x <= _SIZE; x++)
-        {
-            bool _Test = (x == 0) != (y == 0);
-            bool _Include = _OutlineCorner ? true : _Test;
-
-            if (_Include)
-            {
-                float2 _Off = float2(fPixelWidth, fPixelHeight) * float2(x, y) * _OutlineOffset;
-                bool _Comp = all(S2D_Background.Sample(S2D_BackgroundSampler, In.texCoord + _Off).rgb == _ColorIn.rgb);
-
-                _Outline += (float)_Comp;
-            }
-        }
-    }
-
-    _Outline = saturate(_Outline);
-    _Inside = saturate(_Inside);
-
-    _Result = lerp(float4(_OutlineColor.rgb, _OutlineAlpha), _Result, 1.0 - (_Outline - _Inside));
-
-    _Result.rgb *= _Result.a;
-
-    Out.Color = _Result;
-    return Out;
+    return _Render;
 }
