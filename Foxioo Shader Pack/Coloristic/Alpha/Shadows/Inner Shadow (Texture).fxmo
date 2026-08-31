@@ -87,35 +87,36 @@ void main(void)
     vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
 
     float _Alpha = 0.0;
-    float _Idx = 0.0;
-
     for(int y = 0; y <= _Samples; y++)
     {
         for(int x = 0; x <= _Samples; x++)
         {
-            vec2 _Offset = (vec2(x, y) / float(_Samples) - 0.5) * _Size;
+            vec2 _Offset = (vec2(float(x), float(y)) / float(_Samples) - 0.5) * _Size;
             
             _Offset = vec2(fPixelWidth, fPixelHeight) * (_Offset + vec2(_PosX, _PosY));
-            
-            _Alpha += texture(imgTexture, In + _Offset).a * blendColor.a;
-            _Idx += 1.0;
+            _Alpha += texture(imgTexture, In + _Offset).a;
         }
     }
     
-    _Alpha /= _Idx;
+    _Alpha /= float(_Samples * _Samples);
 
-        float _InnerMask = _Render_Texture.a * (1.0 - _Alpha);
-    
-        _InnerMask = clamp(_InnerMask * _AlphaMul, 0.0, 1.0);
+    //float _Outer = clamp(_Alpha * _AlphaMul, 0.0, 1.0) * (1.0 - _Render_Texture.a);
+    float _Inner = clamp((1.0 - _Alpha) * _AlphaMul, 0.0, 1.0) * _Render_Texture.a;
 
-            vec4 _OutlineColor = mix(_ColorAccent, _Color, _InnerMask);
-            _OutlineColor.a = _Render_Texture.a * _ColorAlpha;
+        float _Strength = clamp(_Inner, 0.0, 1.0);
+        float _Mask = clamp((1.0 - _Render_Texture.a) + _AlphaBack, 0.0, 1.0);
 
-        vec4 _Render = _Render_Texture;
-        _Render.a *= _AlphaBack;
+        vec4 _Render_Color = mix(_ColorAccent, _Color, _Strength);
+        _Render_Color.a = _Strength * _Mask * _ColorAlpha * _Mixing;
 
-        _Render = mix(_Render, _OutlineColor, _InnerMask * _Mixing);
+            vec4 _Render = _Render_Texture;
+            _Render.a *= _AlphaBack;
 
-    fragColor = _Render;
+            vec4 _Result;
+
+        _Result.a = _Render_Color.a + _Render.a * (1.0 - _Render_Color.a);
+        _Result.rgb = mix(_Render.rgb, _Render_Color.rgb, _Render_Color.a / _Result.a);
+        
+    fragColor = _Result;
 }
 //@End

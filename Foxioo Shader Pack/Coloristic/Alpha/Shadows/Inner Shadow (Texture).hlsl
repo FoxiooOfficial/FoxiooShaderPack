@@ -81,9 +81,8 @@ float4 Demultiply(float4 _Render, bool _Premultiplied)
 float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
 {
     float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
-    
-    float _Alpha = 0.0, _Idx = 0.0;
 
+    float _Alpha = 0.0;
     for(int y = 0; y <= _Samples; y++)
     {
         for(int x = 0; x <= _Samples; x++)
@@ -91,27 +90,30 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
             float2 _Offset = (float2(x, y) / (float)_Samples - 0.5) * _Size;
             
             _Offset = float2(fPixelWidth, fPixelHeight) * (_Offset + float2(_PosX, _PosY));
-            
-            _Alpha += S2D_Image.Sample(S2D_ImageSampler, In.texCoord + _Offset).a * In.Tint.a;
-            _Idx += 1.0;
+            _Alpha += S2D_Image.Sample(S2D_ImageSampler, In.texCoord + _Offset).a;
         }
     }
     
-    _Alpha /= _Idx;
+    _Alpha /= float(_Samples * _Samples);
 
-        float _InnerMask = _Render_Texture.a * (1.0 - _Alpha);
-    
-        _InnerMask = saturate(_InnerMask * _AlphaMul);
+    //float _Outer = saturate(_Alpha * _AlphaMul) * (1.0 - _Render_Texture.a);
+    float _Inner = saturate((1.0 - _Alpha) * _AlphaMul) * _Render_Texture.a;
 
-            float4 _OutlineColor = lerp(_ColorAccent, _Color, _InnerMask);
-            _OutlineColor.a = _Render_Texture.a * _ColorAlpha;
+        float _Strength = saturate(_Inner);
+        float _Mask = saturate((1.0 - _Render_Texture.a) + _AlphaBack);
 
-        float4 _Render = _Render_Texture;
-        _Render.a *= _AlphaBack;
+        float4 _Render_Color = lerp(_ColorAccent, _Color, _Strength);
+        _Render_Color.a = _Strength * _Mask * _ColorAlpha * _Mixing;
 
-        _Render = lerp(_Render, _OutlineColor, _InnerMask * _Mixing);
+            float4 _Render = _Render_Texture;
+            _Render.a *= _AlphaBack;
 
-    return _Render;
+            float4 _Result;
+
+        _Result.a = _Render_Color.a + _Render.a * (1.0 - _Render_Color.a);
+        _Result.rgb = lerp(_Render.rgb, _Render_Color.rgb, _Render_Color.a / _Result.a);
+        
+    return _Result;
 }
 
 /************************************************************/

@@ -58,8 +58,6 @@ struct FragmentInput {
     var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
 
         var _Alpha: f32 = 0.0;
-        var _Idx: f32 = 0.0;
-
         for (var y: i32 = 0; y <= _Samples; y += 1)
         {
             for (var x: i32 = 0; x <= _Samples; x += 1)
@@ -67,27 +65,35 @@ struct FragmentInput {
                 var _Offset: vec2f = (vec2f(f32(x), f32(y)) / f32(_Samples) - 0.5) * params._Size;
 
                 _Offset = vec2f(fusion.fPixelWidth, fusion.fPixelHeight) * (_Offset + vec2f(params._PosX, params._PosY));
-
-                _Alpha += texture2D(img, input.texCoord + _Offset).a * (input.color * fusion.blendColor).a;
-                _Idx += 1.0;
+                _Alpha += texture2D(img, input.texCoord + _Offset).a;
             }
         }
 
-        _Alpha /= _Idx;
+        _Alpha /= f32(_Samples * _Samples);
 
-            var _InnerMask: f32 = _Render_Texture.a * (1.0 - _Alpha);
+        //float _Outer = clamp(_Alpha * _AlphaMul, 0.0, 1.0) * (1.0 - _Render_Texture.a);
+        var _Inner: f32 = clamp((1.0 - _Alpha) * params._AlphaMul, 0.0, 1.0) * _Render_Texture.a;
 
-            _InnerMask = clamp(_InnerMask * params._AlphaMul, 0.0, 1.0);
+            var _Strength: f32 = clamp(_Inner, 0.0, 1.0);
+            var _Mask: f32 = clamp((1.0 - _Render_Texture.a) + params._AlphaBack, 0.0, 1.0);
 
-                var _OutlineColor: vec4f = mix(params._ColorAccent, params._Color, _InnerMask);
-                _OutlineColor.a = _Render_Texture.a * params._ColorAlpha;
+            var _Render_Color: vec4f = mix(params._ColorAccent, params._Color, _Strength);
+            _Render_Color.a = _Strength * _Mask * params._ColorAlpha * params._Mixing;
 
-            var _Render: vec4f = _Render_Texture;
-            _Render.a *= params._AlphaBack;
+                var _Render: vec4f = _Render_Texture;
+                _Render.a *= params._AlphaBack;
 
-            _Render = mix(_Render, _OutlineColor, _InnerMask * params._Mixing);
+                var _Result: vec4f;
 
-        _fusionOutput = _Render;
+            _Result.a = _Render_Color.a + _Render.a * (1.0 - _Render_Color.a);
+            {
+                let _fusionSwizzle0 = mix(_Render.rgb, _Render_Color.rgb, _Render_Color.a / _Result.a);
+                _Result.x = _fusionSwizzle0.x;
+                _Result.y = _fusionSwizzle0.y;
+                _Result.z = _fusionSwizzle0.z;
+            }
+
+        _fusionOutput = _Result;
     return _fusionOutput;
 }
 //@End

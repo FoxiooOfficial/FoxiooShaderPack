@@ -65,19 +65,23 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
     
     _Alpha /= float(_Samples * _Samples);
 
-        float _Mask = _Render_Texture.a * (1.0 - _Alpha);
-        _Mask = saturate(_Mask * _AlphaMul);
+    //float _Outer = saturate(_Alpha * _AlphaMul) * (1.0 - _Render_Texture.a);
+    float _Inner = saturate((1.0 - _Alpha) * _AlphaMul) * _Render_Texture.a;
 
-        float4 _Render_Color = lerp(_ColorAccent, _Color, _Mask);
-        _Render_Color.a = _Render_Texture.a * _ColorAlpha;
+        float _Strength = saturate(_Inner);
+        float _Mask = saturate((1.0 - _Render_Texture.a) + _AlphaBack);
+
+        float4 _Render_Color = lerp(_ColorAccent, _Color, _Strength);
+        _Render_Color.a = _Strength * _Mask * _ColorAlpha * _Mixing;
 
             float4 _Render = _Render_Texture;
             _Render.a *= _AlphaBack;
 
             float4 _Result;
 
-            _Result = lerp(_Render, _Render_Color, _Mask * _Mixing);
-
+        _Result.a = _Render_Color.a + _Render.a * (1.0 - _Render_Color.a);
+        _Result.rgb = lerp(_Render.rgb, _Render_Color.rgb, _Render_Color.a / _Result.a);
+        
     return _Result;
 }
 /************************************************************/
