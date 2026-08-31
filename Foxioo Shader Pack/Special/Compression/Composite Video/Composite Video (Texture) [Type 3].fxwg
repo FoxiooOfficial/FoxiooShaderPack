@@ -1,0 +1,183 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+//uniform sampler2D bckgTexture;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Mixing: f32,
+    _Time: f32,
+    _CrossLuma: f32,
+    _CrossColor: f32,
+    _Distortion: f32,
+    _Size: f32,
+    _Quality: i32,
+    parameter8_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+const _L: vec3f = vec3f(0.299, 0.587, 0.114);
+
+// Expanded source constant: M_PI
+
+// Expanded source constant: MHZ_CROMA
+// Expanded source constant: MHZ_LUM
+// Expanded source constant: MHZ_LIFT
+
+// Expanded source constant: FPS
+// Expanded source constant: SAMPLES
+// Expanded source constant: LINES
+fn Fun_RGB2YIQ(_Render: vec3f) -> vec3f {
+    var Y: f32 = dot(_Render, vec3f(0.299, 0.587, 0.114));
+        var I: f32 = dot(_Render, vec3f(0.596, -0.274, -0.322));
+        var Q: f32 = dot(_Render, vec3f(0.211, -0.523, 0.312));
+        return vec3f(Y, I, Q);
+}
+
+fn Fun_YIQ2RGB(_YIQ: vec3f) -> vec3f {
+    var Y: f32 = _YIQ.r;
+        var I: f32 = _YIQ.g;
+        var Q: f32 = _YIQ.b;
+
+        var R: f32 = Y + 0.956 * I + 0.621 * Q;
+        var G: f32 = Y - 0.272 * I - 0.647 * Q;
+        var B: f32 = Y - 1.106 * I + 1.703 * Q;
+        return vec3f(R, G, B);
+}
+
+fn Fun_FMod(x: f32, y: f32) -> f32 {
+    return x - y * (sign(x / y) * floor(abs(x / y)));
+}
+
+fn Fun_Blur(_Sampler: texture_2d<f32>, In: vec2f, _Offset: f32) -> vec3f {
+    var _Render: vec3f = texture2D(_Sampler, In).rgb;
+
+        var _Result: vec3f = vec3f(0.0);
+        var x: i32;
+        var y: i32;
+        var _W: f32 = 0.0;
+
+            var _DistG: f32 = max(0.0, _Render.g - max(_Render.r, _Render.b));
+            var _DistP: f32 = max(0.0, min(_Render.r, _Render.b) - _Render.g);
+            var _Mask: f32 = (_DistG + _DistP) * 0.5;
+
+        for(y = i32(0); y < params._Quality; y += 1)
+        {
+            for(x = i32(0); x < params._Quality; x += 1)
+            {
+                var _Off: vec2f = vec2f(f32(x), f32(y));
+                _Off -= floor(f32(params._Quality) / 2.0);
+                _Off *= 1.0 + _Mask;
+                _Result += texture2D(_Sampler, In + (vec2f(fusion.fPixelWidth, fusion.fPixelHeight * 0.5) * _Off * _Offset * params._Size) / f32(params._Quality)).rgb;
+                _W += 1.0;
+            }
+        }
+
+        return _Result / _W;
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        //vec4 _Render_Background = texture(bckgTexture, In);
+
+        var _Pos: vec2f = vec2f(floor(input.texCoord.x * (720.0)), floor(input.texCoord.y * (486.0) + (params._Time * (29.97) * 2.0)));
+
+            var _Vert: f32 = select(-1.0, 1.0, Fun_FMod(f32(_Pos.y), f32(2.0)) < 1.0);
+            var _Cycle: vec2f = vec2f((3.579545) / (13.5), (227.5));
+            var _Noise: f32 = params._Distortion * sin(_Pos.y * 6.0 * params._Distortion - params._Time + 1.0 / cos(params._Time * 15.0));
+            var _Phase: f32 = 2.0 * (3.14159265358979323846) * ((_Pos.x * _Cycle.x) + (_Pos.y * _Cycle.y)) + _Noise;
+
+            var _UV: vec2f = 0.5 * mix(vec2f(sin(_Phase + _Noise) * params._Distortion * (1.0 / (720.0)), 0.0), 5.0 * (input.texCoord.yy / (_Noise / _Phase) * _Vert * params._Distortion), params._Distortion);
+            if(params._Distortion == 0.0) { _UV = vec2f(0.0); }
+
+                // Luma
+                var _Result: vec4f = texture2D(img, input.texCoord + _UV) * (input.color * fusion.blendColor);
+                var _Luma: f32 = (Fun_RGB2YIQ(vec3f(_Result.rgb))).x;
+
+                    {
+                        let _fusionSwizzle0 = Fun_Blur(img, vec2f(input.texCoord + _UV), f32(0.85)) * (input.color * fusion.blendColor).rgb;
+                        _Result.x = _fusionSwizzle0.x;
+                        _Result.y = _fusionSwizzle0.y;
+                        _Result.z = _fusionSwizzle0.z;
+                    }
+                    var _Render: vec3f = Fun_RGB2YIQ(vec3f(_Result.rgb));
+                    var Y: f32 = _Render.x;
+
+                // Chroma
+                {
+                    let _fusionSwizzle1 = Fun_Blur(img, vec2f(input.texCoord + vec2f(0.0, 2.0 * (_Vert / (486.0))) * Y + _UV), f32(4.0)) * (input.color * fusion.blendColor).rgb;
+                    _Result.x = _fusionSwizzle1.x;
+                    _Result.y = _fusionSwizzle1.y;
+                    _Result.z = _fusionSwizzle1.z;
+                }
+
+                    _Render = Fun_RGB2YIQ(vec3f(_Result.rgb));
+                    var U: f32 = _Render.y;
+                    var V: f32 = _Render.z;
+
+                // Rainbowing
+                var _Sin: f32 = sin(_Phase);
+                var _Cos: f32 = cos(_Phase);
+
+                    _Luma = (Y - _Luma) * params._CrossColor;
+                    U += _Luma * _Cos;
+                    V += _Luma * _Sin * _Vert;
+
+                    var _Chroma: f32 = (U * _Cos) + (V * _Vert * _Sin);
+
+                    // Cross-luma
+                    Y += (_Chroma * params._CrossLuma);
+
+                // Out
+                {
+                    let _fusionSwizzle2 = Fun_YIQ2RGB(vec3f(Y, U, V));
+                    _Result.x = _fusionSwizzle2.x;
+                    _Result.y = _fusionSwizzle2.y;
+                    _Result.z = _fusionSwizzle2.z;
+                }
+                {
+                    let _fusionSwizzle3 = mix(_Render_Texture.rgb, _Result.rgb, params._Mixing);
+                    _Result.x = _fusionSwizzle3.x;
+                    _Result.y = _fusionSwizzle3.y;
+                    _Result.z = _fusionSwizzle3.z;
+                }
+
+            _Result.a = _Render_Texture.a;
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End

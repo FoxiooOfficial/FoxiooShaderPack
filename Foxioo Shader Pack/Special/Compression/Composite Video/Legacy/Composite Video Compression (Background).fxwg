@@ -1,0 +1,168 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(0) var background: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Mixing: f32,
+    _Seed: f32,
+    _Time: f32,
+    _FraqMul: f32,
+    _Hertz: f32,
+    _OffsetX_Pb: f32,
+    _OffsetY_Pb: f32,
+    _OffsetX_Pr: f32,
+    _OffsetY_Pr: f32,
+    _Phase: f32,
+    parameter11_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+fn Fun_GetColor(In: vec2f, _Texture: texture_2d<f32>) -> vec4f {
+    return texture2D(_Texture, In);
+}
+
+fn Fun_Interpolation(In: vec2f, _Segm: f32, _Texture: texture_2d<f32>, _Smoothness: f32) -> vec4f {
+    var _In_Segment: vec2f = floor(In * _Segm) / _Segm;
+        var _In_Segment_Next: vec2f = (floor(In * _Segm) + 1.0) / _Segm;
+
+        var _UV: vec2f = fract(In * _Segm);
+
+            var _Render_0X: vec4f = Fun_GetColor(_In_Segment, _Texture);
+            var _Render_1X: vec4f = Fun_GetColor(vec2f(_In_Segment_Next.x, _In_Segment.y), _Texture);
+
+                var _Render_X: vec4f = mix(_Render_0X, _Render_1X, smoothstep(0.0, _Smoothness, _UV.x));
+
+            var _Render_0Y: vec4f = Fun_GetColor(vec2f(_In_Segment.x, _In_Segment_Next.y), _Texture);
+            var _Render_1Y: vec4f = Fun_GetColor(_In_Segment_Next, _Texture);
+
+                var _Render_Y: vec4f = mix(_Render_0Y, _Render_1Y, smoothstep(0.0, _Smoothness, _UV.x));
+
+        return mix(_Render_X, _Render_Y, smoothstep(0.0, _Smoothness, _UV.y));
+}
+
+fn Fun_Sharp_Ex(_Sampler: texture_2d<f32>, _In: vec2f, _Color: vec3f, _Sharpness_Size: f32) -> vec3f {
+    var _Result_Sharpness: vec3f = 5.0 * _Color - (
+                    texture2D(_Sampler, _In + (_Sharpness_Size * vec2f(fusion.fPixelWidth, fusion.fPixelHeight))) +
+                    texture2D(_Sampler, _In - (_Sharpness_Size * vec2f(fusion.fPixelWidth, fusion.fPixelHeight))) +
+                    texture2D(_Sampler, _In + (_Sharpness_Size * vec2f(fusion.fPixelWidth, fusion.fPixelHeight))) +
+                    texture2D(_Sampler, _In - (_Sharpness_Size * vec2f(fusion.fPixelWidth, fusion.fPixelHeight)))
+                ).rgb;
+
+        return _Color - _Result_Sharpness * 0.1;
+}
+
+fn Fun_Sharp(_Sampler: texture_2d<f32>, _In: vec2f, _Color: vec3f, _Sharpness_Size: f32) -> f32 {
+    var _Result_Sharpness: vec3f = 5.0 * _Color - (
+                    texture2D(_Sampler, _In + (_Sharpness_Size * vec2f(fusion.fPixelWidth, fusion.fPixelHeight))) +
+                    texture2D(_Sampler, _In - (_Sharpness_Size * vec2f(fusion.fPixelWidth, fusion.fPixelHeight))) +
+                    texture2D(_Sampler, _In + (_Sharpness_Size * vec2f(fusion.fPixelWidth, fusion.fPixelHeight))) +
+                    texture2D(_Sampler, _In - (_Sharpness_Size * vec2f(fusion.fPixelWidth, fusion.fPixelHeight)))
+                ).rgb;
+
+        return (_Color.r + _Color.g + _Color.b) / 3.0 * 2.0 - (_Result_Sharpness.r + _Result_Sharpness.g + _Result_Sharpness.b) / 3.0;
+}
+
+fn Fun_Rand(_UV: vec2f) -> f32 {
+    return fract(sin(dot(_UV, vec2f(12.9898, 78.233))) * 43758.5453);
+}
+
+fn Fun_FMod(_Value: f32, _Denom: f32) -> f32 {
+    return _Value - _Denom * floor(_Value / _Denom);
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _In: vec2f = input.texCoord;
+        _In.x -= Fun_FMod(f32(input.texCoord.y + params._Time), f32(fusion.fPixelHeight * 1125.0 / (params._Hertz * -10.0 + 1125.0))) * fusion.fPixelWidth * params._Phase * params._Mixing;
+
+        var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        //vec4 _Render_Background = texture(bckgTexture, In);
+
+            const _Div: f32 = 576.0;
+            var _Result_Pb: vec4f = Fun_Interpolation(vec2f(_In + vec2f(params._OffsetX_Pb * fusion.fPixelWidth, params._OffsetY_Pb * fusion.fPixelHeight)), f32(_Div), background, f32(1.25));
+            var _Result_Pr: vec4f = Fun_Interpolation(vec2f(_In + vec2f(params._OffsetX_Pr * fusion.fPixelWidth, params._OffsetY_Pr * fusion.fPixelHeight)), f32(_Div), background, f32(1.25));
+            var _Result: vec4f = texture2D(background, _In);
+
+            const _Kr: f32 = 0.299;
+            const _Kg: f32 = 0.587;
+            const _Kb: f32 = 0.114;
+
+            var _Y: f32 = _Kr * _Result.r + _Kg * _Result.g + _Kb * _Result.b;
+            var _Pb: f32 = -0.168736 * _Result_Pb.r - 0.331264 * _Result_Pb.g + 0.5 * _Result_Pb.b;
+            var _Pr: f32 = 0.5 * _Result_Pr.r - 0.418688 * _Result_Pr.g - 0.081312 * _Result_Pr.b;
+
+                /* Multiplex */
+                var _Omega: f32 = 2.0 * 3.14159265359 * (-85842.936 * params._Hertz + 8725765.55);
+
+                            var _Chroma_1: f32 = _Pb * cos((_Omega * params._FraqMul)) + _Pr * sin((_Omega * params._FraqMul));
+                            var _Chroma_2: f32 = _Pb * cos((_Omega * params._FraqMul) - 2.0) + _Pr * sin((_Omega * params._FraqMul) - 2.0);
+                            var _Chroma_3: f32 = _Pb * cos((_Omega * params._FraqMul) + 2.0) + _Pr * sin((_Omega * params._FraqMul) + 2.0);
+
+                    /* Demultiplex */
+                    var _PbFix: f32 = (( _Chroma_2 * cos((_Omega * params._FraqMul) - 2.0)) + ( _Chroma_1 * cos((_Omega * params._FraqMul))) + ( _Chroma_3 * cos((_Omega * params._FraqMul) + 2.0))) / 3.0;
+                    var _PrFix: f32 = (( _Chroma_2 * sin((_Omega * params._FraqMul) - 2.0)) + ( _Chroma_1 * sin((_Omega * params._FraqMul))) + ( _Chroma_3 * sin((_Omega * params._FraqMul) + 2.0))) / 3.0;
+
+                    var _Edge: f32 = Fun_Sharp(background, _In, vec3f(_Result.rgb), f32(1.0));
+                    _Y += (sin((input.texCoord.x - input.texCoord.y) * 10000.0 * _Edge       + params._Time) * _Edge)   * 0.04;
+                    _PbFix += (sin((input.texCoord.x + input.texCoord.y) * 1000000.0 * _Edge + params._Time) * _Edge) * 0.04;
+                    _PrFix += (cos((input.texCoord.x + input.texCoord.y) * 1000000.0 * _Edge + params._Time) * _Edge) * 0.04;
+
+                /* Meow RGB */
+                var _R: f32 = _Y + 1.402 * _PrFix;
+                var _G: f32 = _Y - 0.344136 * _PbFix - 0.714136 * _PrFix;
+                var _B: f32 = _Y + 1.772 * _PbFix;
+
+                var _Render: vec3f = Fun_Sharp_Ex(background, _In, vec3f(_R, _G, _B), f32(1.0 - _Y));
+                //_Render = mix(_Render, _Render.r * _Render.g * _Render.b, 0.35);
+
+               var _Rand: f32 = Fun_Rand(vec2f(input.texCoord.x + input.texCoord.y + params._Seed)) * _Edge;
+                    _Render.r += abs(sin(_Rand * 5345435.0 + params._Time) * _Edge * _Y) * pow(_Y, 5.0);
+                    _Render.g += abs(sin(_Rand * 1204358.0 + params._Time) * _Edge * _Y) * pow(_Y, 5.0);
+                    _Render.b += abs(cos(_Rand * 7568234.0 + params._Time) * _Edge * _Y) * pow(_Y, 5.0);
+
+                    {
+                        let _fusionSwizzle0 = mix(_Result.rgb, _Render, params._Mixing);
+                        _Result.x = _fusionSwizzle0.x;
+                        _Result.y = _fusionSwizzle0.y;
+                        _Result.z = _fusionSwizzle0.z;
+                    }
+
+            _Result.a = _Render_Texture.a;
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End

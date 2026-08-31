@@ -1,0 +1,37 @@
+<effect>
+	<name>Add Alpha (Texture)</name>
+		<description>This shader adds an additional alpha value to the base.</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>0</BackgroundTexture>
+				<dx8>yes</dx8>
+				<PSVersion>1.1</PSVersion>
+				
+		<parameter>
+			<name>/* Foxioo's Add Alpha (Texture) Shader | 2026.08.31 */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>This shader adds an additional alpha value to the base.</description>
+		</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>0.5</value>
+			</parameter>
+
+		<parameter>
+			<name>/*  */</name>
+			<property>checkbox</property>
+
+			<variable>__</variable>
+		</parameter>
+</effect>
