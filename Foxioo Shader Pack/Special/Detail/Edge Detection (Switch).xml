@@ -1,0 +1,69 @@
+<effect>
+	<name>Edge Detection (Switch)</name>
+		<description>This shader detecting edges at pixels.</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+			
+		<parameter>
+			<name>/* Foxioo's Detection (Switch) Shader | 2026.08.31 */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>This shader detecting edges at pixels.</description>
+		</parameter>
+
+			<parameter>
+				<name>Blending Mode</name>
+				<variable>_Blending_Mode</variable>
+
+				<description>This variable determines what the base should be. Setting it to 0 sets the base as the texture of the object on which the effect is applied, and setting it to 1 sets this as the background.</description>
+
+				<type>int</type>
+				<property>checkbox</property>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>1.0</value>
+			</parameter>
+
+			<parameter>
+				<name>Emboss Size</name>
+				<variable>_Size</variable>
+				
+				<description>This variable determines the distance of the normal map size.</description>
+
+				<type>float</type>
+
+				<value>2.0</value>
+			</parameter>
+
+			<parameter>
+				<name>Angle</name>
+				<variable>_Angle</variable>
+				
+				<description>Specifies the rotation angle of the offset.</description>
+
+				<type>float</type>
+
+				<value>0.0</value>
+			</parameter>
+
+        <parameter>
+            <name>/* */</name>
+            <property>checkbox</property>
+            <variable>__</variable>
+        </parameter>
+
+</effect>
