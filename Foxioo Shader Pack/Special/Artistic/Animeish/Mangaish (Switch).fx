@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.1 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -44,12 +45,8 @@ sampler2D S2D_Background : register(s1);
 
 float3 Fun_Quantize(float3 _Result, float _Steps)
 {
-    float _Render;
-
-    if (_Steps <= 0.0)  _Render = step(0.5, _Result);
-    else                _Render = floor(_Result * _Steps + 0.5) / _Steps;
-
-    return _Render;
+    if (_Steps <= 0.0)  return step(0.5, _Result);
+    else                return floor(_Result * _Steps + 0.5) / _Steps;
 }
 
 float Fun_PatternDot(float2 UV, float _Size, float _Lum)
@@ -58,13 +55,15 @@ float Fun_PatternDot(float2 UV, float _Size, float _Lum)
     float2 _Grid = _UV_Res / _Size;
 
     float _Row = floor(_Grid.y);
-    if (fmod(_Row, 2.0) == 1.0) {   _Grid.x += 0.5;  }
 
-    float2 _Cell = frac(_Grid);
-    float _Dist = abs(_DotsInvertedPattern - length(_Cell - 0.5)) * _DotsCoverage;
+    if (fmod(_Row, 2.0) == 1.0)
+        _Grid.x += 0.5;
 
-    float _Render = _Lum;
-    float _Result = smoothstep(_Render - _DotsAntialiasing, _Render + _DotsAntialiasing, _Dist);
+        float2 _Cell = frac(_Grid);
+        float _Dist = abs(_DotsInvertedPattern - length(_Cell - 0.5)) * _DotsCoverage;
+
+            float _Render = _Lum;
+            float _Result = smoothstep(_Render - _DotsAntialiasing, _Render + _DotsAntialiasing, _Dist);
 
     return 1.0 - _Result * _DotsTranparent;
 }

@@ -139,4 +139,4 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_2_a ps_main(); } }
+technique tech_main { pass P0 { PixelShader = compile ps_3_0 ps_main(); } }

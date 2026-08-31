@@ -1,0 +1,142 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(0) var background: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Blending_Mode: i32,
+    _Mixing: f32,
+    _MixingManga: f32,
+    _ColorSteps: f32,
+    _DotsLumSteps: f32,
+    _LumMult: f32,
+    _ColorLight: vec4f,
+    _ColorShadow: vec4f,
+    _DotsAntialiasing: f32,
+    _DotsTranparent: f32,
+    _DotsSize: f32,
+    _DotsCoverage: f32,
+    _DotsInvertedPattern: i32,
+    _DotsInvertedColors: i32,
+    parameter15_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+fn Fun_FMod(_Value: f32, _Denom: f32) -> f32 {
+    return _Value - _Denom * floor(_Value / _Denom);
+}
+
+fn Fun_Quantize(_Value: f32, _Steps: f32) -> f32 {
+    if (_Steps <= 0.0) {
+            return step(0.5, _Value);
+        }
+        else {
+            return floor(_Value * _Steps + 0.5) / _Steps;
+        }
+}
+
+fn Fun_Quantize_3(_Value: vec3f, _Steps: f32) -> vec3f {
+    return vec3f(Fun_Quantize(f32(_Value.r), f32(_Steps)), Fun_Quantize(f32(_Value.g), f32(_Steps)), Fun_Quantize(f32(_Value.b), f32(_Steps)));
+}
+
+fn Fun_PatternDot(UV: vec2f, _Size: f32, _Lum: f32) -> f32 {
+    var _UV_Res: vec2f = UV / vec2f(fusion.fPixelWidth, fusion.fPixelHeight);
+        var _Grid: vec2f = _UV_Res / _Size;
+
+        var _Row: f32 = floor(_Grid.y);
+        if (Fun_FMod(f32(_Row), f32(2.0)) == 1.0) {
+            _Grid.x += 0.5;
+        }
+
+        var _Cell: vec2f = fract(_Grid);
+
+        var _InvPattern: f32 = select(0.0, 1.0, (params._DotsInvertedPattern != 0));
+        var _Dist: f32 = abs(_InvPattern - length(_Cell - 0.5)) * params._DotsCoverage;
+
+        var _Render: f32 = _Lum;
+        var _Result: f32 = smoothstep(_Render - params._DotsAntialiasing, _Render + params._DotsAntialiasing, _Dist);
+
+        return 1.0 - _Result * params._DotsTranparent;
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        var _Render_Background: vec4f = texture2D(background, input.texCoord);
+
+        var _Result: vec4f = select(_Render_Texture, _Render_Background, (params._Blending_Mode != 0));
+        var _Render: vec4f = _Result;
+
+            var _Lum: f32 = (_Result.r * 0.299 + _Result.g * 0.587 + _Result.b * 0.114) * params._LumMult;
+
+                var _DotPatten: f32 = Fun_PatternDot(vec2f(input.texCoord), f32(params._DotsSize), f32(Fun_Quantize(f32(_Lum), f32(params._DotsLumSteps))));
+                {
+                    let _fusionSwizzle0 = vec3f(_DotPatten);
+                    _Result.x = _fusionSwizzle0.x;
+                    _Result.y = _fusionSwizzle0.y;
+                    _Result.z = _fusionSwizzle0.z;
+                }
+                {
+                    let _fusionSwizzle1 = mix(_Result.rgb, _Result.rgb * Fun_Quantize_3(vec3f(_Render.rgb * params._LumMult), f32(params._ColorSteps)), params._MixingManga);
+                    _Result.x = _fusionSwizzle1.x;
+                    _Result.y = _fusionSwizzle1.y;
+                    _Result.z = _fusionSwizzle1.z;
+                }
+                {
+                    let _fusionSwizzle2 = abs(f32((params._DotsInvertedColors != 0)) - _Result.rgb);
+                    _Result.x = _fusionSwizzle2.x;
+                    _Result.y = _fusionSwizzle2.y;
+                    _Result.z = _fusionSwizzle2.z;
+                }
+
+            {
+                let _fusionSwizzle3 = mix(params._ColorShadow.rgb, params._ColorLight.rgb, (_Result.r * 0.299 + _Result.g * 0.587 + _Result.b * 0.114));
+                _Result.x = _fusionSwizzle3.x;
+                _Result.y = _fusionSwizzle3.y;
+                _Result.z = _fusionSwizzle3.z;
+            }
+            {
+                let _fusionSwizzle4 = mix(_Render.rgb, _Result.rgb, params._Mixing);
+                _Result.x = _fusionSwizzle4.x;
+                _Result.y = _fusionSwizzle4.y;
+                _Result.z = _fusionSwizzle4.z;
+            }
+
+            _Result.a = _Render_Texture.a;
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End
