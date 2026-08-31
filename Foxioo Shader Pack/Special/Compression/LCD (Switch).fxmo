@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.0 (11.04.2026) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -65,46 +66,40 @@ uniform float fPixelHeight;
 uniform float _Mixing;
 uniform bool _Blending_Mode;
 
-
 uniform float _PixelSize;
 
 /************************************************************/
 /* Main */
 /************************************************************/
 
-float Fun_Mod(float _X, float _Y)
-{
+float Fun_Mod(float _X, float _Y) {
     return _X - _Y * floor(_X / _Y);
 }
 
 out vec4 fragColor;
 void main(void)
 {
-    vec2 _In = In;
-    if(_Blending_Mode && _Is_Pre_296_Build)
-        _In = vec2(In.x, 1.0 - In.y);
-
-    vec4 _Render_Texture = texture(imgTexture, _In) * blendColor;
-    vec4 _Render_Background = texture(bckgTexture, _In);
+    vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
+    vec4 _Render_Background = texture(bckgTexture, In);
     _Render_Background.a = _Render_Texture.a;
 
-    ivec2 _Pixel = ivec2(int(_In.x / fPixelWidth), int(_In.y / fPixelHeight));
-    
-    float _PixelSizeFix = _PixelSize == 0.0 ? 0.0001 : _PixelSize;
-    vec2 _Size = vec2(1.0 / fPixelWidth, 1.0 / fPixelHeight) / _PixelSizeFix;
+        ivec2 _Pixel = ivec2(int(In.x / fPixelWidth), int(In.y / fPixelHeight));
+        
+        float _PixelSizeFix = _PixelSize == 0.0 ? 0.0001 : _PixelSize;
+        vec2 _Size = vec2(1.0 / fPixelWidth, 1.0 / fPixelHeight) / _PixelSizeFix;
 
-    vec2 _UV = vec2(ceil(_In.x * _Size.x) / _Size.x, ceil(_In.y * _Size.y) / _Size.y);
+        vec2 _UV = vec2(ceil(In.x * _Size.x) / _Size.x, ceil(In.y * _Size.y) / _Size.y);
 
-        vec4 _Render_Texture_Ex = texture(imgTexture, vec2(_UV.x, _UV.y)) * blendColor;
-        vec4 _Render_Background_Ex = texture(bckgTexture, vec2(_UV.x, _UV.y));
-        _Render_Background_Ex.a = _Render_Texture.a;
+            vec4 _Render_Texture_Ex = texture(imgTexture, vec2(_UV.x, _UV.y)) * blendColor;
+            vec4 _Render_Background_Ex = texture(bckgTexture, vec2(_UV.x, _UV.y));
+            _Render_Background_Ex.a = _Render_Texture.a;
 
-            vec4 _Result = _Blending_Mode ? _Render_Background_Ex : _Render_Texture_Ex;
-            vec4 _Render = _Blending_Mode ? _Render_Background    : _Render_Texture;
+                    vec4 _Result = _Blending_Mode ? _Render_Background_Ex : _Render_Texture_Ex;
+                    vec4 _Render = _Blending_Mode ? _Render_Background    : _Render_Texture;
 
-            if (Fun_Mod(float(_Pixel.x), 3.0) == 0.0)   _Result.rgb += vec3(_Result.r, 0.0, 0.0);
-            if (Fun_Mod(float(_Pixel.x), 3.0) == 1.0)   _Result.rgb += vec3(0.0, _Result.g, 0.0);
-            else                                        _Result.rgb += vec3(0.0, 0.0, _Result.b);
+                        if (Fun_Mod(float(_Pixel.x), 3.0) == 0.0)   _Result.rgb += vec3(_Result.r, 0.0, 0.0);
+                        if (Fun_Mod(float(_Pixel.x), 3.0) == 1.0)   _Result.rgb += vec3(0.0, _Result.g, 0.0);
+                        else                                        _Result.rgb += vec3(0.0, 0.0, _Result.b);
 
         _Result = mix(_Render, _Result, _Mixing);
 
