@@ -171,7 +171,10 @@ float4 Main(PS_INPUT In, bool _Premultiplied) : SV_TARGET
     
     _Alpha /= float(_Samples * _Samples);
 
-        float _Strength = saturate(_Alpha * _AlphaMul);
+    float _Outer = saturate(_Alpha * _AlphaMul) * (1.0 - _Render_Texture.a);
+    //float _Inner = saturate((1.0 - _Alpha) * _AlphaMul) * _Render_Texture.a;
+
+        float _Strength = saturate(_Outer);
         float _Mask = saturate((1.0 - _Render_Texture.a) + _AlphaBack);
 
         float4 _Render_Color = lerp(_ColorAccent, _Color, _Strength);
@@ -182,9 +185,9 @@ float4 Main(PS_INPUT In, bool _Premultiplied) : SV_TARGET
 
             float4 _Result;
 
-        _Result.a = _Render.a + _Render_Color.a * (1.0 - _Render.a);
-        _Result.rgb = lerp(_Render_Color.rgb, _Render.rgb, _Render.a / _Result.a);
-
+        _Result.a = _Render_Color.a + _Render.a * (1.0 - _Render_Color.a);
+        _Result.rgb = lerp(_Render.rgb, _Render_Color.rgb, _Render_Color.a / _Result.a);
+        
 	return _Result;
 }
 

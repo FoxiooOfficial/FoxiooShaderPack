@@ -147,7 +147,10 @@ struct FragmentInput {
 
         _Alpha /= f32(_Samples * _Samples);
 
-            var _Strength: f32 = clamp(_Alpha * params._AlphaMul, 0.0, 1.0);
+        var _Outer: f32 = clamp(_Alpha * params._AlphaMul, 0.0, 1.0) * (1.0 - _Render_Texture.a);
+        //float _Inner = clamp((1.0 - _Alpha) * _AlphaMul, 0.0, 1.0) * _Render_Texture.a;
+
+            var _Strength: f32 = clamp(_Outer, 0.0, 1.0);
             var _Mask: f32 = clamp((1.0 - _Render_Texture.a) + params._AlphaBack, 0.0, 1.0);
 
             var _Render_Color: vec4f = mix(params._ColorAccent, params._Color, _Strength);
@@ -158,9 +161,9 @@ struct FragmentInput {
 
                 var _Result: vec4f;
 
-            _Result.a = _Render.a + _Render_Color.a * (1.0 - _Render.a);
+            _Result.a = _Render_Color.a + _Render.a * (1.0 - _Render_Color.a);
             {
-                let _fusionSwizzle0 = mix(_Render_Color.rgb, _Render.rgb, _Render.a / _Result.a);
+                let _fusionSwizzle0 = mix(_Render.rgb, _Render_Color.rgb, _Render_Color.a / _Result.a);
                 _Result.x = _fusionSwizzle0.x;
                 _Result.y = _fusionSwizzle0.y;
                 _Result.z = _fusionSwizzle0.z;
