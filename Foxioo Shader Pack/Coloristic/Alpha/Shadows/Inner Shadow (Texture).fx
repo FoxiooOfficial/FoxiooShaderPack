@@ -51,8 +51,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
 {
     float4 _Render_Texture = tex2D(S2D_Image, In);
     
-    float _Alpha = 0.0, _Idx = 0.0;
-
+    float _Alpha = 0.0;
     for(int y = 0; y <= _Samples; y++)
     {
         for(int x = 0; x <= _Samples; x++)
@@ -60,27 +59,26 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
             float2 _Offset = (float2(x, y) / (float)_Samples - 0.5) * _Size;
             
             _Offset = float2(fPixelWidth, fPixelHeight) * (_Offset + float2(_PosX, _PosY));
-            
             _Alpha += tex2D(S2D_Image, In + _Offset).a;
-            _Idx += 1.0;
         }
     }
     
-    _Alpha /= _Idx;
+    _Alpha /= float(_Samples * _Samples);
 
-        float _InnerMask = _Render_Texture.a * (1.0 - _Alpha);
-    
-        _InnerMask = saturate(_InnerMask * _AlphaMul);
+        float _Mask = _Render_Texture.a * (1.0 - _Alpha);
+        _Mask = saturate(_Mask * _AlphaMul);
 
-            float4 _OutlineColor = lerp(_ColorAccent, _Color, _InnerMask);
-            _OutlineColor.a = _Render_Texture.a * _ColorAlpha;
+        float4 _Render_Color = lerp(_ColorAccent, _Color, _Mask);
+        _Render_Color.a = _Render_Texture.a * _ColorAlpha;
 
-        float4 _Render = _Render_Texture;
-        _Render.a *= _AlphaBack;
+            float4 _Render = _Render_Texture;
+            _Render.a *= _AlphaBack;
 
-        _Render = lerp(_Render, _OutlineColor, _InnerMask * _Mixing);
+            float4 _Result;
 
-    return _Render;
+            _Result = lerp(_Render, _Render_Color, _Mask * _Mixing);
+
+    return _Result;
 }
 /************************************************************/
 /* Tech Main */
