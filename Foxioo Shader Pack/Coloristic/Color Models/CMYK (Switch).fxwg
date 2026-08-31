@@ -1,0 +1,110 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(0) var background: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+//uniform float fPixelWidth;
+//uniform float fPixelHeight;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Blending_Mode: i32,
+    _Mixing: f32,
+    _Cyan: f32,
+    _Magenta: f32,
+    _Yellow: f32,
+    _Black: f32,
+    parameter7_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+fn RGBtoCMYK(_Render: vec3f) -> vec4f {
+    var _CMYK: vec4f;
+
+            _CMYK.x = 1.0 - max(_Render.r, max(_Render.g, _Render.b));  /*  Black   */
+            _CMYK.y = (1.0 - _Render.r - _CMYK.x) / (1.0 - _CMYK.x);    /*  Cyan    */
+            _CMYK.z = (1.0 - _Render.g - _CMYK.x) / (1.0 - _CMYK.x);    /*  Magenta */
+            _CMYK.w = (1.0 - _Render.b - _CMYK.x) / (1.0 - _CMYK.x);    /*  Yellow  */
+
+        return _CMYK.yzwx;
+}
+
+fn CMYKtoRGB(_CMYK: vec4f) -> vec3f {
+    var _Render: vec3f;
+
+            _Render.r = (1.0 - _CMYK.r) * (1.0 - _CMYK.w);
+            _Render.g = (1.0 - _CMYK.g) * (1.0 - _CMYK.w);
+            _Render.b = (1.0 - _CMYK.b) * (1.0 - _CMYK.w);
+
+        return _Render;
+}
+
+fn Fun_CMYKMagic(_Result: vec4f) -> vec4f {
+    var _fusionParamResult = _Result;
+    var _CMYK: vec4f = RGBtoCMYK(vec3f(_fusionParamResult.rgb));
+
+        var _Value: vec4f = vec4f(params._Cyan, params._Magenta, params._Yellow, params._Black);
+                _Value /= 100.0;
+
+        {
+            let _fusionSwizzle0 = CMYKtoRGB(vec4f(_CMYK - _Value));
+            _fusionParamResult.x = _fusionSwizzle0.x;
+            _fusionParamResult.y = _fusionSwizzle0.y;
+            _fusionParamResult.z = _fusionSwizzle0.z;
+        }
+        return _fusionParamResult;
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        var _Render_Background: vec4f = texture2D(background, input.texCoord);
+
+            var _Result: vec4f = select(_Render_Texture, _Render_Background, (params._Blending_Mode != 0));
+            var _Render: vec4f = _Result;
+
+                    _Result = Fun_CMYKMagic(_Result);
+
+                {
+                    let _fusionSwizzle0 = mix(_Render.rgb, _Result.rgb, params._Mixing);
+                    _Result.x = _fusionSwizzle0.x;
+                    _Result.y = _fusionSwizzle0.y;
+                    _Result.z = _fusionSwizzle0.z;
+                }
+                _Result.a = _Render_Texture.a;
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End

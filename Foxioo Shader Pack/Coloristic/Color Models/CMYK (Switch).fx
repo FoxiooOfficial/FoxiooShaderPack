@@ -57,10 +57,8 @@ float4 Fun_CMYKMagic(float4 _Result)
     
     float4  _Value = float4(_Cyan, _Magenta, _Yellow, _Black);
             _Value /= 100.0;
-
-                _CMYK -= _Value;
     
-    _Result.rgb = CMYKtoRGB(_CMYK);
+    _Result.rgb = CMYKtoRGB(_CMYK - _Value);
     return _Result;
 }
 
