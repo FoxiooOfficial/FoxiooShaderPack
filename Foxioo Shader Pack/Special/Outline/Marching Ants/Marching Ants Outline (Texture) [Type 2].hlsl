@@ -172,7 +172,7 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
         float _Outline = ceil(_Alpha - ceil(_Render_Texture.a) - 1.0 / 255.0);
 
         float2 UV = (float2)(int2)ceil(In.texCoord / _Pixel / _Size);
-        float _Pattern = fmod(UV.x + UV.y, 2.0);
+        float _Pattern = fmod(UV.x + UV.y + 2.0, 2.0);
 
         UV *= 1.0 / _Pixel / 32.0;
         UV /= _Size;
