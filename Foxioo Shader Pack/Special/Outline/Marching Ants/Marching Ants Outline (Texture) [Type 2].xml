@@ -1,18 +1,18 @@
 <effect>
-	<name>Marching Ants Outline (Texture) [Type 1]</name>
-		<description>This shader adds a border to the object using the pixelated zigzag "marching ants" pattern.</description> 
+	<name>Marching Ants Outline (Texture) [Type 2]</name>
+		<description>This shader adds a border to the object using the pixelated checkboard "marching ants" pattern.</description> 
 			<author>Foxioo</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>0</BackgroundTexture>
 
 		<parameter>
-			<name>/* Foxioo's Marching Ants Outline (Texture) [Type 1] Shader | 2026.09.01 */</name>
+			<name>/* Foxioo's Marching Ants Outline (Texture) [Type 2] Shader | 2026.09.01 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
 
-			<description>This shader adds a border to the object using the pixelated zigzag "marching ants" pattern.</description>
+			<description>This shader adds a border to the object using the pixelated checkboard "marching ants" pattern.</description>
 		</parameter>
 
 			<parameter>
@@ -27,25 +27,12 @@
 			</parameter>
 
 			<parameter>
-				<name>Time</name>
-				<variable>_Time</variable>
-				
-				<description>This variable defines the time position of the animation.</description>
-
-				<type>float</type>
-
-				<value>1</value>
-			</parameter>
-
-			<parameter>
 				<name>Size</name>
 				<variable>_Size</variable>
 				
 				<description>This variable defines the scale of the pattern.</description>
 
 				<type>float</type>
-
-				<value>2</value>
 				<preview_value>1.0</preview_value>
 		</parameter>
 
@@ -57,8 +44,7 @@
 
 				<type>float</type>
 
-				<value>1</value>
-				<preview_value>2.0</preview_value>
+				<value>2.0</value>
 			</parameter>
 
 			<parameter>
@@ -70,7 +56,7 @@
 				<type>int_float4</type>
 				<property>color</property>
 
-				<value>16777215</value>
+				<value>0</value>
 			</parameter>
 
 			<parameter>
@@ -82,7 +68,7 @@
 				<type>int_float4</type>
 				<property>color</property>
 
-				<value>0</value>
+				<value>16744576</value>
 			</parameter>		
 
         <parameter>

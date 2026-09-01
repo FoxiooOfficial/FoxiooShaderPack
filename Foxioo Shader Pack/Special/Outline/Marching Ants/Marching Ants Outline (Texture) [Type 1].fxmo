@@ -17,13 +17,30 @@ uniform mat3 projectionMatrix;
 uniform mat3 objectMatrix;
 uniform mat3 textureMatrix;
 
+uniform float fPixelWidth;
+uniform float fPixelHeight;
+uniform float _Offset;
+
 in vec2 position;
 out vec2 In;
 void main()
 {
-    vec3 pos = vec3(position, 1.0);
-    In = (textureMatrix * pos).xy;
+    vec3 Pos = vec3(position, 1.0);
+    In = (textureMatrix * Pos).xy;
+
+    vec2 _PixelSize = vec2(fPixelWidth, fPixelHeight);
+    vec2 _DirCorner = sign(In - 0.5);
+
+        float _Expanded = _Offset + 4.0;
+        vec2 _PixelPadding = vec2(_Expanded);
+        vec2 _PosExpanded = position;
+
+        _PosExpanded.xy += _DirCorner * _PixelPadding * _PixelSize;
+
+    vec3 pos = vec3(_PosExpanded, 1.0);
     gl_Position = vec4(projectionMatrix * transformMatrix * objectMatrix * pos, 1.0);
+
+    In = In + _DirCorner * _Expanded * _PixelSize;
 }
 //@End
 
@@ -77,10 +94,18 @@ uniform vec4 _Light;
 
 #define KERNEL 1
 
+vec4 Fun_Render(sampler2D _Tex, vec2 In)
+{
+    if(In.x <= 0.0 || In.y <= 0.0 || In.x >= 1.0 || In.y >= 1.0)
+        return vec4(0.0);
+    else
+        return texture(_Tex, In);
+}
+
 out vec4 fragColor;
 void main(void)
 {  
-    vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
+    vec4 _Render_Texture = Fun_Render(imgTexture, In) * blendColor;
     //vec4 _Render_Background = texture(bckgTexture, In);
 
         vec4 _Result;
@@ -93,7 +118,7 @@ void main(void)
                     for(int x = -KERNEL; x <= KERNEL; x++)
                     {
                         vec2 _Off = vec2(x, y) * _Pixel * _Offset;
-                        _Alpha += texture(imgTexture, In + _Off).a;
+                        _Alpha += Fun_Render(imgTexture, In + _Off).a;
                         _Weight++;
                     }
                 }
