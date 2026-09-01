@@ -7,7 +7,7 @@
 				<BackgroundTexture>0</BackgroundTexture>
 
 		<parameter>
-			<name>/* Foxioo's Marching Ants Outline (Texture) [Type 2] Shader | 2026.09.01 */</name>
+			<name>/* Foxioo's Marching Ants Outline (Texture) [Type 4] Shader | 2026.09.01 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>

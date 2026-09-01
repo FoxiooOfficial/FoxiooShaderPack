@@ -71,7 +71,6 @@ uniform float fPixelHeight;
 /***********************************************************/
 
 uniform float _Mixing;
-uniform float _Time;
 uniform float _Size;
 uniform float _Offset;
 

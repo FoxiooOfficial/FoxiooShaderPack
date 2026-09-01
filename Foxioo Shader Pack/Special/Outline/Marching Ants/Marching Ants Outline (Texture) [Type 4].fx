@@ -93,7 +93,7 @@ float4 ps_main(VS_INPUT In) : COLOR0
         float _Outline = saturate(any(In.texCoord < 0.0 || In.texCoord > 1.0));
 
         float2 UV = (float2)(int2)ceil(In.texCoord / _Pixel / _Size);
-        float _Pattern = saturate(fmod(UV.x + UV.y + 2.0, 2.0));
+        float _Pattern = saturate(fmod(UV.x + UV.y + _Offset + _Offset, 2.0));
 
         UV *= 1.0 / _Pixel / 32.0;
         UV /= _Size;
