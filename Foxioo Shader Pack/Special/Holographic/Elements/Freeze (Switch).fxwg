@@ -1,0 +1,96 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(0) var background: texture_2d<f32>;
+@group(3) @binding(1) var _Texture_Ice: texture_2d<f32>;
+@group(3) @binding(2) var _Texture_Mask: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Blending_Mode: i32,
+    _Mixing: f32,
+    _Offset: f32,
+    parameter6_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+fn Fun_Luminance(_Result: vec3f) -> f32 {
+    return 0.299 * _Result.r + 0.587 * _Result.g + 0.114 * _Result.b;
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        var _Render_Background: vec4f = texture2D(background, input.texCoord);
+        var _Render_Ice: vec4f = texture2D(_Texture_Ice, input.texCoord);
+        var _Render_Mask: vec4f = texture2D(_Texture_Mask, input.texCoord);
+
+            var _Result: vec4f;
+            var _Render: vec4f;
+
+            var _Size: vec2f = vec2f(fusion.fPixelWidth, fusion.fPixelHeight);
+
+                if(!(params._Blending_Mode != 0))
+                {
+                    _Result = texture2D(img, fract(input.texCoord + _Size * (vec2f(_Render_Ice.rb - 0.5) * _Render_Ice.b * params._Offset))) * (input.color * fusion.blendColor);
+                    _Render = _Render_Texture;
+                }
+                else
+                {
+                    _Result = texture2D(background, fract(input.texCoord + _Size * (vec2f(_Render_Ice.rb - 0.5) * _Render_Ice.b * params._Offset)));
+                    _Render = _Render_Background;
+                }
+
+            {
+                let _fusionSwizzle0 = _Result.rgb * Fun_Luminance(vec3f(_Render_Ice.rgb)) + Fun_Luminance(vec3f(_Render_Ice.rgb)) * 0.75 * _Render_Ice.rgb;
+                _Result.x = _fusionSwizzle0.x;
+                _Result.y = _fusionSwizzle0.y;
+                _Result.z = _fusionSwizzle0.z;
+            }
+            {
+                let _fusionSwizzle1 = Fun_Luminance(vec3f(_Render_Ice.rgb)) * 0.35;
+                _Result.x += _fusionSwizzle1;
+                _Result.y += _fusionSwizzle1;
+                _Result.z += _fusionSwizzle1;
+            }
+
+            _Result = mix(_Render, _Result, smoothstep(Fun_Luminance(_Render_Ice.rgb) * (1.0 - abs(params._Mixing)), Fun_Luminance(_Render_Ice.rgb), abs(params._Mixing) * (1.0 - _Render_Mask.r)));
+            if((params._Blending_Mode != 0)) {
+                _Result.a = _Render_Texture.a;
+            }
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End

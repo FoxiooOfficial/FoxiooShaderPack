@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.1 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -30,15 +31,8 @@ sampler2D _Texture_Mask : register(s3);
 /* Main */
 /************************************************************/
 
-float Fun_Luminance(float3 _Result)
-{
-    const float _Kr = 0.299;
-    const float _Kg = 0.587;
-    const float _Kb = 0.114;
-
-    float _Y = _Kr * _Result.r + _Kg * _Result.g + _Kb * _Result.b;
-
-    return _Y;
+float Fun_Luminance(float3 _Result) {
+    return 0.299 * _Result.r + 0.587 * _Result.g + 0.114 * _Result.b;
 }
 
 float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
@@ -51,24 +45,25 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
         float4 _Result;
         float4 _Render;
 
-        float2 _Pix = float2(fPixelWidth, fPixelHeight);
-
-        if(_Blending_Mode == 0)
-        {
-            _Result = tex2D(S2D_Image, frac(In + _Pix * (float2(_Render_Ice.rb - 0.5) * _Render_Ice.b * _Offset)));
-            _Render = _Render_Texture;
-        }
-        else
-        {
-            _Result = tex2D(S2D_Background, frac(In + _Pix * (float2(_Render_Ice.rb - 0.5) * _Render_Ice.b * _Offset)));
-            _Render = _Render_Background;
-        }
+            float2 _Size = float2(fPixelWidth, fPixelHeight);
+            if(!_Blending_Mode)
+            {
+                _Result = tex2D(S2D_Image, frac(In + _Size * (float2(_Render_Ice.rb - 0.5) * _Render_Ice.b * _Offset)));
+                _Render = _Render_Texture;
+            }
+            else
+            {
+                _Result = tex2D(S2D_Background, frac(In_Background + _Size * (float2(_Render_Ice.rb - 0.5) * _Render_Ice.b * _Offset)));
+                _Render = _Render_Background;
+            }
 
         _Result.rgb = _Result.rgb * Fun_Luminance(_Render_Ice.rgb) + Fun_Luminance(_Render_Ice.rgb) * 0.75 * _Render_Ice.rgb;
         _Result.rgb += Fun_Luminance(_Render_Ice.rgb) * 0.35;
 
         _Result = lerp(_Render, _Result, smoothstep(Fun_Luminance(_Render_Ice.rgb) * (1.0 - abs(_Mixing)), Fun_Luminance(_Render_Ice.rgb), abs(_Mixing) * (1.0 - _Render_Mask.r)));
-        if(_Blending_Mode) _Result.a = _Render_Texture.a;
+        
+        if(_Blending_Mode)
+            _Result.a = _Render_Texture.a;
 
     return _Result;
 }
