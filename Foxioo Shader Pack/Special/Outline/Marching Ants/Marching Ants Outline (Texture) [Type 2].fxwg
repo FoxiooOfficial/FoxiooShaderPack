@@ -1,0 +1,165 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_vertex
+struct Projection {
+    size: vec2f,
+    scale: vec2f,
+};
+
+@group(0) @binding(0) var<uniform> projection: Projection;
+
+struct VertexInput {
+    @location(0) position: vec2f,
+    @location(1) texCoord: vec2f,
+    @location(2) color: vec4f,
+    @location(3) ink: f32,
+    @location(4) bgCoord: vec2f,
+};
+
+struct VertexOutput {
+    @builtin(position) position: vec4f,
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+    @location(2) ink: f32,
+    @location(3) bgCoord: vec2f,
+};
+
+struct Params {
+    parameter0_value: i32,
+    _Mixing: f32,
+    _Size: f32,
+    _Offset: f32,
+    _Light: vec4f,
+    _Shadow: vec4f,
+    parameter6_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+@vertex fn vs_main(input: VertexInput) -> VertexOutput {
+    var output: VertexOutput;
+    var Pos: vec3f = vec3f(input.position, 1.0);
+        output.texCoord = (fusion.textureMatrix * Pos).xy;
+
+        var _PixelSize: vec2f = vec2f(fusion.fPixelWidth, fusion.fPixelHeight);
+        var _DirCorner: vec2f = sign(output.texCoord - 0.5);
+
+            var _Expanded: f32 = params._Offset + 4.0;
+            var _PixelPadding: vec2f = vec2f(_Expanded);
+            var _PosExpanded: vec2f = input.position;
+
+            {
+                let _fusionSwizzle0 = _DirCorner * _PixelPadding * _PixelSize;
+                _PosExpanded.x += _fusionSwizzle0.x;
+                _PosExpanded.y += _fusionSwizzle0.y;
+            }
+
+        var pos: vec3f = vec3f(_PosExpanded, 1.0);
+        output.position = vec4f(fusion.projectionMatrix * fusion.transformMatrix * fusion.objectMatrix * pos, 1.0);
+
+        output.texCoord = output.texCoord + _DirCorner * _Expanded * _PixelSize;
+    output.bgCoord = input.bgCoord;
+    output.color = input.color;
+    output.ink = input.ink;
+    return output;
+}
+//@End
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+//uniform sampler2D bckgTexture;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Mixing: f32,
+    _Size: f32,
+    _Offset: f32,
+    _Light: vec4f,
+    _Shadow: vec4f,
+    parameter6_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+// Expanded source constant: KERNEL
+fn Fun_Render(_Tex: texture_2d<f32>, In: vec2f) -> vec4f {
+    if(In.x <= 0.0 || In.y <= 0.0 || In.x >= 1.0 || In.y >= 1.0) {
+            return vec4f(0.0);
+        }
+        else {
+            return texture2D(_Tex, In);
+        }
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = Fun_Render(img, vec2f(input.texCoord)) * (input.color * fusion.blendColor);
+        //vec4 _Render_Background = texture(bckgTexture, In);
+
+            var _Result: vec4f;
+            var _Alpha: f32 = 0.0;
+            var _Weight: f32 = 0.0;
+
+                var _Pixel: vec2f = vec2f(fusion.fPixelWidth, fusion.fPixelHeight);
+
+                    for (var y: i32 = -(1); y <= (1); y += 1)
+                    {
+                        for (var x: i32 = -(1); x <= (1); x += 1)
+                        {
+                            var _Off: vec2f = vec2f(f32(x), f32(y)) * _Pixel * params._Offset;
+                            _Alpha += Fun_Render(img, vec2f(input.texCoord + _Off)).a;
+                            _Weight += 1.0;
+                        }
+                    }
+
+                _Alpha /= _Weight;
+
+            var _Outline: f32 = ceil(_Alpha - ceil(_Render_Texture.a) - 1.0 / 255.0);
+
+            var UV: vec2f = vec2f(vec2i(ceil(input.texCoord / _Pixel / params._Size)));
+            var _Pattern: f32 = ((UV.x + UV.y) - (2.0) * floor((UV.x + UV.y) / (2.0)));
+
+            UV *= 1.0 / _Pixel / 32.0;
+            UV /= params._Size;
+
+                _Pattern = round(_Pattern);
+
+                    _Result = vec4f(mix(params._Shadow.rgb, params._Light.rgb, _Pattern).rgb, _Outline);
+                    _Result = mix(vec4f(_Render_Texture.rgb, ceil(_Render_Texture.a)), _Result, _Result.a); // it's overcomplicated...
+
+                _Result = mix(_Render_Texture, _Result, params._Mixing);
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End

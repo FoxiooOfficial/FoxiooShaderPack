@@ -23,8 +23,18 @@ SamplerState S2D_ImageSampler : register(s0);
 /* Variables */
 /***********************************************************/
 
-cbuffer PS_VARIABLES : register(b0)
+struct PS_INPUT
 {
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+	//float2 bgCoord : TEXCOORD1;
+    float4 Position : SV_POSITION;
+};
+
+#ifdef FUSION_PIXEL_SHADER
+
+    cbuffer PS_VARIABLES : register(b0)
+    {
     bool _;
     float _Mixing;
     float _Size;
@@ -32,30 +42,96 @@ cbuffer PS_VARIABLES : register(b0)
     float4 _Light;
     float4 _Shadow;
     bool __;
-};
+    };
 
-struct PS_INPUT
+    cbuffer PS_PIXELSIZE : register(b1)
+    {
+        float fPixelWidth;
+        float fPixelHeight;
+    };
+
+#endif // FUSION_PIXEL_SHADER
+
+/***********************************************************/
+
+struct VS_INPUT
 {
-    float4 Tint : COLOR0;
+    float4 Tint     : COLOR0;
     float2 texCoord : TEXCOORD0;
-	float2 bgCoord : TEXCOORD1;
-    float4 Position : SV_POSITION;
+	//float2 bgCoord : TEXCOORD1;
+    float3 Position : SV_POSITION;
 };
 
-struct PS_OUTPUT
-{
-    float4 Color   : SV_TARGET;
-};
+#ifdef FUSION_VERTEX_SHADER
 
-cbuffer PS_PIXELSIZE : register(b1)
+	cbuffer VS_MATRICES : register(b0)
+	{
+		row_major float4x4 transformMatrix;
+		row_major float4x4 projectionMatrix;
+	};
+
+    cbuffer VS_VARIABLES : register(b1)
+    {
+        bool _;
+        float _Mixing;
+        float _Size;
+        float _Offset;
+        float4 _Light;
+        float4 _Shadow;
+        bool __;
+    };
+
+    cbuffer VS_PIXELSIZE : register(b2)
+    {
+        float fPixelWidth;
+        float fPixelHeight;
+    };
+
+#endif // FUSION_VERTEX_SHADER
+
+/************************************************************/
+/* Vertex Shader */
+/************************************************************/
+
+#ifdef FUSION_VERTEX_SHADER
+
+PS_INPUT vs_main(VS_INPUT In)
 {
-	float fPixelWidth;
-	float fPixelHeight;
-};
+	PS_INPUT Out;
+
+	float2 _PixelSize = float2(fPixelWidth, fPixelHeight);
+	float2 _DirCorner = sign(In.texCoord - 0.5);
+
+        float _Expanded = _Offset + 4.0;
+        float2 _PixelPadding = _Expanded * float2(fPixelWidth, fPixelHeight);
+        float4 _PosExpanded = float4(In.Position, 1.0);
+
+            _PosExpanded.xy += _DirCorner * _Expanded;
+
+	Out.Position = mul(_PosExpanded, transformMatrix);
+	Out.Position = mul(Out.Position, projectionMatrix);
+
+	Out.Tint = In.Tint;
+	Out.texCoord = In.texCoord + _DirCorner * _PixelPadding;
+
+	return Out;
+}
+
+#endif // FUSION_VERTEX_SHADER
+
 
 /************************************************************/
 /* Main */
 /************************************************************/
+
+#ifdef FUSION_PIXEL_SHADER
+
+float4 Fun_Render(Texture2D _Tex, SamplerState _TexSampler, float2 In) {
+    if(any(In <= 0.0 || In >= 1.0))
+        return 0.0;
+    else
+        return _Tex.Sample(_TexSampler, In);
+}
 
 float4 Demultiply(float4 _Render, bool _Premultiplied)
 {
@@ -73,7 +149,7 @@ float4 Demultiply(float4 _Render, bool _Premultiplied)
 
 float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
 {
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
+    float4 _Render_Texture = Demultiply(Fun_Render(S2D_Image, S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
     //float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
 
         float4 _Result;
@@ -86,7 +162,7 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
                     for(int x = -KERNEL; x <= KERNEL; x++)
                     {
                         float2 _Off = float2(x, y) * _Pixel * _Offset;
-                        _Alpha += S2D_Image.Sample(S2D_ImageSampler, In.texCoord + _Off).a * In.Tint.a;
+                        _Alpha += Fun_Render(S2D_Image, S2D_ImageSampler, In.texCoord + _Off).a * In.Tint.a;
                         _Weight++;
                     }
                 }
@@ -127,3 +203,5 @@ float4 ps_main_pm(in PS_INPUT In) : SV_TARGET
 
     return _Render;
 }
+
+#endif // FUSION_PIXEL_SHADER
