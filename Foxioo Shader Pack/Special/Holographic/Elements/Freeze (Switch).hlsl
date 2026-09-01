@@ -67,7 +67,6 @@ float Fun_Luminance(float3 _Result) {
     return 0.299 * _Result.r + 0.587 * _Result.g + 0.114 * _Result.b;
 }
 
-
 float4 Demultiply(float4 _Render, bool _Premultiplied)
 {
     if(_Premultiplied)

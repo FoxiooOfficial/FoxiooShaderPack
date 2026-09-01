@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.1 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -18,11 +19,11 @@ SamplerState S2D_ImageSampler : register(s0);
 Texture2D<float4> S2D_Background : register(t1);
 SamplerState S2D_BackgroundSampler : register(s1);
 
-Texture2D<float4> S2D_Fire : register(t2);
-SamplerState S2D_FireSampler : register(s2);
+Texture2D<float4> _Texture_Fire : register(t2);
+SamplerState _Texture_Fire_Sampler : register(s2);
 
-Texture2D<float4> S2D_Mask : register(t3);
-SamplerState S2D_MaskSampler : register(s3);
+Texture2D<float4> _Texture_Mask : register(t3);
+SamplerState _Texture_Mask_Sampler : register(s3);
 
 /***********************************************************/
 /* Variables */
@@ -34,11 +35,9 @@ cbuffer PS_VARIABLES : register(b0)
     bool _Blending_Mode;
     float _Mixing;
     float _Offset;
-    Texture2D _Texture_Fire;
-    Texture2D _Texture_Mask;
+    //Texture2D _Texture_Fire;
+    //Texture2D _Texture_Mask;
     bool __;
-	bool _Is_Pre_296_Build;
-	bool ___;
 };
 
 struct PS_INPUT
@@ -64,41 +63,38 @@ cbuffer PS_PIXELSIZE : register(b1)
 /* Main */
 /************************************************************/
 
-float Fun_Luminance(float3 _Result)
+float4 Demultiply(float4 _Render, bool _Premultiplied)
 {
-    const float _Kr = 0.299;
-    const float _Kg = 0.587;
-    const float _Kb = 0.114;
-
-    float _Y = _Kr * _Result.r + _Kg * _Result.g + _Kb * _Result.b;
-
-    return _Y;
+    if(_Premultiplied)
+    {
+        if ( _Render.a != 0.0 ) {
+            _Render.rgb /= _Render.a;
+        }
+    }
+    return _Render;
 }
 
-PS_OUTPUT ps_main( in PS_INPUT In )
+float4 Main(PS_INPUT In, bool _Premultiplied) : SV_TARGET
 {
-    PS_OUTPUT Out;
-
-    float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord, false) * In.Tint, _Premultiplied);
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
-    float4 _Render_Ice = S2D_Fire.Sample(S2D_FireSampler, In.texCoord);
-    float4 _Render_Mask = S2D_Mask.Sample(S2D_MaskSampler, In.texCoord);
+    float4 _Render_Ice = _Texture_Fire.Sample(_Texture_Fire_Sampler, In.texCoord);
+    float4 _Render_Mask = _Texture_Mask.Sample(_Texture_Mask_Sampler, In.texCoord);
 
         float4 _Result;
         float4 _Render;
 
-        float2 _Pix = float2(fPixelWidth, fPixelHeight);
-
-        if(_Blending_Mode == 0)
-        {
-            _Result = S2D_Image.Sample(S2D_ImageSampler, frac(In.texCoord + _Pix * (float2(_Render_Ice.rb - 0.5) * _Render_Ice.b * _Offset))) * In.Tint;
-            _Render = _Render_Texture;
-        }
-        else
-        {
-            _Result = S2D_Background.Sample(S2D_BackgroundSampler, frac(In.texCoord + _Pix * (float2(_Render_Ice.rb - 0.5) * _Render_Ice.b * _Offset)));
-            _Render = _Render_Background;
-        }
+            float2 _Size = float2(fPixelWidth, fPixelHeight);
+            if(!_Blending_Mode)
+            {
+                _Result = S2D_Image.Sample(S2D_ImageSampler, frac(In.texCoord + _Size * (float2(_Render_Ice.rb - 0.5) * _Render_Ice.b * _Offset))) * In.Tint;
+                _Render = _Render_Texture;
+            }
+            else
+            {
+                _Result = S2D_Background.Sample(S2D_BackgroundSampler, frac(In.texCoord + _Size * (float2(_Render_Ice.rb - 0.5) * _Render_Ice.b * _Offset)));
+                _Render = _Render_Background;
+            }
 
         float _StepAlpha = smoothstep(1.0, 0.0, pow(abs(_Mixing - _Render_Mask.r), 10.0));
         float3 _ColorFire = _Render_Ice.rgb * _Render_Ice.rgb * 2.0 + _Render_Ice.rgb + pow(abs(distance(_Render_Mask.r, _Mixing + 0.1)), 10.0) * float3(0.8, 0.7, 0.0);
@@ -112,59 +108,22 @@ PS_OUTPUT ps_main( in PS_INPUT In )
         _Result = lerp(_Render, _Result, clamp(_Mixing, 0.0, 1.0));
         _Result.a *= _Render_Texture.a;
 
-    Out.Color = _Result;
-    
-    return Out;
-}
-/************************************************************/
-/* Premultiplied Alpha */
-/************************************************************/
-
-float4 Demultiply(float4 _Color)
-{
-	if ( _Color.a != 0 )   _Color.rgb /= _Color.a;
-	return _Color;
+	return _Result;
 }
 
-PS_OUTPUT ps_main_pm( in PS_INPUT In ) 
+/************************************************************/
+/* Render */
+/************************************************************/
+
+float4 ps_main(PS_INPUT In) : SV_TARGET{
+    float4 _Render = Main(In, false);
+    return _Render;
+}
+
+float4 ps_main_pm(PS_INPUT In) : SV_TARGET
 {
-    PS_OUTPUT Out;
+    float4 _Render = Main(In, true);
+    _Render.rgb *= _Render.a;
 
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
-    float4 _Render_Ice = S2D_Fire.Sample(S2D_FireSampler, In.texCoord);
-    float4 _Render_Mask = S2D_Mask.Sample(S2D_MaskSampler, In.texCoord);
-
-        float4 _Result;
-        float4 _Render;
-
-        float2 _Pix = float2(fPixelWidth, fPixelHeight);
-
-        if(_Blending_Mode == 0)
-        {
-            _Result = Demultiply(S2D_Image.Sample(S2D_ImageSampler, frac(In.texCoord + _Pix * (float2(_Render_Ice.rb - 0.5) * _Render_Ice.b * _Offset)))) * In.Tint;
-            _Render = _Render_Texture;
-        }
-        else
-        {
-            _Result = S2D_Background.Sample(S2D_BackgroundSampler, frac(In.texCoord + _Pix * (float2(_Render_Ice.rb - 0.5) * _Render_Ice.b * _Offset)));
-            _Render = _Render_Background;
-        }
-
-        float _StepAlpha = smoothstep(1.0, 0.0, pow(abs(_Mixing - _Render_Mask.r), 10.0));
-        float3 _ColorFire = _Render_Ice.rgb * _Render_Ice.rgb * 2.0 + _Render_Ice.rgb + pow(abs(distance(_Render_Mask.r, _Mixing + 0.1)), 10.0) * float3(0.8, 0.7, 0.0);
-
-        _Result.rgb = lerp(_Render.rgb, 0, saturate(pow(abs(distance(_Render_Mask.r, max(0, _Mixing) + 0.2)), _Offset) * 40.0));
-        _Result.rgb = lerp(_Result.rgb, _ColorFire, pow(abs(distance(_Render_Mask.r, max(0, _Mixing) + 0.2)), _Offset));
-        _Result.a = lerp(_Result.a, _Result.a * _StepAlpha, saturate(_Mixing));
-
-            _Result.rgb += _Render_Background.rgb * _StepAlpha * pow(abs(distance(_Render_Mask.r, _Mixing + 0.2)), _Offset);
-        
-        _Result = lerp(_Render, _Result, clamp(_Mixing, 0.0, 1.0));
-        _Result.a *= _Render_Texture.a;
-    
-    _Result.rgb *= _Result.a;
-
-    Out.Color = _Result;
-    return Out;  
+    return _Render;
 }
