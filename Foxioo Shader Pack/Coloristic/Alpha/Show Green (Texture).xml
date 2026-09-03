@@ -1,0 +1,37 @@
+<effect>
+	<name>Show Green (Texture)</name>
+		<description>This shader returns the Green value as an RGB color (for debugging purposes only).</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>0</BackgroundTexture>
+				<dx8>yes</dx8>
+				<PSVersion>1.1</PSVersion>
+				
+		<parameter>
+			<name>/* Foxioo's Show Green (Texture) Shader | 2026.09.03 */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>This shader returns the Green value as an RGB color (for debugging purposes only).</description>
+		</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+		<parameter>
+			<name>/*  */</name>
+			<property>checkbox</property>
+
+			<variable>__</variable>
+		</parameter>
+</effect>

@@ -16,27 +16,15 @@
 Texture2D<float4> S2D_Image : register(t0);
 SamplerState S2D_ImageSampler : register(s0);
 
-Texture2D<float4> S2D_Background : register(t1);
-SamplerState S2D_BackgroundSampler : register(s1);
-
 /***********************************************************/
 /* Variables */
 /***********************************************************/
 
 cbuffer PS_VARIABLES : register(b0)
 {
-    bool _, __;
-    float _PosX, _PosY;
-    bool ___;
-    float _RotX;
-    bool ____;
-    float _PointX, _PointY;
-    bool _____;
-    float _Scale, _ScaleX, _ScaleY;
-    bool ______;
-    bool _Blending_Mode;
+    bool _;
     float _Mixing;
-    int _ChannelRed, _ChannelGreen, _ChannelBlue;
+    bool __;
 };
 
 struct PS_INPUT
@@ -62,48 +50,6 @@ cbuffer PS_PIXELSIZE : register(b1)
 /* Main */
 /************************************************************/
 
-#define POINTS float2(_PointX, _PointY)
-#define RAD 0.01745329251
-
-float2 Fun_RotationX(float2 In)
-{
-    float2 UV;
-    float _Sin, _Cos;
-    sincos(RAD * _RotX, _Sin, _Cos);
-
-        UV = POINTS + mul(float2x2(_Cos, _Sin, -_Sin, _Cos), In - POINTS);
-
-    return UV;
-}
-
-float Fun_Channel(float2 UV, int _Mode)
-{
-    if(_Mode == 0)
-        return UV.x;
-    
-    else if(_Mode == 1)
-        return UV.y;
-
-    else
-        return UV.x + UV.y;
-}
-
-float3 Fun_Rainbow(float2 UV)
-{
-    static const float _Frag = 6.28318;
-    float3 _Render;
-    
-    float _Red = Fun_Channel(UV, _ChannelRed);
-    float _Green = Fun_Channel(UV, _ChannelGreen);
-    float _Blue = Fun_Channel(UV, _ChannelBlue);
-    
-    _Render.r = sin(_Frag * _Red + 0.0) * 0.5 + 0.5;
-    _Render.g = sin(_Frag * _Green + 2.0) * 0.5 + 0.5;
-    _Render.b = sin(_Frag * _Blue + 4.0) * 0.5 + 0.5;
-
-    return _Render;
-}
-
 float4 Demultiply(float4 _Render, bool _Premultiplied)
 {
     if(_Premultiplied)
@@ -119,20 +65,12 @@ float4 Demultiply(float4 _Render, bool _Premultiplied)
 float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
 {
     float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
+    float4 _Result;
 
-    float4 _Result = _Blending_Mode ? _Render_Background : _Render_Texture;
-    _Result.a = _Render_Texture.a;
-
-        float _Average = (_Result.r + _Result.g + _Result.b) / 3.0;
-
-        float2  _UV = Fun_RotationX(In.texCoord * _Average),
-                _ScaleTemp = (float2(_ScaleX, _ScaleY)) * _Scale,
-                _Pos = float2(-_PosX, _PosY);
-
-        float3 _Render_Rainbow = Fun_Rainbow((_UV - _Pos) * _ScaleTemp);
-
-    _Result.rgb += _Render_Rainbow.rgb * _Average * _Mixing;
+        _Result.rgb = _Render_Texture.r;
+        _Result.a = 1.0;
+        
+        _Result = lerp(_Render_Texture, _Result, _Mixing);
 
     return _Result;
 }
@@ -141,7 +79,7 @@ float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
 /* Render */
 /************************************************************/
 
-float4 ps_main(in PS_INPUT In) : SV_TARGET{
+float4 ps_main(in PS_INPUT In) : SV_TARGET { 
     float4 _Render = Main(In, false);
     return _Render;
 }
