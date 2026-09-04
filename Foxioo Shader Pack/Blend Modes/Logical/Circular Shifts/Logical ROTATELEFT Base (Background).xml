@@ -1,6 +1,6 @@
 <effect>
 	<name>Logical ROTATELEFT Base (Background)</name>
-		<description>This shader is a modification of the "AND" shader created by Cazra. The colors are shifted by a LEFTSHIFT for base based on blend colors and and loops the bits when they go out of range.</description> 
+		<description>This shader is a modification of the "AND" shader created by Cazra. The colors are shifted by a ROTATELEFT for base based on blend colors and and loops the bits when they go out of range.</description> 
 			<author>Foxioo, Special thanks to: Cazra</author>
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
@@ -12,7 +12,7 @@
 
 			<variable>_</variable>
 
-			<description>This shader is a modification of the "AND" shader created by Cazra. The colors are shifted by a LEFTSHIFT for base based on blend colors and and loops the bits when they go out of range.</description>
+			<description>This shader is a modification of the "AND" shader created by Cazra. The colors are shifted by a ROTATELEFT for base based on blend colors and and loops the bits when they go out of range.</description>
 		</parameter>
 
 			<parameter>
