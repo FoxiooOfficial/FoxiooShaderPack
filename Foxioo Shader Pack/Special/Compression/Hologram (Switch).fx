@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.0 (05.04.2026) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -46,13 +47,13 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
                 float4 _Render = _Blending_Mode ? _Render_Background : _Render_Texture;
 
             /* x-axis */
-            if ((_Pixel.x % 3) == 0)    _Result.rgb = float3(_Render.r, _RenderOff2.g, 0.0);
-            if ((_Pixel.x % 3) == 1)    _Result.rgb = float3(0.0, _Render.g, _RenderOff2.b);
+            if ((_Pixel.x % 2) == 0)    _Result.rgb = float3(_Render.r, _RenderOff2.g, 0.0);
+            if ((_Pixel.x % 2) == 1)    _Result.rgb = float3(0.0, _Render.g, _RenderOff2.b);
             else                        _Result.rgb = float3(_RenderOff2.r, 0.0, _Render.b);
 
             /* y-axis */
-            if ((_Pixel.y % 3) == 0)    _Result.rgb += float3(_Render.r, _RenderOff2.g, 0.0);
-            if ((_Pixel.y % 3) == 1)    _Result.rgb += float3(0.0, _Render.g, _RenderOff2.b);
+            if ((_Pixel.y % 2) == 0)    _Result.rgb += float3(_Render.r, _RenderOff2.g, 0.0);
+            if ((_Pixel.y % 2) == 1)    _Result.rgb += float3(0.0, _Render.g, _RenderOff2.b);
             else                        _Result.rgb += float3(_RenderOff2.r, 0.0, _Render.b);
 
 
@@ -66,4 +67,4 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_2_a ps_main(); } }
+technique tech_main { pass P0 { PixelShader = compile ps_2_0 ps_main(); } }
