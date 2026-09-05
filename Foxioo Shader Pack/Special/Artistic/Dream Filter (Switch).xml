@@ -1,0 +1,79 @@
+<effect>
+	<name>Dream Filter (Switch)</name>
+		<description>This shader creates an effect like in a dream.</description> 
+			<author>Foxioo</author>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+				<BackgroundTexture>1</BackgroundTexture>
+
+			<sampler>
+				<index>0</index>
+				<filter>antialiasing</filter>
+			</sampler>
+			
+			<sampler>
+				<index>1</index>
+				<filter>antialiasing</filter>
+			</sampler>
+
+		<parameter>
+			<name>/* Foxioo's Dream Filter (Switch) Shader | 2026.09.05 */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>This shader creates an effect like in a dream.</description>
+		</parameter>
+
+			<parameter>
+				<name>Blending Mode</name>
+				<variable>_Blending_Mode</variable>
+
+				<description>This variable determines which color will be the basis for modification. Set to 0 means it will be the texture of the object and set to 1 it will be the background.</description>
+			
+				<type>bool</type>
+				<property>checkbox</property>
+			
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Size</name>
+				<variable>_Size</variable>
+				
+				<description>This variable specifies the filter size in pixels.</description>
+
+				<type>float</type>
+
+				<value>24</value>
+			</parameter>
+
+			<parameter>
+				<name>Quality</name>
+				<variable>_Quality</variable>
+				
+				<description>This variable determines the quality; the higher the value, the more work the GPU does.</description>
+
+				<type>int</type>
+
+				<value>16</value>
+			</parameter>
+
+        <parameter>
+            <name>/* */</name>
+            <property>checkbox</property>
+            <variable>__</variable>
+        </parameter>
+
+</effect>

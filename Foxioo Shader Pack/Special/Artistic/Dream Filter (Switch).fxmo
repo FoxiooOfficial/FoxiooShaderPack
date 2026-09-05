@@ -1,0 +1,127 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_vertex
+//version_####
+
+uniform mat3 transformMatrix;
+uniform mat3 projectionMatrix;
+uniform mat3 objectMatrix;
+uniform mat3 textureMatrix;
+
+in vec2 position;
+out vec2 In;
+void main()
+{
+    vec3 pos = vec3(position, 1.0);
+    In = (textureMatrix * pos).xy;
+    gl_Position = vec4(projectionMatrix * transformMatrix * objectMatrix * pos, 1.0);
+}
+//@End
+
+/* ####################################################### */
+
+//@Begin_fragment
+//version_####
+
+#ifdef GL_ES
+    #if defined(GL_FRAGMENT_PRECISION_HIGH)
+        #define HIGH_PRECISION_SUPPORTED
+    #endif
+#else
+    #define HIGH_PRECISION_SUPPORTED    
+#endif
+
+#ifdef HIGH_PRECISION_SUPPORTED
+    precision highp float;
+#else
+    precision mediump float;
+#endif
+
+in vec2 In;
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+uniform sampler2D imgTexture;
+uniform sampler2D bckgTexture;
+
+uniform lowp vec4 blendColor;
+uniform float fPixelWidth;
+uniform float fPixelHeight;
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+uniform float _Mixing;
+uniform float _Size;
+uniform bool _Blending_Mode;
+uniform int _Quality;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+
+vec3 Fun_Filter(sampler2D _Sampler, vec2 In, vec3 _Render, vec4 _Tint)
+{
+    vec3 _Blur = vec3(0.0);
+    float _Sum = 0.0;
+
+    vec3 _Result = _Render;
+
+    float _Center = (float(_Quality) - 1.0) / 2.0;
+    vec2 _SizePixel = _Size * vec2(fPixelWidth,  fPixelHeight) / float(_Quality);
+    float _Luma = clamp(dot(_Render, vec3(0.2126, 0.7152, 0.0722)), 0.0, 1.0);
+
+    int x; int y;
+    for(y = 0; y < _Quality; y++)
+    {  
+        for(x = 0; x < _Quality; x++)
+        {  
+            float xx = float(x) - _Center;
+            float yy = float(y) - _Center;
+
+            vec2 UV = In + vec2(xx, yy) * _SizePixel;
+            vec3 _Render_Blur = texture(_Sampler, UV).rgb;
+
+            float _Dist = length(vec2(xx, yy));
+            float _W = 1.0 - clamp(_Dist / _Center, 0.0, 1.0);
+
+            _Blur += _Render_Blur * _W;
+            _Sum += _W;
+        }
+    }
+
+    _Blur /= _Sum;
+    _Result = mix(_Render * _Luma, _Blur / _Luma, _Luma);
+    _Result = mix(_Render, _Result, _Luma);
+
+    return pow(abs(_Result), vec3(1.61));
+}
+
+out vec4 fragColor;
+void main(void)
+{
+    vec4 _Render_Texture = texture(imgTexture, In) * blendColor;
+    vec4 _Render_Background = texture(bckgTexture, In);
+
+        vec4 _Result = _Blending_Mode ? _Render_Background : _Render_Texture;
+        vec3 _Filter = _Blending_Mode ? Fun_Filter(bckgTexture, In, _Render_Background.rgb, vec4(1.0))
+                                      : Fun_Filter(imgTexture, In, _Render_Texture.rgb, blendColor);
+    
+        _Result.rgb = mix(_Result.rgb, _Filter, _Mixing);
+        _Result.a = _Render_Texture.a;
+
+    fragColor = _Result;
+}
+//@End
