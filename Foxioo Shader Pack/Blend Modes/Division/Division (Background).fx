@@ -28,36 +28,68 @@ sampler2D S2D_Background : register(s1);
 /* Main */
 /************************************************************/
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
-{
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In_Background);
+#if (__SHADER_TARGET_MAJOR >= 2)
 
-        float4 _Result, _Render;
-        
-            if(!_Blending_Mode)
-            { 
-                _Result.rgb = _Render_Texture.rgb / (_Render_Background.rgb * _Mul); 
-                _Render = _Render_Texture;
-            }
-            else 
-            { 
-                _Result.rgb = (_Render_Background.rgb * _Mul) / _Render_Texture.rgb; 
-                _Render = _Render_Background;
-            }
+    float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+    {
+        float4 _Render_Texture = tex2D(S2D_Image, In);
+        float4 _Render_Background = tex2D(S2D_Background, In_Background);
 
-            _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
+            float4 _Result, _Render;
 
-            if(_Mixing == 0.0)
-                _Result.rgb = _Render.rgb;
+                if(!_Blending_Mode)
+                { 
+                    _Result.rgb = _Render_Texture.rgb / (_Render_Background.rgb * _Mul); 
+                    _Render = _Render_Texture;
+                }
+                else 
+                { 
+                    _Result.rgb = (_Render_Background.rgb * _Mul) / _Render_Texture.rgb; 
+                    _Render = _Render_Background;
+                }
 
-        _Result.a = _Render_Texture.a;
-        
-    return _Result;
-}
+                _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
+                _Result.rgb = _Mixing == 0.0 ? _Render.rgb : _Result.rgb;
+
+            _Result.a = _Render_Texture.a;
+            
+        return _Result;
+    }
+
+#else
+
+    float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+    {
+        float4 _Render_Texture = tex2D(S2D_Image, In);
+        float4 _Render_Background = tex2D(S2D_Background, In_Background) * _Mul;
+
+            float4 _Result;
+            _Result.a = _Render_Texture.a;
+            
+            float3 _Render = _Blending_Mode ? _Render_Texture.rgb : _Render_Background.rgb;
+            float3 _Div = _Blending_Mode ? _Render_Background.rgb : _Render_Texture.rgb;
+
+            _Result.rgb = (1.0 - _Render + _Div) * step(0.005, _Div);
+
+            _Result.rgb = lerp(_Render, _Result.rgb, _Mixing);
+
+        return _Result;
+    }
+
+#endif // (__SHADER_TARGET_MAJOR >= 2)
 
 /************************************************************/
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_2_0 ps_main(); } }
+technique tech_main
+{ 
+    pass P0
+    { 
+        #if (__SHADER_TARGET_MAJOR >= 2)
+            PixelShader = compile ps_2_0 ps_main();
+        #else
+            PixelShader = compile ps_1_4 ps_main();
+        #endif
+    } 
+}
