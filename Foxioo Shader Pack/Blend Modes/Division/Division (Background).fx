@@ -70,7 +70,6 @@ sampler2D S2D_Background : register(s1);
             float3 _Div = _Blending_Mode ? _Render_Background.rgb : _Render_Texture.rgb;
 
             _Result.rgb = (1.0 - _Render + _Div) * step(0.005, _Div);
-
             _Result.rgb = lerp(_Render, _Result.rgb, _Mixing);
 
         return _Result;

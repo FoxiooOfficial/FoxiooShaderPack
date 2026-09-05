@@ -63,7 +63,7 @@ sampler2D S2D_Background : register(s1);
         return _Result;
     }
 
-#endif // __SHADER_TARGET_MAJOR >= 2
+#endif // (__SHADER_TARGET_MAJOR >= 2)
 
 /************************************************************/
 /* Tech Main */
