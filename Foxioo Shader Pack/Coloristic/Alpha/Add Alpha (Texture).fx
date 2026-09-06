@@ -34,7 +34,7 @@ struct PS_INPUT
 
 float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
     float4 _Result;
 
         _Result.rgb = _Render_Texture.rgb;
