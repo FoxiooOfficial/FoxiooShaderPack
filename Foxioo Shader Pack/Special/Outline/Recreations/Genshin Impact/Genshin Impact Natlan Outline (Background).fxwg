@@ -1,0 +1,228 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_vertex
+struct Projection {
+    size: vec2f,
+    scale: vec2f,
+};
+
+@group(0) @binding(0) var<uniform> projection: Projection;
+
+struct VertexInput {
+    @location(0) position: vec2f,
+    @location(1) texCoord: vec2f,
+    @location(2) color: vec4f,
+    @location(3) ink: f32,
+    @location(4) bgCoord: vec2f,
+};
+
+struct VertexOutput {
+    @builtin(position) position: vec4f,
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+    @location(2) ink: f32,
+    @location(3) bgCoord: vec2f,
+};
+
+struct Params {
+    parameter0_value: i32,
+    parameter1_value: i32,
+    _PosX: f32,
+    _PosY: f32,
+    parameter4_value: i32,
+    _Scale: f32,
+    _ScaleX: f32,
+    _ScaleY: f32,
+    parameter8_value: i32,
+    _Mixing: f32,
+    _Alpha: f32,
+    _Offset: f32,
+    _OffsetDistortion: f32,
+    _Seed: f32,
+    _ColorLight: vec4f,
+    _Color: vec4f,
+    _ColorShadow: vec4f,
+    parameter17_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+@vertex fn vs_main(input: VertexInput) -> VertexOutput {
+    var output: VertexOutput;
+    var Pos: vec3f = vec3f(input.position, 1.0);
+        output.texCoord = (fusion.textureMatrix * Pos).xy;
+
+        var _PixelSize: vec2f = vec2f(fusion.fPixelWidth, fusion.fPixelHeight);
+        var _DirCorner: vec2f = sign(output.texCoord - 0.5);
+
+            var _Expanded: f32 = abs(params._Offset + params._OffsetDistortion);
+            var _PixelPadding: vec2f = vec2f(_Expanded);
+            var _PosExpanded: vec2f = input.position;
+
+            {
+                let _fusionSwizzle0 = _DirCorner * _PixelPadding * _PixelSize;
+                _PosExpanded.x += _fusionSwizzle0.x;
+                _PosExpanded.y += _fusionSwizzle0.y;
+            }
+
+        var pos: vec3f = vec3f(_PosExpanded, 1.0);
+        output.position = vec4f(fusion.projectionMatrix * fusion.transformMatrix * fusion.objectMatrix * pos, 1.0);
+
+        output.texCoord = output.texCoord + _DirCorner * _Expanded * _PixelSize;
+    output.bgCoord = input.bgCoord;
+    output.color = input.color;
+    output.ink = input.ink;
+    return output;
+}
+//@End
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(0) var background: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    parameter1_value: i32,
+    _PosX: f32,
+    _PosY: f32,
+    parameter4_value: i32,
+    _Scale: f32,
+    _ScaleX: f32,
+    _ScaleY: f32,
+    parameter8_value: i32,
+    _Mixing: f32,
+    _Alpha: f32,
+    _Offset: f32,
+    _OffsetDistortion: f32,
+    _Seed: f32,
+    _ColorLight: vec4f,
+    _Color: vec4f,
+    _ColorShadow: vec4f,
+    parameter17_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+fn Fun_Render(_Tex: texture_2d<f32>, In: vec2f) -> vec4f {
+    if(In.x <= 0.0 || In.y <= 0.0 || In.x >= 1.0 || In.y >= 1.0) {
+            return vec4f(0.0);
+        }
+        else {
+            return texture2D(_Tex, In);
+        }
+}
+
+fn Fun_Hash21(_Pos: vec2f) -> f32 {
+    return fract(sin(dot(_Pos, vec2f(12.9898, 78.233))) * 43758.5453);
+}
+
+fn Fun_Noise(_Pos: vec2f) -> f32 {
+    var _I: vec2f = floor(_Pos + params._Seed);
+        var _F: vec2f = fract(_Pos);
+
+            var _A: f32 = Fun_Hash21(vec2f(_I + vec2f(0.0, 0.0) + params._Seed));
+            var _B: f32 = Fun_Hash21(vec2f(_I + vec2f(1.0, 0.0) + params._Seed));
+            var _C: f32 = Fun_Hash21(vec2f(_I + vec2f(0.0, 1.0) + params._Seed));
+            var _D: f32 = Fun_Hash21(vec2f(_I + vec2f(1.0, 1.0) + params._Seed));
+
+        var _UV: vec2f = _F * _F * (3.0 - 2.0 *_F);
+
+        return mix(mix(_A, _B, _UV.x), mix(_C, _D, _UV.x), _UV.y);
+}
+
+fn Fun_NoiseGradient(_UV: vec2f, _Color_1: vec3f, _Color_2: vec3f, _Color_3: vec3f) -> vec3f {
+    var _Noise: f32 = Fun_Noise(vec2f(_UV * 4.0));
+
+        var _Render_1: vec3f = mix(_Color_1, _Color_2, smoothstep(0.0, 0.5, _Noise));
+        var _Render_2: vec3f = mix(_Render_1, _Color_3, smoothstep(0.5, 1.0, _Noise));
+
+        return _Render_2;
+}
+
+fn Fun_NoiseSat(_Color: vec3f, _Sat: f32) -> vec3f {
+    var _Lum: f32 = dot(_Color, vec3f(0.299, 0.587, 0.114));
+
+        return mix(vec3f(_Lum, _Lum, _Lum), _Color, _Sat);
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = Fun_Render(img, vec2f(input.texCoord)) * (input.color * fusion.blendColor);
+        var _Render_Background: vec4f = Fun_Render(background, vec2f(input.texCoord));
+
+            var _UV: vec2f = (input.texCoord + vec2f(params._PosX, params._PosY)) * vec2f(params._ScaleX, params._ScaleY) * params._Scale;
+            var _Result: vec4f = params._Color;
+
+                {
+                    let _fusionSwizzle0 = Fun_NoiseGradient(_UV, vec3f(params._Color.rgb), vec3f(params._ColorShadow.rgb), vec3f(params._ColorLight.rgb));
+                    _Result.x = _fusionSwizzle0.x;
+                    _Result.y = _fusionSwizzle0.y;
+                    _Result.z = _fusionSwizzle0.z;
+                }
+
+                    var _Noise: f32 = Fun_Noise(vec2f(_UV * 8.0));
+                    var _Sat: f32 = mix(0.5, 2.5, _Noise);
+
+                    {
+                        let _fusionSwizzle1 = Fun_NoiseSat(vec3f(_Result.rgb), f32(_Sat));
+                        _Result.x = _fusionSwizzle1.x;
+                        _Result.y = _fusionSwizzle1.y;
+                        _Result.z = _fusionSwizzle1.z;
+                    }
+
+                        var _Mask: f32 = _Render_Texture.a;
+
+                            _Mask += Fun_Render(img, vec2f(input.texCoord + vec2f(-1.0, 0.0) * vec2f(fusion.fPixelWidth, fusion.fPixelHeight) * (params._Offset + sin(input.texCoord + _Noise) * params._OffsetDistortion))).a * (input.color * fusion.blendColor).a;
+                            _Mask += Fun_Render(img, vec2f(input.texCoord + vec2f(1.0, 0.0) * vec2f(fusion.fPixelWidth, fusion.fPixelHeight) * (params._Offset + sin(input.texCoord + _Noise) * params._OffsetDistortion))).a * (input.color * fusion.blendColor).a;
+                            _Mask += Fun_Render(img, vec2f(input.texCoord + vec2f(0.0, -1.0) * vec2f(fusion.fPixelWidth, fusion.fPixelHeight) * (params._Offset + sin(input.texCoord + _Noise) * params._OffsetDistortion))).a * (input.color * fusion.blendColor).a;
+                            _Mask += Fun_Render(img, vec2f(input.texCoord + vec2f(0.0, 1.0) * vec2f(fusion.fPixelWidth, fusion.fPixelHeight) * (params._Offset + sin(input.texCoord + _Noise) * params._OffsetDistortion))).a * (input.color * fusion.blendColor).a;
+
+                            _Mask += Fun_Render(img, vec2f(input.texCoord + vec2f(-1.0, -1.0) * vec2f(fusion.fPixelWidth, fusion.fPixelHeight) * (params._Offset + sin(input.texCoord + _Noise) * params._OffsetDistortion))).a * (input.color * fusion.blendColor).a;
+                            _Mask += Fun_Render(img, vec2f(input.texCoord + vec2f(-1.0, 1.0) * vec2f(fusion.fPixelWidth, fusion.fPixelHeight) * (params._Offset + sin(input.texCoord + _Noise) * params._OffsetDistortion))).a * (input.color * fusion.blendColor).a;
+                            _Mask += Fun_Render(img, vec2f(input.texCoord + vec2f(1.0, -1.0) * vec2f(fusion.fPixelWidth, fusion.fPixelHeight) * (params._Offset + sin(input.texCoord + _Noise) * params._OffsetDistortion))).a * (input.color * fusion.blendColor).a;
+                            _Mask += Fun_Render(img, vec2f(input.texCoord + vec2f(1.0, 1.0) * vec2f(fusion.fPixelWidth, fusion.fPixelHeight) * (params._Offset + sin(input.texCoord + _Noise) * params._OffsetDistortion))).a * (input.color * fusion.blendColor).a;
+                            _Mask = clamp(_Mask, 0.0, 1.0);
+
+                        _Result.a = _Mask;
+
+            {
+                let _fusionSwizzle2 = mix(_Result.rgb, _Result.rgb + _Render_Background.rgb, params._Mixing);
+                _Result.x = _fusionSwizzle2.x;
+                _Result.y = _fusionSwizzle2.y;
+                _Result.z = _fusionSwizzle2.z;
+            }
+            _Render_Texture = mix(_Result, _Render_Texture, _Render_Texture.a * params._Alpha);
+
+        _fusionOutput = _Render_Texture;
+    return _fusionOutput;
+}
+//@End

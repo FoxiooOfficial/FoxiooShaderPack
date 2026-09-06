@@ -34,7 +34,7 @@
 
 				<type>float</type>
 
-				<value>0.4</value>
+				<value>0.1</value>
 			</parameter>
 
 			<parameter>
@@ -45,7 +45,7 @@
 
 				<type>float</type>
 
-				<value>48.0</value>
+				<value>8.0</value>
 			</parameter>
 
 			<parameter>
@@ -67,7 +67,7 @@
 
 				<type>float</type>
 
-				<value>0.2</value>
+				<value>0.05</value>
 			</parameter>
 
         <parameter>

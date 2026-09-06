@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.1 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -16,14 +17,43 @@
 uniform mat4 transformMatrix;
 uniform mat4 projectionMatrix;
 
+uniform float _Mixing;
+uniform float _Seed;
+uniform float _PosX;
+uniform float _PosY;
+uniform float _Scale;
+uniform float _ScaleX; 
+uniform float _ScaleY;
+uniform float _Offset;
+uniform float _OffsetDistortion;
+uniform vec4 _ColorShadow;
+uniform vec4 _Color;
+uniform float _Alpha;
+uniform vec4 _ColorLight;
+
+uniform float fPixelWidth;
+uniform float fPixelHeight;
+
 attribute vec4 position;
 attribute vec2 texCoord;
 varying vec2 In;
 
 void main(void)
 {
-	In = texCoord;
-	gl_Position = projectionMatrix * transformMatrix * position;
+    In = texCoord;
+
+    vec2 _PixelSize = vec2(fPixelWidth, fPixelHeight);
+    vec2 _DirCorner = sign(In - 0.5);
+
+        float _Expanded = abs(_Offset + _OffsetDistortion);
+        vec2 _PixelPadding = vec2(_Expanded);
+        vec4 _PosExpanded = position;
+
+        _PosExpanded.xy += _DirCorner * _PixelPadding;
+
+    gl_Position = projectionMatrix * transformMatrix * _PosExpanded;
+
+    In = In + _DirCorner * _Expanded * _PixelSize;
 }
 
 //@End
@@ -72,10 +102,23 @@ uniform vec4 _ColorLight;
 /* Main */
 /************************************************************/
 
-float Fun_Hash21(vec2 _Pos) { return fract(sin(dot(_Pos, vec2(12.9898,78.233))) * 43758.5453); }
+vec4 Fun_Render(sampler2D _Tex, vec2 In)
+{
+    if(In.x <= 0.0 || In.y <= 0.0 || In.x >= 1.0 || In.y >= 1.0)
+        return vec4(0.0);
+    else
+        return texture2D(_Tex, In);
+}
+
+
+float Fun_Hash21(vec2 _Pos) { 
+    return fract(sin(dot(_Pos, vec2(12.9898,78.233))) * 43758.5453);
+}
+
 float Fun_Noise(vec2 _Pos)
 {
-    vec2 _I = floor(_Pos + _Seed);    vec2 _F = fract(_Pos);
+    vec2 _I = floor(_Pos + _Seed);
+    vec2 _F = fract(_Pos);
 
         float _A = Fun_Hash21(_I + vec2(0.0, 0.0) + _Seed);
         float _B = Fun_Hash21(_I + vec2(1.0, 0.0) + _Seed);
@@ -106,36 +149,36 @@ vec3 Fun_NoiseSat(vec3 _Color, float _Sat)
 
 void main(void)
 {
-    vec2 In_Background = vec2(In.x, 1.0 - In.y);
-
-    vec4 _Render_Texture = texture2D(imgTexture, In) * blendColor;
-    vec4 _Render_Background = _Is_Pre_296_Build ? texture2D(bckgTexture, In_Background) : texture2D(bckgTexture, In);
+    vec4 _Render_Texture = Fun_Render(imgTexture, In) * blendColor;
+    vec4 _Render_Background = Fun_Render(bckgTexture, In);
 
         vec2 _UV = (In + vec2(_PosX, _PosY)) * vec2(_ScaleX, _ScaleY) * _Scale; 
         vec4 _Result = _Color;
 
             _Result.rgb = Fun_NoiseGradient(_UV, _Color.rgb, _ColorShadow.rgb, _ColorLight.rgb);
 
-                float _Noise = Fun_Noise(_UV * 8.0);     float _Sat = mix(0.5, 2.5, _Noise);
+                float _Noise = Fun_Noise(_UV * 8.0);
+                float _Sat = mix(0.5, 2.5, _Noise);
+
                 _Result.rgb = Fun_NoiseSat(_Result.rgb, _Sat);
 
                     float _Mask = _Render_Texture.a;
 
-                        _Mask += texture2D(imgTexture, In + vec2(-1.0,  0.0) * vec2(fPixelWidth, fPixelHeight) * (_Offset + sin(In + _Noise) * _OffsetDistortion)).a * blendColor.a;
-                        _Mask += texture2D(imgTexture, In + vec2( 1.0,  0.0) * vec2(fPixelWidth, fPixelHeight) * (_Offset + sin(In + _Noise) * _OffsetDistortion)).a * blendColor.a;
-                        _Mask += texture2D(imgTexture, In + vec2( 0.00001, -1.0) * vec2(fPixelWidth, fPixelHeight) * (_Offset + sin(In + _Noise) * _OffsetDistortion)).a * blendColor.a;
-                        _Mask += texture2D(imgTexture, In + vec2( 0.00001,  1.0) * vec2(fPixelWidth, fPixelHeight) * (_Offset + sin(In + _Noise) * _OffsetDistortion)).a * blendColor.a;
+                        _Mask += Fun_Render(imgTexture, In + vec2(-1.0,  0.0) * vec2(fPixelWidth, fPixelHeight) * (_Offset + sin(In + _Noise) * _OffsetDistortion)).a * blendColor.a;
+                        _Mask += Fun_Render(imgTexture, In + vec2( 1.0,  0.0) * vec2(fPixelWidth, fPixelHeight) * (_Offset + sin(In + _Noise) * _OffsetDistortion)).a * blendColor.a;
+                        _Mask += Fun_Render(imgTexture, In + vec2( 0.0, -1.0) * vec2(fPixelWidth, fPixelHeight) * (_Offset + sin(In + _Noise) * _OffsetDistortion)).a * blendColor.a;
+                        _Mask += Fun_Render(imgTexture, In + vec2( 0.0,  1.0) * vec2(fPixelWidth, fPixelHeight) * (_Offset + sin(In + _Noise) * _OffsetDistortion)).a * blendColor.a;
 
-                        _Mask += texture2D(imgTexture, In + vec2(-1.0, -1.0) * vec2(fPixelWidth, fPixelHeight) * (_Offset + sin(In + _Noise) * _OffsetDistortion)).a * blendColor.a;
-                        _Mask += texture2D(imgTexture, In + vec2(-1.0,  1.0) * vec2(fPixelWidth, fPixelHeight) * (_Offset + sin(In + _Noise) * _OffsetDistortion)).a * blendColor.a;
-                        _Mask += texture2D(imgTexture, In + vec2( 1.0, -1.0) * vec2(fPixelWidth, fPixelHeight) * (_Offset + sin(In + _Noise) * _OffsetDistortion)).a * blendColor.a;
-                        _Mask += texture2D(imgTexture, In + vec2( 1.0,  1.0) * vec2(fPixelWidth, fPixelHeight) * (_Offset + sin(In + _Noise) * _OffsetDistortion)).a * blendColor.a;
+                        _Mask += Fun_Render(imgTexture, In + vec2(-1.0, -1.0) * vec2(fPixelWidth, fPixelHeight) * (_Offset + sin(In + _Noise) * _OffsetDistortion)).a * blendColor.a;
+                        _Mask += Fun_Render(imgTexture, In + vec2(-1.0,  1.0) * vec2(fPixelWidth, fPixelHeight) * (_Offset + sin(In + _Noise) * _OffsetDistortion)).a * blendColor.a;
+                        _Mask += Fun_Render(imgTexture, In + vec2( 1.0, -1.0) * vec2(fPixelWidth, fPixelHeight) * (_Offset + sin(In + _Noise) * _OffsetDistortion)).a * blendColor.a;
+                        _Mask += Fun_Render(imgTexture, In + vec2( 1.0,  1.0) * vec2(fPixelWidth, fPixelHeight) * (_Offset + sin(In + _Noise) * _OffsetDistortion)).a * blendColor.a;
                         _Mask = clamp(_Mask, 0.0, 1.0);
                 
                     _Result.a = _Mask;
 
-                _Result.rgb = mix(_Result.rgb, _Result.rgb + _Render_Background.rgb, _Mixing);
-                _Render_Texture = mix(_Result, _Render_Texture, _Render_Texture.a * _Alpha);
+        _Result.rgb = mix(_Result.rgb, _Result.rgb + _Render_Background.rgb, _Mixing);
+        _Render_Texture = mix(_Result, _Render_Texture, _Render_Texture.a * _Alpha);
 
     gl_FragColor = _Render_Texture;
 }
