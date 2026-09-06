@@ -9,7 +9,7 @@
 				<PSVersion>1.4</PSVersion>
 				
 		<parameter>
-			<name>/* Foxioo's Show TexCoord (Texture) Shader | 2026.09.06 */</name>
+			<name>/* Foxioo's Show TexCoord (Background) Shader | 2026.09.06 */</name>
 			<property>checkbox</property>
 
 			<variable>_</variable>
