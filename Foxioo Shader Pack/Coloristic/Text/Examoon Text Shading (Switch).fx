@@ -19,6 +19,13 @@ sampler2D S2D_Image : register(s0);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing, _PT, _DPI, _Height,
             _OffsetY, _ScaleY, 
 
@@ -34,9 +41,9 @@ sampler2D S2D_Image : register(s0);
 /* Main */
 /************************************************************/
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
     float4 _Result;
         
         _Result.a = _Render_Texture.a;
@@ -44,13 +51,13 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
         float2 _Res = float2(fPixelWidth, fPixelHeight);
         float _FontSize = _DPI / 72.0 * _PT * _Res.y;
 
-            float _Gradient = cos(((In.y - _OffsetY * _FontSize) * _ScaleY * 2.0) * M_PI / _FontSize * (2.0 / _Height));
+            float _Gradient = cos(((In.texCoord.y - _OffsetY * _FontSize) * _ScaleY * 2.0) * M_PI / _FontSize * (2.0 / _Height));
 
                 _Result.rgb = lerp(_Dark.rgb, _Light.rgb, _Gradient);
 
             float2 _ShadowOffset = float2(_PosX, _PosY) * _Res;
 
-                float4 _Render_Shadow = tex2D(S2D_Image, In - _ShadowOffset);
+                float4 _Render_Shadow = tex2D(S2D_Image, In.texCoord - _ShadowOffset);
                     _Render_Shadow.rgb = _Shadow.rgb;
                     _Render_Shadow.a *= _Alpha;
 

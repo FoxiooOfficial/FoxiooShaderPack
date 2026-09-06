@@ -21,6 +21,13 @@ sampler2D _Texture : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing,
             _PosX, _PosY,
             _Scale, _ScaleX, _ScaleY,
@@ -93,7 +100,7 @@ float Fun_Lum(float4 _Result) {
 }
 
 float4 ps_main(VS_OUTPUT In) : COLOR0
-//float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+//float4 ps_main(in PS_INPUT In) : COLOR0
 {
     float4 _Render_Texture = Fun_PixelSample(S2D_Image, In.texCoord);
 

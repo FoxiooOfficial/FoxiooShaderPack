@@ -24,6 +24,13 @@ sampler2D _Texture_D : register(s4);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing,
             _B, _C, _D;
 
@@ -34,17 +41,17 @@ sampler2D _Texture_D : register(s4);
 /* Main */
 /************************************************************/
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In_Background);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
 
         float4 _Result = _Blending_Mode ? _Render_Background : _Render_Texture;
         float4 _Render = _Result;
 
-            _Render -= _B_Mode ? tex2D(_Texture_B, In) * _B : _B;
-            _Render *= _C_Mode ? tex2D(_Texture_C, In) * _C : _C;
-            _Render += _D_Mode ? tex2D(_Texture_D, In) * _D : _D;
+            _Render -= _B_Mode ? tex2D(_Texture_B, In.texCoord) * _B : _B;
+            _Render *= _C_Mode ? tex2D(_Texture_C, In.texCoord) * _C : _C;
+            _Render += _D_Mode ? tex2D(_Texture_D, In.texCoord) * _D : _D;
 
         _Result.rgb = lerp(_Result.rgb, _Render.rgb, _Mixing); 
         _Result.a = _Render_Texture.a;

@@ -20,6 +20,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing,
             _Phase,
             _PosX, _PosY;
@@ -41,17 +48,17 @@ float Fun_Luminance(float3 _Result)
     return _Y;
 }
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In_Background);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
 
         float4 _Render =    _Blending_Mode ? _Render_Background : _Render_Texture;
         
             float3 _Lum = Fun_Luminance(_Render.rgb);
             _Lum *= _Lum;
 
-                float2 _UV = In + float2(_PosX, _PosY);
+                float2 _UV = In.texCoord + float2(_PosX, _PosY);
 
                 _Lum.r = lerp(_Lum.r, cos(_Lum.r * 9.0 + _UV.y * 9.0 + _Render.r) *  sin(_UV.x * 6.0 - _Lum.r), _Phase * sin(_Lum.r * 15. + 2. * _Render.r));
                 _Lum.g = lerp(_Lum.g, cos(_Lum.g * 8.0 + _UV.x * 10.0 + _Render.g) * sin(_UV.y * 6.0 - _Lum.g), _Phase * sin(_Lum.g * 17. + 2. * _Render.g));

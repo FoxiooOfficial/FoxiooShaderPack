@@ -21,6 +21,13 @@ sampler2D _Texture_Overlay : register(s3);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing,
             _ReflectionMixing, _ReflectionCut,
             _NormalMapX, _NormalMapY, _NormalMapStrength,
@@ -39,36 +46,36 @@ sampler2D _Texture_Overlay : register(s3);
 /* Main */
 /************************************************************/
 
-float2 Fun_RotationX(float2 In)
+float2 Fun_RotationX(float2 In.texCoord)
 {
     float2 _Points = float2(_PointX, _PointY);
-    float2 _UV = In;
+    float2 _UV = In.texCoord;
     float _RotX_Fix = _RotX * 0.0174532925;
 
-        In = _Points + mul(float2x2(cos(_RotX_Fix), sin(_RotX_Fix), -sin(_RotX_Fix), cos(_RotX_Fix)), _UV - _Points);
+        In.texCoord = _Points + mul(float2x2(cos(_RotX_Fix), sin(_RotX_Fix), -sin(_RotX_Fix), cos(_RotX_Fix)), _UV - _Points);
 
     return _UV;
 }
 
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float2 In_Rot = Fun_RotationX(In);
+    float2 In_Rot = Fun_RotationX(In.texCoord);
 
     //float _Fix =  lerp(1.0, 1.0 - (saturate((abs(In_Rot.y - _SafeAlphaTransition) * 2.0) * (abs(0.5 - _SafeAlphaTransition) * _SafeAlphaPower))), _SafeAlphaMixing);
     //return float4(_Fix, _Fix, _Fix, 1.0);
     //float _SafeAlpha = (1.0 - saturate((In_Rot.y) - _Fix) / (1.0 - _Fix)) * (_Fix * 16.);
 
-    float4 _Render_Texture = tex2D(S2D_Image, In);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
 
-    float3 _Render_Normal = normalize(tex2D(_Texture_NormalMap, frac(In + float2(_NormalMapX , _NormalMapY)) * float2(_NormalMapScaleX, _NormalMapScaleY)).rgb * 2.0 - 1.0);
+    float3 _Render_Normal = normalize(tex2D(_Texture_NormalMap, frac(In.texCoord + float2(_NormalMapX , _NormalMapY)) * float2(_NormalMapScaleX, _NormalMapScaleY)).rgb * 2.0 - 1.0);
     float2 _Offset = _Render_Normal.xy * _NormalMapStrength;
 
-    float4 _Render_Overlay = tex2D(_Texture_Overlay, frac(In + float2(_OverlayX, _OverlayY) + _Offset) * float2(_OverlayScaleX, _OverlayScaleY));
+    float4 _Render_Overlay = tex2D(_Texture_Overlay, frac(In.texCoord + float2(_OverlayX, _OverlayY) + _Offset) * float2(_OverlayScaleX, _OverlayScaleY));
 
-        float4 _Result =  tex2D(S2D_Background, In_Background);;
+        float4 _Result =  tex2D(S2D_Background, In.bgCoord);;
 
-            float4 _Reflect = tex2D(S2D_Background, frac(float2(abs(_X - In.x) + _Offset.x, abs(_Y - In.y) + _Offset.y)));
+            float4 _Reflect = tex2D(S2D_Background, frac(float2(abs(_X - In.texCoord.x) + _Offset.x, abs(_Y - In.texCoord.y) + _Offset.y)));
             _Reflect.rgb = _Reflect.rgb * _ColorMul.rgb + _ColorAdd.rgb;
 
                 if(In_Rot.y > _ReflectionCut - _Offset.y) 

@@ -19,6 +19,13 @@ sampler2D S2D_Image : register(s0);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing, _Fade, _PosX, _PosY,
             fPixelWidth, fPixelHeight;
 
@@ -78,17 +85,17 @@ float4 Fun_Render(sampler2D _Tex, float2 In, bool _Ex) {
         return tex2D(_Tex, In);
 }
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {   
-    float4 _Render_Texture = Fun_Render(S2D_Image, In, false);
+    float4 _Render_Texture = Fun_Render(S2D_Image, In.texCoord, false);
 
     float2 _Off = float2(_PosX, _PosY) * float2(fPixelWidth, fPixelHeight);
         
         float4 _Freeze_Sum;
         _Freeze_Sum.rgb = _Color.rgb;
-        _Freeze_Sum.a  = Fun_Render(S2D_Image, In, true).a;
-        _Freeze_Sum.a += Fun_Render(S2D_Image, In - _Off, true).a * 0.5;
-        _Freeze_Sum.a += Fun_Render(S2D_Image, In + _Off, true).a * 0.5;
+        _Freeze_Sum.a  = Fun_Render(S2D_Image, In.texCoord, true).a;
+        _Freeze_Sum.a += Fun_Render(S2D_Image, In.texCoord - _Off, true).a * 0.5;
+        _Freeze_Sum.a += Fun_Render(S2D_Image, In.texCoord + _Off, true).a * 0.5;
         
         _Freeze_Sum.a = saturate(_Freeze_Sum.a);
         _Freeze_Sum *= _Freeze_Sum.a;

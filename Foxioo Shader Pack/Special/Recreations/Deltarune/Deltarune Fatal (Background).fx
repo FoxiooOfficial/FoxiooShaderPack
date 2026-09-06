@@ -20,6 +20,13 @@ sampler2D S2D_Image : register(s0);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float       _Mixing, _Mul,
                 fPixelWidth, fPixelHeight;
 

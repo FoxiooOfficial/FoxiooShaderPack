@@ -20,6 +20,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Hue, _Saturation, _Value, _Mixing;
     
     bool    _Blending_Mode;
@@ -73,10 +80,10 @@ float3 HSVtoRGB(float _H, float _S, float _V)
     return (_Render + _M);
 }
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In_Background);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
 
         float4 _Render = _Blending_Mode ? _Render_Background : _Render_Texture;
         float4 _Result = _Render;

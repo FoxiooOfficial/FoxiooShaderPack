@@ -40,6 +40,13 @@ sampler2D S2D_Background : register(s1) = sampler_state
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing,
             _DotsTranparent,
             _DotsCoverage,
@@ -93,22 +100,22 @@ float Fun_PatternDot(float2 UV, float _Size, float _Lum, float _Offset)
     return (1.0 - _Result * _DotsTranparent) * _PatternMask;
 }
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, Fun_FishEye(In));
-    float4 _Render_Background = tex2D(S2D_Background, Fun_FishEye(In));
+    float4 _Render_Texture = tex2D(S2D_Image, Fun_FishEye(In.texCoord));
+    float4 _Render_Background = tex2D(S2D_Background, Fun_FishEye(In.texCoord));
 
     float4 _Result = _Blending_Mode ? _Render_Background : _Render_Texture;
     float4 _Render = _Result * 0.5;
 
-            float3 _CRT = float3(Fun_PatternDot(In, _DotsSize, _Render.r, 0.0), Fun_PatternDot(In, _DotsSize, _Render.g, 1.0), Fun_PatternDot(In, _DotsSize, _Render.b, 2.0));
+            float3 _CRT = float3(Fun_PatternDot(In.texCoord, _DotsSize, _Render.r, 0.0), Fun_PatternDot(In.texCoord, _DotsSize, _Render.g, 1.0), Fun_PatternDot(In.texCoord, _DotsSize, _Render.b, 2.0));
 
-            float2 _L = (_CRT.rg * _CRT.b * 0.01 + sin(In.y * 3. + _Time - _CRT.rg * _CRT.b ) * 0.001);
-            float2 UV = In - _L * 0.2;
+            float2 _L = (_CRT.rg * _CRT.b * 0.01 + sin(In.texCoord.y * 3. + _Time - _CRT.rg * _CRT.b ) * 0.001);
+            float2 UV = In.texCoord - _L * 0.2;
             _CRT += float3(Fun_PatternDot(UV + 0.2, _DotsSize, _Render.r, 0.2), Fun_PatternDot(UV + 0.2, _DotsSize, _Render.g, 1.2), Fun_PatternDot(UV + 0.2, _DotsSize, _Render.b, 2.2));
             _CRT += float3(Fun_PatternDot(UV + 0.4, _DotsSize, _Render.r, 0.4), Fun_PatternDot(UV + 0.4, _DotsSize, _Render.g, 1.4), Fun_PatternDot(UV + 0.4, _DotsSize, _Render.b, 2.4));
             _CRT += float3(Fun_PatternDot(UV + 0.6, _DotsSize, _Render.r, 0.6), Fun_PatternDot(UV + 0.6, _DotsSize, _Render.g, 1.6), Fun_PatternDot(UV + 0.6, _DotsSize, _Render.b, 2.6));
-            //_CRT += float3(Fun_PatternDot(In + 0.8, _DotsSize, _Render.r, 0.8), Fun_PatternDot(In + 0.8, _DotsSize, _Render.g, 1.8), Fun_PatternDot(In + 0.8, _DotsSize, _Render.b, 2.8));
+            //_CRT += float3(Fun_PatternDot(In.texCoord + 0.8, _DotsSize, _Render.r, 0.8), Fun_PatternDot(In.texCoord + 0.8, _DotsSize, _Render.g, 1.8), Fun_PatternDot(In.texCoord + 0.8, _DotsSize, _Render.b, 2.8));
 
             _Render.rgb *= 2.0;
         _Result.rgb = ((_CRT + _CRT * 1.2 * _Render.rgb + _Render.rgb) * (cos(_L.x + _L.y) * 0.1 + 0.5));

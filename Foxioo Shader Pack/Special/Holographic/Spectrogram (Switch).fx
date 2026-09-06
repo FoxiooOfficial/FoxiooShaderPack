@@ -20,6 +20,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float _Mixing, _Time;
 
     bool _Blending_Mode;
@@ -36,10 +43,10 @@ float2 Fun_UV(float2 UV, float _Lum) {
     return float2(_Lum * sin(_Lum + UV.x * _Lum * 200.0 * _Mixing + _Time) * 0.01 * _Mixing, _Lum * cos(_Lum + UV.y * 400.0 * _Mixing + sin(UV.x * 10.0 + _Time * _Lum) + _Time) * 0.01 * _Mixing);
 }
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In_Background);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
 
     float4 _Result, _Render;
     
@@ -65,12 +72,12 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
                 float2 _Off;
                     
                 if(!_Blending_Mode) {
-                    _Off = Fun_UV(In, _Lum);
-                    _Result = tex2D(S2D_Image, In + _Off);
+                    _Off = Fun_UV(In.texCoord, _Lum);
+                    _Result = tex2D(S2D_Image, In.texCoord + _Off);
                 }
                 else {
-                    _Off = Fun_UV(In_Background, _Lum);
-                    _Result.rgb = tex2D(S2D_Background, In_Background + _Off).rgb;
+                    _Off = Fun_UV(In.bgCoord, _Lum);
+                    _Result.rgb = tex2D(S2D_Background, In.bgCoord + _Off).rgb;
                     _Result.a = _Render.a;
                 }
 

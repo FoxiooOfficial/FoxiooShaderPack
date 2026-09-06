@@ -20,6 +20,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing,
             _Seed,
             
@@ -41,10 +48,10 @@ float3 Fun_Hash21(float3 _Color)
     return _Noise;
 }
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In_Background);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
 
         float4 _Render = _Blending_Mode ? _Render_Background : _Render_Texture;
         float4 _Result = _Render;
@@ -52,7 +59,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
             _Result.rgb = Fun_Hash21(_Result.rgb);
             _Result.rgb = Fun_Hash21(1.0 - _Result.rgb);
 
-                    int _Pixel = (int)(In.x / fPixelWidth);
+                    int _Pixel = (int)(In.texCoord.x / fPixelWidth);
                     
                     if((_Pixel % 2) == 0) _Result.rgb = _Result.gbr;
                     if((_Pixel % 3) == 0) _Result.rgb = _Result.brg;

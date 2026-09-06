@@ -19,43 +19,50 @@ sampler2D S2D_Image : register(s0);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float _Mixing;
 
 /************************************************************/
 /* Main */
 /************************************************************/
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    //float4 _Render_Background = tex2D(S2D_Background, In_Background);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    //float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
         
-        In *= 1.12;
-        In.x -= 0.05;
-        float4 _Result = float4(In, 0.0, 1.0);
+        In.texCoord *= 1.12;
+        In.texCoord.x -= 0.05;
+        float4 _Result = float4(In.texCoord, 0.0, 1.0);
 
-        float2 _Center = float2(In * 2.0) - 1.2;
+        float2 _Center = float2(In.texCoord * 2.0) - 1.2;
         float _Cirl = sqrt(_Center.x * _Center.x + _Center.y * _Center.y);
 
         
-        float2 _CenterTopShadow = float2(In * 2.0) - float2(1.5, 0.3);
+        float2 _CenterTopShadow = float2(In.texCoord * 2.0) - float2(1.5, 0.3);
             float _CenterTopShadowCirl = sqrt(_CenterTopShadow.x * _CenterTopShadow.x + _CenterTopShadow.y * _CenterTopShadow.y);
 
-        float2 _CenterBottomShadow = float2(In * 2.0) - float2(1.5, 1.3);
+        float2 _CenterBottomShadow = float2(In.texCoord * 2.0) - float2(1.5, 1.3);
             float _CenterBottomShadowCirl = sqrt(_CenterBottomShadow.x * _CenterBottomShadow.x + _CenterBottomShadow.y * _CenterBottomShadow.y);
 
-        if(In.y > 0.57) 
-        _Cirl *= lerp(0.95, 1.0, 1.0 - pow(In.y - 0.55, 0.0));
+        if(In.texCoord.y > 0.57) 
+        _Cirl *= lerp(0.95, 1.0, 1.0 - pow(In.texCoord.y - 0.55, 0.0));
 
             float3 _TopColor = lerp(float3(0.9921, 0.79215, 0.0), float3(0.69803, 0.56078, 0.0), _CenterTopShadowCirl * _CenterTopShadowCirl);
-            float _Depth = pow(abs(0.55 - In.y), 3);
+            float _Depth = pow(abs(0.55 - In.texCoord.y), 3);
             float3 _BottomColor = lerp(float3(1.0, 0.9176, 0.0), float3(0.70196, 0.64313, 0.0), (_CenterBottomShadowCirl));
             _BottomColor *= pow(_Depth, 0.001);
 
             _Result.a = _Cirl < 0.90;
-            _Result.rgb = lerp(_TopColor, _BottomColor * 1.1, In.y > 0.57);
+            _Result.rgb = lerp(_TopColor, _BottomColor * 1.1, In.texCoord.y > 0.57);
 
-            float2 _Fish1In = In;
+            float2 _Fish1In = In.texCoord;
                 _Fish1In.x -= 0.3;
                 _Fish1In.y += 0.61;
                 _Fish1In.x *= 1.04;
@@ -63,9 +70,9 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
                 _Result = lerp(_Result,float4(_TopColor, 1.0), _Fish1);
 
             //////////////////////////////////////
-            float2 _Center2 = ((float2(In * 2.0) - 1.1) / float2(0.2, 0.3)) + float2(4.3, 0.0);
-            _Center2.x += In.y;
-            float2 _CenterTailDist = ((float2(In * 2.0) - 1.1) / float2(0.2, 0.3)) + float2(4.3, 0.5);
+            float2 _Center2 = ((float2(In.texCoord * 2.0) - 1.1) / float2(0.2, 0.3)) + float2(4.3, 0.0);
+            _Center2.x += In.texCoord.y;
+            float2 _CenterTailDist = ((float2(In.texCoord * 2.0) - 1.1) / float2(0.2, 0.3)) + float2(4.3, 0.5);
             float _CenterTail = sqrt(_CenterTailDist.x * _CenterTailDist.x + _CenterTailDist.y * _CenterTailDist.y);
             float4 _TailColor = lerp(float4(0.69803, 0.56078, 0.0, 1.0), float4(1.0, 0.9176, 0.0, 1.0), 1.0 - _CenterTail * 0.5);
 
@@ -73,7 +80,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
             _Result = lerp(_Result, _TailColor, _Fish2);
 
             //////////////////////////////////////
-            float2 _Center3 = ((float2(In * 2.0) - 1.1) / float2(0.4 / In.y * 0.5, 0.3)) + float2(0.35, In.x * 0.5 - 0.5);
+            float2 _Center3 = ((float2(In.texCoord * 2.0) - 1.1) / float2(0.4 / In.texCoord.y * 0.5, 0.3)) + float2(0.35, In.texCoord.x * 0.5 - 0.5);
             float _Fish3 = sqrt(_Center3.x * _Center3.x + _Center3.y * _Center3.y);
 
             float2 _Center3Mid = _Center3 - float2(0.1, -0.2);
@@ -82,10 +89,10 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
             _Result.rgb = lerp(_Result.rgb, _MidColor, _Fish3 < 0.9);
     
             //////////////////////////////////////
-            float2 _EyeCenter = (float2(In * 2.0) - 1.1) + float2(-0.57, 0.2);
+            float2 _EyeCenter = (float2(In.texCoord * 2.0) - 1.1) + float2(-0.57, 0.2);
             float _Eye = sqrt(_EyeCenter.x * _EyeCenter.x + _EyeCenter.y * _EyeCenter.y);
 
-            float2 _EyeBloomCenter = (float2(In * 2.0) - 1.1) + float2(-0.54, 0.23);
+            float2 _EyeBloomCenter = (float2(In.texCoord * 2.0) - 1.1) + float2(-0.54, 0.23);
             float _EyeBloomCirl = sqrt(_EyeBloomCenter.x * _EyeBloomCenter.x + _EyeBloomCenter.y * _EyeBloomCenter.y) * 7.0;
 
                 float3 _EyeBloom = lerp(float3( 0.6, 0.6, 0.6), float3(0.1137, 0.1137, 0.1137), pow(_EyeBloomCirl, 0.25));

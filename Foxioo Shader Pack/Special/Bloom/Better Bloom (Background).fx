@@ -19,6 +19,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Distance, 
             _Power,
             _Mixing,
@@ -72,9 +79,9 @@ static const float2 _Blur[_BlurSize] =
 /* Main */
 /************************************************************/
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Result_Blur = tex2D(S2D_Background, In_Background);
+    float4 _Result_Blur = tex2D(S2D_Background, In.bgCoord);
     
     /* BYPASS LIMIT PIXEL SHADER!!! */ float _Bypass = 1; if(_Distance_Color == 1) {_Bypass = ((_Result_Blur.r + _Result_Blur.g + _Result_Blur.b) / 3.0); }
     
@@ -83,7 +90,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
     {
         for (int i = 0; i < _BlurSize; i++)
         {
-            _Result_Blur += tex2D(S2D_Background, max(0.0, min(1.0, In + ((_Distance / j * _Bypass) * float2(fPixelWidth, fPixelHeight) * _Blur[i]) / 2.0)));
+            _Result_Blur += tex2D(S2D_Background, max(0.0, min(1.0, In.texCoord + ((_Distance / j * _Bypass) * float2(fPixelWidth, fPixelHeight) * _Blur[i]) / 2.0)));
         }
         _Result_Blur /= _BlurSize + 1;
     }
@@ -99,7 +106,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
     
     float4 _Result = pow(_Result_Blur, _Power) * _Mixing;
 
-    return  _Result * _Alpha * tex2D(S2D_Image, In);
+    return  _Result * _Alpha * tex2D(S2D_Image, In.texCoord);
 }
 
 /************************************************************/

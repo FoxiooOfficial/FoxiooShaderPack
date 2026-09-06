@@ -19,6 +19,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float _Mixing;
 
     float xA;
@@ -68,10 +75,10 @@ float3 Fun_Quad(float2 UV)
     //else return 0;
 }
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {  
-    In = frac(In);
-    float3 _In = Fun_Quad(In);
+    In.texCoord = frac(In.texCoord);
+    float3 _In = Fun_Quad(In.texCoord);
     
     float4 _Render_Texture = tex2D(S2D_Image, _In.xy);
     if (_In.x <= 0.0 || _In.x >= 1.0 || _In.y <= 0.0 || _In.y >= 1.0) _Render_Texture.a = 0;
@@ -83,7 +90,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
 
         _Render_Texture_Ref *= _In.y;
 
-        float4 _Render_Background = tex2D(S2D_Background, In) * _Render_Texture_Ref;
+        float4 _Render_Background = tex2D(S2D_Background, In.texCoord) * _Render_Texture_Ref;
 
     _Render_Texture = lerp(_Render_Texture, _Render_Texture_Ref + _Render_Background, _Render_Texture_Ref.a * _Mixing);
 

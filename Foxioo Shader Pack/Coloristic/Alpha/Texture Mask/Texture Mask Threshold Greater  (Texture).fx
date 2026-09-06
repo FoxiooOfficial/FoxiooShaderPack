@@ -20,6 +20,13 @@ sampler2D _Texture : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing,
 
             _PosX, _PosY,
@@ -33,7 +40,7 @@ sampler2D _Texture : register(s1);
 /* Main */
 /************************************************************/
 
-float2 Fun_RotationX(float2 In)
+float2 Fun_RotationX(float2 In.texCoord)
 {
     float2 _Points = float2(_PointX, _PointY);
     float _RotX_Fix = radians(_RotX);
@@ -42,18 +49,18 @@ float2 Fun_RotationX(float2 In)
         float _Cos;
         sincos(_RotX_Fix, _Sin, _Cos);
 
-    return _Points + mul(float2x2(_Cos, _Sin, -_Sin, _Cos), In - _Points);
+    return _Points + mul(float2x2(_Cos, _Sin, -_Sin, _Cos), In.texCoord - _Points);
 }
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
 
     float2 _Pos = float2(_PosX, _PosY);
     float2 _Point = float2(_PointX, _PointY);
     float2 _ScaleEx = float2(_ScaleX, _ScaleY) * _Scale;
 
-            float2  UV = Fun_RotationX((In + _Pos));
+            float2  UV = Fun_RotationX((In.texCoord + _Pos));
             UV = ((UV - _Point) * _ScaleEx) + _Point;
 
                 /* Looping Mode! */

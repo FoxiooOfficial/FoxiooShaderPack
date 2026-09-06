@@ -20,6 +20,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing,
             fPixelWidth, fPixelHeight;
 
@@ -29,21 +36,21 @@ sampler2D S2D_Background : register(s1);
 /* Main */
 /************************************************************/
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
     float4 _Render_Texture;
     float4 _Render_Background;
 
-    int2 _Pixel = float2((int)(In.x / fPixelWidth), (int)(In.y / fPixelHeight));
+    int2 _Pixel = float2((int)(In.texCoord.x / fPixelWidth), (int)(In.texCoord.y / fPixelHeight));
 
             float4 _Result = 0.0;   
 
-                _Render_Texture = tex2D(S2D_Image, In + float2(fPixelWidth, fPixelHeight));
-                _Render_Background = tex2D(S2D_Background, In_Background + (fPixelWidth, fPixelHeight));
+                _Render_Texture = tex2D(S2D_Image, In.texCoord + float2(fPixelWidth, fPixelHeight));
+                _Render_Background = tex2D(S2D_Background, In.bgCoord + (fPixelWidth, fPixelHeight));
                 float4 _RenderOff2 = _Blending_Mode ? _Render_Background : _Render_Texture;
                 
-                _Render_Texture = tex2D(S2D_Image, In);
-                _Render_Background = tex2D(S2D_Background, In_Background);
+                _Render_Texture = tex2D(S2D_Image, In.texCoord);
+                _Render_Background = tex2D(S2D_Background, In.bgCoord);
                 float4 _Render = _Blending_Mode ? _Render_Background : _Render_Texture;
 
             /* x-axis */

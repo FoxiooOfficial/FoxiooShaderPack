@@ -33,6 +33,13 @@ sampler2D S2D_Background : register(s1) = sampler_state
 /***********************************************************/
 /* Variables */
 /***********************************************************/
+
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
             
     float   _PosX, _PosY, _PosZ,
 
@@ -61,20 +68,20 @@ sampler2D S2D_Background : register(s1) = sampler_state
 /* Mode 7 */
 /***********************************************************/
 
-float2 Fun_Mode7(float2 In)
+float2 Fun_Mode7(float2 In.texCoord)
 {
     /* THE REAL, M O D E  7  E F F E C T (the best function :3) */
 
         /* Perspective */
-        float2 _UV = In / (In.y * _Distortion - 0.5);
+        float2 _UV = In.texCoord / (In.texCoord.y * _Distortion - 0.5);
 
     return _UV * _PosZ;
 }
 
 
-float2 Fun_Rotation(float2 In, float2 _Pivot, float _Mul, float _Off, float _Rot, float _RotSub)
+float2 Fun_Rotation(float2 In.texCoord, float2 _Pivot, float _Mul, float _Off, float _Rot, float _RotSub)
 {
-    float2 _UV = float2(In.x + _Pivot.x, In.y + _Pivot.y) * _Mul;
+    float2 _UV = float2(In.texCoord.x + _Pivot.x, In.texCoord.y + _Pivot.y) * _Mul;
 
     float _Rot_Temp = (_Rot - _RotSub) * RAD;
 
@@ -108,15 +115,15 @@ PS_OUTPUT ps_main(float2 In: TEXCOORD)
     PS_OUTPUT Out;
 
     /* _RotY -> Rotation around the CENTER of the screen (camera viewpoint) */
-    In = Fun_Rotation(In, float2(_RotYPointX, _RotYPointY), 1.0, 0.5, _RotY, 180.0);
+    In.texCoord = Fun_Rotation(In.texCoord, float2(_RotYPointX, _RotYPointY), 1.0, 0.5, _RotY, 180.0);
 
     /* _RotZ -> Y-axis offset of texCoords; Pseudo-3D (possibly true 3D in the future...? i NEED ps_3_0!!!!) */
-    In.y += _RotZ * RAD;
-    In.x += _OffsetX - 0.5; /* ALSO OFFSET IN X AXIS RAHHHHHHH */
+    In.texCoord.y += _RotZ * RAD;
+    In.texCoord.x += _OffsetX - 0.5; /* ALSO OFFSET IN X AXIS RAHHHHHHH */
 
     /* Set Mode 7 Distortion! -> Set perspective depth OR orthographic projection!!! */
     /* TODO: add option to change the POV */
-    float2 _UV = Fun_Mode7(In);
+    float2 _UV = Fun_Mode7(In.texCoord);
 
         /* _PosX -> Camera rotation AROUND ITSELF */
         _UV = Fun_Rotation(_UV, float2(_RotXPointX, _RotXPointY), 0.5, 0.0, _RotX, 0.0);
@@ -183,7 +190,7 @@ PS_OUTPUT ps_main(float2 In: TEXCOORD)
 
             (i have to comment on this because the code is becoming less readable due to optimization :sob:)
         */
-        _Render *= lerp(abs(step(0.0, _PosZ) - step(0.5, In.y * _Distortion)), 1.0, _Render_Sky);
+        _Render *= lerp(abs(step(0.0, _PosZ) - step(0.5, In.texCoord.y * _Distortion)), 1.0, _Render_Sky);
 
     Out.Color = _Render;
     return Out;

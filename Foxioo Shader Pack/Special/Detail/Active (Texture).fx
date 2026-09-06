@@ -20,6 +20,13 @@ sampler2D S2D_Image : register(s0);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing,
             _Size,
             _Angle,
@@ -61,9 +68,9 @@ float2 Fun_Sharp(sampler2D _Sampler, float2 In, float2 _Off, float _Alpha)
     return _Result;
 }
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
     
         float4 _Result;
         float2 _Render;
@@ -82,41 +89,41 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
 
             /* ############################# */
 
-            _Render = Fun_Sharp(S2D_Image, In, 5.0 * _Offset, _Render_Texture.a);
+            _Render = Fun_Sharp(S2D_Image, In.texCoord, 5.0 * _Offset, _Render_Texture.a);
             _Result.rgb = lerp(_Result.rgb, _ColorEx.rgb * (_Render.y + 0.1), saturate((0.25 - saturate(abs(_Render.x * 6.0))) * 0.2));
 
-            _Render = Fun_Sharp(S2D_Image, In, float2(-5.0, 5.0) * _Offset, _Render_Texture.a);
+            _Render = Fun_Sharp(S2D_Image, In.texCoord, float2(-5.0, 5.0) * _Offset, _Render_Texture.a);
             _Result.rgb = lerp(_Result.rgb, _ColorEx.rgb * _Render.y, saturate((0.25 - saturate(abs(_Render.x * 6.0))) * 0.2));
             
             /* ############################# */
 
             /* ############################# */
 
-            _Render = Fun_Sharp(S2D_Image, In, 4.95 * _Offset, _Render_Texture.a);
+            _Render = Fun_Sharp(S2D_Image, In.texCoord, 4.95 * _Offset, _Render_Texture.a);
             _Result.rgb = lerp(_Result.rgb, _ColorEx.rgb * (_Render.y + 0.1), saturate((0.25 - saturate(abs(_Render.x * 6.0))) * 1.5));
 
             float2 _Result_Side_L = _Render;
-            _Render = Fun_Sharp(S2D_Image, In, float2(-4.95, 4.95) * _Offset, _Render_Texture.a);
+            _Render = Fun_Sharp(S2D_Image, In.texCoord, float2(-4.95, 4.95) * _Offset, _Render_Texture.a);
             _Result.rgb = lerp(_Result.rgb, _ColorEx.rgb * _Render.y, saturate((0.25 - saturate(abs(_Render.x * 6.0))) * 0.5));
             
             /* ############################# */
 
             /* ############################# */
 
-            _Render = Fun_Sharp(S2D_Image, In, 2.0 * _Offset, _Render_Texture.a) * 0.3;
+            _Render = Fun_Sharp(S2D_Image, In.texCoord, 2.0 * _Offset, _Render_Texture.a) * 0.3;
             _Result.rgb = lerp(_Result.rgb, _ColorEx.rgb + min(_Render.y - 0.09, 0.0), saturate(0.5 - saturate(abs(_Render.x * 6.0))));
 
-            _Render = Fun_Sharp(S2D_Image, In, float2(-2.0, 2.0) * _Offset, _Render_Texture.a) * 0.3;
+            _Render = Fun_Sharp(S2D_Image, In.texCoord, float2(-2.0, 2.0) * _Offset, _Render_Texture.a) * 0.3;
             _Result.rgb = lerp(_Result.rgb, _ColorEx.rgb + min(_Render.y - 0.09, 0.0),  saturate(0.5 - saturate(abs(_Render.x * 6.0))));
             
             /* ############################# */
 
             /* ############################# */
 
-            _Render = Fun_Sharp(S2D_Image, In, 1.85 * _Offset, _Render_Texture.a) * 0.3;
+            _Render = Fun_Sharp(S2D_Image, In.texCoord, 1.85 * _Offset, _Render_Texture.a) * 0.3;
             _Result.rgb = lerp(_Result.rgb, _ColorEx.rgb + min(_Render.y - 0.09, 0.0) + _Result_Side_L.y * 0.1, saturate((1.0 - saturate(abs(_Render.x * 6.0))) - (_Result_Side_L.y * 0.4)));
 
-            _Render = Fun_Sharp(S2D_Image, In, float2(-1.85, 1.85) * _Offset, _Render_Texture.a) * 0.3;
+            _Render = Fun_Sharp(S2D_Image, In.texCoord, float2(-1.85, 1.85) * _Offset, _Render_Texture.a) * 0.3;
             _Result.rgb = lerp(_Result.rgb, _ColorEx.rgb + min(_Render.y - 0.09, 0.0), 1.0 - saturate(abs(_Render.x * 6.0)));
             
             /* ############################# */

@@ -27,6 +27,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing,
             _PosX, _PosY,
             _PointX, _PointY,
@@ -59,13 +66,13 @@ float Fun_CalculateGlint(float2 In, float _OffsetX, float _OffsetY, float _Scale
     return pow(1 - frac((sin((In.x - _OffsetX) * _Scale) / 2.0 + 0.5) * (cos((In.y + _OffsetY) * _Scale) / 2.0 + 0.5)), _Intensity);
 }
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In_Background);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
 
-    In = Fun_RotationX(In);
-    float2 _UV = float2((In.x + _PosX) * _ScaleX, (In.y + _PosY) * _ScaleY) * _Scale;
+    In.texCoord = Fun_RotationX(In.texCoord);
+    float2 _UV = float2((In.texCoord.x + _PosX) * _ScaleX, (In.texCoord.y + _PosY) * _ScaleY) * _Scale;
 
     //float2 _UV_Glint = (1 - frac((sin(_UV.x) / 2.0 + 0.5) * (cos(_UV.y) / 2.0 + 0.5)));
 

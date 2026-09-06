@@ -20,6 +20,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     bool    _Blending_Mode;
 
     float   _Mixing,
@@ -115,7 +122,7 @@ float2 Fun_Squeeze(float2 In)
 float4 ps_main(VS_OUTPUT In) : COLOR0
 {   
     float4 _Render_Texture = Fun_Render(S2D_Image, In.texCoord);
-    //return float4(In.bgCoord.xy, 0.0, 1.0);
+    //return float4(In.texCoord.bgCoord.xy, 0.0, 1.0);
     
     float2 UV = Fun_Squeeze(In.texCoord);
 

@@ -19,6 +19,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing,
             _DotsTranparent,
             _DotsCoverage,
@@ -62,10 +69,10 @@ float2 Fun_RotationX(float2 In, float _RotX)
     return In;
 }
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In_Background);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
 
     float4 _Result = _Blending_Mode ? _Render_Background : _Render_Texture;
     float4 _Render = _Result;
@@ -75,10 +82,10 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
         float _M = _InvK > 0.001 ? (1.0 - _Result.g - _K) / _InvK : 0.0;
         float _Y = _InvK > 0.001 ? (1.0 - _Result.b - _K) / _InvK : 0.0;
 
-            float _YellowDot    = Fun_PatternDot(Fun_RotationX(In,  0.0), _DotsSize, _Y);
-            float _CyanDot      = Fun_PatternDot(Fun_RotationX(In, 15.0), _DotsSize, _C);
-            float _MagentaDot   = Fun_PatternDot(Fun_RotationX(In, 75.0), _DotsSize, _M);
-            float _BlackDot     = Fun_PatternDot(Fun_RotationX(In, 45.0), _DotsSize, _K);
+            float _YellowDot    = Fun_PatternDot(Fun_RotationX(In.texCoord,  0.0), _DotsSize, _Y);
+            float _CyanDot      = Fun_PatternDot(Fun_RotationX(In.texCoord, 15.0), _DotsSize, _C);
+            float _MagentaDot   = Fun_PatternDot(Fun_RotationX(In.texCoord, 75.0), _DotsSize, _M);
+            float _BlackDot     = Fun_PatternDot(Fun_RotationX(In.texCoord, 45.0), _DotsSize, _K);
 
                     float3 _YellowRender    = lerp(float3(1.0, 1.0, 1.0), float3(1.0, 1.0, 0.0), _YellowDot);
                     float3 _CyanRender      = lerp(float3(1.0, 1.0, 1.0), float3(0.0, 1.0, 1.0), _CyanDot);

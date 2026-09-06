@@ -36,6 +36,13 @@ sampler2D S2D_Background : register(s1) = sampler_state
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _PosX, _PosY,
             _RotX,
             _PointX, _PointY,
@@ -53,10 +60,10 @@ sampler2D S2D_Background : register(s1) = sampler_state
 /* Main */
 /************************************************************/
 
-float2 Fun_RotationX(float2 In)
+float2 Fun_RotationX(float2 In.texCoord)
 {
     float2 _Points = float2(_PointX, _PointY);
-    float2 _UV = In;
+    float2 _UV = In.texCoord;
     float _RotX_Fix = _RotX * (3.14159265 / 180);
 
         _UV = _Points + mul(float2x2(cos(_RotX_Fix), sin(_RotX_Fix), -sin(_RotX_Fix), cos(_RotX_Fix)), _UV - _Points);
@@ -64,14 +71,14 @@ float2 Fun_RotationX(float2 In)
     return _UV;
 }
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {   
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In_Background);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
     float4 _Render;
 
     float2  _Pos = float2(_PosX, _PosY),
-        UV = Fun_RotationX((In + _Pos));
+        UV = Fun_RotationX((In.texCoord + _Pos));
         UV = ((UV - float2(_PointX, _PointY)) * float2(_ScaleX, _ScaleY) * _Scale) + float2(_PointX, _PointY);
 
         float2 _UV_Temp = UV;

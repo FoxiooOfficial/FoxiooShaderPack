@@ -25,6 +25,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing,
             _Size,
 
@@ -78,7 +85,7 @@ float3 Fun_Sharp(sampler2D _Sampler, float2 In, float2 _Off)
     float4 _N  = tex2D(_Sampler, In + float2(0.0, -_Off.y));
     float4 _NE = tex2D(_Sampler, In + float2( _Off.x, -_Off.y));
     float4 _W  = tex2D(_Sampler, In + float2(-_Off.x, 0.0));
-    //float4 _C  = tex2D(_Sampler, In);
+    //float4 _C  = tex2D(_Sampler, In.texCoord);
     float4 _E  = tex2D(_Sampler, In + float2( _Off.x, 0.0));
     float4 _SW = tex2D(_Sampler, In + float2(-_Off.x, _Off.y));
     float4 _S  = tex2D(_Sampler, In + float2(0.0,_Off.y));
@@ -94,10 +101,10 @@ float3 Fun_Sharp(sampler2D _Sampler, float2 In, float2 _Off)
     return _Render;
 }
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In_Background);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
     
         float4 _Result, _Render;
         float _Alpha;
@@ -106,9 +113,9 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
             if(!_Blending_Mode)
             {
                 _Result = _Render_Texture;
-                _Render = Fun_Border(S2D_Image, In, _Offset, _Render_Texture);
+                _Render = Fun_Border(S2D_Image, In.texCoord, _Offset, _Render_Texture);
 
-                float3 _Sharp = float3(Fun_Sharp(S2D_Image, In, _Offset));
+                float3 _Sharp = float3(Fun_Sharp(S2D_Image, In.texCoord, _Offset));
                 _Alpha = Fun_Luminance(float4(_Sharp.r, _Sharp.g, _Sharp.b, _Render_Texture.a));
             }
             else
@@ -116,17 +123,17 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
                 _Result.rgb = _Render_Background.rgb;
                 _Result.a = _Render_Texture.a;
 
-                _Render = Fun_Border(S2D_Background, In_Background, _Offset, _Render_Background);
+                _Render = Fun_Border(S2D_Background, In.bgCoord, _Offset, _Render_Background);
 
-                float3 _Sharp = float3(Fun_Sharp(S2D_Background, In_Background, _Offset));
+                float3 _Sharp = float3(Fun_Sharp(S2D_Background, In.bgCoord, _Offset));
                 _Alpha = Fun_Luminance(float4(_Sharp.r, _Sharp.g, _Sharp.b, _Render_Texture.a));
             }
             
                 float _InnerMask = saturate((_Alpha * _Alpha) * 2.0) * 0.85;
                 float3 _InnerColor = lerp(_InnerShadow, _InnerLight, _InnerMask);
 
-                _InnerColor += (_InnerColor * (abs(In.y * 1.3 - 0.75) * _InnerLight)) * 0.25;
-                _InnerColor -= pow(abs(In.x * 2.0 - 1.0), 3.0) * 0.5 * _InnerShadow;
+                _InnerColor += (_InnerColor * (abs(In.texCoord.y * 1.3 - 0.75) * _InnerLight)) * 0.25;
+                _InnerColor -= pow(abs(In.texCoord.x * 2.0 - 1.0), 3.0) * 0.5 * _InnerShadow;
 
             _Render.rgb = lerp(_InnerColor, _Render.rgb, _Render.a / 18.0);
 

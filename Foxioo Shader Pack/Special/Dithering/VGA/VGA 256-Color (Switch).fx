@@ -20,6 +20,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing, _DitheringSize, _Add, _Mul,
             fPixelWidth, fPixelHeight;
 
@@ -109,10 +116,10 @@ static const float _Dithering[16] =
    15.0 / 16.0,  7.0 / 16.0, 13.0 / 16.0,  5.0 / 16.0
 };
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In_Background);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
 
     _Render_Texture.rgb = _Render_Texture.rgb * _Mul + _Add;
     _Render_Background.rgb = _Render_Background.rgb * _Mul + _Add;
@@ -130,8 +137,8 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
             _Render = _Render_Background;
         }
 
-        int2 _Dith = int2(  fmod(In.x / fPixelWidth,   4.0), 
-                            fmod(In.y / fPixelHeight,  4.0)
+        int2 _Dith = int2(  fmod(In.texCoord.x / fPixelWidth,   4.0), 
+                            fmod(In.texCoord.y / fPixelHeight,  4.0)
                         );
 
         int _Index = _Dith.x + _Dith.y * 4;

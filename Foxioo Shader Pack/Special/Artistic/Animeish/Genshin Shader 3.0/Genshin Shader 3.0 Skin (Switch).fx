@@ -23,6 +23,13 @@ sampler2D S2D_RimMap : register(s2);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing,
     
             _NoLightMapStart,   _NoLightMapEnd,     _NoLightMapColorStart,    _NoLightMapColorEnd,
@@ -68,7 +75,7 @@ float3 Fun_BaseColor(float _Lum)
     
 /* Rim Light */
 
-float3 Fun_RimLight(float2 In, float2 rimCoords)
+float3 Fun_RimLight(float2 In.texCoord, float2 rimCoords)
 {
     float rimMask = step(_RimlightSize * _RimlightSize, dot(rimCoords, rimCoords));
     return rimMask * _RimLightColor.rgb;
@@ -96,11 +103,11 @@ float3 Fun_SecondShadow(float _Mix, float3 _Color)
 
 /************************************************************/
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture    = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In_Background);
-    float3 _Render_RimMap     = tex2D(S2D_RimMap, In);
+    float4 _Render_Texture    = tex2D(S2D_Image, In.texCoord);
+    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
+    float3 _Render_RimMap     = tex2D(S2D_RimMap, In.texCoord);
     
     float4 _Result = _Blending_Mode ? _Render_Background : _Render_Texture;
     
@@ -115,7 +122,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
     
     float3 _SecondShadowEffect = Fun_SecondShadow(_ShadowThreshold, _ShadowEffect);
     
-    float3 _RimLightEffect = Fun_RimLight(In, _Render_RimMap.rg);
+    float3 _RimLightEffect = Fun_RimLight(In.texCoord, _Render_RimMap.rg);
 
     _ShadowEffect = lerp(_RimLightEffect, _SecondShadowEffect, _RimlightSize);
          

@@ -29,24 +29,12 @@ sampler2D S2D_Background : register(s1) = sampler_state
 /* Variables */
 /***********************************************************/
 
-/*
-float4x4 transformMatrix;
-float4x4 projectionMatrix;
-
-struct VS_INPUT
-{
-    float4 Tint     : COLOR0;
-    float2 texCoord : TEXCOORD0;
-    float4 Position : POSITION;
-};
-
 struct PS_INPUT
 {
-    float4 Tint     : COLOR0;
+    float4 Tint : COLOR0;
     float2 texCoord : TEXCOORD0;
-    float4 Position : POSITION;
+    float2 bgCoord : TEXCOORD1;
 };
-*/
 
     float   _Size, _Mixing,
             
@@ -56,55 +44,8 @@ struct PS_INPUT
     bool    _Blending_Mode;
 
 /************************************************************/
-/* Vertex Shader */
-/************************************************************/
-
-/*
-    Based on "Blur (outside rect)"
-    Created by: Sphax - Flavien Clermont / NaitorStudios
-*/
-/*
-PS_INPUT Fun_VertexExpand(VS_INPUT input, float2 InOff)
-{
-	PS_INPUT _Output;
-
-	float2 _PixelSize = float2(fPixelWidth, fPixelHeight);
-	float2 _DirCorner = sign(input.texCoord - 0.5);
-    
-	    float2 _PixelPadding = InOff / _PixelSize; // Radius
-	    float4 _PosExpanded = input.Position;
-
-	        _PosExpanded.xy += _DirCorner * _PixelPadding;
-
-	_Output.Position = mul(_PosExpanded, transformMatrix);
-	_Output.Position = mul(_Output.Position, projectionMatrix);
-    
-    _Output.Tint = input.Tint;
-	_Output.texCoord = input.texCoord + _DirCorner * InOff;
-
-	return _Output;
-}
-
-PS_INPUT vs_main(VS_INPUT input)
-{
-	return Fun_VertexExpand(input, _Size * float2(fPixelWidth, fPixelHeight));
-}
-*/
-
-/************************************************************/
 /* Pixel Shader */
 /************************************************************/
-
-/*
-float Fun_PixelInside(float2 In) {
-	return all(In >= 0.0 && In <= 1.0);
-}
-
-float4 Fun_PixelSample(sampler2D _Sampler, float2 In) {
-	return tex2D(_Sampler, saturate(In)) * Fun_PixelInside(In);
-}
-*/
-
 
 float3 Fun_Filter(sampler2D _Sampler, float2 In, float3 _Render)
 {
@@ -143,15 +84,15 @@ float3 Fun_Filter(sampler2D _Sampler, float2 In, float3 _Render)
     return pow(abs(_Result), 1.61);
 }
 
-//float4 ps_main(PS_INPUT In) : COLOR0
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+//float4 ps_main(PS_INPUT In.texCoord) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In_Background);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
 
         float4 _Result = _Blending_Mode ? _Render_Background : _Render_Texture;
-        float3 _Filter = _Blending_Mode ? Fun_Filter(S2D_Background, In_Background, _Render_Background.rgb)
-                                        : Fun_Filter(S2D_Image, In, _Render_Texture.rgb);
+        float3 _Filter = _Blending_Mode ? Fun_Filter(S2D_Background, In.bgCoord, _Render_Background.rgb)
+                                        : Fun_Filter(S2D_Image, In.texCoord, _Render_Texture.rgb);
 
         _Result.rgb = lerp(_Result.rgb, _Filter, _Mixing);
         _Result.a = _Render_Texture.a;

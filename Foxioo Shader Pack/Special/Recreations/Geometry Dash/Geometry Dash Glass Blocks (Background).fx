@@ -19,6 +19,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mul, _Mixing,
             _Distance;
 
@@ -26,17 +33,17 @@ sampler2D S2D_Background : register(s1);
 /* Main */
 /************************************************************/
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In_Background) * _Mul;
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord) * _Mul;
 
         float4 _Render;
         _Render.rgb = _Render_Texture.rgb + (_Render_Background.rgb * _Render_Background.rgb);
         _Render.a = _Render_Texture.r * _Render_Texture.g * _Render_Texture.b * _Render_Texture.a;
 
         float4 _RenderClose = _Render * 0.04705;
-        float4 _RenderFar   = _Render + lerp(0.43529, 0.164705, In.y) * _Render_Texture.a;
+        float4 _RenderFar   = _Render + lerp(0.43529, 0.164705, In.texCoord.y) * _Render_Texture.a;
 
         _RenderFar.rgb += _Render_Background.rgb * _RenderFar.rgb;
 

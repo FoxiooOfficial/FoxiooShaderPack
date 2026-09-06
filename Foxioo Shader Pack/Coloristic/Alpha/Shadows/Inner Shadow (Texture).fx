@@ -28,6 +28,13 @@ sampler2D S2D_Image : register(s0) = sampler_state
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing,
             _ColorAlpha,
             _Size,
@@ -47,9 +54,9 @@ sampler2D S2D_Image : register(s0) = sampler_state
 
 static const int _Samples = 16;
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
     
     float _Alpha = 0.0;
     for(int y = 0; y <= _Samples; y++)
@@ -59,7 +66,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
             float2 _Offset = (float2(x, y) / (float)_Samples - 0.5) * _Size;
             
             _Offset = float2(fPixelWidth, fPixelHeight) * (_Offset + float2(_PosX, _PosY));
-            _Alpha += tex2D(S2D_Image, In + _Offset).a;
+            _Alpha += tex2D(S2D_Image, In.texCoord + _Offset).a;
         }
     }
     

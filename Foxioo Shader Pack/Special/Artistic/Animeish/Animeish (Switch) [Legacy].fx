@@ -19,6 +19,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing,
             _ShadowThreshold,
             _ShadowAlpha,
@@ -45,20 +52,20 @@ float4 Fun_ColorRamp(float4 _Color, float _Steps)
     return _Color;
 }
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In_Background);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
 
     float4 _Result, _GradientX, _GradientY;
 
     if(_Blending_Mode == 0)
     {
-        _Result = tex2D(S2D_Image, In) * _Mixing;
+        _Result = tex2D(S2D_Image, In.texCoord) * _Mixing;
     }
     else
     {
-        _Result = tex2D(S2D_Background, In_Background) * _Mixing;
+        _Result = tex2D(S2D_Background, In.bgCoord) * _Mixing;
     }
 
     float _Average = (_Result.r + _Result.g + _Result.b) / 3.0;
@@ -73,13 +80,13 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
     // Outline
     if(_Blending_Mode == 0)
     {
-        _GradientX = tex2D(S2D_Image, In + float2(fPixelWidth, 0)) - tex2D(S2D_Image, In - float2(fPixelWidth, 0));
-        _GradientY = tex2D(S2D_Image, In + float2(0, fPixelHeight)) - tex2D(S2D_Image, In - float2(0, fPixelHeight));
+        _GradientX = tex2D(S2D_Image, In.texCoord + float2(fPixelWidth, 0)) - tex2D(S2D_Image, In.texCoord - float2(fPixelWidth, 0));
+        _GradientY = tex2D(S2D_Image, In.texCoord + float2(0, fPixelHeight)) - tex2D(S2D_Image, In.texCoord - float2(0, fPixelHeight));
     }
     else
     {
-        _GradientX = tex2D(S2D_Background, In_Background + float2(fPixelWidth, 0)) - tex2D(S2D_Background, In_Background - float2(fPixelWidth, 0));
-        _GradientY = tex2D(S2D_Background, In_Background + float2(0, fPixelHeight)) - tex2D(S2D_Background, In_Background - float2(0, fPixelHeight));       
+        _GradientX = tex2D(S2D_Background, In.bgCoord + float2(fPixelWidth, 0)) - tex2D(S2D_Background, In.bgCoord - float2(fPixelWidth, 0));
+        _GradientY = tex2D(S2D_Background, In.bgCoord + float2(0, fPixelHeight)) - tex2D(S2D_Background, In.bgCoord - float2(0, fPixelHeight));       
     }
 
     float _EdgeDetection = (length(_GradientX.rgb) + length(_GradientY.rgb)) * _OutlineScale;

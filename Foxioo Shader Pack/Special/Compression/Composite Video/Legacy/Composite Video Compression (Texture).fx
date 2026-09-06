@@ -20,6 +20,13 @@ sampler2D S2D_Image : register(s0);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing,
             _FraqMul,
             _Seed, _Time,
@@ -87,18 +94,18 @@ float Fun_Rand(float2 _UV) {
     return frac(sin(dot(_UV, float2(12.9898, 78.233))) * 43758.5453);
 }
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    In.x -= fmod(In.y + _Time, fPixelHeight * 1125.0 / (_Hertz * -10.0 + 1125.0)) * fPixelWidth * _Phase * _Mixing;
-    //return float4(In, 0, 1);
-    //float4 _Render_Background = tex2D(S2D_Image, In);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    In.texCoord.x -= fmod(In.texCoord.y + _Time, fPixelHeight * 1125.0 / (_Hertz * -10.0 + 1125.0)) * fPixelWidth * _Phase * _Mixing;
+    //return float4(In.texCoord, 0, 1);
+    //float4 _Render_Background = tex2D(S2D_Image, In.texCoord);
 
         /* Low Quality */
         static const float _Div = 576.0;
-        float4 _Result_Pb = Fun_Interpolation(In + float2(_OffsetX_Pb * fPixelWidth, _OffsetY_Pb * fPixelHeight), _Div, S2D_Image, 1.25);
-        float4 _Result_Pr = Fun_Interpolation(In + float2(_OffsetX_Pr * fPixelWidth, _OffsetY_Pr * fPixelHeight), _Div, S2D_Image, 1.25);
-        float4 _Result = tex2D(S2D_Image, In);
+        float4 _Result_Pb = Fun_Interpolation(In.texCoord + float2(_OffsetX_Pb * fPixelWidth, _OffsetY_Pb * fPixelHeight), _Div, S2D_Image, 1.25);
+        float4 _Result_Pr = Fun_Interpolation(In.texCoord + float2(_OffsetX_Pr * fPixelWidth, _OffsetY_Pr * fPixelHeight), _Div, S2D_Image, 1.25);
+        float4 _Result = tex2D(S2D_Image, In.texCoord);
 
             /* RGB -> Y'UV (Y'PbPr) */
             const float _Kr = 0.299;
@@ -123,20 +130,20 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
                 float _PbFix = (( _Chroma_2 * cos((_Omega * _FraqMul) - 2.0)) + ( _Chroma_1 * cos((_Omega * _FraqMul))) + ( _Chroma_3 * cos((_Omega * _FraqMul) + 2.0))) / 3.0;
                 float _PrFix = (( _Chroma_2 * sin((_Omega * _FraqMul) - 2.0)) + ( _Chroma_1 * sin((_Omega * _FraqMul))) + ( _Chroma_3 * sin((_Omega * _FraqMul) + 2.0))) / 3.0;
 
-                float _Edge = Fun_Sharp(S2D_Image, In, _Result.rgb, 1.0);
-                _Y +=     (sin((In.x - In.y) * 10000.0 * _Edge   + _Time) * _Edge)   * 0.04;
-                _PbFix += (sin((In.x + In.y) * 1000000.0 * _Edge + _Time) * _Edge) * 0.04;
-                _PrFix += (cos((In.x + In.y) * 1000000.0 * _Edge + _Time) * _Edge) * 0.04;
+                float _Edge = Fun_Sharp(S2D_Image, In.texCoord, _Result.rgb, 1.0);
+                _Y +=     (sin((In.texCoord.x - In.texCoord.y) * 10000.0 * _Edge   + _Time) * _Edge)   * 0.04;
+                _PbFix += (sin((In.texCoord.x + In.texCoord.y) * 1000000.0 * _Edge + _Time) * _Edge) * 0.04;
+                _PrFix += (cos((In.texCoord.x + In.texCoord.y) * 1000000.0 * _Edge + _Time) * _Edge) * 0.04;
 
             /* Meow RGB */
             float _R = _Y + 1.402 * _PrFix;
             float _G = _Y - 0.344136 * _PbFix - 0.714136 * _PrFix;
             float _B = _Y + 1.772 * _PbFix;
 
-            float3 _Render = Fun_Sharp_Ex(S2D_Image, In, float3(_R, _G, _B), 1.0 - _Y);
+            float3 _Render = Fun_Sharp_Ex(S2D_Image, In.texCoord, float3(_R, _G, _B), 1.0 - _Y);
             //_Render = lerp(_Render, _Render.r * _Render.g * _Render.b, 0.35); 
 
-            float _Rand = Fun_Rand(In.x + In.y + _Seed) * _Edge;
+            float _Rand = Fun_Rand(In.texCoord.x + In.texCoord.y + _Seed) * _Edge;
                 _Render.r += abs(sin(_Rand * 5345435.0 + _Time) * _Edge * _Y) * pow(_Y, 5.0);
                 _Render.g += abs(sin(_Rand * 1204358.0 + _Time) * _Edge * _Y) * pow(_Y, 5.0);
                 _Render.b += abs(cos(_Rand * 7568234.0 + _Time) * _Edge * _Y) * pow(_Y, 5.0);

@@ -20,6 +20,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing,
             _Size,
             _Angle,
@@ -67,10 +74,10 @@ float3 Fun_Sharp(sampler2D _Sampler, float2 In, float2 _Off)
     return _Render;
 }
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In_Background);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
     
         float4 _Result, _Render;
         float2 _Offset = _Size * -float2(fPixelWidth, fPixelHeight);
@@ -86,12 +93,12 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
             if(!_Blending_Mode)
             {
                 _Result.rgb = _Render_Texture.rgb;
-                _Render.rgb = Fun_Sharp(S2D_Image, In, _Offset);
+                _Render.rgb = Fun_Sharp(S2D_Image, In.texCoord, _Offset);
             }
             else
             {
                 _Result.rgb = _Render_Background.rgb;
-                _Render.rgb = Fun_Sharp(S2D_Background, In_Background, _Offset);
+                _Render.rgb = Fun_Sharp(S2D_Background, In.bgCoord, _Offset);
 
             }
 

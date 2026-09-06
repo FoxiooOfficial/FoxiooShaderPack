@@ -20,6 +20,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing,
             _Seed,
 
@@ -153,32 +160,32 @@ float3 HSVtoRGB(float _H, float _S, float _V)
     return (_Render + _M);
 }
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In_Background);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
 
         float4 _Result;
 
-        _Result.rgb = Fun_Sharp(S2D_Background, In_Background, _Render_Background.rgb, 1.5);
+        _Result.rgb = Fun_Sharp(S2D_Background, In.bgCoord, _Render_Background.rgb, 1.5);
 
             /* Noise */
                 /* Big */
-                    float2 _Noise_In = In * float2(10, 80);
+                    float2 _Noise_In = In.texCoord * float2(10, 80);
 
                     float3 _Noise = float3(Fun_Noise(_Noise_In), Fun_Noise(_Noise_In + 1.0), Fun_Noise(_Noise_In + 2.0)); _Noise.r *= _Noise.b;
                         float _Lum = Fun_Luminance(_Noise);
                         _Result.rgb += _Noise * _Lum * 0.05 * _NoiseBig;
 
                 /* Small (Chrominance noise) */
-                    _Noise_In = In * float2(1.6 / fPixelWidth, 1.6 / fPixelHeight);
+                    _Noise_In = In.texCoord * float2(1.6 / fPixelWidth, 1.6 / fPixelHeight);
 
                     _Noise = float3(Fun_Noise(_Noise_In), Fun_Noise(_Noise_In + 1.0), Fun_Noise(_Noise_In + 2.0));
                         _Result.rgb += _Noise * _Lum * 0.22 * _NoiseSmall; 
 
             /* Rainbow effects */
                 float Y = Fun_Luminance(_Result.rgb);
-                float _Phase = (0.5 - abs(In.x / Y - 0.5)) * _RainbowFreq * 6.2831;
+                float _Phase = (0.5 - abs(In.texCoord.x / Y - 0.5)) * _RainbowFreq * 6.2831;
 
                     float3 _Rainbow = float3(   sin(_Phase + 0.0),  sin(_Phase + 2.094),    sin(_Phase + 4.188) );
                     float  _Rainbow_Pre = _RainbowStrength * _Rainbow;
@@ -187,7 +194,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
                 _Result.rgb += _Rainbow * Y;
 
             /* Ringing */
-                float3 _Ringing = Fun_Ringing(S2D_Background, In_Background + _Rainbow_Pre.r * 0.05, _Result.rgb * _Rainbow);
+                float3 _Ringing = Fun_Ringing(S2D_Background, In.bgCoord + _Rainbow_Pre.r * 0.05, _Result.rgb * _Rainbow);
                 float _Ringing_Lum = Fun_Luminance(_Ringing);
 
                 _Result.rgb += (_Ringing / _Rainbow) * _RainbowErrorNoise;

@@ -20,6 +20,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     bool    _Blending_Mode;
 
     float   _Mixing,
@@ -73,7 +80,7 @@ VS_OUTPUT vs_main(VS_INPUT In)
 
 	Out.Tint = In.Tint;
 	Out.texCoord = In.texCoord + _DirCorner.xy * _PixelPadding;
-    //Out.bgCoord = In.bgCoord;// + _DirCorner.zw * _PixelPadding;
+    //Out.bgCoord = In.texCoord.bgCoord;// + _DirCorner.zw * _PixelPadding;
 
 	return Out;
 }
@@ -92,11 +99,11 @@ float4 Fun_Render(sampler2D _Tex, float2 In) {
 float4 ps_main(VS_OUTPUT In) : COLOR0
 {   
     float4 _Render_Texture = Fun_Render(S2D_Image, In.texCoord);
-    //return float4(In.bgCoord.xy, 0.0, 1.0);
+    //return float4(In.texCoord.bgCoord.xy, 0.0, 1.0);
    
     float4 _Pivot, _Shear;
     _Pivot.xy = In.texCoord - float2(_PosX, _PosY);
-    //_Pivot.zw = In.bgCoord - float2(_PosX, _PosY);
+    //_Pivot.zw = In.texCoord.bgCoord - float2(_PosX, _PosY);
 
     _Shear.xy = _Pivot.yx * float2(_X, _Y) * _Mixing;
     //_Shear.zw = _Pivot.wz * float2(_X, _Y) * _Mixing;

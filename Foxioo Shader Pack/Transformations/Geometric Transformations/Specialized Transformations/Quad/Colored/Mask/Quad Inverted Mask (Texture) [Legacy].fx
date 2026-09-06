@@ -27,6 +27,13 @@ sampler2D S2D_Image : register(s0) = sampler_state
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float xA;
     float yA;
     float xB;
@@ -83,11 +90,11 @@ float2 Fun_Quad(float2 UV)
 }
 
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {  
-    float2 _In = Fun_Quad(In);
+    float2 _In = Fun_Quad(In.texCoord);
 
-    float4 _Render_Texture = float4(float3(tex2D(S2D_Image, In).rgb),  1.0 - tex2D(S2D_Image, _In).a);
+    float4 _Render_Texture = float4(float3(tex2D(S2D_Image, In.texCoord).rgb),  1.0 - tex2D(S2D_Image, _In).a);
 
     //_Render_Texture.a *= _In.z;
 

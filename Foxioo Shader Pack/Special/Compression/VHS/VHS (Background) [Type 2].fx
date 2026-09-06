@@ -20,6 +20,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing,
             _Frame, _Alpha, _Time,
             _Size,
@@ -145,17 +152,17 @@ float Fun_Rand(float2 In)
 
 #define M_PI 3.14159265358979323846
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {       
-    float _UV_Y = cos(In.y * 4.0 / tan(In.y - _Time / 36.0) + _Time * 0.01 + sin(In.y * 3.0 - _Time * 0.0001) * 0.01 + sin(In.y / 5.0 - _Time * 0.32)) * fPixelHeight + fPixelHeight * 2.0 * sin(In.y / 7.12 + _Time * 0.001);
-    _UV_Y += Fun_Rand(In.xy + _UV_Y) * fPixelHeight;
+    float _UV_Y = cos(In.texCoord.y * 4.0 / tan(In.texCoord.y - _Time / 36.0) + _Time * 0.01 + sin(In.texCoord.y * 3.0 - _Time * 0.0001) * 0.01 + sin(In.texCoord.y / 5.0 - _Time * 0.32)) * fPixelHeight + fPixelHeight * 2.0 * sin(In.texCoord.y / 7.12 + _Time * 0.001);
+    _UV_Y += Fun_Rand(In.texCoord.xy + _UV_Y) * fPixelHeight;
 
-    float2 UV = In_Background + float2(sin(In.y / fPixelWidth * 1.5 + _Time) * fPixelWidth * 0.5, _UV_Y * 0.5) * _Mixing;
+    float2 UV = In.bgCoord + float2(sin(In.texCoord.y / fPixelWidth * 1.5 + _Time) * fPixelWidth * 0.5, _UV_Y * 0.5) * _Mixing;
     float _Rand = Fun_Rand(UV + Fun_Rand(UV));
 
-    UV = lerp(In_Background, UV, _Mixing);
+    UV = lerp(In.bgCoord, UV, _Mixing);
 
-    float4 _Render_Texture = tex2D(S2D_Image, In);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
     float4 _Render_Background = tex2D(S2D_Background, UV);
 
         float4 _Result = _Render_Background;
@@ -183,7 +190,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
                 float _Weight = sin((float(i + 1) / float(_Quality)) * M_PI);
 
                     float3 _Render_ColorB = tex2D(S2D_Background, UV - _BOffset * _Size).rgb;
-                    _Render_ColorB *= (Fun_Rand(In + Fun_Rand(In + i) + i) * 0.5 + 0.5);
+                    _Render_ColorB *= (Fun_Rand(In.texCoord + Fun_Rand(In.texCoord + i) + i) * 0.5 + 0.5);
 
                     _Result.rgb += _Render_ColorB * _Weight;
 
@@ -209,7 +216,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
         /* etap 5; interlacing!
         // drawing with arrival; direct3d only! */
 
-        int _LVertical = (int)((In.y + _Frame * fPixelHeight) / fPixelHeight);
+        int _LVertical = (int)((In.texCoord.y + _Frame * fPixelHeight) / fPixelHeight);
         bool _LCondition = (_LVertical % 2 == 0);
 
             if(_Interlacing && _LCondition)

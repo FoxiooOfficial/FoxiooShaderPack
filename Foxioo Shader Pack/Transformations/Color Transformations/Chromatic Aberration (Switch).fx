@@ -26,10 +26,16 @@ sampler2D S2D_Background : register(s1) = sampler_state
     BorderColor = float4(0, 0, 0, 0);
 };
 
-
 /***********************************************************/
 /* Variables */
 /***********************************************************/
+
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
 
     float   _PosXRed, _PosYRed, _PosXGreen, _PosYGreen, _PosXBlue, _PosYBlue,
 
@@ -53,14 +59,14 @@ float2 Fun_ChannelUV(float2 In, float _PosX, float _PosY, float _PointX, float _
     return UV;
 }
 
-float4 ps_main(float2 In: TEXCOORD) : COLOR
+float4 ps_main(PS_INPUT In) : COLOR0
 {   
-    float4 _Render_Texture = tex2D(S2D_Image, In);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
     float4 _Render;
 
-    float2 _UVRed =     lerp(In, Fun_ChannelUV(In, _PosXRed, _PosYRed, _PointXRed, _PointYRed, _ScaleXRed, _ScaleYRed, _ScaleRed), _Mixing);
-    float2 _UVGreen =   lerp(In, Fun_ChannelUV(In, _PosXGreen, _PosYGreen, _PointXGreen, _PointYGreen, _ScaleXGreen, _ScaleYGreen, _ScaleGreen), _Mixing);
-    float2 _UVBlue =    lerp(In, Fun_ChannelUV(In, _PosXBlue, _PosYBlue, _PointXBlue, _PointYBlue, _ScaleXBlue, _ScaleYBlue, _ScaleBlue), _Mixing);
+    float2 _UVRed =     lerp(In.texCoord, Fun_ChannelUV(In.texCoord, _PosXRed, _PosYRed, _PointXRed, _PointYRed, _ScaleXRed, _ScaleYRed, _ScaleRed), _Mixing);
+    float2 _UVGreen =   lerp(In.texCoord, Fun_ChannelUV(In.texCoord, _PosXGreen, _PosYGreen, _PointXGreen, _PointYGreen, _ScaleXGreen, _ScaleYGreen, _ScaleGreen), _Mixing);
+    float2 _UVBlue =    lerp(In.texCoord, Fun_ChannelUV(In.texCoord, _PosXBlue, _PosYBlue, _PointXBlue, _PointYBlue, _ScaleXBlue, _ScaleYBlue, _ScaleBlue), _Mixing);
 
 
         if (_Looping_Mode == 0) {

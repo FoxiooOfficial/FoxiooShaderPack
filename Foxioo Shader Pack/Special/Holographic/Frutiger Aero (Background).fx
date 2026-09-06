@@ -24,6 +24,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing,
 
             fPixelWidth, fPixelHeight;
@@ -57,10 +64,10 @@ float3 Fun_Outline(float2 In, float3 _Color)
     return lerp(_Color, _Color + _Color * 0.25, _Edge1 * _Alpha) + _Edge2 * 0.15;
 }
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In_Background);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
 
         float _Lum = pow(Fun_Lum(_Render_Texture), 2);
         float _Lum_Background = pow(Fun_Lum(_Render_Background), 2);
@@ -72,8 +79,8 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
                 float2 _Center_Off = float2(0.5, 1.0 - 0.2);
                 float2 _Center = float2(0.5, 0.5);
 
-                float _Dist = distance(In, _Center_Off);
-                float _Dist_Cen = distance(In, _Center);
+                float _Dist = distance(In.texCoord, _Center_Off);
+                float _Dist_Cen = distance(In.texCoord, _Center);
 
                         _Result.rgb += saturate(1.0 - (_Dist / 0.25)) * 0.15;
                         _Result.rgb += saturate(1.0 - (_Dist / 0.75)) * 0.35;
@@ -89,10 +96,10 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
                         float _Arc_In = smoothstep(0.75 - 0.4, 0.75, _Dist);
                         _Result.rgb += _Arc_In * (_Inside) * 0.15;
 
-                    _Result.rgb = (Fun_Outline(In, _Result.rgb));
+                    _Result.rgb = (Fun_Outline(In.texCoord, _Result.rgb));
 
                 float _Lum_Aero = Fun_Lum(float4(_Result.rgb, 1.0));
-                float4 _Render_Background_Ex = (tex2D(S2D_Background, In_Background - (_Lum_Aero * 0.25) + 0.125));
+                float4 _Render_Background_Ex = (tex2D(S2D_Background, In.bgCoord - (_Lum_Aero * 0.25) + 0.125));
 
             _Result.rgb += _Render_Background_Ex.rgb * _Lum * _Lum;
             _Result.rgb = lerp(_Result.rgb, _Result.rgb * _Result.rgb * lerp(1.0, _Result.rgb * _Lum, 0.5), 0.85);

@@ -26,6 +26,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing,
             _Distortion,
             _Intensity,
@@ -62,10 +69,10 @@ float3 Fun_Outline(float2 In, float3 _Color)
     float aD2 = tex2D(S2D_Image, In + float2(0.0, _PX.y * 2.0))  .a;
 
     /* no outline. */
-    // float aL3 = tex2D(S2D_Image, In + float2(-_PX.x, 0.0)) .a;
-    // float aR3 = tex2D(S2D_Image, In + float2(_PX.x, 0.0))  .a;
-    // float aU3 = tex2D(S2D_Image, In + float2(0.0, -_PX.y)) .a;
-    // float aD3 = tex2D(S2D_Image, In + float2(0.0, _PX.y))  .a;
+    // float aL3 = tex2D(S2D_Image, In.texCoord + float2(-_PX.x, 0.0)) .a;
+    // float aR3 = tex2D(S2D_Image, In.texCoord + float2(_PX.x, 0.0))  .a;
+    // float aU3 = tex2D(S2D_Image, In.texCoord + float2(0.0, -_PX.y)) .a;
+    // float aD3 = tex2D(S2D_Image, In.texCoord + float2(0.0, _PX.y))  .a;
 
         float _EdgeDark  = step(0.01, abs(aL1 - _Alpha) + abs(aR1 - _Alpha) + abs(aU1 - _Alpha) + abs(aD1 - _Alpha));
         float _EdgeLight = step(0.01, abs(aL2 - _Alpha) + abs(aR2 - _Alpha) + abs(aU2 - _Alpha) + abs(aD2 - _Alpha));
@@ -82,16 +89,16 @@ float2 Fun_Hash21(float2 _Pos)
     _Noise.y = frac(sin(dot(_Pos, float2(63.7264, 10.873))) * 73156.8473) - 0.5;
     return _Noise;
 }
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    //float4 _OutlineInter = tex2D(S2D_Background, Fun_Liquid(In, 1).rg);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    //float4 _OutlineInter = tex2D(S2D_Background, Fun_Liquid(In.texCoord, 1).rg);
 
-    float2 _Mask = float2(  Fun_Liquid(In_Background.xx * _Render_Texture.a, _Intensity * fPixelWidth),
-                            Fun_Liquid(In_Background.yy * _Render_Texture.a, _Intensity * fPixelHeight));
+    float2 _Mask = float2(  Fun_Liquid(In.bgCoord.xx * _Render_Texture.a, _Intensity * fPixelWidth),
+                            Fun_Liquid(In.bgCoord.yy * _Render_Texture.a, _Intensity * fPixelHeight));
 
 
-    float2 _UVB = frac(In_Background * 0.5) * 2.0;
+    float2 _UVB = frac(In.bgCoord * 0.5) * 2.0;
     float2 _UVM = abs(_UVB - 1.0);
 
     float2 _UV = lerp(_UVB, _UVM, _Mask * _Mask * _Distortion);
@@ -104,7 +111,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
         }
         _Render_Background /= 36.0;
 
-        float3 _Outline = Fun_Outline(In, _Render_Background.rgb);
+        float3 _Outline = Fun_Outline(In.texCoord, _Render_Background.rgb);
         float4 _Render_Tint = lerp(_Render_Background, _Render_Texture, 0.5);
 
     float4 _Render = float4(lerp(_Render_Texture.rgb, (_Render_Tint.rgb * 0.75 + _Outline.rgb * 0.25) * 0.9, _Mixing), _Render_Texture.a);

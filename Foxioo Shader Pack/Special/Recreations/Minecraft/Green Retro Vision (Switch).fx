@@ -20,6 +20,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing,
             fPixelWidth, fPixelHeight;
 
@@ -31,7 +38,7 @@ sampler2D S2D_Background : register(s1);
 /* Main */
 /************************************************************/
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
     const float _Steps = 32.0;
     const float _Res = 4.0;
@@ -39,21 +46,21 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
     float2 _PixelSize = float2(fPixelWidth, fPixelHeight);
     float _ResSize = _Res * _Mixing;
 
-        float4 _Render_Texture = tex2D(S2D_Image, In);
-        float4 _Render_Background = tex2D(S2D_Background, In_Background);
+        float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+        float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
 
         float4 _Result, _Render;
 
             if(!_Blending_Mode)
             {
-                float2 UV = floor(In / _PixelSize / _ResSize) * _PixelSize * _ResSize;
+                float2 UV = floor(In.texCoord / _PixelSize / _ResSize) * _PixelSize * _ResSize;
 
                 _Result = tex2D(S2D_Image, UV);
                 _Render = _Render_Texture;
             }
             else
             {
-                float2 UV = floor(In_Background / _PixelSize / _ResSize) * _PixelSize * _ResSize;
+                float2 UV = floor(In.bgCoord / _PixelSize / _ResSize) * _PixelSize * _ResSize;
 
                 _Result.rgb = tex2D(S2D_Background, UV);
                 _Render = _Render_Background;

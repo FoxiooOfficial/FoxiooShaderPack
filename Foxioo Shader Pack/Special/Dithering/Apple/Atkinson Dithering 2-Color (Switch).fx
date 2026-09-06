@@ -20,6 +20,13 @@ sampler2D _Texture_Dithering : register(s2);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing, _Threshold,
             fPixelWidth, fPixelHeight;
 
@@ -31,10 +38,10 @@ sampler2D _Texture_Dithering : register(s2);
 /* Main */
 /************************************************************/
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In_Background);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
 
         float4 _Result, _Render;
 
@@ -54,7 +61,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
             float _Lum = dot(_Result.rgb, float3(0.2126, 0.7152, 0.0722)) * 63.0;
             _Lum = floor(_Lum);
 
-                float2 _UV = frac(In / float2(fPixelWidth, fPixelHeight) / 32.0); 
+                float2 _UV = frac(In.texCoord / float2(fPixelWidth, fPixelHeight) / 32.0); 
 
                     _UV.x *= (32.0 / 2048.0);
                     _UV.x += (_Lum * 32.0 / 2048.0);

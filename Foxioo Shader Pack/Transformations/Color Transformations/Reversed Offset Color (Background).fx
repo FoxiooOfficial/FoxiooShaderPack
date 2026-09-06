@@ -19,6 +19,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _OffsetX, _OffsetY, _OffsetZ,
             _PosX, _PosY,
             _Mixing;
@@ -29,12 +36,12 @@ sampler2D S2D_Background : register(s1);
 /* Main */
 /************************************************************/
 
-float4 ps_main(float2 In: TEXCOORD) : COLOR
+float4 ps_main(PS_INPUT In) : COLOR0
 {   
-        float4 _Render_Texture = tex2D(S2D_Image, frac(In + float2(_PosX, _PosY)));
-        float4 _Render_Background = tex2D(S2D_Background, frac(In + float2(_PosX, _PosY)));
+        float4 _Render_Texture = tex2D(S2D_Image, frac(In.texCoord + float2(_PosX, _PosY)));
+        float4 _Render_Background = tex2D(S2D_Background, frac(In.texCoord + float2(_PosX, _PosY)));
 
-    float2 UV = In;
+    float2 UV = In.texCoord;
 
     float4 _Result = 0;
     float4 _Render = 0;

@@ -21,6 +21,13 @@ sampler2D _Texture : register(s2);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float _Time, _Mixing;
 
     bool _Blending_Mode;
@@ -46,10 +53,10 @@ float3 Fun_Aurora(float _Noise)
 
 static const float _Max = 25.0;
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In_Background);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
 
         float4 _Result = _Blending_Mode ? _Render_Background : _Render_Texture;
         float4 _Render = _Result;
@@ -61,24 +68,24 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
 
         for (int i = 1; i < _Max; i++)
         {
-            float w = In.x;
+            float w = In.texCoord.x;
         
-            w += sin((1.0 - In.y) * 2.0 + _Time) / 60.0;
+            w += sin((1.0 - In.texCoord.y) * 2.0 + _Time) / 60.0;
             w = abs(sin(-w * 10.0 * i / _Max * 2.0 + _Time / i) / 20. + sin(40.0 * i / _Max + _Time) / 18.0) * 35.0;
 
-                w += ((1.0 - In.y) * 2.4 - 1.6);
+                w += ((1.0 - In.texCoord.y) * 2.4 - 1.6);
                 w = smoothstep(0.4, 0.7, w / 5.0) / 20.0;
 
-            float _Color = 1.0 - (abs(In.y - 0.5)) * 3.0;
-            _Color += (In.x + 4.0 + Wave * 0.5 + 0.5) * 0.3;
+            float _Color = 1.0 - (abs(In.texCoord.y - 0.5)) * 3.0;
+            _Color += (In.texCoord.x + 4.0 + Wave * 0.5 + 0.5) * 0.3;
 
-                float3 _Perlin = tex2D(_Texture, frac(In * 0.3 + float2(_Time * i / 100.0, 0.0))).rgb;
+                float3 _Perlin = tex2D(_Texture, frac(In.texCoord * 0.3 + float2(_Time * i / 100.0, 0.0))).rgb;
                 float _Lum = (_Perlin.r + _Perlin.g + _Perlin.b) / 32.0;
 
-            _Result.rgb += (5.0 / _Max) * (Fun_Aurora(0.7 * (_Color + In.x + _Time)) * w * 5.0 + Fun_Aurora(_Lum));
+            _Result.rgb += (5.0 / _Max) * (Fun_Aurora(0.7 * (_Color + In.texCoord.x + _Time)) * w * 5.0 + Fun_Aurora(_Lum));
         }
 
-        _Result.rgb += Fun_Aurora(1.0 - abs(In.y * In.y * 2.0 - 0.8)) * In.y;
+        _Result.rgb += Fun_Aurora(1.0 - abs(In.texCoord.y * In.texCoord.y * 2.0 - 0.8)) * In.texCoord.y;
         _Result.rgb = lerp(_Render.rgb, pow(abs(_Result.rgb), 2.0) * 1.8, _Mixing);
 
     return _Result;

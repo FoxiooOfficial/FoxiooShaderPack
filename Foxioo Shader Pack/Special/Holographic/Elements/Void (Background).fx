@@ -25,6 +25,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing, _Border,
 
             fPixelWidth, fPixelHeight;
@@ -60,28 +67,28 @@ float Fun_Random(float2 In) {
     return frac(sin(dot(In, float2(12.9898, 78.233))) * 43758.5453);
 }
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In_Background);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
         
-    float _Rand = Fun_Random(In + _Render_Texture.rb + _Render_Texture.bg + _Render_Background.rg + _Render_Background.br);
+    float _Rand = Fun_Random(In.texCoord + _Render_Texture.rb + _Render_Texture.bg + _Render_Background.rg + _Render_Background.br);
     float _Lum = Fun_Lum(_Render_Texture);
     float _Lum_Background = Fun_Lum(_Render_Background);
 
         float3 _Space = lerp(float3(0.0, 0.0, 0.0), float3(0.15, 0.05, 0.25), _Lum);
-        _Space += (_Space * (tex2D(S2D_Background, In_Background + tan(_Lum) * _Lum * 0.25 - tan(_Lum_Background) * 0.25 - _Rand).rgb) * 1.5);
+        _Space += (_Space * (tex2D(S2D_Background, In.bgCoord + tan(_Lum) * _Lum * 0.25 - tan(_Lum_Background) * 0.25 - _Rand).rgb) * 1.5);
         _Space *= 0.5;
 
-            float3 _Void = tex2D(S2D_Background, In_Background + (_Render_Background * (1.0 - _Render_Texture) + _Rand) * 0.1).rgb;
+            float3 _Void = tex2D(S2D_Background, In.bgCoord + (_Render_Background * (1.0 - _Render_Texture) + _Rand) * 0.1).rgb;
             _Space = lerp(_Space, _Space + _Void * float3(0.15, 0.05, 0.25), 1.0 - _Lum);
 
             float4 _Result = _Render_Texture;
             _Result.rgb = lerp( _Render_Texture.rgb, 
-                                _Space + pow(Fun_Random(In + _Space.rb + _Space.bg + _Render_Background.rg + _Render_Background.br + _Rand), 255.0), 
+                                _Space + pow(Fun_Random(In.texCoord + _Space.rb + _Space.bg + _Render_Background.rg + _Render_Background.br + _Rand), 255.0), 
                                 _Mixing);
 
-            float _Inner = (1.0 - Fun_Inner(In)) * _Render_Texture.a;
+            float _Inner = (1.0 - Fun_Inner(In.texCoord)) * _Render_Texture.a;
             _Result.rgb += ((_Inner / pow(cos(_Lum - _Inner), 6.0)) * saturate(_Mixing)) * 0.05;
             _Result.rgb += saturate(_Inner * _Inner + (1.0 - _Lum) * 0.15) * 4.0;
 

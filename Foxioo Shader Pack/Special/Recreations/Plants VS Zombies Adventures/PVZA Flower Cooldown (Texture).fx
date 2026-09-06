@@ -20,6 +20,13 @@ sampler2D S2D_Image : register(s0);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing,
             _Time, 
             _InGray, _InMul, 
@@ -29,9 +36,9 @@ sampler2D S2D_Image : register(s0);
 /* Main */
 /************************************************************/
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
 
         float4 _Result = _Render_Texture;
         float _Lum = dot(_Result.rgb, float3(0.2126, 0.7152, 0.0722));
@@ -39,7 +46,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
         float3 _In = lerp(_Result.rgb, _Lum, _OutGray) * _OutMul;
         float3 _Out = lerp(_Result.rgb, _Lum, _InGray) * _InMul;
 
-            _Result.rgb = lerp(_Out, _In, step(In.y, _Time));
+            _Result.rgb = lerp(_Out, _In, step(In.texCoord.y, _Time));
             _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
 
     return _Result;

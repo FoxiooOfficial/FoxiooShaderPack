@@ -20,6 +20,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing,
             _Size,
 
@@ -96,12 +103,12 @@ float4 Fun_Kuwahara(float2 UV, sampler2D _Sampler)
     return _Mean[_Best];
 }
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In_Background);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
 
-        float4 _Result = Fun_Kuwahara(In_Background, S2D_Background);
+        float4 _Result = Fun_Kuwahara(In.bgCoord, S2D_Background);
 
             _Result.rgb = lerp(_Render_Background.rgb, _Result.rgb, _Mixing);
             _Result.a = _Render_Texture.a;

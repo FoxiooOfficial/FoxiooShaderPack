@@ -19,6 +19,13 @@ sampler2D S2D_Image : register(s0);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing, _Time, _Scale,
 
             fPixelWidth, fPixelHeight;
@@ -76,14 +83,14 @@ float3 Fun_Square(float2 In, float2 _Offset, float2 _Dir, int _Color)
     return _Alpha * _Palette[_Color];
 }
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
 
         float4 _Result = 0.0;
 
         // Background
-        float2 _UV = In / 2.0 * _Scale;
+        float2 _UV = In.texCoord / 2.0 * _Scale;
         float2 _In_Background = _UV / _Size / float2(fPixelWidth, fPixelHeight);
         float2 _In_Frac = frac(_In_Background - float2(0.5, 0.0));
 

@@ -36,6 +36,13 @@ sampler2D S2D_Background : register(s1) = sampler_state
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _PosX, _PosY, _PosZ,
 
             _OffsetX,
@@ -94,12 +101,12 @@ PS_OUTPUT ps_main(float2 In: TEXCOORD)
 {   
     PS_OUTPUT Out;
 
-    In = Fun_Rotation(In, float2(_RotYPointX, _RotYPointY), 1.0, 0.5, _RotY, 180.0);
+    In.texCoord = Fun_Rotation(In.texCoord, float2(_RotYPointX, _RotYPointY), 1.0, 0.5, _RotY, 180.0);
 
     /* _RotZ -> Y-axis offset of texCoords; Pseudo-3D (possibly true 3D in the future...? i NEED ps_3_0!!!!) */
-    In.y += _RotZ * RAD;
-    In.x += _OffsetX - 0.5;
-    float2 _UV = Fun_Mode7(In);
+    In.texCoord.y += _RotZ * RAD;
+    In.texCoord.x += _OffsetX - 0.5;
+    float2 _UV = Fun_Mode7(In.texCoord);
 
         _UV = Fun_Rotation(_UV, float2(_RotXPointX, _RotXPointY), 0.5, 0.0, _RotX, 0.0);
         float2 _UVPos = _UV;
@@ -124,15 +131,15 @@ PS_OUTPUT ps_main(float2 In: TEXCOORD)
                         _3), _2), _1);
 
         float4 _Render_Texture = tex2D(S2D_Image, _UV);
-        //float4 _Render_Background = tex2D(S2D_Background, In_Background);
+        //float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
 
  float4 _Render = _Render_Texture;
  //float4 _Render = _Render_Texture + _Render_Background / 128.0;
         
         float _Depth =  saturate(sqrt(_UVPos.x * _UVPos.x + _UVPos.y * _UVPos.y) / 65536.0);
 
-        _Render *= lerp(abs(step(0.0, _PosZ) - step(0.5, In.y * _Distortion)), 1.0, _Render_Sky);
-        if(abs(step(0.0, _PosZ) - step(0.5, In.y * _Distortion)) && !_Render_Sky) _Depth = 1.0;
+        _Render *= lerp(abs(step(0.0, _PosZ) - step(0.5, In.texCoord.y * _Distortion)), 1.0, _Render_Sky);
+        if(abs(step(0.0, _PosZ) - step(0.5, In.texCoord.y * _Distortion)) && !_Render_Sky) _Depth = 1.0;
 
     Out.Depth = 1.0 - _Depth * _Render.a;
     Out.Color = _Render;

@@ -20,6 +20,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing, _Seed, _Distortion,
             fPixelWidth, fPixelHeight;
 
@@ -37,21 +44,21 @@ float2 Fun_Rand(float2 In)
     return _Rand;
 }
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In_Background);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
 
         float2 _Pixel = float2(fPixelWidth, fPixelHeight);
         float2 _Block = float2(4.0, 8.0);
         float4 _Result = (float4)0.0;
         float4 _Render = (float4)0.0;
 
-            float2 _Art = floor(In / _Pixel / _Block) * _Pixel * _Block;
+            float2 _Art = floor(In.texCoord / _Pixel / _Block) * _Pixel * _Block;
             if(any(abs(Fun_Rand(_Art).xy) > _Distortion))
-                _Art = _Blending_Mode ? In_Background : In;
+                _Art = _Blending_Mode ? In.bgCoord : In.texCoord;
             else
-                _Art = In + Fun_Rand(_Art) * 0.5 - 0.25;
+                _Art = In.texCoord + Fun_Rand(_Art) * 0.5 - 0.25;
 
                 if(_Blending_Mode)
                 {
@@ -61,7 +68,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
                 }
                 else
                 {
-                    _Result = tex2D(S2D_Image, _Art);
+                    _Result = tex2D(S2D_Image, _Art) * In.Tint;
                     _Render = _Render_Texture;
                     
                 }

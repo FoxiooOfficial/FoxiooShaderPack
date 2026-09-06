@@ -25,6 +25,13 @@ sampler2D S2D_Image : register(s0) = sampler_state
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _PosX, _PosY,
             _RotX,
             _PointX, _PointY,
@@ -54,20 +61,20 @@ float2 Fun_UV(float _UVRot, float2 _UVPos, float _UVScaler, float2 UV)
     return frac(UV * _UVScaler);
 }
 
-float4 ps_main(float2 In: TEXCOORD) : COLOR
+float4 ps_main(PS_INPUT In) : COLOR0
 {   
-    float4 _Render_Texture = tex2D(S2D_Image, In);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
 
         float2 _Pos = float2(_PosX, _PosY);
         float4 _Result = 0;
 
-        float4 _Render = tex2D(S2D_Image, Fun_UV(236, _Pos, 3, In));
+        float4 _Render = tex2D(S2D_Image, Fun_UV(236, _Pos, 3, In.texCoord));
         float _Lum = _Render.r * _Render.g * _Render.b * _Render.a;
         _Result += lerp(_Render, _Render_Texture, _Lum);
 
-        _Result += tex2D(S2D_Image, Fun_UV(206, _Pos, 2, In));
-        _Result += tex2D(S2D_Image, Fun_UV(127, _Pos, 1, In));
-        _Result += tex2D(S2D_Image, Fun_UV(2, _Pos, 0.5, In));
+        _Result += tex2D(S2D_Image, Fun_UV(206, _Pos, 2, In.texCoord));
+        _Result += tex2D(S2D_Image, Fun_UV(127, _Pos, 1, In.texCoord));
+        _Result += tex2D(S2D_Image, Fun_UV(2, _Pos, 0.5, In.texCoord));
 
         _Result /= 3.0;
 

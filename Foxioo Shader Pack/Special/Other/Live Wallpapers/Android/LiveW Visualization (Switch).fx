@@ -20,6 +20,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing, _Time, _Alpha;
 
     bool    _Blending_Mode;
@@ -28,10 +35,10 @@ sampler2D S2D_Background : register(s1);
 /* Main */
 /************************************************************/
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In_Background);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
 
         float4 _Result, _Render;
         _Result.a = _Render_Texture.a;
@@ -46,15 +53,15 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
         _Result.rgb = lerp(_Render.rgb, float3(0.0, 0.0, 0.0), _Alpha);
         float t = _Time;
 
-        float _Off = cos(In.x * 2.0 - t * 0.6
-                        + sin(In.x * 0.031 - t * 2.0) * 0.1
-                        - sin(In.x * 4.0 - t * 0.2) * 0.2
-                        + cos(In.x * 0.0115 - t) * 0.1
-                        - cos(In.x / 0.1 - t * 2.0) * 0.3
+        float _Off = cos(In.texCoord.x * 2.0 - t * 0.6
+                        + sin(In.texCoord.x * 0.031 - t * 2.0) * 0.1
+                        - sin(In.texCoord.x * 4.0 - t * 0.2) * 0.2
+                        + cos(In.texCoord.x * 0.0115 - t) * 0.1
+                        - cos(In.texCoord.x / 0.1 - t * 2.0) * 0.3
                         + sin(t * 0.02) * 0.1
                     ) * 0.2;
 
-        float2 _UV = float2(In + float2(0.0, -0.5 + _Off)) * float2(960.0, 4.0);
+        float2 _UV = float2(In.texCoord + float2(0.0, -0.5 + _Off)) * float2(960.0, 4.0);
         float _High = (1.0 / _Off) / 8.0;
 
         float _Y =  sin(_UV.x * 0.002 + t) * 160.0 +

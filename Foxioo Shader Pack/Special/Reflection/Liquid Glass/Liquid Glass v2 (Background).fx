@@ -20,6 +20,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mul, _Mixing, _Radius, _Liquid, _Size,
 
             fPixelWidth, fPixelHeight;
@@ -104,16 +111,16 @@ float2 Fun_Mirror(float2 In)
     return 1.0 - abs(frac(In / 2.0) * 2.0 - 1.0);
 }
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In_Background);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
 
         float4 _Result = 0.0;
         float2 _Pixel = float2(fPixelWidth, fPixelHeight);
             
-            float2 _UV = In;
-            float2 _UV_Background = In_Background;
+            float2 _UV = In.texCoord;
+            float2 _UV_Background = In.bgCoord;
             //_UV.z = max(abs(_UV.x - 0.5), abs(_UV.y - 0.5)) * 2.0;
             //_UV.z = 1.0 - pow(_UV.z, 10.0);
 

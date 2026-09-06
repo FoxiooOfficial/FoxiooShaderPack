@@ -27,6 +27,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
 struct VS_INPUT
 {
     float4 Pos          : POSITION;
@@ -82,18 +89,18 @@ float4x4 Fun_OrthoMatrix_Center(float2 _Pos, float2 _Res, float2 _Z)
     );
 }
 
-VS_OUTPUT vs_main(const VS_INPUT In)
+VS_OUTPUT vs_main(const VS_INPUT In.texCoord)
 {
     VS_OUTPUT Out;
 
     /* vertex setup */
-    float4 _Offset = float4(In.Coord.x, In.Coord.y, 0.0, 0.0);
+    float4 _Offset = float4(In.texCoord.Coord.x, In.texCoord.Coord.y, 0.0, 0.0);
     float2 _Resolution = float2(_Width, _Height);
 
     float4x4 _Proj = Fun_OrthoMatrix_Center(_Resolution / 2.0, _Resolution, float2(-1.0, 1.0));
     Out.Pos = mul(In.Pos - _Offset, _Proj);
 
-    Out.Coord = In.Coord;
+    Out.Coord = In.texCoord.Coord;
 
     /* polygon */
     float a11 = xC - xB;
@@ -148,9 +155,9 @@ VS_OUTPUT vs_main(const VS_INPUT In)
             float C21 = (xA * H10 - H00 * yA) * INV_H;
             float C22 = (H00 * H11 - H01 * H10) * INV_H;
 
-            float _U = C00 * In.Coord.x + C10 * In.Coord.y + C20;
-            float _V = C01 * In.Coord.x + C11 * In.Coord.y + C21;
-            float _W = C02 * In.Coord.x + C12 * In.Coord.y + C22;
+            float _U = C00 * In.texCoord.Coord.x + C10 * In.texCoord.Coord.y + C20;
+            float _V = C01 * In.texCoord.Coord.x + C11 * In.texCoord.Coord.y + C21;
+            float _W = C02 * In.texCoord.Coord.x + C12 * In.texCoord.Coord.y + C22;
 
             Out.Polygon = float3(_U, _V, _W);
 
@@ -184,7 +191,7 @@ VS_OUTPUT vs_main(const VS_INPUT In)
 /* Main */
 /************************************************************/
 
-float4 ps_main(in float2 In : TEXCOORD0, in float3 Polygon : TEXCOORD1, in float  WReflected : TEXCOORD2) : COLOR0
+float4 ps_main(in float2 In.texCoord : TEXCOORD0, in float3 Polygon : TEXCOORD1, in float  WReflected : TEXCOORD2) : COLOR0
 {
     /* polygon checks */
     if (isnan(Polygon.z) || isnan(WReflected))                      clip(-1);
@@ -197,7 +204,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float3 Polygon : TEXCOORD1, in float
 
     /* pixel shader */
         float4 _Render = tex2D(S2D_Image, frac(_UV * _Scale * float2(_ScaleX, _ScaleY) + float2(_PosX, _PosY)));
-        _Render.rgb = lerp(_Render.rgb,  tex2D(S2D_Background, In).rgb * _Mul * _Render.rgb, _Mixing); 
+        _Render.rgb = lerp(_Render.rgb,  tex2D(S2D_Background, In.texCoord).rgb * _Mul * _Render.rgb, _Mixing); 
 
     return _Render;
 }

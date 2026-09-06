@@ -27,6 +27,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _PosX, _PosY,
             _PointX, _PointY,
             _ScaleX, _ScaleY, _Scale,
@@ -57,22 +64,22 @@ float Fun_Jevil(float In)
     return _Out;
 }
 
-float4 ps_main(float2 In: TEXCOORD) : COLOR
+float4 ps_main(PS_INPUT In) : COLOR0
 {   
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    //float4 _Render_Background = tex2D(S2D_Background, In_Background);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    //float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
     float4 _Render;
 
     float2  _Pos = float2(_PosX, _PosY),
-        UV = (In + _Pos);
+        UV = (In.texCoord + _Pos);
         UV = ((UV - float2(_PointX, _PointY)) * float2(_ScaleX, _ScaleY) * _Scale) + float2(_PointX, _PointY);
 
         //UV = lerp(UV, _UV_Temp, _Mixing);
 
         float2 UV_Extra = UV;
 
-        float _In_Offset = distance(In.x + _DistortionYOffsetFactor, 0.5);
-        float _In_Dist = abs(In.x - 0.5) - _PosX;
+        float _In_Offset = distance(In.texCoord.x + _DistortionYOffsetFactor, 0.5);
+        float _In_Dist = abs(In.texCoord.x - 0.5) - _PosX;
 
         float _UV_Distortion = pow(_In_Offset, _DistortionYPow);
             UV_Extra.y += _UV_Distortion * _DistortionYOffset;

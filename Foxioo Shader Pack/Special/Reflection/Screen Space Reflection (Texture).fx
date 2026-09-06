@@ -20,6 +20,13 @@ sampler2D S2D_Image : register(s0);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing,
             _Angle, _Size, _Jump, 
             _Strength, _Threshold, _Fade,
@@ -43,9 +50,9 @@ bool Fun_Comp(float3 _Color)
 }
 
 /*
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
 
     if(Fun_Comp(_Render_Texture.rgb))
         return 0.0;
@@ -60,7 +67,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
             sincos(_Rad, _SinCos.x, _SinCos.y);
 
             float2 _Ray = _SinCos * float2(fPixelWidth, fPixelHeight) * _Size;
-            float2 UV = In + float2(_OffsetX, _OffsetY) * float2(fPixelWidth, fPixelHeight);
+            float2 UV = In.texCoord + float2(_OffsetX, _OffsetY) * float2(fPixelWidth, fPixelHeight);
 
                 float4 _Render_Reflection = tex2D(S2D_Image, UV);
                 float2 _Hit = 0.0;
@@ -82,7 +89,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
 
                     if (!Fun_Comp(_Render_Reflected.rgb) && _Render_Reflected.a > _Threshold)
                     {        
-                        float2 UV_Ref = In + (_Ray * float(i * (64.0 / (float)_Loop)) * _Jump);
+                        float2 UV_Ref = In.texCoord + (_Ray * float(i * (64.0 / (float)_Loop)) * _Jump);
                         float4 _Render = tex2D(S2D_Image, UV_Ref);
                                         
                         if (any(UV_Ref <= 0.0 || UV_Ref >= 1.0) || Fun_Comp(_Render.rgb)) 
@@ -138,9 +145,9 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
 
 static int _MaxSteps = 9;
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
 
     if(Fun_Comp(_Render_Texture.rgb)) return 0.0;
     else if(_Render_Texture.a >= 1.0) return _Render_Texture;
@@ -153,7 +160,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
         sincos(_Rad, _SinCos.x, _SinCos.y);
 
         float2 _Ray = _SinCos * float2(fPixelWidth, fPixelHeight) * _Size;
-        float2 UV = In + float2(_OffsetX, _OffsetY) * float2(fPixelWidth, fPixelHeight);
+        float2 UV = In.texCoord + float2(_OffsetX, _OffsetY) * float2(fPixelWidth, fPixelHeight);
 
             float4 _Render_Reflection = tex2D(S2D_Image, UV);
             float2 _Hit = float2(0.0, 0.0);
@@ -174,7 +181,7 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
                 
             if (_Render_Reflected.a > _Threshold)
             {        
-                float2 UV_Ref = In + (_Ray * float(i * (64.0 / _MaxSteps)) * _Jump);
+                float2 UV_Ref = In.texCoord + (_Ray * float(i * (64.0 / _MaxSteps)) * _Jump);
                 float4 _Render = tex2D(S2D_Image, UV_Ref);
                         
                 //if (any(UV_Ref <= 0.0 || UV_Ref >= 1.0) || Fun_Comp(_Render.rgb)) 

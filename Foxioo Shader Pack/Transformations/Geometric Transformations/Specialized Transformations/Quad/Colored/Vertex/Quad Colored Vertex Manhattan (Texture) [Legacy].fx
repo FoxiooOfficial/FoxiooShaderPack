@@ -27,6 +27,13 @@ sampler2D S2D_Image : register(s0) = sampler_state
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float xA;
     float yA;
     float xB;
@@ -88,9 +95,9 @@ float2 Fun_Quad(float2 UV)
 }
 
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {  
-    float2 _In = Fun_Quad(In);
+    float2 _In = Fun_Quad(In.texCoord);
 
         float _T0 = max(abs(_In.x), abs(_In.y));
         float _T1 = max(abs(1.0 - _In.x), abs(_In.y));

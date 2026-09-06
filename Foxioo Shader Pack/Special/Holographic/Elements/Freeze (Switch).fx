@@ -22,6 +22,13 @@ sampler2D _Texture_Mask : register(s3);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing, _Offset,
             fPixelWidth, fPixelHeight;
 
@@ -35,12 +42,12 @@ float Fun_Luminance(float3 _Result) {
     return 0.299 * _Result.r + 0.587 * _Result.g + 0.114 * _Result.b;
 }
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In_Background);
-    float4 _Render_Ice = tex2D(_Texture_Ice, In);
-    float4 _Render_Mask = tex2D(_Texture_Mask, In);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
+    float4 _Render_Ice = tex2D(_Texture_Ice, In.texCoord);
+    float4 _Render_Mask = tex2D(_Texture_Mask, In.texCoord);
 
         float4 _Result;
         float4 _Render;
@@ -48,12 +55,12 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
             float2 _Size = float2(fPixelWidth, fPixelHeight);
             if(!_Blending_Mode)
             {
-                _Result = tex2D(S2D_Image, frac(In + _Size * (float2(_Render_Ice.rb - 0.5) * _Render_Ice.b * _Offset)));
+                _Result = tex2D(S2D_Image, frac(In.texCoord + _Size * (float2(_Render_Ice.rb - 0.5) * _Render_Ice.b * _Offset)));
                 _Render = _Render_Texture;
             }
             else
             {
-                _Result = tex2D(S2D_Background, frac(In_Background + _Size * (float2(_Render_Ice.rb - 0.5) * _Render_Ice.b * _Offset)));
+                _Result = tex2D(S2D_Background, frac(In.bgCoord + _Size * (float2(_Render_Ice.rb - 0.5) * _Render_Ice.b * _Offset)));
                 _Render = _Render_Background;
             }
 

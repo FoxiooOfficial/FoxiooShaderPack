@@ -27,6 +27,13 @@ sampler2D S2D_Image : register(s0) = sampler_state
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing, _PT, _DPI, 
             _Time, _Amplitude, _Wave, _Distortion,
             
@@ -40,7 +47,7 @@ sampler2D S2D_Image : register(s0) = sampler_state
 /* Main */
 /************************************************************/
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
     float4 _Result;
         
@@ -50,19 +57,19 @@ float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : 
     float2 _CharsLine = 1.0 / (_Res.xy / _FontSize.xy * 1.25);
 
         float _Out;
-        float2 _Quant = floor(In / _FontSize) * _FontSize;
+        float2 _Quant = floor(In.texCoord / _FontSize) * _FontSize;
 
         _Out = sin(_Quant.x *_CharsLine.y * _Wave + _Time + _Quant.y * _Distortion);
         _Out = floor(_Out / _FontSize.x) * _FontSize.y * _Amplitude;
 
-        float2 _Coord = In + float2(0.0, _Out);
+        float2 _Coord = In.texCoord + float2(0.0, _Out);
 
     float4 _Render_Texture = tex2D(S2D_Image, _Coord);
 
         _Result = lerp(_Render_Texture, _Render_Texture, _Mixing);
 
     if(__)
-        return abs(float4((In.x - _Coord.x), In.y -_Coord.y, 0.0, 1.0)) * 64.;
+        return abs(float4((In.texCoord.x - _Coord.x), In.texCoord.y -_Coord.y, 0.0, 1.0)) * 64.;
     else
         return _Result;
 }

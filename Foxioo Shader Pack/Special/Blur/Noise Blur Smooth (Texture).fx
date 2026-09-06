@@ -19,6 +19,13 @@ sampler2D S2D_Image : register(s0);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing;
 
 /************************************************************/
@@ -33,18 +40,18 @@ float2 Fun_Hash21(float2 _Pos)
     return _Noise;
 }
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
     const int _Size = 10;
     float4 _Render = 0.0;
    
         for(int i = 0; i < _Size; i++)
         {
-            float2 _Off = Fun_Hash21(In + i);
-            _Render += tex2D(S2D_Image, frac(In + float2( _Off.x,  _Off.y) * _Mixing));
-            _Render += tex2D(S2D_Image, frac(In + float2(-_Off.x,  _Off.y) * _Mixing)) * 0.25;
-            _Render += tex2D(S2D_Image, frac(In + float2( _Off.x, -_Off.y) * _Mixing)) * 0.25;
-            _Render += tex2D(S2D_Image, frac(In + float2(-_Off.x, -_Off.y) * _Mixing)) * 0.5;
+            float2 _Off = Fun_Hash21(In.texCoord + i);
+            _Render += tex2D(S2D_Image, frac(In.texCoord + float2( _Off.x,  _Off.y) * _Mixing));
+            _Render += tex2D(S2D_Image, frac(In.texCoord + float2(-_Off.x,  _Off.y) * _Mixing)) * 0.25;
+            _Render += tex2D(S2D_Image, frac(In.texCoord + float2( _Off.x, -_Off.y) * _Mixing)) * 0.25;
+            _Render += tex2D(S2D_Image, frac(In.texCoord + float2(-_Off.x, -_Off.y) * _Mixing)) * 0.5;
         }
 
         _Render /= _Size * 2.0;

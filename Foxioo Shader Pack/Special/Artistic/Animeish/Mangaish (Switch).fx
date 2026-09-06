@@ -20,6 +20,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing,
             _ColorSteps,
             _LumMult,
@@ -69,17 +76,17 @@ float Fun_PatternDot(float2 UV, float _Size, float _Lum)
 }
 
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In_Background);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
 
     float4 _Result = _Blending_Mode ? _Render_Background : _Render_Texture;
     float4 _Render = _Result;
 
         float _Lum = (_Result.r * 0.299 + _Result.g * 0.587 + _Result.b * 0.114) * _LumMult;
 
-            _Result.rgb = Fun_PatternDot(In, _DotsSize, Fun_Quantize(_Lum, _DotsLumSteps).r);
+            _Result.rgb = Fun_PatternDot(In.texCoord, _DotsSize, Fun_Quantize(_Lum, _DotsLumSteps).r);
             _Result.rgb = lerp(_Result.rgb, _Result.rgb * Fun_Quantize(_Render.rgb * _LumMult, _ColorSteps), _MixingManga);
             _Result.rgb = abs(_DotsInvertedColors - _Result.rgb);
 

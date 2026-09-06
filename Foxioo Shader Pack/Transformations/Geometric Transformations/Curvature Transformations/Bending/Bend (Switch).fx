@@ -86,7 +86,7 @@ VS_OUTPUT vs_main(VS_INPUT In)
 
 	Out.Tint = In.Tint;
 	Out.texCoord = In.texCoord + _DirCorner.xy * _PixelPadding;
-    //Out.bgCoord = In.bgCoord + _DirCorner.zw * _PixelPadding;
+    //Out.bgCoord = In.texCoord.bgCoord + _DirCorner.zw * _PixelPadding;
 
 	return Out;
 }
@@ -123,7 +123,7 @@ float2 Fun_Bend(float2 In)
 float4 ps_main(VS_OUTPUT In) : COLOR0
 {   
     float4 _Render_Texture = Fun_Render(S2D_Image, In.texCoord);
-    //return float4(In.bgCoord.xy, 0.0, 1.0);
+    //return float4(In.texCoord.bgCoord.xy, 0.0, 1.0);
     
     float2 UV = lerp(In.texCoord, Fun_Bend(In.texCoord), _Mixing);
 

@@ -29,6 +29,13 @@ sampler2D S2D_Background : register(s1) = sampler_state
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Size, _Mixing,
             
             fPixelWidth, fPixelHeight;
@@ -73,14 +80,14 @@ float3 Fun_Filter(sampler2D _Sampler, float2 In)
     return _Sum / _Result;
 }
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In_Background);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
 
         float4 _Result = _Blending_Mode ? _Render_Background : _Render_Texture;
-        float3 _Filter = _Blending_Mode ? Fun_Filter(S2D_Background, In_Background)
-                                        : Fun_Filter(S2D_Image, In);
+        float3 _Filter = _Blending_Mode ? Fun_Filter(S2D_Background, In.bgCoord)
+                                        : Fun_Filter(S2D_Image, In.texCoord);
 
         _Result.rgb = lerp(_Result.rgb, _Filter, _Mixing);
         _Result.a = _Render_Texture.a;

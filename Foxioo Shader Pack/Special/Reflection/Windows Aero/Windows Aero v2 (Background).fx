@@ -35,6 +35,13 @@ sampler2D S2D_Background : register(s1) = sampler_state
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _PosX, _PosY,
             _Mixing,
             
@@ -103,29 +110,29 @@ float Fun_Aero_Light(float2 In)
     return _Light;
 }
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    //float4 _Render_Background = tex2D(S2D_Background, In);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    //float4 _Render_Background = tex2D(S2D_Background, In.texCoord);
 
         float4 _Result;
 
             // blur!!
-            _Result.rgb = Fun_Blur(In_Background);
+            _Result.rgb = Fun_Blur(In.bgCoord);
             _Result.rgb = lerp(_Result.rgb, _AColor, _ALerp);
 
             // outline
-            float _Outline = Fun_Inner(In);
+            float _Outline = Fun_Inner(In.texCoord);
             float3 _Border = lerp(_BorderHigh, _BorderLow, saturate(_Outline * 1.5));
-            _Border *= lerp(_Border, _BorderCyan, In.x + In.y);
+            _Border *= lerp(_Border, _BorderCyan, In.texCoord.x + In.texCoord.y);
 
             _Result.rgb = lerp(_Result.rgb, _Border, saturate(1.0 - _Outline));
 
             // lines
-            _Result.rgb += _BorderHigh * Fun_Aero_Light(In / PIXELSIZE * 0.04 + float2(_PosX, _PosY) * PIXELSIZE);
+            _Result.rgb += _BorderHigh * Fun_Aero_Light(In.texCoord / PIXELSIZE * 0.04 + float2(_PosX, _PosY) * PIXELSIZE);
 
             // light
-            _Result.rgb += saturate(abs(0.5 - In.x) * (1.0 - In.y * 2.0)) * 0.5;
+            _Result.rgb += saturate(abs(0.5 - In.texCoord.x) * (1.0 - In.texCoord.y * 2.0)) * 0.5;
             
         _Result.a = _Render_Texture.a + _Outline * 3.0;
         _Result = lerp(_Render_Texture, _Result, _Mixing);

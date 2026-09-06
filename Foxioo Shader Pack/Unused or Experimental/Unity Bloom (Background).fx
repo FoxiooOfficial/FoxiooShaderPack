@@ -35,6 +35,13 @@ sampler2D S2D_Background : register(s1) = sampler_state
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing,
 
             _BlurStrength, _BloomIntensity, _BloomAddition,
@@ -60,15 +67,15 @@ float4 Fun_Blur(float2 UV)
 }
 
 
-float4 Fun_ReScale(float2 In, float _ScaleFactor)
+float4 Fun_ReScale(float2 In.texCoord, float _ScaleFactor)
 {
     _ScaleFactor = 1.0 / _ScaleFactor;
     
     float2 _Res = float2(fPixelWidth, fPixelHeight);
     float2 _BlockSize = _ScaleFactor * _Res;
     
-        float2 _UV = floor(In / _BlockSize) * _BlockSize;
-        float2 _InFrac = frac(In / _BlockSize);
+        float2 _UV = floor(In.texCoord / _BlockSize) * _BlockSize;
+        float2 _InFrac = frac(In.texCoord / _BlockSize);
     
             //float4 _Render_A = tex2D(S2D_Image, _UV);
             //float4 _Render_B = tex2D(S2D_Image, _UV + float2(_BlockSize.x, 0));
@@ -88,29 +95,29 @@ float4 Fun_ReScale(float2 In, float _ScaleFactor)
     return _Result;
 }
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In_Background);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
     
         float4 _Result = _Render_Texture;
         _Result *= _Result;
 
                // Resolution 50%
-                _Result += Fun_ReScale(In, 0.5) * _ResB;
+                _Result += Fun_ReScale(In.texCoord, 0.5) * _ResB;
 
                 // Resolution 25%
-                _Result += Fun_ReScale(In, 0.0625) * _ResF;
+                _Result += Fun_ReScale(In.texCoord, 0.0625) * _ResF;
 
                 // Resolution 12.5%
-                //_Result += Fun_ReScale(In, 0.0625);
+                //_Result += Fun_ReScale(In.texCoord, 0.0625);
 
                 // Resolution 6.25%
-                //_Result += Fun_ReScale(In, 0.015625);
+                //_Result += Fun_ReScale(In.texCoord, 0.015625);
 
             _Result /= 3.0;
 
-    float4 _Bloom = Fun_Blur(In);
+    float4 _Bloom = Fun_Blur(In.texCoord);
         _Result += _Bloom * _BloomIntensity;
 
     _Result = _Render_Texture + _Result * _BloomAddition;

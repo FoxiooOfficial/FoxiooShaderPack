@@ -25,6 +25,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing,
             _PosX, _PosY,
             _PointX, _PointY,
@@ -96,18 +103,18 @@ float2 Fun_RotationX(float2 In)
     return In;
 }
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
-    float4 _Render_Texture = tex2D(S2D_Image, In);
-    float4 _Render_Background = tex2D(S2D_Background, In_Background);
+    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
 
-        float2 _UV = Fun_RotationX(float2((In.x + _PosX) * _ScaleX, (In.y + _PosY) * _ScaleY) * _Scale);
+        float2 _UV = Fun_RotationX(float2((In.texCoord.x + _PosX) * _ScaleX, (In.texCoord.y + _PosY) * _ScaleY) * _Scale);
 
         float _In_Aero = Fun_Aero_Light((_UV * 0.05 / float2(fPixelWidth, fPixelHeight)));
-        float3 _Result = _Render_Texture * ((abs(In.x - 0.5) * (1.0 - (In.y - 0.2))) + _In_Aero) * _Intensity;
+        float3 _Result = _Render_Texture * ((abs(In.texCoord.x - 0.5) * (1.0 - (In.texCoord.y - 0.2))) + _In_Aero) * _Intensity;
 
 
-        float3 _Outline = Fun_Outline(In, _Result);
+        float3 _Outline = Fun_Outline(In.texCoord, _Result);
 
     float4 _Render = float4(lerp(_Render_Texture.rgb, _Render_Background.rgb * 0.75 + _Render_Texture.rgb * 0.25 + (_Outline.rgb + _Render_Texture.rgb * 0.1) * 0.25, _Mixing), _Render_Texture.a);
 

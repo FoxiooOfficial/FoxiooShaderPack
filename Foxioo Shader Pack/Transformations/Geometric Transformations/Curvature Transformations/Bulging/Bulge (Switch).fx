@@ -19,6 +19,13 @@ sampler2D S2D_Background : register(s1);
 /* Variables */
 /***********************************************************/
 
+struct PS_INPUT
+{
+    float4 Tint : COLOR0;
+    float2 texCoord : TEXCOORD0;
+    float2 bgCoord : TEXCOORD1;
+};
+
     float   _Mixing,
             
             _PosX, _PosY,
@@ -62,10 +69,10 @@ float2 Fun_RotationX(float2 In)
 
 }
 
-float4 ps_main(in float2 In : TEXCOORD0, in float2 In_Background : TEXCOORD1) : COLOR0
+float4 ps_main(in PS_INPUT In) : COLOR0
 {
     float2  _Pos = float2(_PosX, _PosY),
-        _UV = Fun_RotationX((In + _Pos));
+        _UV = Fun_RotationX((In.texCoord + _Pos));
         _UV = ((_UV - float2(_PointX, _PointY)) * float2(_ScaleX, _ScaleY) * _Scale) + float2(_PointX, _PointY);
          
     _UV = Fun_Bulge(_UV);
