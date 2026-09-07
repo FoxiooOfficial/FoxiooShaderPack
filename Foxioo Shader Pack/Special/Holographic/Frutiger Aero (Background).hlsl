@@ -1,8 +1,9 @@
 /***********************************************************/
 
-/* Shader author: Foxioo */
-/* Version shader: 1.1 (18.10.2025) */
-/* My GitHub: https://github.com/FoxiooOfficial */
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
 
 /***********************************************************/
 
@@ -30,9 +31,6 @@ cbuffer PS_VARIABLES : register(b0)
     float4 _Color;
     float4 _ColorShadow;
     bool __;
-
-	bool _Is_Pre_296_Build;
-	bool ___;
 };
 
 struct PS_INPUT
@@ -81,12 +79,21 @@ float3 Fun_Outline(float2 In, float3 _Color, float _Tint)
     return lerp(_Color, _Color + _Color * 0.25, _Edge1 * _Alpha) + _Edge2 * 0.15;
 }
 
-
-PS_OUTPUT ps_main( in PS_INPUT In )
+float4 Demultiply(float4 _Render, bool _Premultiplied)
 {
-    PS_OUTPUT Out;
+    if(_Premultiplied)
+    {
+	    if ( _Render.a != 0.0 ) {
+            _Render.rgb /= _Render.a;
+        }
+    }
 
-    float4 _Render_Texture = S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint;
+	return _Render;
+}
+
+float4 Main(in PS_INPUT In, bool _Premultiplied) : SV_TARGET
+{
+    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord) * In.Tint, _Premultiplied);
     float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
 
         float _Lum = pow(Fun_Lum(_Render_Texture), 2);
@@ -127,68 +134,22 @@ PS_OUTPUT ps_main( in PS_INPUT In )
         _Result.a = _Render_Texture.a;
         _Result = lerp(_Render_Texture, _Result * lerp(1.0, _Lum, 0.1 * (1.0 - _Lum)), _Mixing);
 
-    Out.Color = _Result;
-    
-    return Out;
+    return _Result;
 }
 
 /************************************************************/
-/* Premultiplied Alpha */
+/* Render */
 /************************************************************/
 
-float4 Demultiply(float4 _Color)
-{
-	if ( _Color.a != 0 )   _Color.rgb /= _Color.a;
-	return _Color;
+float4 ps_main(in PS_INPUT In) : SV_TARGET{
+    float4 _Render = Main(In, false);
+    return _Render;
 }
 
-PS_OUTPUT ps_main_pm( in PS_INPUT In ) 
+float4 ps_main_pm(in PS_INPUT In) : SV_TARGET
 {
-    PS_OUTPUT Out;
+    float4 _Render = Main(In, true);
+    _Render.rgb *= _Render.a;
 
-    float4 _Render_Texture = Demultiply(S2D_Image.Sample(S2D_ImageSampler, In.texCoord)) * In.Tint;
-    float4 _Render_Background = S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord);
-
-        float _Lum = pow(Fun_Lum(_Render_Texture), 2);
-        float _Lum_Background = pow(Fun_Lum(_Render_Background), 2);
-
-        float4 _Result;
-
-            _Result.rgb = lerp(_ColorShadow.rgb, lerp(_ColorLight.rgb, _Color.rgb, _Lum * _Lum), _Lum);
-
-                float2 _Center_Off = float2(0.5, 1.0 - 0.2);
-                float2 _Center = float2(0.5, 0.5);
-
-                float _Dist = distance(In.texCoord, _Center_Off);
-                float _Dist_Cen = distance(In.texCoord, _Center);
-
-                        _Result.rgb += saturate(1.0 - (_Dist / 0.25)) * 0.15;
-                        _Result.rgb += saturate(1.0 - (_Dist / 0.75)) * 0.35;
-
-                    _Result.rgb += saturate((_Dist_Cen / 0.75)) * 0.15;
-
-                    /* Arc */
-                        float _Inside = step(_Dist, 0.75);
-
-                        float _Arc_Out = smoothstep(0.75 + 0.15, 0.75, _Dist);
-                        _Result.rgb += _Arc_Out * (1.0 - _Inside) * 0.15;
-
-                        float _Arc_In = smoothstep(0.75 - 0.4, 0.75, _Dist);
-                        _Result.rgb += _Arc_In * (_Inside) * 0.15;
-
-                    _Result.rgb = Fun_Outline(In.texCoord, _Result.rgb, In.Tint.a);
-
-                float _Lum_Aero = Fun_Lum(float4(_Result.rgb, 1.0));
-                float4 _Render_Background_Ex = (S2D_Background.Sample(S2D_BackgroundSampler, In.bgCoord - (_Lum_Aero * 0.25) + 0.125));
-
-            _Result.rgb += _Render_Background_Ex.rgb * _Lum * _Lum;
-            _Result.rgb = lerp(_Result.rgb, _Result.rgb * _Result.rgb * lerp(1.0, _Result.rgb * _Lum, 0.5), 0.85);
-
-        _Result.a = _Render_Texture.a;
-        _Result = lerp(_Render_Texture, _Result * lerp(1.0, _Lum, 0.1 * (1.0 - _Lum)), _Mixing);
-
-    _Result.rgb *= _Result.a;
-
-    Out.Color = _Result;
-    return Out;
+    return _Render;
 }

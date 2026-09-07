@@ -38,7 +38,8 @@ float4 ps_main(in PS_INPUT In) : COLOR0
     float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
     float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
 
-            float4 _Result = sqrt(abs(_Render_Texture + (_Render_Background * _Mul)));
+            float4 _Result;
+            _Result.rgb = sqrt(abs(_Render_Texture + (_Render_Background * _Mul)));
             _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
             
         _Result.a = _Render_Texture.a;

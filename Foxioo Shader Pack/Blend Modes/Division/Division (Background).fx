@@ -65,18 +65,23 @@ struct PS_INPUT
 
 #else
 
+    float3 Fun_Div(float3 _Divisor, float3 _Divisible) {
+        float3 _Div = (1.0 - _Divisor + _Divisible) - 0.07;
+        return _Div * step(0.005, _Divisible);
+    }
+
     float4 ps_main(in PS_INPUT In) : COLOR0
     {
-        float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+        float4 _Render_Texture = tex2D(S2D_Image, In.texCoord); // * In.Tint;
         float4 _Render_Background = tex2D(S2D_Background, In.bgCoord) * _Mul;
 
             float4 _Result;
             _Result.a = _Render_Texture.a;
             
-            float3 _Render = _Blending_Mode ? _Render_Texture.rgb : _Render_Background.rgb;
-            float3 _Div = _Blending_Mode ? _Render_Background.rgb : _Render_Texture.rgb;
+            float3 _Render = lerp(_Render_Background.rgb, _Render_Texture.rgb, _Blending_Mode);
+            float3 _Div = lerp(_Render_Texture.rgb, _Render_Background.rgb, _Blending_Mode);
 
-            _Result.rgb = (1.0 - _Render + _Div) * step(0.005, _Div);
+            _Result.rgb = Fun_Div(_Render, _Div);
             _Result.rgb = lerp(_Render, _Result.rgb, _Mixing);
 
         return _Result;

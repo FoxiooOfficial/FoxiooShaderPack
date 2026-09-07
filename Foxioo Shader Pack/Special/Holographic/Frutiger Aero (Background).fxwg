@@ -1,0 +1,162 @@
+/***********************************************************/
+
+/* Copyright (c) 2024-2026 Foxioo */
+/* Project repository page: https://github.com/FoxiooOfficial/FoxiooShaderPack */
+/* MIT License; for more details, see: https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/LICENSE */
+/* Information about the shader version can be found in the effect's .xml file */
+
+/***********************************************************/
+
+/* ####################################################### */
+
+//@Begin_fragment
+
+/***********************************************************/
+/* Samplers */
+/***********************************************************/
+
+@group(1) @binding(0) var img: texture_2d<f32>;
+@group(1) @binding(1) var textureSampler: sampler;
+@group(3) @binding(0) var background: texture_2d<f32>;
+
+fn texture2D(image: texture_2d<f32>, texCoord: vec2f) -> vec4f {
+    return textureSampleLevel(image, textureSampler, texCoord, 0.0);
+}
+
+/***********************************************************/
+/* Variables */
+/***********************************************************/
+
+struct Params {
+    parameter0_value: i32,
+    _Mixing: f32,
+    _ColorLight: vec4f,
+    _Color: vec4f,
+    _ColorShadow: vec4f,
+    parameter5_value: i32,
+};
+
+@group(2) @binding(1) var<uniform> params: Params;
+
+/************************************************************/
+/* Main */
+/************************************************************/
+fn Fun_Lum(_Result: vec4f) -> f32 {
+    return (0.2126 * _Result.r + 0.7152 * _Result.g + 0.0722 * _Result.b);
+}
+
+fn Fun_Outline(In: vec2f, _Color: vec3f) -> vec3f {
+    var _PX: vec2f = vec2f(fusion.fPixelWidth, fusion.fPixelHeight);
+        var _Alpha: f32 = texture2D(img, In).a;
+
+        var aL1: f32 = texture2D(img, In + vec2f(-_PX.x, 0.0)).a;
+        var aR1: f32 = texture2D(img, In + vec2f(_PX.x, 0.0)).a;
+        var aU1: f32 = texture2D(img, In + vec2f(0.0, -_PX.y)).a;
+        var aD1: f32 = texture2D(img, In + vec2f(0.0, _PX.y)).a;
+
+        var aL2: f32 = texture2D(img, In + vec2f(-_PX.x * 2.0, 0.0)).a;
+        var aR2: f32 = texture2D(img, In + vec2f(_PX.x * 2.0, 0.0)).a;
+        var aU2: f32 = texture2D(img, In + vec2f(0.0, -_PX.y * 2.0)).a;
+        var aD2: f32 = texture2D(img, In + vec2f(0.0, _PX.y * 2.0)).a;
+
+            var _Edge1: f32 = step(0.01, abs(aL1 - _Alpha) + abs(aR1 - _Alpha) + abs(aU1 - _Alpha) + abs(aD1 - _Alpha));
+            var _Edge2: f32 = step(0.01, abs(aL2 - _Alpha) + abs(aR2 - _Alpha) + abs(aU2 - _Alpha) + abs(aD2 - _Alpha));
+
+        return mix(_Color, _Color + _Color * 0.25, _Edge1 * _Alpha) + _Edge2 * 0.15;
+}
+struct FragmentInput {
+    @location(0) texCoord: vec2f,
+    @location(1) color: vec4f,
+};
+@fragment fn fs_main(input: FragmentInput) -> @location(0) vec4f {
+    var _fusionOutput: vec4f = vec4f(0.0);
+    var _Render_Texture: vec4f = texture2D(img, input.texCoord) * (input.color * fusion.blendColor);
+        var _Render_Background: vec4f = texture2D(background, input.texCoord);
+
+            var _Lum: f32 = pow(Fun_Lum(_Render_Texture), 2.0);
+            var _Lum_Background: f32 = pow(Fun_Lum(_Render_Background), 2.0);
+
+            var _Result: vec4f;
+
+                {
+                    let _fusionSwizzle0 = mix(params._ColorShadow.rgb, mix(params._ColorLight.rgb, params._Color.rgb, _Lum * _Lum), _Lum);
+                    _Result.x = _fusionSwizzle0.x;
+                    _Result.y = _fusionSwizzle0.y;
+                    _Result.z = _fusionSwizzle0.z;
+                }
+
+                    var _Center_Off: vec2f = vec2f(0.5, 1.0 - 0.2);
+                    var _Center: vec2f = vec2f(0.5, 0.5);
+
+                    var _Dist: f32 = distance(input.texCoord, _Center_Off);
+                    var _Dist_Cen: f32 = distance(input.texCoord, _Center);
+
+                            {
+                                let _fusionSwizzle1 = clamp(1.0 - (_Dist / 0.25), 0.0, 1.0) * 0.15;
+                                _Result.x += _fusionSwizzle1;
+                                _Result.y += _fusionSwizzle1;
+                                _Result.z += _fusionSwizzle1;
+                            }
+                            {
+                                let _fusionSwizzle2 = clamp(1.0 - (_Dist / 0.75), 0.0, 1.0) * 0.35;
+                                _Result.x += _fusionSwizzle2;
+                                _Result.y += _fusionSwizzle2;
+                                _Result.z += _fusionSwizzle2;
+                            }
+
+                        {
+                            let _fusionSwizzle3 = clamp((_Dist_Cen / 0.75), 0.0, 1.0) * 0.15;
+                            _Result.x += _fusionSwizzle3;
+                            _Result.y += _fusionSwizzle3;
+                            _Result.z += _fusionSwizzle3;
+                        }
+
+                        /* Arc */
+                            var _Inside: f32 = step(_Dist, 0.75);
+
+                            var _Arc_Out: f32 = smoothstep(0.75 + 0.15, 0.75, _Dist);
+                            {
+                                let _fusionSwizzle4 = _Arc_Out * (1.0 - _Inside) * 0.15;
+                                _Result.x += _fusionSwizzle4;
+                                _Result.y += _fusionSwizzle4;
+                                _Result.z += _fusionSwizzle4;
+                            }
+
+                            var _Arc_In: f32 = smoothstep(0.75 - 0.4, 0.75, _Dist);
+                            {
+                                let _fusionSwizzle5 = _Arc_In * (_Inside) * 0.15;
+                                _Result.x += _fusionSwizzle5;
+                                _Result.y += _fusionSwizzle5;
+                                _Result.z += _fusionSwizzle5;
+                            }
+
+                        {
+                            let _fusionSwizzle6 = (Fun_Outline(vec2f(input.texCoord), vec3f(_Result.rgb)));
+                            _Result.x = _fusionSwizzle6.x;
+                            _Result.y = _fusionSwizzle6.y;
+                            _Result.z = _fusionSwizzle6.z;
+                        }
+
+                    var _Lum_Aero: f32 = Fun_Lum(vec4f(_Result.rgb, 1.0));
+                    var _Render_Background_Ex: vec4f = texture2D(background, input.texCoord - (_Lum_Aero * 0.25) + 0.125);
+
+                {
+                    let _fusionSwizzle7 = _Render_Background_Ex.rgb * _Lum * _Lum;
+                    _Result.x += _fusionSwizzle7.x;
+                    _Result.y += _fusionSwizzle7.y;
+                    _Result.z += _fusionSwizzle7.z;
+                }
+                {
+                    let _fusionSwizzle8 = mix(_Result.rgb, _Result.rgb * _Result.rgb * mix(vec3f(1.0), _Result.rgb * _Lum, 0.5), vec3f(0.85));
+                    _Result.x = _fusionSwizzle8.x;
+                    _Result.y = _fusionSwizzle8.y;
+                    _Result.z = _fusionSwizzle8.z;
+                }
+
+            _Result.a = _Render_Texture.a;
+            _Result = mix(_Render_Texture, _Result * mix(1.0, _Lum, 0.1 * (1.0 - _Lum)), params._Mixing);
+
+        _fusionOutput = _Result;
+    return _fusionOutput;
+}
+//@End
