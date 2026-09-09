@@ -133,6 +133,19 @@ Here you can find my [social media accounts](https://foxiooofficial.github.io/li
 It’s thanks to ALL OF YOU that FSP has gained so much attention.<br>
 *If you’re using this project and you like it, please leave a star! :3*
 
+details>
+  <summary><b>Star History Chart</b></summary>
+   <br>
+<a href="https://www.star-history.com/?repos=foxiooofficial%2Ffoxiooshaderpack&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=foxiooofficial/foxiooshaderpack&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=foxiooofficial/foxiooshaderpack&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=foxiooofficial/foxiooshaderpack&type=date&legend=top-left" />
+ </picture>
+</a>
+</details>
+
+
 ## License
 This project is available under the terms of the **MIT** license
 
