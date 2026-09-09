@@ -133,7 +133,7 @@ Here you can find my [social media accounts](https://foxiooofficial.github.io/li
 It’s thanks to ALL OF YOU that FSP has gained so much attention.<br>
 *If you’re using this project and you like it, please leave a star! :3*
 
-details>
+<details>
   <summary><b>Star History Chart</b></summary>
    <br>
 <a href="https://www.star-history.com/?repos=foxiooofficial%2Ffoxiooshaderpack&type=date&legend=top-left">
