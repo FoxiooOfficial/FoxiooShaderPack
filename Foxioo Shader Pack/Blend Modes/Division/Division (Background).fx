@@ -65,26 +65,54 @@ struct PS_INPUT
 
 #else
 
-    float3 Fun_Div(float3 _Divisor, float3 _Divisible) {
-        float3 _Div = (1.0 - _Divisor + _Divisible) - 0.07;
-        return _Div * step(0.005, _Divisible);
+    /*  fox note!
+        ps_1_x does not have a function to return 1 / x or a / b (division)
+
+        both functions (Fun_FastInvDiv and Fun_UltraFastInvDiv) return ~ 1 / x;
+
+        Fun_FastInvDiv -> when x is in [-1, 1]
+        Fun_UltraFastInvDiv -> when x is in [0, 1] (for colors)
+
+        if there are no slots, comment out the Newton correction but...
+        lower precision :3
+    */
+    float3 Fun_FastInvDiv(float3 _Render)
+    {
+        float3 _Abs = (_Render >= 0.0) ? _Render : -_Render;
+         float3 _Color = 0.754 - 0.431 * _Abs;
+        _Color = _Color * _Color;
+
+        // newton fix;
+        float3 _Err = (_Abs * _Color) * 8;
+        _Color = _Color + _Color * (1.0 - _Err);
+
+        return (_Render >= 0.0) ? _Color : -_Color;
+    }
+
+    float3 Fun_UltraFastInvDiv(float3 _Div)
+    {
+        float3 _Color = 0.754 - 0.431 * _Div;
+        _Color = _Color * _Color;
+
+        // newton fix;
+        float3 _Err = (_Div * _Color) * 8;
+        _Color += _Color * (1.0 - _Err);
+
+        return _Color;
     }
 
     float4 ps_main(in PS_INPUT In) : COLOR0
     {
         float4 _Render_Texture = tex2D(S2D_Image, In.texCoord); // * In.Tint;
-        float4 _Render_Background = tex2D(S2D_Background, In.bgCoord) * _Mul;
+        float3 _Render_Background = tex2D(S2D_Background, In.bgCoord).rgb * _Mul;
 
-            float4 _Result;
-            _Result.a = _Render_Texture.a;
-            
-            float3 _Render = lerp(_Render_Background.rgb, _Render_Texture.rgb, _Blending_Mode);
-            float3 _Div = lerp(_Render_Texture.rgb, _Render_Background.rgb, _Blending_Mode);
+            float3 _Divider = lerp(_Render_Texture.rgb, _Render_Background.rgb, _Blending_Mode);
+            float3 _Div = lerp(_Render_Background.rgb, _Render_Texture.rgb, _Blending_Mode);
 
-            _Result.rgb = Fun_Div(_Render, _Div);
-            _Result.rgb = lerp(_Render, _Result.rgb, _Mixing);
+                float3 _Render = (Fun_UltraFastInvDiv(_Div) * _Divider) * 8;
+                _Render = lerp(_Div, _Render, _Mixing);
 
-        return _Result;
+        return float4(_Render, _Render_Texture.a);
     }
 
 #endif // (__SHADER_TARGET_MAJOR >= 2)
