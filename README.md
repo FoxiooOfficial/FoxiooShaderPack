@@ -8,6 +8,8 @@
 
 Foxioo's Shader Pack *(aka. "FSP")* is a huge, free and open-source shader pack created for Clickteam Fusion 2.5 to make your projects even more beautiful!
 
+Please read the description carefully to avoid downloading the wrong release. 
+
 ## Contents
 
 - [About The Project](#about-the-project)
@@ -37,7 +39,7 @@ Shaders are amazing; thanks to them, I created another project called [Tails7](h
 
 ## Technical Specifications
 
-- Description was last updated on **August 28, 2026**
+- Description was last updated on **November 25, 2026**
 - I'm count the number of effects in the latest release; there are currently **420**
    - The last release was on **[April 13, 2026](https://github.com/FoxiooOfficial/FoxiooShaderPack/releases/)**
    - FSP release requirements:
@@ -68,7 +70,7 @@ Shaders are amazing; thanks to them, I created another project called [Tails7](h
 **Platform Support**
 | Platform                | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 |-------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `Windows (Direct3D 8)`  | A very old API that supports up to Pixel Shader 1.4; shaders written in assembly language with very significant limitations; I know how to write effects for Direct3D 8, but it’s not worth it right now-why?<br>The `.fx` file is shared by Direct3D 8 and Direct3D 9, so if I write an effect for D3D8, I limit the effect for D3D9; if only the files weren’t shared and D3D8 had a file format like, for example, `.fxasm`, I’d be more than happy to support it; I can only hope that Clickteam changes this.<br>It’s interesting that I’ve probably written the only working effect for D3D8 over the years-looking by various forums and information, no one else has created anything for D3D8 for CTF/MMF2 |
+| `Windows (Direct3D 8)`  | A very old graphics API that supports Pixel Shader 1.4 at most and the lack of a Vertex Shader (disabled from Fusion), in January 2026 I managed to write a working Shader for this API. FSP support for D3D8 **will** be a separate release as the code is currently shared with D3D9, limiting the newer API due to Pixel Shader 1.X limitations. Some shaders will natively support D3D8 because they are visually indistinguishable when input values are outside the -1 to 1 range. In the unreleased FSP for Fusion build 297, over 20% of the ~520 effects can work for D3D8. I hope that Clickteam will split .fx from D3D8 and D3D9 in favor of e.g. .fxasm for D3D8 and .fx for D3D9. |
 | `Windows (Direct3D 9)`  | This is the basis for the effects in CTF/MMF2! Of course it supports them!<br>*(Not counting those more advanced effects that don't look the way they should or are "worse")*                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | `Windows (Direct3D 11)` | Supported.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | `Android`               | Supported.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -81,6 +83,7 @@ Shaders are amazing; thanks to them, I created another project called [Tails7](h
 
 - [Clickteam Fusion 2.5](https://store.steampowered.com/app/248170/Clickteam_Fusion_25/)
 - [Visual Studio Code](https://code.visualstudio.com/)
+- [Microsoft DirectX 8.0 SDK](https://archive.org/details/dx8sdk)
 - [Microsoft DirectX SDK Summber 2004](https://archive.org/details/dxsdk_sum2004)
 - [Microsoft DirectX SDK November 2008](https://archive.org/details/dxsdk_nov08)
 - [GLSL Editor](https://thebookofshaders.com/edit.php)
