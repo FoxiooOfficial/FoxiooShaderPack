@@ -106,11 +106,11 @@ struct PS_INPUT
         float4 _Render_Texture = tex2D(S2D_Image, In.texCoord); // * In.Tint;
         float3 _Render_Background = tex2D(S2D_Background, In.bgCoord).rgb * _Mul;
 
-            float3 _Divider = lerp(_Render_Texture.rgb, _Render_Background.rgb, _Blending_Mode);
+            float3 _Color = lerp(_Render_Texture.rgb, _Render_Background.rgb, _Blending_Mode);
             float3 _Div = lerp(_Render_Background.rgb, _Render_Texture.rgb, _Blending_Mode);
 
-                float3 _Render = (Fun_UltraFastInvDiv(_Div) * _Divider) * 8;
-                _Render = lerp(_Div, _Render, _Mixing);
+                float3 _Render = (_Color * Fun_UltraFastInvDiv(_Div)) * 8;
+                _Render = lerp(_Color, _Render, _Mixing);
 
         return float4(_Render, _Render_Texture.a);
     }
