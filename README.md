@@ -83,10 +83,10 @@ Shaders are amazing; thanks to them, I created another project called [Tails7](h
 
 - [Clickteam Fusion 2.5](https://store.steampowered.com/app/248170/Clickteam_Fusion_25/)
 - [Visual Studio Code](https://code.visualstudio.com/)
+- [Microsoft DirectX 8.0 SDK](https://archive.org/details/dx8sdk)
 - [Microsoft DirectX SDK Summber 2004](https://archive.org/details/dxsdk_sum2004)
 - [Microsoft DirectX SDK November 2008](https://archive.org/details/dxsdk_nov08)
-- [GLSL Editor](https://thebookofshaders.com/edit.php)
-- [GLSLangValidator](https://github.com/KhronosGroup/glslang/releases)
+- [GLSL Editor](https://thebookofshaders.com/edit.php) [GLSLangValidator](https://github.com/KhronosGroup/glslang/releases)
 - [Fusion 2.5+ DX11 Shader Compile Tool](https://github.com/defisym/OpenFusionExamples/tree/master/Tools/DX11%20Shader%20Compile%20Tool/EN_US)
 - [Fusion FX: Shader Previewer for VS Code](https://discord.com/invite/R3WuvF3mHr)
 ---
