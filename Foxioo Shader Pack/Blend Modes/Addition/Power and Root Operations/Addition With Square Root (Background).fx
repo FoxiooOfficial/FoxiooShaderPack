@@ -51,6 +51,10 @@ struct PS_INPUT
 
 #else
     
+    /*  fox note!
+        ps_1_x does not have a function to return sqrt(x)
+        Fun_FastSqrt -> return ~sqrt(x) when x is in [0, 1];
+    */
     float3 Fun_FastSqrt(float3 _Render) {
         return 2.0 * (_Render * (0.9375 - 0.4375 * _Render));
     }
@@ -65,7 +69,7 @@ struct PS_INPUT
             
             _Result = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
 
-        return float4(float3(_Color), _Render_Texture.a);
+        return float4(float3(_Result), _Render_Texture.a);
     }
 
 #endif // (__SHADER_TARGET_MAJOR >= 2)
