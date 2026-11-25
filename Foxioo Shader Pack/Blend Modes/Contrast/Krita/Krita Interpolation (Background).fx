@@ -33,23 +33,58 @@ struct PS_INPUT
 /* Main */
 /************************************************************/
 
-float4 ps_main(in PS_INPUT In) : COLOR0
-{
-    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
-    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
+#if (__SHADER_TARGET_MAJOR >= 2)
 
-        float4 _Result;
-        
-            _Result.rgb = 0.5 - 0.25 * cos(3.14159265 * _Render_Background.rgb) - 0.25 * cos(3.14159265 * _Render_Texture.rgb);
-            _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
+    float4 ps_main(in PS_INPUT In) : COLOR0
+    {
+        float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+        float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
 
-        _Result.a = _Render_Texture.a;
+            float4 _Result;
+            
+                _Result.rgb = 0.5 - 0.25 * cos(3.14159265 * _Render_Background.rgb) - 0.25 * cos(3.14159265 * _Render_Texture.rgb);
+                _Result.rgb = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
 
-    return _Result;
-}
+            _Result.a = _Render_Texture.a;
+
+        return _Result;
+    }
+
+#else
+
+    float3 Fun_Interpolation(float3 _Render) {
+        float3 x2 = _Render * _Render;
+        float3 x4 = x2 * x2;
+        return saturate(x2 * 0.58875) * 2 - x4 * 0.6775;
+    }
+
+    float4 ps_main(in PS_INPUT In) : COLOR0
+    {
+        float4 _Render_Texture = tex2D(S2D_Image, In.texCoord); // * In.Tint;
+        float3 _Render_Background = tex2D(S2D_Background, In.bgCoord).rgb;
+
+            float3 _Result;
+            
+                _Result = Fun_Interpolation(_Render_Background.rgb) + Fun_Interpolation(_Render_Texture.rgb);
+                _Result = lerp(_Render_Texture.rgb, _Result.rgb, _Mixing);
+
+        return float4(_Result, _Render_Texture.a);
+    }
+
+#endif // (__SHADER_TARGET_MAJOR >= 2)
 
 /************************************************************/
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_2_0 ps_main(); } }
+technique tech_main
+{ 
+    pass P0
+    { 
+        #if (__SHADER_TARGET_MAJOR >= 2)
+            PixelShader = compile ps_2_0 ps_main();
+        #else
+            PixelShader = compile ps_1_4 ps_main();
+        #endif
+    } 
+}
