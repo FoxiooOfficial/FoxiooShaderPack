@@ -37,7 +37,7 @@ Shaders are amazing; thanks to them, I created another project called [Tails7](h
 
 ## Technical Specifications
 
-- Description was last updated on **August 28, 2026**
+- Description was last updated on **November 25, 2026**
 - I'm count the number of effects in the latest release; there are currently **420**
    - The last release was on **[April 13, 2026](https://github.com/FoxiooOfficial/FoxiooShaderPack/releases/)**
    - FSP release requirements:
