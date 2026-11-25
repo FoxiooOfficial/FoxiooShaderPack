@@ -8,6 +8,8 @@
 
 Foxioo's Shader Pack *(aka. "FSP")* is a huge, free and open-source shader pack created for Clickteam Fusion 2.5 to make your projects even more beautiful!
 
+Please read the description carefully to avoid downloading the wrong release. 
+
 ## Contents
 
 - [About The Project](#about-the-project)
