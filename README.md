@@ -126,7 +126,7 @@ Shaders are amazing; thanks to them, I created another project called [Tails7](h
 
 1. After the installation process, go to the **"Workspace Toolbar"** window, **select your application** and click **"Properties"**.<br><br>
 ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Usage/1.png?raw=true).<br>
-2. Go to **"Runtime options"** and make sure **"Display Mode"** is set to **"Direct3D 11"** or **"Direct3D 9"**.<br><br>
+2. Go to **"Runtime options"** and make sure **"Display Mode"** is set to **"Direct3D 11" (If you have DLC+)**, **"Direct3D 9"** or **"Direct3D 8" (If you have D3D8 version of FSP)**.<br><br>
 ![Alt text](https://github.com/FoxiooOfficial/FoxiooShaderPack/blob/main/Resources/Usage/2.png?raw=true).<br>
 
 ## Support and Social Media
