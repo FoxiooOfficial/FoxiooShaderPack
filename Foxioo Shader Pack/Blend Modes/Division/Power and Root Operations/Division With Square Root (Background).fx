@@ -35,37 +35,97 @@ struct PS_INPUT
 /* Main */
 /************************************************************/
 
-float4 ps_main(in PS_INPUT In) : COLOR0
-{
-    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
-    float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
+#if (__SHADER_TARGET_MAJOR >= 2)
 
-        float4 _Result, _Render;
-        
-            if(!_Blending_Mode)
-            { 
-                _Result.rgb = _Render_Texture.rgb / (_Render_Background.rgb * _Mul);
-                _Render = _Render_Texture;
-            }
-            else 
-            { 
-                _Result.rgb = (_Render_Background.rgb * _Mul) / _Render_Texture.rgb; 
-                _Render = _Render_Background;
-            }
+    float4 ps_main(in PS_INPUT In) : COLOR0
+    {
+        float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+        float4 _Render_Background = tex2D(S2D_Background, In.bgCoord);
 
-            _Result.rgb = sqrt(_Result.rgb);
-            _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
+            float4 _Result, _Render;
+            
+                if(!_Blending_Mode)
+                { 
+                    _Result.rgb = _Render_Texture.rgb / (_Render_Background.rgb * _Mul);
+                    _Render = _Render_Texture;
+                }
+                else 
+                { 
+                    _Result.rgb = (_Render_Background.rgb * _Mul) / _Render_Texture.rgb; 
+                    _Render = _Render_Background;
+                }
 
-            if(_Mixing == 0.0)
-                _Result.rgb = _Render.rgb;
+                _Result.rgb = sqrt(abs(_Result.rgb));
+                _Result.rgb = lerp(_Render.rgb, _Result.rgb, _Mixing);
 
-        _Result.a = _Render_Texture.a;
-        
-    return _Result;
-}
+                if(_Mixing == 0.0)
+                    _Result.rgb = _Render.rgb;
+
+            _Result.a = _Render_Texture.a;
+            
+        return _Result;
+    }
+
+#else
+
+    /*  fox note!
+        ps_1_x does not have a function to return sqrt(x) and division;
+
+        Fun_FastSqrt -> return ~sqrt(~1 / x) when x is in [0, 1];
+        Fun_UltraFastInvDiv -> return ~1 / x when x is in [0, 1];
+
+        if there are no slots, comment out the Newton correction but...
+        lower precision :3
+    */
+    float3 Fun_UltraFastInvDiv(float3 _Div)
+    {
+        float3 _Color = 0.754 - 0.431 * _Div;
+        _Color = _Color * _Color;
+
+        // newton fix;
+        //float3 _Err = (_Div * _Color) * 8;
+        //_Color += _Color * (1.0 - _Err);
+
+        return _Color;
+    }
+
+    float3 Fun_FastSqrt(float3 _Color)
+    {
+        float3 _Render = _Color * (0.9375 - 0.4375 * _Color);
+        return _Render + _Render;
+    }
+
+    float4 ps_main(in PS_INPUT In) : COLOR0
+    {
+        float4 _Render_Texture = tex2D(S2D_Image, In.texCoord);
+        float3 _Render_Background = tex2D(S2D_Background, In.bgCoord).rgb * _Mul;
+
+            float3 _Color = lerp(_Render_Texture.rgb, _Render_Background, _Blending_Mode);
+            float3 _Div   = lerp(_Render_Background, _Render_Texture.rgb, _Blending_Mode);
+
+                float3 _Render = _Color * Fun_UltraFastInvDiv(_Div);
+                _Render = saturate(_Render * 8);
+
+                float3 _Result = Fun_FastSqrt(_Render);
+                _Result = lerp(_Color, _Result, _Mixing);
+
+        return float4(_Result, _Render_Texture.a);
+    }
+
+#endif
 
 /************************************************************/
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_2_0 ps_main(); } }
+technique tech_main
+{ 
+    pass P0
+    { 
+        #if (__SHADER_TARGET_MAJOR >= 2)
+            PixelShader = compile ps_2_0 ps_main();
+        #else
+            PixelShader = compile ps_1_4 ps_main();
+        #endif
+    } 
+}
