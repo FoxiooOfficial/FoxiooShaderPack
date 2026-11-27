@@ -33,21 +33,83 @@ struct PS_INPUT
 /* Main */
 /************************************************************/
 
-float4 ps_main(in PS_INPUT In) : COLOR0
-{
-    float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
-    float4 _Result = _Render_Texture;
+#if (__SHADER_TARGET_MAJOR >= 2)
+
+    float4 ps_main(in PS_INPUT In) : COLOR0
+    {
+        float4 _Render_Texture = tex2D(S2D_Image, In.texCoord) * In.Tint;
+        float4 _Result = _Render_Texture;
+            
+            if ( _Result.a != 0.0 )
+                _Result.rgb = _Render_Texture.rgb / _Render_Texture.a;
+
+            _Result = lerp(_Render_Texture, _Result, _Mixing);
+
+        return _Result;
+    }
+
+#else
+
+    /*  fox note!
+        ps_1_x does not have a function to return 1 / x or a / b (division)
+
+        both functions (Fun_FastInvDiv and Fun_UltraFastInvDiv) return ~ 1 / x;
+
+        Fun_FastInvDiv -> when x is in [-1, 1]
+        Fun_UltraFastInvDiv -> when x is in [0, 1] (for colors)
+
+        if there are no slots, comment out the Newton correction but...
+        lower precision :3
+    */
+    float Fun_FastInvDiv(float _Render)
+    {
+        float _Abs = (_Render >= 0.0) ? _Render : -_Render;
+        float _Color = 0.754 - 0.431 * _Abs;
+        _Color = _Color * _Color;
+
+        // newton fix;
+        float _Err = (_Abs * _Color) * 8;
+        _Color = _Color + _Color * (1.0 - _Err);
+
+        return (_Render >= 0.0) ? _Color : -_Color;
+    }
+
+    float Fun_UltraFastInvDiv(float _Div)
+    {
+        float _Color = 0.754 - 0.431 * _Div;
+        _Color = _Color * _Color;
+
+        // newton fix;
+        float _Err = (_Div * _Color) * 8;
+        _Color = saturate(_Color + _Color * saturate(1.0 - _Err));
+
+        return _Color;
+    }
+
+    float4 ps_main(in PS_INPUT In) : COLOR0
+    {
+        float4 _Render_Texture = tex2D(S2D_Image, In.texCoord); // * In.Tint;
+        float3 _Result = saturate(_Render_Texture.rgb * Fun_UltraFastInvDiv(_Render_Texture.a) * 8);
         
-        if ( _Result.a != 0.0 )
-            _Result.rgb = _Render_Texture.rgb / _Render_Texture.a;
+            _Result = lerp(_Render_Texture, _Result, _Mixing);
 
-        _Result = lerp(_Render_Texture, _Result, _Mixing);
+        return float4(_Result, _Render_Texture.a);
+    }
 
-    return _Result;
-}
+#endif // (__SHADER_TARGET_MAJOR >= 2)
 
 /************************************************************/
 /* Tech Main */
 /************************************************************/
 
-technique tech_main { pass P0 { PixelShader = compile ps_2_0 ps_main(); } }
+technique tech_main
+{ 
+    pass P0
+    { 
+        #if (__SHADER_TARGET_MAJOR >= 2)
+            PixelShader = compile ps_2_0 ps_main();
+        #else
+            PixelShader = compile ps_1_4 ps_main();
+        #endif
+    } 
+}
