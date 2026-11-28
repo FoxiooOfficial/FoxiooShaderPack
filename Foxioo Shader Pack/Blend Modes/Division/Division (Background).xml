@@ -5,7 +5,7 @@
 			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
 			<website>https://github.com/FoxiooOfficial</website>
 				<BackgroundTexture>1</BackgroundTexture>
-				<dx8>yes</dx8>
+				<dx8>0</dx8>
 				<PSVersion>1.4</PSVersion>
 
 		<parameter>

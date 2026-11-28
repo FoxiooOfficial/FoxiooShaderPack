@@ -1,0 +1,146 @@
+<effect>
+	<name>Deltarune Lighting System With Shadow (Texture)</name>
+		<description>This is a recreation of the lighting effect, including shadow, from DELTARUNE (Chapter 5) by Toby Fox.</description> 
+			<author>Foxioo, (Recreation of an effect from a DELTARUNE created by Toby Fox)</author>
+			<copyright>Copyright (C) 2024-2026 Foxioo</copyright>
+			<website>https://github.com/FoxiooOfficial</website>
+			<BackgroundTexture>0</BackgroundTexture>
+			
+		<parameter>
+			<name>/* Foxioo's Deltarune Lighting System With Shadow (Texture) Shader | 2026.11.28 */</name>
+			<property>checkbox</property>
+
+			<variable>_</variable>
+
+			<description>This is a recreation of the lighting effect, including shadow, from DELTARUNE (Chapter 5) by Toby Fox.</description>
+		</parameter>
+
+			<parameter>
+				<name>Mixing</name>
+				<variable>_Mixing</variable>
+				
+				<description>This variable is responsible for the visibility of the effect.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Light Position X</name>
+				<variable>_PosX</variable>
+				<description>This variable defines the position of the light source on the X-axis.</description> 
+
+				<type>float</type>
+
+				<value>-32</value>
+			</parameter>
+
+			<parameter>
+				<name>Light Position Y</name>
+				<variable>_PosY</variable>
+				<description>This variable defines the position of the light source on the Y-axis.</description> 
+
+				<type>float</type>
+
+				<value>-32.0</value>
+			</parameter>
+
+			<parameter>
+				<name>Offset Shadow X</name>
+				<variable>_OffsetX</variable>
+				<description>This variable defines the shadow offset along the X-axis.</description> 
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+			<parameter>
+				<name>Offset Shadow Y</name>
+				<variable>_OffsetY</variable>
+				<description>This variable defines the shadow offset along the Y-axis.</description> 
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+		
+			<parameter>
+				<name>Footer Position</name>
+				<variable>_Footer</variable>
+				
+				<description>This variable defines an offset for the point where the shadow begins; for example, if your sprite has 2 empty pixels from the bottom edge along the Y-axis, set this variable to 2-otherwise, there will be a gap between the shadow and the "feet."</description>
+
+				<type>float</type>
+
+				<value>0</value>
+			</parameter>
+
+
+			<parameter>
+				<name>Color Light</name>
+				<variable>_ColorLight</variable>
+				
+				<description>This variable determines the color of the light.</description>
+
+				<type>int_float4</type>
+				<property>color</property>
+
+				<value>12370</value>
+			</parameter>
+			
+			<parameter>
+				<name>Color Shadow</name>
+				<variable>_ColorShadow</variable>
+				
+				<description>This variable determines the color of the shadow.</description>
+
+				<type>int_float4</type>
+				<property>color</property>
+
+				<value>2695009</value>
+			</parameter>
+
+			<parameter>
+				<name>Alpha Shadow</name>
+				<variable>_Alpha</variable>
+				
+				<description>This variable defines the color of the alpha shadow.</description>
+
+				<type>float</type>
+
+				<value>1</value>
+			</parameter>
+
+			<parameter>
+				<name>Max Rim Offset</name>
+				<variable>_Max</variable>
+				
+				<description>This variable defines the maximum limit of the rim light position.</description>
+
+				<type>float</type>
+
+				<value>4</value>
+			</parameter>
+
+
+			<parameter>
+				<name>Rim Offset Multiply</name>
+				<variable>_Mul</variable>
+				
+				<description>This variable multiplies the current position of the rim light.</description>
+
+				<type>float</type>
+
+				<value>0.5</value>
+			</parameter>
+
+		<parameter>
+			<name>/*  */</name>
+			<property>checkbox</property>
+
+			<variable>__</variable>
+		</parameter>
+</effect>

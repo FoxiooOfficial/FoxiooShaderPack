@@ -46,13 +46,13 @@ struct PS_INPUT
 /* Main */
 /************************************************************/
 
-float2 Fun_RotationX(float2 In.texCoord)
+float2 Fun_RotationX(float2 In)
 {
     float2 _Points = float2(_PointX, _PointY);
-    float2 _UV = In.texCoord;
+    float2 _UV = In;
     float _RotX_Fix = _RotX * 0.0174532925;
 
-        In.texCoord = _Points + mul(float2x2(cos(_RotX_Fix), sin(_RotX_Fix), -sin(_RotX_Fix), cos(_RotX_Fix)), _UV - _Points);
+        In = _Points + mul(float2x2(cos(_RotX_Fix), sin(_RotX_Fix), -sin(_RotX_Fix), cos(_RotX_Fix)), _UV - _Points);
 
     return _UV;
 }

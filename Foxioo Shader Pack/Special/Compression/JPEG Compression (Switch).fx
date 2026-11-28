@@ -56,14 +56,14 @@ float3 Fun_YCbCr(float _Y, float _Cb, float _Cr)
     
 }
 
-float4 Fun_GetColor(float2 In.texCoord, sampler2D _Texture)  {    return tex2D(_Texture, In.texCoord); }
+float4 Fun_GetColor(float2 In, sampler2D _Texture)  { return tex2D(_Texture, In); }
 
-float4 Fun_Interpolation(float2 In.texCoord, float _Segm, sampler2D _Texture, float _Smoothness)
+float4 Fun_Interpolation(float2 In, float _Segm, sampler2D _Texture, float _Smoothness)
 {
-    float2 _In_Segment = floor(In.texCoord * _Segm) / _Segm;
-    float2 _In_Segment_Next = (floor(In.texCoord * _Segm) + 1.0) / _Segm;
+    float2 _In_Segment = floor(In * _Segm) / _Segm;
+    float2 _In_Segment_Next = (floor(In * _Segm) + 1.0) / _Segm;
     
-    float2 _UV = frac(In.texCoord * _Segm);
+    float2 _UV = frac(In * _Segm);
 
         float4 _Render_0X = Fun_GetColor(_In_Segment, _Texture);
         float4 _Render_1X = Fun_GetColor(float2(_In_Segment_Next.x, _In_Segment.y), _Texture);
@@ -94,7 +94,7 @@ float4 ps_main(in PS_INPUT In) : COLOR0
     float __Segments = 1.0 / _Div;
 
         float4 _Result = _Blending_Mode ? Fun_Interpolation(In.texCoord, __Segments, S2D_Background, _BlurScale) : Fun_Interpolation(In.bgCoord, __Segments, S2D_Image, _BlurScale);
-        float4 _Render = _Blending_Mode ? _Render_Background : _Render_Texture;
+        //float4 _Render = _Blending_Mode ? _Render_Background : _Render_Texture;
     float Y  = Fun_Y(_Result.r, _Result.g, _Result.b);
     float Cb = Fun_Cb(_Result.b, Y);
     float Cr = Fun_Cr(_Result.r, Y);
